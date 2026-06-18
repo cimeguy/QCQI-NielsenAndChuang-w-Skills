@@ -1,0 +1,165 @@
+<div class="v-ch05">
+<style>
+.v-ch05{color:var(--fg)}
+.v-ch05 figure{margin:0 0 26px}
+.v-ch05 .v-ch05-h{font-weight:600;color:var(--accent2);margin:4px 0 8px;font-size:15px}
+.v-ch05 figcaption{color:var(--muted);font-size:12.5px;line-height:1.65;margin-top:8px}
+.v-ch05 .v-ch05-legend{display:flex;flex-wrap:wrap;gap:16px;font-size:12.5px;color:var(--muted);margin:6px 0 10px}
+.v-ch05 .v-ch05-legend span{display:inline-flex;align-items:center;gap:6px}
+.v-ch05 .v-ch05-sw{width:14px;height:14px;border-radius:3px;display:inline-block;border:1px solid var(--border)}
+.v-ch05 svg{display:block}
+/* shared SVG primitives */
+.v-ch05 .v-ch05-wire{stroke:var(--muted);stroke-width:1.4;fill:none}
+.v-ch05 .v-ch05-gate{fill:var(--code);stroke:var(--accent);stroke-width:1.6}
+.v-ch05 .v-ch05-rgate{fill:var(--code);stroke:var(--accent2);stroke-width:1.6}
+.v-ch05 .v-ch05-gtxt{fill:var(--fg);font-size:14px;font-weight:600;text-anchor:middle;dominant-baseline:central}
+.v-ch05 .v-ch05-lbl{fill:var(--muted);font-size:12px;text-anchor:middle;dominant-baseline:central}
+.v-ch05 .v-ch05-qlbl{fill:var(--fg);font-size:13px;text-anchor:middle;dominant-baseline:central}
+.v-ch05 .v-ch05-ctrl{fill:var(--accent2)}
+.v-ch05 .v-ch05-link{stroke:var(--accent2);stroke-width:1.6}
+.v-ch05 .v-ch05-swap{stroke:var(--accent);stroke-width:1.8}
+/* flowchart */
+.v-ch05 .v-ch05-box{fill:var(--panel2);stroke:var(--border);stroke-width:1.5}
+.v-ch05 .v-ch05-qbox{fill:rgba(90,176,255,.13);stroke:var(--accent);stroke-width:2}
+.v-ch05 .v-ch05-end{fill:var(--panel2);stroke:var(--accent2);stroke-width:1.8}
+.v-ch05 .v-ch05-dia{fill:var(--panel2);stroke:var(--accent2);stroke-width:1.5}
+.v-ch05 .v-ch05-bt{fill:var(--fg);font-size:13px;text-anchor:middle;dominant-baseline:central}
+.v-ch05 .v-ch05-bs{fill:var(--muted);font-size:11px;text-anchor:middle;dominant-baseline:central}
+.v-ch05 .v-ch05-flow{stroke:var(--muted);stroke-width:1.6;fill:none}
+.v-ch05 .v-ch05-ah{fill:var(--muted)}
+.v-ch05 .v-ch05-tag{fill:var(--accent);font-size:11px;text-anchor:middle;dominant-baseline:central}
+/* bars */
+.v-ch05 .v-ch05-bar-c{fill:var(--accent2)}
+.v-ch05 .v-ch05-bar-q{fill:var(--accent)}
+.v-ch05 .v-ch05-btitle{fill:var(--fg);font-size:13px;font-weight:600;dominant-baseline:central}
+.v-ch05 .v-ch05-brow{fill:var(--muted);font-size:12px;dominant-baseline:central}
+.v-ch05 .v-ch05-bin{fill:#fff;font-size:11.5px;dominant-baseline:central}
+.v-ch05 .v-ch05-bout{fill:var(--fg);font-size:11.5px;dominant-baseline:central}
+</style>
+
+<!-- ============ 图 1：QFT 量子线路（3 比特）============ -->
+<figure>
+  <p class="v-ch05-h">① 量子傅里叶变换 QFT 线路（3 比特）</p>
+  <svg viewBox="0 0 740 250" style="width:100%;height:auto;max-width:760px" role="img" aria-label="3 比特 QFT 线路">
+    <!-- wires -->
+    <line class="v-ch05-wire" x1="70" y1="64"  x2="700" y2="64"/>
+    <line class="v-ch05-wire" x1="70" y1="128" x2="700" y2="128"/>
+    <line class="v-ch05-wire" x1="70" y1="192" x2="700" y2="192"/>
+    <text class="v-ch05-qlbl" x="36" y="64">|j₁⟩</text>
+    <text class="v-ch05-qlbl" x="36" y="128">|j₂⟩</text>
+    <text class="v-ch05-qlbl" x="36" y="192">|j₃⟩</text>
+
+    <!-- controlled-phase vertical links (drawn first, behind boxes) -->
+    <line class="v-ch05-link" x1="190" y1="64" x2="190" y2="128"/>
+    <line class="v-ch05-link" x1="260" y1="64" x2="260" y2="192"/>
+    <line class="v-ch05-link" x1="410" y1="128" x2="410" y2="192"/>
+    <circle class="v-ch05-ctrl" cx="190" cy="128" r="4.5"/>
+    <circle class="v-ch05-ctrl" cx="260" cy="192" r="4.5"/>
+    <circle class="v-ch05-ctrl" cx="410" cy="192" r="4.5"/>
+
+    <!-- H gates -->
+    <g><rect class="v-ch05-gate" x="103" y="51" width="34" height="26" rx="4"/><text class="v-ch05-gtxt" x="120" y="64">H</text></g>
+    <g><rect class="v-ch05-gate" x="323" y="115" width="34" height="26" rx="4"/><text class="v-ch05-gtxt" x="340" y="128">H</text></g>
+    <g><rect class="v-ch05-gate" x="473" y="179" width="34" height="26" rx="4"/><text class="v-ch05-gtxt" x="490" y="192">H</text></g>
+
+    <!-- controlled R_k phase gates (target on the H-ed wire) -->
+    <g><rect class="v-ch05-rgate" x="173" y="51" width="34" height="26" rx="4"/><text class="v-ch05-gtxt" x="190" y="64">R₂</text><text class="v-ch05-lbl" x="190" y="92">π/2</text></g>
+    <g><rect class="v-ch05-rgate" x="243" y="51" width="34" height="26" rx="4"/><text class="v-ch05-gtxt" x="260" y="64">R₃</text><text class="v-ch05-lbl" x="260" y="92">π/4</text></g>
+    <g><rect class="v-ch05-rgate" x="393" y="115" width="34" height="26" rx="4"/><text class="v-ch05-gtxt" x="410" y="128">R₂</text><text class="v-ch05-lbl" x="410" y="156">π/2</text></g>
+
+    <!-- final SWAP (reverse bit order): q1 <-> q3 -->
+    <line class="v-ch05-swap" x1="600" y1="64" x2="600" y2="192"/>
+    <line class="v-ch05-swap" x1="594" y1="58" x2="606" y2="70"/><line class="v-ch05-swap" x1="606" y1="58" x2="594" y2="70"/>
+    <line class="v-ch05-swap" x1="594" y1="186" x2="606" y2="198"/><line class="v-ch05-swap" x1="606" y1="186" x2="594" y2="198"/>
+    <text class="v-ch05-lbl" x="600" y="222">SWAP</text>
+
+    <!-- column legend -->
+    <text class="v-ch05-lbl" x="120" y="30">H</text>
+    <text class="v-ch05-lbl" x="225" y="30">受控相位 Rₖ</text>
+    <text class="v-ch05-lbl" x="600" y="42">位序翻转</text>
+  </svg>
+  <figcaption>每根线先 H，再串受控相位门 Rₖ（相位 2π/2ᵏ：R₂=π/2、R₃=π/4…），末端 SWAP 翻转高低位次序。
+  作用：|j⟩ → (1/√N)·Σₖ e^{2πijk/N}|k⟩，N=2ⁿ；输出可因式分解为各比特单比特态张量积，共 O(n²) 个门（vs 经典 FFT 的 O(N log N)）。</figcaption>
+</figure>
+
+<!-- ============ 图 2：Shor 算法流程（量子 vs 经典）============ -->
+<figure>
+  <p class="v-ch05-h">② Shor 大数分解流程：分解 → 求阶 → GCD</p>
+  <div class="v-ch05-legend">
+    <span><span class="v-ch05-sw" style="background:rgba(90,176,255,.13);border-color:var(--accent)"></span>量子步骤</span>
+    <span><span class="v-ch05-sw" style="background:var(--panel2)"></span>经典步骤</span>
+  </div>
+  <svg viewBox="0 0 540 430" style="width:100%;height:auto;max-width:560px" role="img" aria-label="Shor 算法流程图">
+    <defs>
+      <marker id="v-ch05-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+        <path class="v-ch05-ah" d="M0 0L10 5L0 10z"/>
+      </marker>
+    </defs>
+
+    <!-- Box A: pick random y (classical) -->
+    <rect class="v-ch05-box" x="120" y="14" width="300" height="48" rx="9"/>
+    <text class="v-ch05-bt" x="270" y="32">随机取 y，1 &lt; y &lt; N</text>
+    <text class="v-ch05-bs" x="270" y="50">若 gcd(y,N)≠1 则已直接得到因子</text>
+
+    <!-- Box B: order finding (quantum) -->
+    <rect class="v-ch05-qbox" x="120" y="90" width="300" height="54" rx="9"/>
+    <text class="v-ch05-tag" x="270" y="105">量子相位估计</text>
+    <text class="v-ch05-bt" x="270" y="125">求阶：最小 r 使 yʳ ≡ 1 (mod N)</text>
+
+    <!-- Decision diamond (classical) -->
+    <polygon class="v-ch05-dia" points="270,168 435,216 270,264 105,216"/>
+    <text class="v-ch05-bt" x="270" y="208">r 为偶数 且</text>
+    <text class="v-ch05-bt" x="270" y="226">y^(r/2) ≢ −1 (mod N) ?</text>
+
+    <!-- Box C: gcd -> factor (classical) -->
+    <rect class="v-ch05-box" x="120" y="292" width="300" height="50" rx="9"/>
+    <text class="v-ch05-bt" x="270" y="310">计算 gcd(y^(r/2) ± 1, N)</text>
+    <text class="v-ch05-bs" x="270" y="329">得到 N 的非平凡因子</text>
+
+    <!-- End -->
+    <rect class="v-ch05-end" x="160" y="370" width="220" height="44" rx="22"/>
+    <text class="v-ch05-bt" x="270" y="392">输出非平凡因子</text>
+
+    <!-- arrows -->
+    <line class="v-ch05-flow" x1="270" y1="62"  x2="270" y2="88"  marker-end="url(#v-ch05-arrow)"/>
+    <line class="v-ch05-flow" x1="270" y1="144" x2="270" y2="166" marker-end="url(#v-ch05-arrow)"/>
+    <line class="v-ch05-flow" x1="270" y1="264" x2="270" y2="290" marker-end="url(#v-ch05-arrow)"/>
+    <text class="v-ch05-bs" x="286" y="278">是</text>
+    <line class="v-ch05-flow" x1="270" y1="342" x2="270" y2="368" marker-end="url(#v-ch05-arrow)"/>
+
+    <!-- retry loop: decision -> back to A -->
+    <path class="v-ch05-flow" d="M105 216 H50 V38 H120" marker-end="url(#v-ch05-arrow)"/>
+    <text class="v-ch05-bs" x="78" y="150">否 · 重试</text>
+  </svg>
+  <figcaption>蓝色框为量子子程序：对模乘 U|x⟩=|yx mod N⟩、输入 |1⟩=(1/√r)Σₛ|uₛ⟩ 做相位估计得 s/r，再经连分数展开+GCD 经典恢复 r。其余均为经典步骤；失败（r 为奇或 y^(r/2)≡−1）则换 y 重试。</figcaption>
+</figure>
+
+<!-- ============ 图 3：复杂度对比（示意）============ -->
+<figure>
+  <p class="v-ch05-h">③ 经典 vs 量子复杂度对比（示意，非按比例）</p>
+  <div class="v-ch05-legend">
+    <span><span class="v-ch05-sw v-ch05-bar-c" style="border:none"></span>经典算法</span>
+    <span><span class="v-ch05-sw v-ch05-bar-q" style="border:none"></span>量子算法</span>
+  </div>
+  <svg viewBox="0 0 660 230" style="width:100%;height:auto;max-width:680px" role="img" aria-label="复杂度对比条形图">
+    <!-- group 1: factoring -->
+    <text class="v-ch05-btitle" x="14" y="20">① 因式分解（分解 N=2ⁿ）</text>
+    <text class="v-ch05-brow" x="14" y="42">经典</text>
+    <rect class="v-ch05-bar-c" x="70" y="32" width="390" height="20" rx="3"/>
+    <text class="v-ch05-bin" x="80" y="42">数域筛 · 超多项式 exp(c·n^{1/3})</text>
+    <text class="v-ch05-brow" x="14" y="72">量子</text>
+    <rect class="v-ch05-bar-q" x="70" y="62" width="82" height="20" rx="3"/>
+    <text class="v-ch05-bout" x="160" y="72">Shor · 多项式 O(n³)</text>
+
+    <!-- group 2: Fourier transform -->
+    <text class="v-ch05-btitle" x="14" y="120">② 傅里叶变换（N=2ⁿ 维）</text>
+    <text class="v-ch05-brow" x="14" y="142">经典</text>
+    <rect class="v-ch05-bar-c" x="70" y="132" width="360" height="20" rx="3"/>
+    <text class="v-ch05-bin" x="80" y="142">FFT · O(N log N)</text>
+    <text class="v-ch05-brow" x="14" y="172">量子</text>
+    <rect class="v-ch05-bar-q" x="70" y="162" width="60" height="20" rx="3"/>
+    <text class="v-ch05-bout" x="138" y="172">QFT · O(n²) = O(log²N)</text>
+  </svg>
+  <figcaption>分解从超多项式降到多项式（指数级加速）；傅里叶变换从 O(N log N) 降到 O(log²N)，即把对维数 N 的多项式开销压成对比特数 n 的多项式开销。条形长度仅示意量级差异。</figcaption>
+</figure>
+</div>

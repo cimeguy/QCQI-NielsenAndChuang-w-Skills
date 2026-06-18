@@ -1,0 +1,158 @@
+<div class="v-ch01">
+<style>
+.v-ch01{margin:4px 0}
+.v-ch01 .v-ch01-grid{display:flex;flex-wrap:wrap;gap:20px;align-items:flex-start}
+.v-ch01 .v-ch01-fig{flex:1 1 320px;min-width:300px}
+.v-ch01 .v-ch01-fig svg{width:100%;height:auto;display:block}
+.v-ch01 .v-ch01-bloch{max-width:420px;margin:0 auto}
+.v-ch01 .v-ch01-circ{max-width:620px;margin:0 auto}
+.v-ch01 .v-ch01-cap{color:var(--muted);font-size:13px;margin:8px 2px 0;line-height:1.55}
+.v-ch01 .v-ch01-cap b{color:var(--fg);font-weight:600}
+.v-ch01 .v-ch01-t{fill:var(--fg);font-size:14px}
+.v-ch01 .v-ch01-tm{fill:var(--muted);font-size:12px}
+.v-ch01 .v-ch01-ta{fill:var(--accent);font-size:14px;font-style:italic}
+.v-ch01 .v-ch01-psi{animation:v-ch01-pulse 2.6s ease-in-out infinite}
+.v-ch01 .v-ch01-tip{animation:v-ch01-glow 2.6s ease-in-out infinite}
+@keyframes v-ch01-pulse{0%,100%{opacity:.8}50%{opacity:1}}
+@keyframes v-ch01-glow{0%,100%{r:4.5;opacity:.85}50%{r:6.5;opacity:1}}
+@media (prefers-reduced-motion:reduce){.v-ch01 .v-ch01-psi,.v-ch01 .v-ch01-tip{animation:none}}
+</style>
+
+<div class="v-ch01-grid">
+
+  <!-- ============ 图1：Bloch 球 ============ -->
+  <div class="v-ch01-fig">
+    <svg class="v-ch01-bloch" viewBox="0 0 420 380" role="img" aria-label="Bloch 球">
+      <defs>
+        <marker id="v-ch01-arr" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto">
+          <path d="M0,0 L7,3 L0,6 Z" fill="var(--muted)"/></marker>
+        <marker id="v-ch01-arrv" markerWidth="11" markerHeight="11" refX="7" refY="3" orient="auto">
+          <path d="M0,0 L7,3 L0,6 Z" fill="var(--accent2)"/></marker>
+      </defs>
+
+      <!-- 球体 -->
+      <circle cx="195" cy="185" r="118" fill="var(--accent)" fill-opacity="0.05" stroke="var(--border)" stroke-width="1.3"/>
+      <!-- 赤道（前实后虚） -->
+      <path d="M77 185 A118 40 0 0 1 313 185" fill="none" stroke="var(--muted)" stroke-width="1" stroke-dasharray="4 4" opacity="0.7"/>
+      <path d="M77 185 A118 40 0 0 0 313 185" fill="none" stroke="var(--muted)" stroke-width="1.2" opacity="0.85"/>
+      <!-- 经线（前实后虚） -->
+      <path d="M195 67 A40 118 0 0 1 195 303" fill="none" stroke="var(--muted)" stroke-width="1" stroke-dasharray="4 4" opacity="0.7"/>
+      <path d="M195 67 A40 118 0 0 0 195 303" fill="none" stroke="var(--muted)" stroke-width="1.2" opacity="0.85"/>
+
+      <!-- 坐标轴：负向虚线短桩 -->
+      <line x1="195" y1="185" x2="297" y2="126" stroke="var(--muted)" stroke-width="1" stroke-dasharray="3 3" opacity="0.55"/>
+      <line x1="195" y1="185" x2="79" y2="163" stroke="var(--muted)" stroke-width="1" stroke-dasharray="3 3" opacity="0.55"/>
+      <!-- z 轴 -->
+      <line x1="195" y1="330" x2="195" y2="40" stroke="var(--muted)" stroke-width="1.4" marker-end="url(#v-ch01-arr)"/>
+      <!-- x 轴（前左下） -->
+      <line x1="195" y1="185" x2="92" y2="245" stroke="var(--muted)" stroke-width="1.4" marker-end="url(#v-ch01-arr)"/>
+      <!-- y 轴（右下前） -->
+      <line x1="195" y1="185" x2="336" y2="212" stroke="var(--muted)" stroke-width="1.4" marker-end="url(#v-ch01-arr)"/>
+
+      <!-- 轴标签 -->
+      <text class="v-ch01-tm" x="206" y="36">z</text>
+      <text class="v-ch01-t"  x="195" y="30" text-anchor="middle">|0⟩</text>
+      <text class="v-ch01-t"  x="195" y="350" text-anchor="middle">|1⟩</text>
+      <text class="v-ch01-tm" x="80"  y="240">x</text>
+      <text class="v-ch01-t"  x="60"  y="258">|+⟩</text>
+      <text class="v-ch01-tm" x="333" y="200">y</text>
+      <text class="v-ch01-t"  x="346" y="216">|i⟩</text>
+
+      <!-- 投影：到赤道面的虚线 + 半径 -->
+      <line x1="262" y1="118" x2="255" y2="216" stroke="var(--muted)" stroke-width="1" stroke-dasharray="3 3" opacity="0.7"/>
+      <line x1="195" y1="185" x2="255" y2="216" stroke="var(--muted)" stroke-width="1" stroke-dasharray="3 3" opacity="0.7"/>
+
+      <!-- 角 θ（z 轴与态矢之间） -->
+      <path d="M195 140 A42 42 0 0 1 225 155" fill="none" stroke="var(--accent)" stroke-width="1.6"/>
+      <text class="v-ch01-ta" x="205" y="150">θ</text>
+      <!-- 角 φ（赤道面内 x 到投影） -->
+      <path d="M145 214 A70 24 0 0 1 247 212" fill="none" stroke="var(--accent)" stroke-width="1.6"/>
+      <text class="v-ch01-ta" x="190" y="234">φ</text>
+
+      <!-- 态矢 |ψ⟩ -->
+      <line class="v-ch01-psi" x1="195" y1="185" x2="262" y2="118" stroke="var(--accent2)" stroke-width="3.2" marker-end="url(#v-ch01-arrv)"/>
+      <circle class="v-ch01-tip" cx="262" cy="118" r="5" fill="var(--accent2)"/>
+      <text class="v-ch01-t" x="270" y="112" fill="var(--accent2)">|ψ⟩</text>
+    </svg>
+    <div class="v-ch01-cap"><b>Bloch 球</b>：单量子比特纯态的几何表示。
+      <b>|ψ⟩ = cos(θ/2)|0⟩ + e<tspan style="font-size:.8em">iφ</tspan>sin(θ/2)|1⟩</b>，
+      极角 θ∈[0,π] 决定 |0⟩/|1⟩ 权重，方位角 φ∈[0,2π) 为相对相位；北极 |0⟩、南极 |1⟩。</div>
+  </div>
+
+  <!-- ============ 图2：量子隐形传态线路 ============ -->
+  <div class="v-ch01-fig">
+    <svg class="v-ch01-circ" viewBox="0 0 580 230" role="img" aria-label="量子隐形传态线路">
+      <!-- 阶段标注 -->
+      <text class="v-ch01-tm" x="150" y="16" text-anchor="middle">① 制备 Bell 纠缠对</text>
+      <text class="v-ch01-tm" x="280" y="16" text-anchor="middle">② Alice 纠缠 + 测量</text>
+      <text class="v-ch01-tm" x="470" y="16" text-anchor="middle">③ Bob 条件门</text>
+      <line x1="195" y1="26" x2="195" y2="200" stroke="var(--border)" stroke-width="1" stroke-dasharray="3 4"/>
+      <line x1="370" y1="26" x2="370" y2="200" stroke="var(--border)" stroke-width="1" stroke-dasharray="3 4"/>
+
+      <!-- 量子线 -->
+      <text class="v-ch01-t" x="14" y="50">|ψ⟩</text>
+      <text class="v-ch01-t" x="14" y="114">|0⟩</text>
+      <text class="v-ch01-t" x="14" y="174">|0⟩</text>
+      <line x1="56" y1="45"  x2="310" y2="45"  stroke="var(--fg)" stroke-width="1.4"/>
+      <line x1="56" y1="110" x2="310" y2="110" stroke="var(--fg)" stroke-width="1.4"/>
+      <line x1="56" y1="170" x2="545" y2="170" stroke="var(--fg)" stroke-width="1.4"/>
+
+      <!-- H(q2)：制备 Bell 对 -->
+      <rect x="92" y="97" width="26" height="26" rx="4" fill="var(--panel)" stroke="var(--accent)" stroke-width="1.6"/>
+      <text class="v-ch01-t" x="105" y="115" text-anchor="middle">H</text>
+      <!-- CNOT q2→q3 -->
+      <line x1="150" y1="110" x2="150" y2="170" stroke="var(--fg)" stroke-width="1.4"/>
+      <circle cx="150" cy="110" r="4.5" fill="var(--fg)"/>
+      <circle cx="150" cy="170" r="11" fill="var(--panel)" stroke="var(--fg)" stroke-width="1.6"/>
+      <line x1="139" y1="170" x2="161" y2="170" stroke="var(--fg)" stroke-width="1.6"/>
+      <line x1="150" y1="159" x2="150" y2="181" stroke="var(--fg)" stroke-width="1.6"/>
+
+      <!-- CNOT q1→q2 -->
+      <line x1="225" y1="45" x2="225" y2="110" stroke="var(--fg)" stroke-width="1.4"/>
+      <circle cx="225" cy="45" r="4.5" fill="var(--fg)"/>
+      <circle cx="225" cy="110" r="11" fill="var(--panel)" stroke="var(--fg)" stroke-width="1.6"/>
+      <line x1="214" y1="110" x2="236" y2="110" stroke="var(--fg)" stroke-width="1.6"/>
+      <line x1="225" y1="99"  x2="225" y2="121" stroke="var(--fg)" stroke-width="1.6"/>
+      <!-- H(q1) -->
+      <rect x="262" y="32" width="26" height="26" rx="4" fill="var(--panel)" stroke="var(--accent)" stroke-width="1.6"/>
+      <text class="v-ch01-t" x="275" y="50" text-anchor="middle">H</text>
+
+      <!-- 测量计 (q1,q2) -->
+      <g>
+        <rect x="310" y="32" width="32" height="26" rx="4" fill="var(--panel)" stroke="var(--accent2)" stroke-width="1.6"/>
+        <path d="M316 52 A10 10 0 0 1 336 52" fill="none" stroke="var(--accent2)" stroke-width="1.4"/>
+        <line x1="326" y1="52" x2="334" y2="40" stroke="var(--accent2)" stroke-width="1.4"/>
+      </g>
+      <g>
+        <rect x="310" y="97" width="32" height="26" rx="4" fill="var(--panel)" stroke="var(--accent2)" stroke-width="1.6"/>
+        <path d="M316 117 A10 10 0 0 1 336 117" fill="none" stroke="var(--accent2)" stroke-width="1.4"/>
+        <line x1="326" y1="117" x2="334" y2="105" stroke="var(--accent2)" stroke-width="1.4"/>
+      </g>
+
+      <!-- 经典双线 q2→X (m2) -->
+      <path d="M342 107 H432 V158" fill="none" stroke="var(--muted)" stroke-width="1.2"/>
+      <path d="M342 113 H428 V158" fill="none" stroke="var(--muted)" stroke-width="1.2"/>
+      <!-- 经典双线 q1→Z (m1) -->
+      <path d="M342 42 H487 V158" fill="none" stroke="var(--muted)" stroke-width="1.2"/>
+      <path d="M342 48 H483 V158" fill="none" stroke="var(--muted)" stroke-width="1.2"/>
+      <circle cx="430" cy="158" r="3.4" fill="var(--muted)"/>
+      <circle cx="485" cy="158" r="3.4" fill="var(--muted)"/>
+      <text class="v-ch01-tm" x="360" y="104">m₂</text>
+      <text class="v-ch01-tm" x="360" y="40">m₁</text>
+
+      <!-- Bob 条件门 X^m2、Z^m1 -->
+      <rect x="417" y="157" width="26" height="26" rx="4" fill="var(--panel)" stroke="var(--accent)" stroke-width="1.6"/>
+      <text class="v-ch01-t" x="430" y="175" text-anchor="middle">X</text>
+      <rect x="472" y="157" width="26" height="26" rx="4" fill="var(--panel)" stroke="var(--accent)" stroke-width="1.6"/>
+      <text class="v-ch01-t" x="485" y="175" text-anchor="middle">Z</text>
+
+      <!-- 输出 -->
+      <text class="v-ch01-t" x="552" y="174" fill="var(--accent2)">|ψ⟩</text>
+    </svg>
+    <div class="v-ch01-cap"><b>量子隐形传态</b>：Alice、Bob 预先共享 Bell 对；Alice 对待传比特与自己一半作
+      <b>CNOT + H</b> 并测量，得 2 个经典比特 (m₁,m₂) 发给 Bob；Bob 据此施加 <b>X<tspan style="font-size:.8em">m₂</tspan> Z<tspan style="font-size:.8em">m₁</tspan></b> 即复原 |ψ⟩。
+      <b>2 经典比特传送 1 量子比特</b>；原比特被测量破坏，未违反不可克隆定理。</div>
+  </div>
+
+</div>
+</div>

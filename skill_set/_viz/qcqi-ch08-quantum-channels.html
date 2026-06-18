@@ -1,0 +1,137 @@
+<div class="v-ch08">
+<style>
+.v-ch08{display:flex;flex-direction:column;gap:26px;margin-top:6px}
+.v-ch08 .v-ch08-fig{background:var(--panel2);border:1px solid var(--border);border-radius:12px;padding:14px 16px}
+.v-ch08 .v-ch08-t{font-weight:600;color:var(--accent);font-size:14.5px;margin:0 0 8px}
+.v-ch08 .v-ch08-cap{color:var(--muted);font-size:12.5px;margin:8px 2px 0;line-height:1.6}
+.v-ch08 svg{display:block;margin:0 auto}
+.v-ch08 text{fill:var(--fg);font-size:14px}
+.v-ch08 .v-ch08-sm{fill:var(--muted);font-size:11.5px}
+.v-ch08 .v-ch08-ac{fill:var(--accent)}
+.v-ch08 .v-ch08-a2{fill:var(--accent2)}
+.v-ch08 .v-ch08-node{fill:var(--panel);stroke:var(--accent);stroke-width:1.6}
+.v-ch08 .v-ch08-node2{fill:var(--panel);stroke:var(--accent2);stroke-width:1.6}
+.v-ch08 .v-ch08-edge{fill:none;stroke:var(--accent2);stroke-width:2}
+.v-ch08 .v-ch08-arrow{fill:var(--accent2)}
+.v-ch08 .v-ch08-flow{fill:none;stroke:var(--accent);stroke-width:2.4}
+.v-ch08 .v-ch08-arrow2{fill:var(--accent)}
+.v-ch08 .v-ch08-sphere{fill:none;stroke:var(--accent);stroke-width:2}
+.v-ch08 .v-ch08-ghost{fill:none;stroke:var(--muted);stroke-width:1.2;stroke-dasharray:4 4;opacity:.65}
+.v-ch08 .v-ch08-shape{fill:rgba(90,176,255,.16);stroke:var(--accent);stroke-width:2}
+.v-ch08 .v-ch08-shape2{fill:rgba(157,123,255,.18);stroke:var(--accent2);stroke-width:2}
+.v-ch08 .v-ch08-axis{stroke:var(--muted);stroke-width:1.2;fill:none}
+.v-ch08 .v-ch08-lbar{fill:var(--panel2)}
+.v-ch08 .v-ch08-dot{fill:var(--accent)}
+</style>
+
+<!-- 图 1：量子信道的三种等价描述 -->
+<div class="v-ch08-fig">
+  <p class="v-ch08-t">① 量子信道的三种等价描述</p>
+  <svg viewBox="0 0 640 380" style="width:100%;height:auto;max-width:620px" role="img" aria-label="信道、Kraus 算符、Choi 矩阵三者等价的三角图">
+    <defs>
+      <marker id="v-ch08-ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+        <path d="M0,0 L10,5 L0,10 z" class="v-ch08-arrow"/>
+      </marker>
+    </defs>
+    <!-- 三条双向边 -->
+    <line x1="248" y1="86" x2="152" y2="260" class="v-ch08-edge" marker-start="url(#v-ch08-ar)" marker-end="url(#v-ch08-ar)"/>
+    <line x1="392" y1="86" x2="488" y2="260" class="v-ch08-edge" marker-start="url(#v-ch08-ar)" marker-end="url(#v-ch08-ar)"/>
+    <line x1="224" y1="302" x2="416" y2="302" class="v-ch08-edge" marker-start="url(#v-ch08-ar)" marker-end="url(#v-ch08-ar)"/>
+    <!-- 边标签（带底色避免压线） -->
+    <rect x="120" y="160" width="96" height="22" rx="5" class="v-ch08-lbar"/>
+    <text x="168" y="175" text-anchor="middle" class="v-ch08-a2" font-size="12.5">Kraus 分解</text>
+    <rect x="392" y="160" width="150" height="22" rx="5" class="v-ch08-lbar"/>
+    <text x="467" y="175" text-anchor="middle" class="v-ch08-a2" font-size="12.5">Choi–Jamiołkowski</text>
+    <rect x="258" y="290" width="124" height="22" rx="5" class="v-ch08-lbar"/>
+    <text x="320" y="305" text-anchor="middle" class="v-ch08-a2" font-size="12.5">重排 · 半正定分解</text>
+    <!-- 顶点 1：信道 -->
+    <rect x="210" y="20" width="220" height="66" rx="12" class="v-ch08-node"/>
+    <text x="320" y="46" text-anchor="middle" font-size="15">信道  ε(ρ)</text>
+    <text x="320" y="68" text-anchor="middle" class="v-ch08-sm">CPTP 映射（完全正 · 保迹）</text>
+    <!-- 顶点 2：Kraus -->
+    <rect x="14" y="260" width="208" height="86" rx="12" class="v-ch08-node"/>
+    <text x="118" y="286" text-anchor="middle" font-size="14">Kraus 算符 {Eₖ}</text>
+    <text x="118" y="308" text-anchor="middle" class="v-ch08-sm">ε(ρ) = Σₖ Eₖ ρ Eₖ†</text>
+    <text x="118" y="328" text-anchor="middle" class="v-ch08-sm">Σₖ Eₖ† Eₖ = I</text>
+    <!-- 顶点 3：Choi -->
+    <rect x="418" y="260" width="208" height="86" rx="12" class="v-ch08-node2"/>
+    <text x="522" y="286" text-anchor="middle" font-size="14">蔡氏矩阵 / Choi 矩阵</text>
+    <text x="522" y="308" text-anchor="middle" class="v-ch08-sm">J(ε) = (ε⊗I)|Ω⟩⟨Ω|</text>
+    <text x="522" y="328" text-anchor="middle" class="v-ch08-sm">半正定  J ≥ 0</text>
+  </svg>
+  <p class="v-ch08-cap">三种描述互为等价、可双向转换：由 Kraus 算符代入即得 ε(ρ)；对 Choi 矩阵作谱分解即得一组 Kraus 算符；ε 的完全正性 ⇔ Choi 矩阵半正定。</p>
+</div>
+
+<!-- 图 2：Bloch 表示下的仿射变换 -->
+<div class="v-ch08-fig">
+  <p class="v-ch08-t">② 信道是 Bloch 表示下的仿射变换</p>
+  <svg viewBox="0 0 640 260" style="width:100%;height:auto;max-width:620px" role="img" aria-label="单位 Bloch 球经信道映射为收缩平移的椭球">
+    <defs>
+      <marker id="v-ch08-flow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+        <path d="M0,0 L10,5 L0,10 z" class="v-ch08-arrow2"/>
+      </marker>
+    </defs>
+    <!-- 左：单位 Bloch 球 -->
+    <line x1="135" y1="22" x2="135" y2="240" class="v-ch08-axis"/>
+    <circle cx="135" cy="130" r="92" class="v-ch08-sphere"/>
+    <ellipse cx="135" cy="130" rx="92" ry="28" class="v-ch08-axis" stroke-dasharray="4 4"/>
+    <ellipse cx="135" cy="130" rx="28" ry="92" class="v-ch08-axis" stroke-dasharray="4 4"/>
+    <circle cx="135" cy="130" r="3.2" class="v-ch08-dot"/>
+    <text x="135" y="16" text-anchor="middle" class="v-ch08-sm">|0⟩</text>
+    <text x="135" y="255" text-anchor="middle" class="v-ch08-sm">|1⟩</text>
+    <text x="135" y="246" text-anchor="middle" class="v-ch08-sm"> </text>
+    <!-- 中间箭头 -->
+    <line x1="248" y1="130" x2="392" y2="130" class="v-ch08-flow" marker-end="url(#v-ch08-flow)"/>
+    <text x="320" y="116" text-anchor="middle" class="v-ch08-ac" font-size="13">ε : r ↦ M r + c</text>
+    <text x="320" y="150" text-anchor="middle" class="v-ch08-sm">M：收缩矩阵　c：平移矢量</text>
+    <!-- 右：被压缩平移的椭球 -->
+    <circle cx="505" cy="130" r="92" class="v-ch08-ghost"/>
+    <line x1="505" y1="22" x2="505" y2="240" class="v-ch08-axis"/>
+    <ellipse cx="505" cy="108" rx="58" ry="64" class="v-ch08-shape"/>
+    <ellipse cx="505" cy="108" rx="58" ry="18" class="v-ch08-axis" stroke-dasharray="3 3"/>
+    <circle cx="505" cy="108" r="3.2" class="v-ch08-dot"/>
+    <text x="505" y="16" text-anchor="middle" class="v-ch08-sm">|0⟩</text>
+    <text x="592" y="206" text-anchor="middle" class="v-ch08-sm">椭球</text>
+  </svg>
+  <p class="v-ch08-cap">信道在 Bloch 表示下是仿射变换：纯态构成的单位球被线性收缩（M）并整体平移（c），半径变小、球心偏离原点，从而成为内含于原球的椭球。</p>
+</div>
+
+<!-- 图 3：典型信道对 Bloch 球的作用 -->
+<div class="v-ch08-fig">
+  <p class="v-ch08-t">③ 典型信道对 Bloch 球的作用</p>
+  <svg viewBox="0 0 640 230" style="width:100%;height:auto;max-width:620px" role="img" aria-label="去极化、相位阻尼、振幅阻尼三种信道对 Bloch 球的不同形变">
+    <!-- 去极化 -->
+    <g>
+      <line x1="110" y1="20" x2="110" y2="166" class="v-ch08-axis"/>
+      <circle cx="110" cy="93" r="58" class="v-ch08-ghost"/>
+      <circle cx="110" cy="93" r="32" class="v-ch08-shape"/>
+      <circle cx="110" cy="93" r="3" class="v-ch08-dot"/>
+      <text x="110" y="14" text-anchor="middle" class="v-ch08-sm">|0⟩</text>
+      <text x="110" y="195" text-anchor="middle" font-size="13">去极化</text>
+      <text x="110" y="214" text-anchor="middle" class="v-ch08-sm">整体均匀收缩</text>
+    </g>
+    <!-- 相位阻尼 -->
+    <g>
+      <line x1="320" y1="20" x2="320" y2="166" class="v-ch08-axis"/>
+      <circle cx="320" cy="93" r="58" class="v-ch08-ghost"/>
+      <ellipse cx="320" cy="93" rx="15" ry="58" class="v-ch08-shape2"/>
+      <circle cx="320" cy="93" r="3" class="v-ch08-dot"/>
+      <text x="320" y="14" text-anchor="middle" class="v-ch08-sm">|0⟩</text>
+      <text x="320" y="195" text-anchor="middle" font-size="13">相位阻尼 / 消相干</text>
+      <text x="320" y="214" text-anchor="middle" class="v-ch08-sm">沿 z 轴压扁，保留 z 分量</text>
+    </g>
+    <!-- 振幅阻尼 -->
+    <g>
+      <line x1="530" y1="20" x2="530" y2="166" class="v-ch08-axis"/>
+      <circle cx="530" cy="93" r="58" class="v-ch08-ghost"/>
+      <ellipse cx="530" cy="74" rx="40" ry="44" class="v-ch08-shape"/>
+      <circle cx="530" cy="35" r="3.4" class="v-ch08-dot"/>
+      <circle cx="530" cy="74" r="3" class="v-ch08-dot"/>
+      <text x="530" y="14" text-anchor="middle" class="v-ch08-sm">|0⟩</text>
+      <text x="530" y="195" text-anchor="middle" font-size="13">振幅阻尼</text>
+      <text x="530" y="214" text-anchor="middle" class="v-ch08-sm">收缩并移向 |0⟩ 北极</text>
+    </g>
+  </svg>
+  <p class="v-ch08-cap">虚线为原单位球：去极化使球向球心等比收缩；相位阻尼仅压缩 x-y 平面、把球压成沿 z 轴的纺锤；振幅阻尼既收缩又把球心推向 |0⟩，体现能量耗散趋于基态。</p>
+</div>
+</div>

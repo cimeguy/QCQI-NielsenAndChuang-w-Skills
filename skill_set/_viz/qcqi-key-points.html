@@ -1,0 +1,142 @@
+<div class="v-kp">
+  <style>
+    .v-kp{margin:2px 0 4px}
+    .v-kp-cap{color:var(--muted);font-size:13px;margin:0 0 10px}
+    .v-kp-cap b{color:var(--accent)}
+    .v-kp svg{display:block;width:100%;height:auto;max-width:960px;margin:0 auto}
+    .v-kp-node{stroke-width:2}
+    .v-kp-a{fill:var(--accent);fill-opacity:.14;stroke:var(--accent)}
+    .v-kp-b{fill:var(--accent2);fill-opacity:.14;stroke:var(--accent2)}
+    .v-kp-la{stroke:var(--accent);fill:none;stroke-width:2;opacity:.72}
+    .v-kp-lb{stroke:var(--accent2);fill:none;stroke-width:2;opacity:.72}
+    .v-kp-spine{stroke:var(--border);fill:none;stroke-width:1.4}
+    .v-kp-da{fill:var(--accent)}
+    .v-kp-db{fill:var(--accent2)}
+    .v-kp-num{fill:var(--muted);font-size:10px}
+    .v-kp-ti{fill:var(--fg);font-size:13px;font-weight:600}
+    .v-kp-leaf{fill:var(--fg);font-size:12.5px}
+    .v-kp-core-t{fill:#fff;font-size:23px;font-weight:700;letter-spacing:.04em}
+    .v-kp-core-s{fill:#fff;fill-opacity:.85;font-size:10px}
+    /* 三条红线 */
+    .v-kp-lines{display:flex;flex-wrap:wrap;gap:12px;margin-top:16px}
+    .v-kp-chip{flex:1 1 200px;background:var(--bg);border:1px solid var(--border);
+      border-left:4px solid var(--accent2);border-radius:10px;padding:11px 14px}
+    .v-kp-chip:nth-child(2){border-left-color:var(--accent)}
+    .v-kp-chip h4{margin:0 0 5px;font-size:13.5px;color:var(--fg)}
+    .v-kp-chip .v-kp-arr{color:var(--accent2);font-weight:700;margin:0 4px}
+    .v-kp-chip:nth-child(2) .v-kp-arr{color:var(--accent)}
+    .v-kp-chip p{margin:0;font-size:12px;color:var(--muted);line-height:1.55}
+    .v-kp-lt{font-size:13px;color:var(--muted);margin:18px 0 2px;font-weight:600}
+  </style>
+
+  <p class="v-kp-cap"><b>QCQI 全书脉络</b> · 中心向 6 章辐射，叶节点为各章必记关键词（<span style="color:var(--accent)">蓝</span>/<span style="color:var(--accent2)">紫</span>区分章节）。</p>
+
+  <svg viewBox="0 0 960 640" role="img" aria-label="QCQI 各章关键知识点思维导图">
+    <defs>
+      <radialGradient id="v-kp-core" cx="38%" cy="34%" r="72%">
+        <stop offset="0%" style="stop-color:var(--accent)"/>
+        <stop offset="100%" style="stop-color:var(--accent2)"/>
+      </radialGradient>
+    </defs>
+
+    <!-- 中心 → 章 连线 -->
+    <path class="v-kp-la" d="M480 320 C410 320 348 120 325 120"/>
+    <path class="v-kp-lb" d="M480 320 C410 320 348 320 325 320"/>
+    <path class="v-kp-la" d="M480 320 C410 320 348 540 325 540"/>
+    <path class="v-kp-lb" d="M480 320 C550 320 612 120 635 120"/>
+    <path class="v-kp-la" d="M480 320 C550 320 612 320 635 320"/>
+    <path class="v-kp-lb" d="M480 320 C550 320 612 540 635 540"/>
+
+    <!-- 叶 脊线 + 节点→脊 连接 -->
+    <path class="v-kp-spine" d="M152 78 V162 M175 120 H152"/>
+    <path class="v-kp-spine" d="M152 278 V362 M175 320 H152"/>
+    <path class="v-kp-spine" d="M152 519 V561 M175 540 H152"/>
+    <path class="v-kp-spine" d="M808 88 V152 M785 120 H808"/>
+    <path class="v-kp-spine" d="M808 288 V352 M785 320 H808"/>
+    <path class="v-kp-spine" d="M808 519 V561 M785 540 H808"/>
+
+    <!-- ===== 章节节点 ===== -->
+    <!-- 第1章 (左上, accent) -->
+    <rect class="v-kp-node v-kp-a" x="175" y="97" width="150" height="46" rx="11"/>
+    <text text-anchor="middle"><tspan class="v-kp-num" x="250" y="114">第 1 章</tspan><tspan class="v-kp-ti" x="250" y="132">量子计算简介</tspan></text>
+    <!-- 第2章 (左中, accent2) -->
+    <rect class="v-kp-node v-kp-b" x="175" y="297" width="150" height="46" rx="11"/>
+    <text text-anchor="middle"><tspan class="v-kp-num" x="250" y="314">第 2 章</tspan><tspan class="v-kp-ti" x="250" y="332">线性代数与量子力学</tspan></text>
+    <!-- 第8章补充 (左下, accent) -->
+    <rect class="v-kp-node v-kp-a" x="175" y="517" width="150" height="46" rx="11"/>
+    <text text-anchor="middle"><tspan class="v-kp-num" x="250" y="534">第 8 章 · 补充</tspan><tspan class="v-kp-ti" x="250" y="552">量子信道</tspan></text>
+    <!-- 第4章 (右上, accent2) -->
+    <rect class="v-kp-node v-kp-b" x="635" y="97" width="150" height="46" rx="11"/>
+    <text text-anchor="middle"><tspan class="v-kp-num" x="710" y="114">第 4 章</tspan><tspan class="v-kp-ti" x="710" y="132">量子线路与模拟</tspan></text>
+    <!-- 第5章 (右中, accent) -->
+    <rect class="v-kp-node v-kp-a" x="635" y="297" width="150" height="46" rx="11"/>
+    <text text-anchor="middle"><tspan class="v-kp-num" x="710" y="314">第 5 章</tspan><tspan class="v-kp-ti" x="710" y="332">QFT 与 Shor</tspan></text>
+    <!-- 第6章 (右下, accent2) -->
+    <rect class="v-kp-node v-kp-b" x="635" y="517" width="150" height="46" rx="11"/>
+    <text text-anchor="middle"><tspan class="v-kp-num" x="710" y="534">第 6 章</tspan><tspan class="v-kp-ti" x="710" y="552">量子搜索</tspan></text>
+
+    <!-- ===== 叶节点（关键词）===== -->
+    <!-- 第1章: qubit / Bloch / 量子门 / 隐形传态 / Deutsch -->
+    <g class="v-kp-da">
+      <circle cx="152" cy="78" r="2.6"/><circle cx="152" cy="99" r="2.6"/><circle cx="152" cy="120" r="2.6"/><circle cx="152" cy="141" r="2.6"/><circle cx="152" cy="162" r="2.6"/>
+    </g>
+    <g class="v-kp-leaf" text-anchor="end">
+      <text x="144" y="82">qubit</text><text x="144" y="103">Bloch 球</text><text x="144" y="124">量子门</text><text x="144" y="145">隐形传态</text><text x="144" y="166">Deutsch</text>
+    </g>
+    <!-- 第2章: 四公理 / 密度矩阵 / PVM·POVM / Schmidt / Bell -->
+    <g class="v-kp-db">
+      <circle cx="152" cy="278" r="2.6"/><circle cx="152" cy="299" r="2.6"/><circle cx="152" cy="320" r="2.6"/><circle cx="152" cy="341" r="2.6"/><circle cx="152" cy="362" r="2.6"/>
+    </g>
+    <g class="v-kp-leaf" text-anchor="end">
+      <text x="144" y="282">四公理</text><text x="144" y="303">密度矩阵 ρ</text><text x="144" y="324">PVM · POVM</text><text x="144" y="345">Schmidt</text><text x="144" y="366">Bell 态</text>
+    </g>
+    <!-- 第8章: 信道 / Kraus / 蔡氏矩阵 -->
+    <g class="v-kp-da">
+      <circle cx="152" cy="519" r="2.6"/><circle cx="152" cy="540" r="2.6"/><circle cx="152" cy="561" r="2.6"/>
+    </g>
+    <g class="v-kp-leaf" text-anchor="end">
+      <text x="144" y="523">量子信道</text><text x="144" y="544">Kraus 算符</text><text x="144" y="565">蔡氏矩阵 (Choi)</text>
+    </g>
+    <!-- 第4章: z-y-z / 受控门 / {H,T,CNOT} / Trotter·BCH -->
+    <g class="v-kp-db">
+      <circle cx="808" cy="88" r="2.6"/><circle cx="808" cy="109" r="2.6"/><circle cx="808" cy="131" r="2.6"/><circle cx="808" cy="152" r="2.6"/>
+    </g>
+    <g class="v-kp-leaf" text-anchor="start">
+      <text x="816" y="92">z-y-z 分解</text><text x="816" y="113">受控门 CU</text><text x="816" y="135">{H, T, CNOT}</text><text x="816" y="156">Trotter · BCH</text>
+    </g>
+    <!-- 第5章: QFT / 相位估计 / Shor 求阶 / HSP -->
+    <g class="v-kp-da">
+      <circle cx="808" cy="288" r="2.6"/><circle cx="808" cy="309" r="2.6"/><circle cx="808" cy="331" r="2.6"/><circle cx="808" cy="352" r="2.6"/>
+    </g>
+    <g class="v-kp-leaf" text-anchor="start">
+      <text x="816" y="292">QFT</text><text x="816" y="313">相位估计</text><text x="816" y="335">Shor 求阶</text><text x="816" y="356">HSP</text>
+    </g>
+    <!-- 第6章: Grover / 预言机 / √N -->
+    <g class="v-kp-db">
+      <circle cx="808" cy="519" r="2.6"/><circle cx="808" cy="540" r="2.6"/><circle cx="808" cy="561" r="2.6"/>
+    </g>
+    <g class="v-kp-leaf" text-anchor="start">
+      <text x="816" y="523">Grover 迭代</text><text x="816" y="544">预言机 (oracle)</text><text x="816" y="565">√N 加速</text>
+    </g>
+
+    <!-- ===== 中心节点 ===== -->
+    <circle cx="480" cy="320" r="46" fill="url(#v-kp-core)" stroke="var(--accent)" stroke-width="2"/>
+    <text text-anchor="middle"><tspan class="v-kp-core-t" x="480" y="318">QCQI</tspan><tspan class="v-kp-core-s" x="480" y="337">全书脉络</tspan></text>
+  </svg>
+
+  <p class="v-kp-lt">贯穿全书的三条红线</p>
+  <div class="v-kp-lines">
+    <div class="v-kp-chip">
+      <h4>不可克隆<span class="v-kp-arr">→</span>禁扇出</h4>
+      <p>未知量子态不可复制（no-cloning），线路中一根量子线不能被"扇出"成多份拷贝。</p>
+    </div>
+    <div class="v-kp-chip">
+      <h4>幺正可逆<span class="v-kp-arr">→</span>禁扇入 / 环路</h4>
+      <p>演化是幺正变换、处处可逆，量子线路无反馈环、无多线汇合的不可逆"扇入"。</p>
+    </div>
+    <div class="v-kp-chip">
+      <h4>测量即塌缩<span class="v-kp-arr">→</span>信息藏在幅里</h4>
+      <p>测量使态塌缩、只给概率结果；算法的威力藏在振幅与相位中，需用干涉才能"读出"。</p>
+    </div>
+  </div>
+</div>

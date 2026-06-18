@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>第一章 · 量子计算简介 · QCQI 知识库</title>
+<style>
+:root{--bg:#0f1419;--panel:#1a2330;--panel2:#141c27;--fg:#e6edf3;--muted:#8b98a9;
+--accent:#5ab0ff;--accent2:#9d7bff;--border:#26313f;--code:#1e2a38;--th:#1d2733;}
+[data-theme=light]{--bg:#f6f8fa;--panel:#fff;--panel2:#f0f3f7;--fg:#1f2733;--muted:#5a6b7d;
+--accent:#0969da;--accent2:#7b4bff;--border:#d6dee7;--code:#eef2f6;--th:#eaf0f6;}
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,"PingFang SC","Microsoft YaHei",Segoe UI,system-ui,sans-serif;
+background:var(--bg);color:var(--fg);line-height:1.7;font-size:15px}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+.layout{display:flex;min-height:100vh}
+.sidebar{width:280px;flex:0 0 280px;background:var(--panel2);border-right:1px solid var(--border);
+position:sticky;top:0;height:100vh;overflow-y:auto;padding:20px 0}
+.sidebar h2{font-size:14px;margin:0 18px 6px;color:var(--muted);font-weight:600;letter-spacing:.04em}
+.brand{padding:0 18px 14px;border-bottom:1px solid var(--border);margin-bottom:12px}
+.brand .t{font-size:17px;font-weight:700}
+.brand .s{font-size:12px;color:var(--muted);margin-top:3px}
+.search{margin:0 14px 12px;width:calc(100% - 28px);padding:8px 10px;border-radius:8px;
+border:1px solid var(--border);background:var(--panel);color:var(--fg);font-size:13px}
+.nav a{display:block;padding:6px 18px;color:var(--fg);font-size:13.5px;border-left:3px solid transparent}
+.nav a:hover{background:var(--panel);text-decoration:none}
+.nav a.active{border-left-color:var(--accent);background:var(--panel);color:var(--accent)}
+.nav a.hidden{display:none}
+.main{flex:1;min-width:0;padding:34px 48px 80px;max-width:1000px}
+.topbar{display:flex;align-items:center;gap:14px;margin-bottom:8px}
+.topbar .home{font-size:13px;color:var(--muted)}
+.toggle{margin-left:auto;cursor:pointer;border:1px solid var(--border);background:var(--panel);
+color:var(--fg);border-radius:8px;padding:6px 12px;font-size:13px}
+section{scroll-margin-top:20px;padding:18px 0;border-bottom:1px solid var(--border)}
+h1{font-size:26px;margin:.2em 0 .5em}h2{font-size:20px;margin:1.2em 0 .5em;color:var(--accent)}
+h3{font-size:16.5px;margin:1em 0 .4em;color:var(--accent2)}h4{font-size:15px;margin:.9em 0 .3em}
+code{background:var(--code);padding:1.5px 6px;border-radius:5px;font-size:.9em;
+font-family:"SF Mono",Menlo,Consolas,monospace}
+pre{background:var(--code);padding:14px 16px;border-radius:10px;overflow-x:auto;border:1px solid var(--border)}
+pre code{background:none;padding:0}
+table{border-collapse:collapse;width:100%;margin:12px 0;font-size:13.5px;overflow:hidden;border-radius:8px}
+th,td{border:1px solid var(--border);padding:7px 11px;text-align:left;vertical-align:top}
+th{background:var(--th);font-weight:600}
+tr:nth-child(even) td{background:rgba(127,127,127,.05)}
+blockquote{border-left:4px solid var(--accent2);margin:10px 0;padding:6px 16px;color:var(--muted);
+background:var(--panel);border-radius:0 8px 8px 0}
+ul,ol{padding-left:24px}li{margin:3px 0}
+hr{border:none;border-top:1px dashed var(--border);margin:16px 0}
+.viz{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:20px 22px;margin:14px 0 26px}
+.viz h2{margin-top:0;color:var(--accent)}
+.viz svg{max-width:100%;height:auto}
+.badge{display:inline-block;background:var(--accent);color:#fff;border-radius:6px;padding:2px 9px;font-size:12px;font-weight:600}
+@media(max-width:820px){.sidebar{display:none}.main{padding:24px 18px}}
+</style>
+</head>
+<body>
+<div class="layout">
+<aside class="sidebar">
+<div class="brand"><div class="t">QCQI 知识库</div><div class="s">第一章 · 量子计算简介</div></div>
+<input class="search" id="search" placeholder="过滤小节…">
+<nav class="nav">
+<a href="index.html" style="color:var(--muted)">← 返回门户</a>
+<a href="#viz">可视化图示</a>
+<a href="#top">概览</a>
+<a href="#sec-sec1-1-overview">1.1 量子计算和量子信息简介</a>
+<a href="#sec-sec1-2-qubit">1.2 量子比特</a>
+<a href="#sec-sec1-3-quantum-computation">1.3 量子计算</a>
+<a href="#sec-sec1-4-algorithms">1.4 量子算法</a>
+<a href="#sec-sec1-5-experiments">1.5 量子信息处理（量子计算）实验</a>
+<a href="#sec-sec1-6-quantum-info">1.6 量子信息</a>
+<a href="#sec-glossary">术语表</a>
+<a href="#sec-patterns">技巧/构件</a>
+<a href="#sec-cheatsheet">速查表</a>
+</nav></aside>
+<main class="main">
+<div class="topbar"><span class="badge">QCQI</span><span class="home">第一章 · 量子计算简介</span><button class="toggle" id="themeToggle">🌓 深/浅色</button></div>
+<section id="viz" class="viz"><h2>可视化图示</h2><div class="v-ch01">
+<style>
+.v-ch01{margin:4px 0}
+.v-ch01 .v-ch01-grid{display:flex;flex-wrap:wrap;gap:20px;align-items:flex-start}
+.v-ch01 .v-ch01-fig{flex:1 1 320px;min-width:300px}
+.v-ch01 .v-ch01-fig svg{width:100%;height:auto;display:block}
+.v-ch01 .v-ch01-bloch{max-width:420px;margin:0 auto}
+.v-ch01 .v-ch01-circ{max-width:620px;margin:0 auto}
+.v-ch01 .v-ch01-cap{color:var(--muted);font-size:13px;margin:8px 2px 0;line-height:1.55}
+.v-ch01 .v-ch01-cap b{color:var(--fg);font-weight:600}
+.v-ch01 .v-ch01-t{fill:var(--fg);font-size:14px}
+.v-ch01 .v-ch01-tm{fill:var(--muted);font-size:12px}
+.v-ch01 .v-ch01-ta{fill:var(--accent);font-size:14px;font-style:italic}
+.v-ch01 .v-ch01-psi{animation:v-ch01-pulse 2.6s ease-in-out infinite}
+.v-ch01 .v-ch01-tip{animation:v-ch01-glow 2.6s ease-in-out infinite}
+@keyframes v-ch01-pulse{0%,100%{opacity:.8}50%{opacity:1}}
+@keyframes v-ch01-glow{0%,100%{r:4.5;opacity:.85}50%{r:6.5;opacity:1}}
+@media (prefers-reduced-motion:reduce){.v-ch01 .v-ch01-psi,.v-ch01 .v-ch01-tip{animation:none}}
+</style>
+
+<div class="v-ch01-grid">
+
+  <!-- ============ 图1：Bloch 球 ============ -->
+  <div class="v-ch01-fig">
+    <svg class="v-ch01-bloch" viewBox="0 0 420 380" role="img" aria-label="Bloch 球">
+      <defs>
+        <marker id="v-ch01-arr" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto">
+          <path d="M0,0 L7,3 L0,6 Z" fill="var(--muted)"/></marker>
+        <marker id="v-ch01-arrv" markerWidth="11" markerHeight="11" refX="7" refY="3" orient="auto">
+          <path d="M0,0 L7,3 L0,6 Z" fill="var(--accent2)"/></marker>
+      </defs>
+
+      <!-- 球体 -->
+      <circle cx="195" cy="185" r="118" fill="var(--accent)" fill-opacity="0.05" stroke="var(--border)" stroke-width="1.3"/>
+      <!-- 赤道（前实后虚） -->
+      <path d="M77 185 A118 40 0 0 1 313 185" fill="none" stroke="var(--muted)" stroke-width="1" stroke-dasharray="4 4" opacity="0.7"/>
+      <path d="M77 185 A118 40 0 0 0 313 185" fill="none" stroke="var(--muted)" stroke-width="1.2" opacity="0.85"/>
+      <!-- 经线（前实后虚） -->
+      <path d="M195 67 A40 118 0 0 1 195 303" fill="none" stroke="var(--muted)" stroke-width="1" stroke-dasharray="4 4" opacity="0.7"/>
+      <path d="M195 67 A40 118 0 0 0 195 303" fill="none" stroke="var(--muted)" stroke-width="1.2" opacity="0.85"/>
+
+      <!-- 坐标轴：负向虚线短桩 -->
+      <line x1="195" y1="185" x2="297" y2="126" stroke="var(--muted)" stroke-width="1" stroke-dasharray="3 3" opacity="0.55"/>
+      <line x1="195" y1="185" x2="79" y2="163" stroke="var(--muted)" stroke-width="1" stroke-dasharray="3 3" opacity="0.55"/>
+      <!-- z 轴 -->
+      <line x1="195" y1="330" x2="195" y2="40" stroke="var(--muted)" stroke-width="1.4" marker-end="url(#v-ch01-arr)"/>
+      <!-- x 轴（前左下） -->
+      <line x1="195" y1="185" x2="92" y2="245" stroke="var(--muted)" stroke-width="1.4" marker-end="url(#v-ch01-arr)"/>
+      <!-- y 轴（右下前） -->
+      <line x1="195" y1="185" x2="336" y2="212" stroke="var(--muted)" stroke-width="1.4" marker-end="url(#v-ch01-arr)"/>
+
+      <!-- 轴标签 -->
+      <text class="v-ch01-tm" x="206" y="36">z</text>
+      <text class="v-ch01-t"  x="195" y="30" text-anchor="middle">|0⟩</text>
+      <text class="v-ch01-t"  x="195" y="350" text-anchor="middle">|1⟩</text>
+      <text class="v-ch01-tm" x="80"  y="240">x</text>
+      <text class="v-ch01-t"  x="60"  y="258">|+⟩</text>
+      <text class="v-ch01-tm" x="333" y="200">y</text>
+      <text class="v-ch01-t"  x="346" y="216">|i⟩</text>
+
+      <!-- 投影：到赤道面的虚线 + 半径 -->
+      <line x1="262" y1="118" x2="255" y2="216" stroke="var(--muted)" stroke-width="1" stroke-dasharray="3 3" opacity="0.7"/>
+      <line x1="195" y1="185" x2="255" y2="216" stroke="var(--muted)" stroke-width="1" stroke-dasharray="3 3" opacity="0.7"/>
+
+      <!-- 角 θ（z 轴与态矢之间） -->
+      <path d="M195 140 A42 42 0 0 1 225 155" fill="none" stroke="var(--accent)" stroke-width="1.6"/>
+      <text class="v-ch01-ta" x="205" y="150">θ</text>
+      <!-- 角 φ（赤道面内 x 到投影） -->
+      <path d="M145 214 A70 24 0 0 1 247 212" fill="none" stroke="var(--accent)" stroke-width="1.6"/>
+      <text class="v-ch01-ta" x="190" y="234">φ</text>
+
+      <!-- 态矢 |ψ⟩ -->
+      <line class="v-ch01-psi" x1="195" y1="185" x2="262" y2="118" stroke="var(--accent2)" stroke-width="3.2" marker-end="url(#v-ch01-arrv)"/>
+      <circle class="v-ch01-tip" cx="262" cy="118" r="5" fill="var(--accent2)"/>
+      <text class="v-ch01-t" x="270" y="112" fill="var(--accent2)">|ψ⟩</text>
+    </svg>
+    <div class="v-ch01-cap"><b>Bloch 球</b>：单量子比特纯态的几何表示。
+      <b>|ψ⟩ = cos(θ/2)|0⟩ + e<tspan style="font-size:.8em">iφ</tspan>sin(θ/2)|1⟩</b>，
+      极角 θ∈[0,π] 决定 |0⟩/|1⟩ 权重，方位角 φ∈[0,2π) 为相对相位；北极 |0⟩、南极 |1⟩。</div>
+  </div>
+
+  <!-- ============ 图2：量子隐形传态线路 ============ -->
+  <div class="v-ch01-fig">
+    <svg class="v-ch01-circ" viewBox="0 0 580 230" role="img" aria-label="量子隐形传态线路">
+      <!-- 阶段标注 -->
+      <text class="v-ch01-tm" x="150" y="16" text-anchor="middle">① 制备 Bell 纠缠对</text>
+      <text class="v-ch01-tm" x="280" y="16" text-anchor="middle">② Alice 纠缠 + 测量</text>
+      <text class="v-ch01-tm" x="470" y="16" text-anchor="middle">③ Bob 条件门</text>
+      <line x1="195" y1="26" x2="195" y2="200" stroke="var(--border)" stroke-width="1" stroke-dasharray="3 4"/>
+      <line x1="370" y1="26" x2="370" y2="200" stroke="var(--border)" stroke-width="1" stroke-dasharray="3 4"/>
+
+      <!-- 量子线 -->
+      <text class="v-ch01-t" x="14" y="50">|ψ⟩</text>
+      <text class="v-ch01-t" x="14" y="114">|0⟩</text>
+      <text class="v-ch01-t" x="14" y="174">|0⟩</text>
+      <line x1="56" y1="45"  x2="310" y2="45"  stroke="var(--fg)" stroke-width="1.4"/>
+      <line x1="56" y1="110" x2="310" y2="110" stroke="var(--fg)" stroke-width="1.4"/>
+      <line x1="56" y1="170" x2="545" y2="170" stroke="var(--fg)" stroke-width="1.4"/>
+
+      <!-- H(q2)：制备 Bell 对 -->
+      <rect x="92" y="97" width="26" height="26" rx="4" fill="var(--panel)" stroke="var(--accent)" stroke-width="1.6"/>
+      <text class="v-ch01-t" x="105" y="115" text-anchor="middle">H</text>
+      <!-- CNOT q2→q3 -->
+      <line x1="150" y1="110" x2="150" y2="170" stroke="var(--fg)" stroke-width="1.4"/>
+      <circle cx="150" cy="110" r="4.5" fill="var(--fg)"/>
+      <circle cx="150" cy="170" r="11" fill="var(--panel)" stroke="var(--fg)" stroke-width="1.6"/>
+      <line x1="139" y1="170" x2="161" y2="170" stroke="var(--fg)" stroke-width="1.6"/>
+      <line x1="150" y1="159" x2="150" y2="181" stroke="var(--fg)" stroke-width="1.6"/>
+
+      <!-- CNOT q1→q2 -->
+      <line x1="225" y1="45" x2="225" y2="110" stroke="var(--fg)" stroke-width="1.4"/>
+      <circle cx="225" cy="45" r="4.5" fill="var(--fg)"/>
+      <circle cx="225" cy="110" r="11" fill="var(--panel)" stroke="var(--fg)" stroke-width="1.6"/>
+      <line x1="214" y1="110" x2="236" y2="110" stroke="var(--fg)" stroke-width="1.6"/>
+      <line x1="225" y1="99"  x2="225" y2="121" stroke="var(--fg)" stroke-width="1.6"/>
+      <!-- H(q1) -->
+      <rect x="262" y="32" width="26" height="26" rx="4" fill="var(--panel)" stroke="var(--accent)" stroke-width="1.6"/>
+      <text class="v-ch01-t" x="275" y="50" text-anchor="middle">H</text>
+
+      <!-- 测量计 (q1,q2) -->
+      <g>
+        <rect x="310" y="32" width="32" height="26" rx="4" fill="var(--panel)" stroke="var(--accent2)" stroke-width="1.6"/>
+        <path d="M316 52 A10 10 0 0 1 336 52" fill="none" stroke="var(--accent2)" stroke-width="1.4"/>
+        <line x1="326" y1="52" x2="334" y2="40" stroke="var(--accent2)" stroke-width="1.4"/>
+      </g>
+      <g>
+        <rect x="310" y="97" width="32" height="26" rx="4" fill="var(--panel)" stroke="var(--accent2)" stroke-width="1.6"/>
+        <path d="M316 117 A10 10 0 0 1 336 117" fill="none" stroke="var(--accent2)" stroke-width="1.4"/>
+        <line x1="326" y1="117" x2="334" y2="105" stroke="var(--accent2)" stroke-width="1.4"/>
+      </g>
+
+      <!-- 经典双线 q2→X (m2) -->
+      <path d="M342 107 H432 V158" fill="none" stroke="var(--muted)" stroke-width="1.2"/>
+      <path d="M342 113 H428 V158" fill="none" stroke="var(--muted)" stroke-width="1.2"/>
+      <!-- 经典双线 q1→Z (m1) -->
+      <path d="M342 42 H487 V158" fill="none" stroke="var(--muted)" stroke-width="1.2"/>
+      <path d="M342 48 H483 V158" fill="none" stroke="var(--muted)" stroke-width="1.2"/>
+      <circle cx="430" cy="158" r="3.4" fill="var(--muted)"/>
+      <circle cx="485" cy="158" r="3.4" fill="var(--muted)"/>
+      <text class="v-ch01-tm" x="360" y="104">m₂</text>
+      <text class="v-ch01-tm" x="360" y="40">m₁</text>
+
+      <!-- Bob 条件门 X^m2、Z^m1 -->
+      <rect x="417" y="157" width="26" height="26" rx="4" fill="var(--panel)" stroke="var(--accent)" stroke-width="1.6"/>
+      <text class="v-ch01-t" x="430" y="175" text-anchor="middle">X</text>
+      <rect x="472" y="157" width="26" height="26" rx="4" fill="var(--panel)" stroke="var(--accent)" stroke-width="1.6"/>
+      <text class="v-ch01-t" x="485" y="175" text-anchor="middle">Z</text>
+
+      <!-- 输出 -->
+      <text class="v-ch01-t" x="552" y="174" fill="var(--accent2)">|ψ⟩</text>
+    </svg>
+    <div class="v-ch01-cap"><b>量子隐形传态</b>：Alice、Bob 预先共享 Bell 对；Alice 对待传比特与自己一半作
+      <b>CNOT + H</b> 并测量，得 2 个经典比特 (m₁,m₂) 发给 Bob；Bob 据此施加 <b>X<tspan style="font-size:.8em">m₂</tspan> Z<tspan style="font-size:.8em">m₁</tspan></b> 即复原 |ψ⟩。
+      <b>2 经典比特传送 1 量子比特</b>；原比特被测量破坏，未违反不可克隆定理。</div>
+  </div>
+
+</div>
+</div>
+</section>
+<section id="top"><h1>量子计算与量子信息 · 第一章 量子计算简介</h1>
+<p><strong>原著</strong>: M. Nielsen &amp; I. Chuang《Quantum Computation and Quantum Information》| <strong>小节</strong>: 1.1–1.6 | <strong>来源</strong>: 中文学习笔记 (.nb) | <strong>生成</strong>: 2026-06-19</p>
+<h2>如何使用本 skill</h2>
+<ul><li><strong>不带参数</strong> — 加载第一章的核心概念框架</li><li><strong>带主题</strong> — 问 <code>隐形传态</code>、<code>Deutsch</code>、<code>Bloch</code>、<code>通用门</code> 等，我会读对应小节文件再回答</li><li><strong>带小节号</strong> — 问 <code>1.3</code> 或 <code>sec1.3</code>，加载该小节</li><li><strong>浏览</strong> — 问"有哪些小节？"查看完整索引</li></ul>
+<p>当你问的主题不在下面的核心框架里，我会先读相关小节文件再回答。</p>
+<hr>
+<h2>核心概念框架</h2>
+<p><strong>量子计算的定义</strong>：利用量子系统及其特性（叠加、纠缠、测量的概率性、对环境敏感）完成信息处理任务。远期目标是实现实用的通用量子计算，在某些问题上超越任何经典计算机。</p>
+<p><strong>量子比特 (qubit)</strong>：状态 |ψ⟩ = α|0⟩ + β|1⟩，|α|²+|β|²=1。区别于经典比特，可处于叠加态；测量塌缩为基态，概率为幅的模方。密度矩阵 ρ 的迹为 1（概率归一）。</p>
+<p><strong>Bloch 球表示</strong>：单 qubit 纯态 = |ψ⟩ = cos(θ/2)|0⟩ + e^{iφ}sin(θ/2)|1⟩，对应单位球面上一点 (sinθcosφ, sinθsinφ, cosθ)。任意态都可由某个 U∈U(2) 作用 |0⟩ 得到——几何上是绕某轴旋转。</p>
+<p><strong>单比特门 = U(2) 旋转</strong>：核心门 = Rx(θ)、Ry(θ)、Rz(θ)、Hadamard(H，制备等权叠加)、相位门 S、T 门。任意单比特门可做 <strong>z-y-z 分解</strong>（旋量空间欧拉角），(SU(2)⋉U(1))/2 = U(2)。</p>
+<p><strong>多比特门</strong>：CNOT（受控非，纠缠的生成器）、SWAP（=三个 CNOT）、Toffoli（受控受控非，经典可逆计算的通用门）。</p>
+<p><strong>通用门集合</strong>：一组能以任意精度模拟任何幺正变换的门。精度越高所需门越多。常用通用集 = {H, T, CNOT} 等。</p>
+<p><strong>量子线路规则</strong>：无环（不出现回路）；不允许扇入（不可逆）和扇出（违反不可克隆定理）。</p>
+<p><strong>量子隐形传态 (teleportation)</strong>：用一对 Bell 态 + 2 比特经典通信，把未知量子态从 Alice 传给 Bob。本质是 LOCC（本地操作+经典通信）。不违反相对论（需经典信道）也不违反不可克隆（原态被测量破坏）。</p>
+<p><strong>Deutsch 算法（量子并行的范例）</strong>：用一次 Uf 调用判断 f 是常数型还是平衡型，经典需两次。启发：当经典计算获取的信息量超过问题答案所需信息量（存在计算冗余）时，量子有加速潜力。推广到 n 位 = Deutsch-Jozsa 算法。</p>
+<p><strong>量子算法两大家族</strong>：① 基于量子 Fourier 变换（Shor 因数分解，经典 O(N) → 量子可多项式）；② 量子搜索（Grover，O(N) → O(√N)）；③ 量子模拟（Feynman 设想，模拟量子系统）。</p>
+<p><strong>复杂性视角</strong>：因数分解 ∈ BQP。核心开放问题——是否 BPP ⊊ BQP（量子是否严格强于经典概率计算）。量子版丘奇-图灵论题：量子图灵机能高效模拟任何现实计算模型。</p>
+<hr>
+<h2>小节索引</h2>
+<table><thead><tr><th>小节</th><th>标题</th><th>关键概念</th></tr></thead><tbody><tr><td><a href="#sec-sec1-1-overview">1.1</a></td><td>量子计算和量子信息简介</td><td>可计算性、丘奇-图灵论题、复杂性类、发展简史</td></tr><tr><td><a href="#sec-sec1-2-qubit">1.2</a></td><td>量子比特</td><td>qubit、叠加、Bloch 矢量、测量、Bell 基</td></tr><tr><td><a href="#sec-sec1-3-quantum-computation">1.3</a></td><td>量子计算</td><td>单/多比特门、z-y-z 分解、通用门、量子线路、隐形传态</td></tr><tr><td><a href="#sec-sec1-4-algorithms">1.4</a></td><td>量子算法</td><td>可逆计算、量子并行、Deutsch 算法、算法家族</td></tr><tr><td><a href="#sec-sec1-5-experiments">1.5</a></td><td>量子信息处理实验</td><td>Stern-Gerlach、阈值定理、NISQ、物理实现平台</td></tr><tr><td><a href="#sec-sec1-6-quantum-info">1.6</a></td><td>量子信息</td><td>经典 vs 量子信息论、量子信息的基本目标</td></tr></tbody></table>
+<h2>主题索引</h2>
+<ul><li><strong>Bell 态 / 隐形传态</strong> → 1.2, 1.3</li><li><strong>Bloch 矢量</strong> → 1.2</li><li><strong>CNOT / Toffoli / SWAP</strong> → 1.3</li><li><strong>Deutsch / Deutsch-Jozsa</strong> → 1.4</li><li><strong>Hadamard / 相位门 / T 门</strong> → 1.3</li><li><strong>丘奇-图灵论题</strong> → 1.1</li><li><strong>可计算性 / 复杂性类 (BQP/BPP)</strong> → 1.1, 1.4</li><li><strong>量子并行</strong> → 1.4</li><li><strong>量子比特 / 叠加 / 测量</strong> → 1.2</li><li><strong>量子线路</strong> → 1.3</li><li><strong>量子算法家族 (Shor/Grover/模拟)</strong> → 1.4</li><li><strong>通用门集合</strong> → 1.3</li><li><strong>物理实现 / NISQ / 阈值定理</strong> → 1.5</li><li><strong>z-y-z 分解</strong> → 1.3</li></ul>
+<h2>辅助文件</h2>
+<ul><li><a href="#sec-glossary">glossary.md</a> — 关键术语表（中英对照）</li><li><a href="#sec-patterns">patterns.md</a> — 量子线路构件与技巧</li><li><a href="#sec-cheatsheet">cheatsheet.md</a> — 量子门速查与决策表</li></ul>
+<hr>
+<h2>范围与限制</h2>
+<p>本 skill 仅覆盖 QCQI 第一章（量子计算简介）的概念框架，源自一份中文 Mathematica 笔记。公式以纯文本/Unicode 近似表示，精确推导请参阅原书。第 2 章起的线性代数、量子操作、纠错等内容不在此范围内。</p></section>
+<section id="sec-sec1-1-overview"><h1>1.1 量子计算和量子信息简介</h1>
+<h2>核心思想</h2>
+<p>量子计算 = 利用量子系统的特性（叠加、纠缠、测量概率性、对环境敏感）完成信息处理任务。本节给出领域全景：可计算性、复杂性、发展简史，并引出"量子是否比经典更强"的核心问题。</p>
+<h2>关键概念</h2>
+<ul><li><strong>量子计算</strong>：利用量子系统及其特性完成信息处理任务；远期目标是实用的通用量子计算机，在某些问题上超越任何经典机。</li><li><strong>量子系统的重要特性</strong>：① 态的线性叠加（态与物理量的数学刻画）；② 概率性（测量公理）；③ 信息以概率幅叠加方式储存，不易直接存取；④ 纠缠与非定域性（Bell 检验：量子理论违背定域实在性）；⑤ 对环境敏感（退相干）。</li><li><strong>可计算性 (computability)</strong>：研究算法的抽象与严格定义（图灵机）、计算的限度（可计算函数、停机问题）、复杂性分类。</li><li><strong>丘奇-图灵论题 (Turing-Church Thesis)</strong>：可计算偏函数严格刻画了"能行可计算偏函数"的概念。它本身不是可被证明的数学陈述，但至今无反例；λ 演算、图灵机等独立构建的模型最终被证等价（殊途同归）。</li></ul>
+<h2>心智模型</h2>
+<ul><li><strong>计算模型的层级</strong>：高级模型能高效模拟低级模型，反之不能。是否存在"最高级"的计算模型？基于"信息是物理的"，由物理规律支配的计算可能最强——相对论/量子场论/大一统理论的模型或许比量子计算更高级。</li><li><strong>复杂性版丘奇-图灵论题</strong>：(Bernstein-Vazirani) 概率图灵机能高效模拟任何现实计算模型；量子版：量子图灵机能高效模拟任何现实计算模型。若证明 BPP ⊊ BQP，则<strong>经典</strong>复杂性版论题被推翻（原始论题只关心可计算性，不受影响）。</li></ul>
+<h2>发展简史（节点）</h2>
+<ul><li>1956 BCS 低温超导理论；1980 量子霍尔效应。</li><li>1980s <strong>Feynman</strong>：用量子计算机模拟量子系统。</li><li>1984 <strong>Bennett &amp; Brassard</strong>：BB84，量子密钥分发 (QKD)。</li><li>1985 <strong>Deutsch 算法</strong>（oracle 问题）。</li><li>1994 <strong>Shor 算法</strong>：多项式时间因数分解，因数分解 ∈ BQP。</li><li>1996 <strong>Grover 算法</strong>：非结构化搜索的量子加速。</li><li><strong>Seth Lloyd</strong>：小时间步演化可高效模拟少粒子相互作用的多体哈密顿量，总时间多项式增长。</li></ul>
+<h2>关键要点</h2>
+<ol><li>量子的"威力"来自叠加+纠缠+干涉，而非单纯并行。</li><li>信息以概率幅形式储存，测量才坍缩——这是优势也是约束。</li><li>核心开放问题：量子计算是否严格强于经典（BPP vs BQP）。</li></ol>
+<h2>关联</h2>
+<ul><li><strong>1.4</strong>：量子并行、算法家族把本节"威力"具体化。</li><li><strong>1.5/1.6</strong>：物理实现与信息论视角。</li></ul></section>
+<section id="sec-sec1-2-qubit"><h1>1.2 量子比特</h1>
+<h2>核心思想</h2>
+<p>量子比特 (qubit) 是量子信息的基本单元：可处于 |0⟩ 与 |1⟩ 的线性叠加；测量塌缩为基态、概率为幅的模方；纯态可用 Bloch 球面上的点几何表示。</p>
+<h2>关键概念</h2>
+<ul><li><strong>qubit</strong>：|ψ⟩ = α|0⟩ + β|1⟩，α,β∈ℂ，|α|²+|β|²=1。计算基 {|0⟩,|1⟩} 是常用 ONB（标准正交基）。</li><li><strong>态矢量与密度矩阵</strong>：密度矩阵 ρ = |ψ⟩⟨ψ|，Tr(ρ)=|α|²+|β|² = 1（迹为 1 即各测量结果概率归一）。</li><li><strong>物理状态与物理量</strong>：经典——状态是确定值；量子——状态是叠加，物理量由算符（如 Pauli σx,σy,σz）刻画，测量得本征值且概率性塌缩。</li></ul>
+<h2>心智模型</h2>
+<ul><li><strong>Bloch 矢量</strong>：纯态参数化 |ψ⟩ = cos(θ/2)|0⟩ + e^{iφ}sin(θ/2)|1⟩，对应单位球面点 r = (sinθcosφ, sinθsinφ, cosθ)。θ 为纬度角、φ 为经度角。可用 rᵢ = Tr(ρ σᵢ) 计算 Bloch 分量。</li><li><strong>态的制备 = 旋转</strong>：任意 qubit 态 |ψ⟩ 都能找到 U∈U(2) 使 |ψ⟩ = U|0⟩——几何上是绕躺在 x-y 平面的某根轴旋转某角度。（思考：实现同一目标的转轴/转角不唯一。）</li></ul>
+<h2>测量</h2>
+<ul><li><strong>计算基测量</strong>：测 |ψ⟩=α|0⟩+β|1⟩，得 |0⟩ 概率 |α|²，得 |1⟩ 概率 |β|²。</li><li><strong>非计算基测量</strong>：可测 σx 等其它可观测量，等价于先旋转到该基再做计算基测量。</li></ul>
+<h2>多比特与 Bell 基</h2>
+<ul><li><strong>多比特计算基</strong>：n 比特张成 2ⁿ 维空间，基矢 |00…0⟩…|11…1⟩。</li><li><strong>Bell 基（最大纠缠）</strong>：|Φ±⟩=(|00⟩±|11⟩)/√2，|Ψ±⟩=(|01⟩±|10⟩)/√2。</li><li><strong>Bell 关联</strong>：在计算基下测量 Bell 态（如 |Φ+⟩），两比特总是得到<strong>相同</strong>结果——纠缠的标志。</li></ul>
+<h2>关键要点</h2>
+<ol><li>qubit 的"信息"藏在概率幅里，测量只给出概率性的一比特结果。</li><li>单 qubit 纯态 ↔ Bloch 球面点；混合态 ↔ 球内点（|r|&lt;1）。</li><li>Bell 态体现纠缠：局部测量结果强关联，无法写成张量积。</li></ol>
+<h2>关联</h2>
+<ul><li><strong>1.3</strong>：单比特门 = Bloch 球上的旋转；Bell 态由 H+CNOT 制备。</li><li><strong>1.6</strong>：测量概率性是量子信息论的出发点。</li></ul></section>
+<section id="sec-sec1-3-quantum-computation"><h1>1.3 量子计算</h1>
+<h2>核心思想</h2>
+<p>量子计算 = 用幺正门组成的线路操纵 qubit。本节给出单比特门 (U(2))、多比特门、通用门集合、量子线路规则，并以隐形传态作为综合应用。</p>
+<h2>框架与门集合</h2>
+<ul><li><strong>单比特门 ∈ U(2)</strong>：保持归一的幺正变换。基本门：</li><ul><li><strong>Rx(θ)/Ry(θ)/Rz(θ)</strong>：绕 x/y/z 轴旋转 θ。</li><li><strong>绕任意轴 n=(x,y,z) 旋转 θ</strong>：Rn(θ)=cos(θ/2)I − i sin(θ/2)(n·σ)。</li><li><strong>Hadamard (H)</strong>：制备等权叠加，H|0⟩=(|0⟩+|1⟩)/√2，H|1⟩=(|0⟩−|1⟩)/√2。</li><li><strong>相位门 S</strong>：diag(1, i)；<strong>T 门</strong>：diag(1, e^{iπ/4})（π/8 门）。</li></ul><li><strong>z-y-z 分解</strong>：任意单比特幺正门可写成 e^{iα} Rz(β) Ry(γ) Rz(δ)——旋量空间的欧拉角。群关系 (SU(2)⋉U(1))/2 = U(2)（SU(2) 半直积 U(1)）。</li></ul>
+<h2>多比特门 U(2ⁿ)</h2>
+<ul><li><strong>CNOT (controlled-NOT)</strong>：控制位为 1 时翻转目标位；纠缠的生成器。</li><li><strong>SWAP</strong>：交换两比特；<strong>SWAP = 三个 CNOT</strong> 级联。</li><li><strong>Toffoli (CCNOT)</strong>：双控制非门，经典可逆计算的通用门，可配合测量模拟经典逻辑。</li></ul>
+<h2>量子线路（反模式 / 规则）</h2>
+<ul><li><strong>无环</strong>：不允许出现回路。</li><li><strong>禁止扇入</strong>：扇入不可逆，违反幺正性。</li><li><strong>禁止扇出</strong>：扇出 = 量子克隆，违反不可克隆定理。</li></ul>
+<h2>通用门集合</h2>
+<ul><li>定义：一组能以<strong>任意精度</strong>模拟任何量子幺正变换的门。</li><li>权衡：精度越高，所需门数越多（Solovay-Kitaev 量级）。常用通用集如 {H, T, CNOT}。</li></ul>
+<h2>Worked Example：量子隐形传态 (teleportation)</h2>
+<p>目标：把 Alice 手中未知态 |ψ⟩=α|0⟩+β|1⟩ 传给远端 Bob（双方都不知道 α,β）。</p>
+<ol><li><strong>共享纠缠</strong>：Alice 的第 2 比特与 Bob 的第 3 比特预先制备在 Bell 态 |Φ+⟩。三比特总态 |ψ⟩⊗|Φ+⟩。</li><li><strong>Alice 本地操作</strong>：对她的比特 1、2 做 CNOT(1→2) 再对 1 做 H，然后在计算基下测量比特 1、2，得到 2 个经典比特 (m1,m2)∈{00,01,10,11}。</li><li><strong>经典通信</strong>：Alice 把 (m1,m2) 通过经典信道（线路图中双横线）告诉 Bob。</li><li><strong>Bob 纠正</strong>：依据 (m1,m2) 对自己的比特施加 I / X / Z / XZ 之一，即恢复出 |ψ⟩。</li><li><strong>要点</strong>：无论 Alice 测得什么，Bob 经修正后总得到原态 |ψ⟩（"无论测量结果是什么，Bob 手中的态都是 |ψ⟩"）。</li><li><strong>不矛盾</strong>：需经典信道 ⇒ 不超光速；原比特被测量破坏 ⇒ 不违反不可克隆。"信息的传递就是物质（态）的传递"。</li><li><strong>方法 2 (LOCC 视角)</strong>：Alice 在本地执行一系列门+测量，把结果告诉 Bob，Bob 据此施门得到正确的 |ψ⟩。</li></ol>
+<h2>关键要点</h2>
+<ol><li>单比特门是 Bloch 球旋转；任意门可 z-y-z 分解为三次旋转。</li><li>CNOT 是纠缠之源；SWAP=3×CNOT；Toffoli 通用于经典可逆计算。</li><li>通用门集 + 任意精度逼近 = 量子计算的"图灵完备"基础。</li><li>隐形传态 = 纠缠资源 + 经典通信，不传物质本身也不违反相对论/不可克隆。</li></ol>
+<h2>关联</h2>
+<ul><li><strong>1.2</strong>：门作用对象是 qubit / Bloch 矢量；Bell 态来自 H+CNOT。</li><li><strong>1.4</strong>：通用门构成的线路实现量子算法。</li></ul></section>
+<section id="sec-sec1-4-algorithms"><h1>1.4 量子算法</h1>
+<h2>核心思想</h2>
+<p>量子算法靠"量子并行 + 干涉"提取经典难以高效获取的全局信息。Deutsch 算法是最小范例；Shor/Grover/量子模拟是三大算法家族。</p>
+<h2>量子计算机上的经典计算</h2>
+<ul><li><strong>Landauer 原理</strong>：擦除信息有最小能量代价 (kT ln2)；可逆计算可规避。</li><li><strong>可逆替代</strong>：任何不可逆经典逻辑门都可用可逆量子门等效实现（如经典 <strong>Toffoli 门</strong> 模拟 AND/NAND）。</li><li><strong>概率经典模拟</strong>：用量子测量的概率性可模拟概率经典计算机。</li></ul>
+<h2>量子并行</h2>
+<ul><li><strong>定义</strong>：量子计算机能在<strong>同一个幺正变换</strong>中同时计算函数 f(x) 在许多 x 处的值。</li><li><strong>注意</strong>：并行算出的值叠加在一起，直接测量只能随机得到其一——必须用干涉把"全局性质"提炼出来才有用。</li></ul>
+<h2>Worked Example：Deutsch 算法</h2>
+<p>问题：f:{0,1}→{0,1}，判断 f 是<strong>常数型</strong>(f(0)=f(1)) 还是<strong>平衡型</strong>(f(0)≠f(1))。经典需 2 次求值。</p>
+<ol><li>制备 |0⟩|1⟩，各过 H 得 (|0⟩+|1⟩)(|0⟩−|1⟩)/2。</li><li>作用一次 Uf：|x⟩|y⟩ → |x⟩|y⊕f(x)⟩，相位回踢得到 (−1)^{f(x)} 因子。</li><li>对第一比特再过 H 并测量：结果 |0⟩ ⇒ 常数型，|1⟩ ⇒ 平衡型。</li><li><strong>结果</strong>：每个线路只用了<strong>一次</strong> Uf，一次计算完成经典需两次才能完成的任务。</li><li><strong>启发</strong>：当经典计算获取的信息量<strong>超过</strong>问题答案所需信息量（即存在"计算冗余"）时，量子计算有潜在加速。Deutsch 问的是 f(0)⊕f(1) 这个全局比特，不需要分别知道 f(0)、f(1)。</li><li><strong>推广</strong>：判断 n 位函数常数/平衡 = <strong>Deutsch-Jozsa 算法</strong> (Sec.1.4.4)。</li></ol>
+<h2>量子算法家族（总结）</h2>
+<ul><li><strong>基于量子 Fourier 变换</strong>：Shor 因数分解/求阶，经典亚指数 → 量子多项式。</li><li><strong>量子搜索 (Grover)</strong>：非结构化搜索经典 O(N) → 量子 O(√N)。</li><li><strong>量子模拟</strong>：高效模拟量子多体系统（Feynman/Lloyd）。</li></ul>
+<h2>复杂性视角</h2>
+<ul><li>因数分解 ∈ <strong>BQP</strong>。</li><li>量子计算的威力问题：是否存在某些问题，量子概率算法能高效解决而概率图灵机不能？即是否 <strong>BPP ⊊ BQP</strong>（但愿成立，尚未证明）。</li></ul>
+<h2>关键要点</h2>
+<ol><li>量子并行本身不够用——优势来自干涉提取全局信息 + 减少"信息冗余"。</li><li>Deutsch：一次 Uf 判常数/平衡，揭示量子加速的本质直觉。</li><li>三大家族：QFT 类 / 搜索类 / 模拟类。</li></ol>
+<h2>关联</h2>
+<ul><li><strong>1.3</strong>：算法由通用门线路实现，Uf 是 oracle 子线路。</li><li><strong>1.1</strong>：BQP/BPP 与丘奇-图灵论题呼应。</li></ul></section>
+<section id="sec-sec1-5-experiments"><h1>1.5 量子信息处理（量子计算）实验</h1>
+<h2>核心思想</h2>
+<p>量子计算要落地，必须在真实物理系统上制备、操控、测量量子态并抑制噪声。本节给出实验直觉（Stern-Gerlach）、容错前景（阈值定理）与主流物理实现平台。</p>
+<h2>关键概念</h2>
+<ul><li><strong>Stern-Gerlach 实验</strong>：自旋测量的原型。对级联的 Z-X-Z 测量，量子力学正确预言了实验结果——测量不对易导致"重置"前序信息，体现测量的不可对易性。</li><li><strong>状态层析 / 量子层析 (state/process tomography)</strong>：通过多次测量重构未知量子态 ρ 或未知量子过程。</li><li><strong>阈值定理 (threshold theorem)</strong>：若量子噪声水平降到某个阈值以下，就能在工程上实现<strong>任意规模</strong>的容错量子计算。这是大规模量子计算可行性的理论支柱。</li></ul>
+<h2>规模阶段</h2>
+<ul><li><strong>小规模</strong>：量子通信（QKD 等）。</li><li><strong>中等规模</strong>：<strong>NISQ</strong>（Noisy Intermediate-Scale Quantum）——含噪、无完整纠错的中等比特机。</li><li><strong>大规模</strong>：容错通用量子计算（依赖阈值定理）。</li></ul>
+<h2>物理实现平台</h2>
+<p>被用于量子计算的物理系统：① 光学系统；② 超导线路（含 transmon）；③ 离子阱；④ 冷原子；⑤ NV 色心；⑥ 核磁共振 (NMR)；⑦ 任意子（拓扑）。</p>
+<h2>进展指标（"多少比特了？"）</h2>
+<ul><li>IBM Quantum（https://www.ibm.com/quantum）、本源量子 OriginQC（https://originqc.com.cn/）等公开路线图与比特规模。</li></ul>
+<h2>关键要点</h2>
+<ol><li>噪声是头号敌人；阈值定理给出"够低就能纠错放大"的希望。</li><li>当前处于 NISQ 阶段：比特数上升但缺完整容错。</li><li>没有单一最优平台——超导/离子阱/光学各有取舍。</li></ol>
+<h2>关联</h2>
+<ul><li><strong>1.2/1.3</strong>：实验要忠实实现态制备与门操作。</li><li><strong>后续章节</strong>：量子噪声、量子操作与量子纠错（第 8、10 章）是阈值定理的技术基础。</li></ul></section>
+<section id="sec-sec1-6-quantum-info"><h1>1.6 量子信息</h1>
+<h2>核心思想</h2>
+<p>量子信息论研究信息的"量子版"基本极限：如何编码、传输、压缩、保护以量子态承载的信息，以及量子相比经典带来的新资源（纠缠）。</p>
+<h2>经典信息论（出发点）</h2>
+<ul><li><strong>两个基本问题</strong>：</li><ol><li><strong>信源压缩极限</strong>——一个信息源最多能被压缩到多少？（Shannon 熵）</li><li><strong>可靠传输极限</strong>——含噪信道上能以多高速率可靠传输？（信道容量）</li></ol></ul>
+<h2>量子信息论</h2>
+<ul><li><strong>狭义量子信息</strong>：量子领域中与经典信息相对应的理论（量子熵、量子信道、量子容量等）。</li><li><strong>量子信息的基本目标</strong>：</li><ul><li>识别量子信息处理中的基本资源（如纠缠、相干）。</li><li>给出量子态压缩、量子信道传输的极限（Schumacher 压缩、量子信道容量）。</li><li>在含噪环境下保护量子信息（量子纠错）。</li></ul></ul>
+<h2>关键要点</h2>
+<ol><li>量子信息论是经典信息论的推广：把"比特"换成"qubit"，把 Shannon 熵换成 von Neumann 熵。</li><li>纠缠是经典没有的新资源，可用于通信与计算（如隐形传态、超密编码）。</li><li>测量的概率性与不可克隆定理塑造了量子信息的独特极限。</li></ol>
+<h2>关联</h2>
+<ul><li><strong>1.2</strong>：测量概率性、Bell 态纠缠是信息论的物理基础。</li><li><strong>1.3</strong>：隐形传态展示纠缠作为通信资源。</li><li><strong>后续章节</strong>：量子熵、量子信道、量子纠错（第 8–11 章）展开本节提纲。</li></ul></section>
+<section id="sec-glossary"><h1>术语表 · QCQI 第一章</h1>
+<p><strong>BQP</strong> — Bounded-error Quantum Polynomial time，量子多项式时间复杂性类；因数分解 ∈ BQP (1.4) <strong>BPP</strong> — Bounded-error Probabilistic Polynomial time，经典概率多项式时间类；核心问题 BPP ⊊ BQP? (1.4) <strong>Bell 基 / Bell 态</strong> — 四个最大纠缠两比特态 |Φ±⟩,|Ψ±⟩；局部测量结果强关联 (1.2) <strong>Bloch 矢量 / Bloch 球</strong> — 单 qubit 纯态 ↔ 单位球面点 (sinθcosφ, sinθsinφ, cosθ) (1.2) <strong>CNOT</strong> — 受控非门，控制位为 1 时翻转目标位；纠缠生成器 (1.3) <strong>Deutsch 算法</strong> — 一次 Uf 判断 f 常数/平衡，经典需两次 (1.4) <strong>Deutsch-Jozsa 算法</strong> — Deutsch 推广到 n 位函数 (1.4) <strong>Hadamard 门 (H)</strong> — 制备等权叠加，H|0⟩=(|0⟩+|1⟩)/√2 (1.3) <strong>Landauer 原理</strong> — 擦除信息有最小能耗 kT ln2，可逆计算可规避 (1.4) <strong>LOCC</strong> — 本地操作 + 经典通信 (Local Operations and Classical Communication) (1.3) <strong>NISQ</strong> — 含噪中等规模量子 (Noisy Intermediate-Scale Quantum) (1.5) <strong>ONB</strong> — 标准正交基 (Orthonormal Basis)，如计算基 {|0⟩,|1⟩} (1.2) <strong>Pauli 矩阵 (σx,σy,σz)</strong> — 单比特可观测量/门的基本算符 (1.2,1.3) <strong>Rn(θ) / Rx,Ry,Rz</strong> — 绕轴 n 旋转 θ 的单比特门 (1.3) <strong>SWAP 门</strong> — 交换两比特，= 三个 CNOT 级联 (1.3) <strong>Shor 算法</strong> — 多项式时间因数分解，基于量子 Fourier 变换 (1.1,1.4) <strong>Grover 算法</strong> — 非结构化搜索 O(N)→O(√N) (1.1,1.4) <strong>Stern-Gerlach</strong> — 自旋测量原型实验，验证测量不对易性 (1.5) <strong>T 门 (π/8 门)</strong> — diag(1, e^{iπ/4}) 相位门 (1.3) <strong>Toffoli 门 (CCNOT)</strong> — 双控制非门，经典可逆计算通用门 (1.3,1.4) <strong>Turing-Church 论题</strong> — 能行可计算 = 图灵可计算；无反例，多模型等价 (1.1) <strong>U(2) / SU(2)</strong> — 单比特幺正群；(SU(2)⋉U(1))/2 = U(2) (1.3) <strong>Uf (oracle)</strong> — |x⟩|y⟩→|x⟩|y⊕f(x)⟩，封装函数 f 的量子黑盒 (1.4) <strong>z-y-z 分解</strong> — 任意单比特门 = e^{iα}Rz(β)Ry(γ)Rz(δ)，旋量欧拉角 (1.3) <strong>叠加 (superposition)</strong> — |ψ⟩=α|0⟩+β|1⟩，量子态的线性组合 (1.2) <strong>不可克隆定理</strong> — 未知量子态不可被完美复制；禁止线路扇出 (1.3) <strong>密度矩阵 ρ</strong> — ρ=|ψ⟩⟨ψ|，Tr(ρ)=1；描述纯/混合态 (1.2) <strong>退相干 (decoherence)</strong> — 量子态因环境耦合失去相干性 (1.1,1.5) <strong>纠缠 (entanglement)</strong> — 不可写成张量积的关联态；量子独有资源 (1.2,1.6) <strong>量子并行</strong> — 一个幺正变换中同时计算 f 在多个 x 的值 (1.4) <strong>量子隐形传态</strong> — 纠缠+经典通信传未知态，不传物质 (1.3) <strong>量子层析 (tomography)</strong> — 测量重构未知态/过程 (1.5) <strong>通用门集合</strong> — 能以任意精度模拟任何幺正变换的门集，如 {H,T,CNOT} (1.3) <strong>阈值定理</strong> — 噪声低于阈值即可实现任意规模容错量子计算 (1.5) <strong>von Neumann 熵</strong> — 量子版 Shannon 熵，量子信息论核心量 (1.6)</p></section>
+<section id="sec-patterns"><h1>量子线路构件与技巧 · QCQI 第一章</h1>
+<h2>用 H 制备均匀叠加态</h2>
+<p><strong>何时用</strong>：算法第一步，把 |0⟩^n 变成所有计算基的等权叠加（量子并行的入口）。 <strong>怎么做</strong>：对每个比特施 H：H^{⊗n}|0…0⟩ = (1/√2ⁿ) Σ_x |x⟩。 <strong>权衡</strong>：叠加本身免费，但要取出有用信息须靠后续干涉。</p>
+<h2>相位回踢 (phase kickback)</h2>
+<p><strong>何时用</strong>：oracle 类算法（Deutsch、Grover）把函数信息编码到相位上。 <strong>怎么做</strong>：目标比特置于 |−⟩=(|0⟩−|1⟩)/√2，作用 Uf 后 |x⟩|−⟩ → (−1)^{f(x)}|x⟩|−⟩，f 的值"踢"成控制位相位。 <strong>权衡</strong>：信息进了相位，需再过 H 做干涉才能测出。</p>
+<h2>用 CNOT 制备 Bell 态</h2>
+<p><strong>何时用</strong>：需要纠缠资源（隐形传态、超密编码、纠缠判据）。 <strong>怎么做</strong>：|0⟩|0⟩ → H 第一位 → CNOT(1→2) ⇒ |Φ+⟩=(|00⟩+|11⟩)/√2。 <strong>权衡</strong>：纠缠不可由本地操作单独产生，需双比特门。</p>
+<h2>单比特门 z-y-z 分解</h2>
+<p><strong>何时用</strong>：把任意 U∈U(2) 编译到硬件可用的旋转门。 <strong>怎么做</strong>：U = e^{iα} Rz(β) Ry(γ) Rz(δ)，求出四个角。 <strong>权衡</strong>：精确分解；离散通用门集下还需 Solovay-Kitaev 近似（门数 ↑）。</p>
+<h2>SWAP = 3×CNOT</h2>
+<p><strong>何时用</strong>：硬件只有 CNOT、需交换两比特（如比特路由）。 <strong>怎么做</strong>：CNOT(a→b)·CNOT(b→a)·CNOT(a→b)。 <strong>权衡</strong>：交换是经典操作，无需额外资源，但占 3 个两比特门深度。</p>
+<h2>经典逻辑的可逆/量子化（Toffoli）</h2>
+<p><strong>何时用</strong>：在量子线路里嵌入经典布尔函数（如 oracle 内部）。 <strong>怎么做</strong>：用 Toffoli (CCNOT) 实现可逆 AND/NAND，辅以辅助比特；不可逆门加垃圾比特变可逆。 <strong>权衡</strong>：需要辅助 (ancilla) 比特和反计算 (uncompute) 清理垃圾。</p>
+<h2>隐形传态协议</h2>
+<p><strong>何时用</strong>：把未知态从 A 移到 B，只有纠缠 + 经典信道。 <strong>怎么做</strong>：共享 Bell 态 → A 做 CNOT+H+测量 → 传 2 经典比特 → B 施 {I,X,Z,XZ} 纠正。 <strong>权衡</strong>：消耗 1 份纠缠 + 2 经典比特；原态被毁（符合不可克隆）；不超光速。</p>
+<h2>反模式（量子线路禁忌）</h2>
+<ul><li><strong>扇出 (fan-out)</strong> = 克隆未知态 → 违反不可克隆定理。</li><li><strong>扇入 (fan-in)</strong> → 不可逆，违反幺正性。</li><li><strong>回路/环</strong> → 量子线路必须是有向无环。</li><li><strong>中途窥探</strong>：过早测量会塌缩叠加，破坏并行——测量应放在干涉之后。</li></ul></section>
+<section id="sec-cheatsheet"><h1>速查表 · QCQI 第一章</h1>
+<h2>常用单比特门</h2>
+<table><thead><tr><th>门</th><th>矩阵 (计算基)</th><th>作用</th></tr></thead><tbody><tr><td>X (NOT)</td><td>[[0,1],[1,0]]</td><td>翻转，绕 x 轴 π</td></tr><tr><td>Y</td><td>[[0,−i],[i,0]]</td><td>绕 y 轴 π</td></tr><tr><td>Z</td><td>[[1,0],[0,−1]]</td><td>相位翻转</td><td>β⟩→−</td><td>β⟩</td></tr><tr><td>H</td><td>(1/√2)[[1,1],[1,−1]]</td><td>等权叠加；交换 X↔Z</td></tr><tr><td>S</td><td>[[1,0],[0,i]]</td><td>π/2 相位</td></tr><tr><td>T</td><td>[[1,0],[0,e^{iπ/4}]]</td><td>π/4 相位 (π/8 门)</td></tr></tbody></table>
+<h2>决策：选哪个门 / 操作</h2>
+<ul><li>要<strong>等权叠加</strong> → H（每比特一个）。</li><li>要<strong>纠缠两比特</strong> → CNOT（前置 H 制 Bell 态）。</li><li>要<strong>翻转目标</strong>（条件） → CNOT / Toffoli。</li><li>要<strong>交换比特</strong>且只有 CNOT → SWAP = 3×CNOT。</li><li>要<strong>把经典函数塞进线路</strong> → Toffoli + ancilla + uncompute。</li><li>要<strong>编译任意 U(2)</strong> → z-y-z 分解；离散集再用 Solovay-Kitaev。</li></ul>
+<h2>Bloch 球速记</h2>
+<ul><li>纯态：球面，|r|=1；混合态：球内，|r|&lt;1；最大混合 ρ=I/2 → 球心。</li><li>|ψ⟩=cos(θ/2)|0⟩+e^{iφ}sin(θ/2)|1⟩；rᵢ=Tr(ρσᵢ)。</li><li>门 = 旋转：Rn(θ) 绕轴 n 转 θ。</li></ul>
+<h2>测量概率速记</h2>
+<ul><li>计算基测 α|0⟩+β|1⟩：P(0)=|α|², P(1)=|β|²。</li><li>测量后态塌缩到对应本征态；测量不对易（如 Z 后测 X 会"重置"Z 信息）。</li></ul>
+<h2>复杂性 / 加速判断</h2>
+<table><thead><tr><th>现象</th><th>含义</th></tr></thead><tbody><tr><td>经典获取信息量 &gt; 答案所需信息量</td><td>有"计算冗余"→ 量子可能加速</td></tr><tr><td>问全局性质 (如 f(0)⊕f(1))</td><td>适合量子并行+干涉</td></tr><tr><td>因数分解 / 求阶</td><td>QFT 家族，∈ BQP</td></tr><tr><td>非结构化搜索</td><td>Grover，O(N)→O(√N)</td></tr><tr><td>模拟量子多体系统</td><td>量子模拟，指数→多项式</td></tr><tr><td>BPP ⊊ BQP ?</td><td>量子是否严格强于经典——核心开放问题</td></tr></tbody></table>
+<h2>三条不可违反的红线</h2>
+<ol><li><strong>不可克隆</strong> → 禁止扇出/复制未知态。</li><li><strong>幺正可逆</strong> → 禁止扇入、禁止环路。</li><li><strong>测量即塌缩</strong> → 干涉做完再测，别中途窥探。</li></ol>
+<h2>物理平台速记</h2>
+<p>光学 · 超导(transmon) · 离子阱 · 冷原子 · NV 色心 · NMR · 任意子。 阶段：小规模(通信) → NISQ(中等含噪) → 大规模(容错，靠阈值定理)。</p></section>
+</main>
+</div>
+<script>
+const toggle=document.getElementById('themeToggle');
+const saved=localStorage.getItem('qcqi-theme');
+if(saved)document.documentElement.setAttribute('data-theme',saved);
+toggle&&toggle.addEventListener('click',()=>{
+ const cur=document.documentElement.getAttribute('data-theme')==='light'?'':'light';
+ document.documentElement.setAttribute('data-theme',cur);
+ localStorage.setItem('qcqi-theme',cur);
+});
+const links=[...document.querySelectorAll('.nav a')];
+const secs=[...document.querySelectorAll('section[id]')];
+const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){
+ links.forEach(l=>l.classList.toggle('active',l.getAttribute('href')==='#'+e.target.id));}})},
+ {rootMargin:'-10% 0px -80% 0px'});
+secs.forEach(s=>obs.observe(s));
+const box=document.getElementById('search');
+box&&box.addEventListener('input',()=>{const q=box.value.trim().toLowerCase();
+ links.forEach(l=>l.classList.toggle('hidden',q&&!l.textContent.toLowerCase().includes(q)));});
+</script>
+</body>
+</html>

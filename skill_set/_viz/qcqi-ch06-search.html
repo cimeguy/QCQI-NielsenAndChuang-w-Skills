@@ -1,0 +1,175 @@
+<div class="v-ch06">
+<style>
+  .v-ch06{display:flex;flex-direction:column;gap:22px}
+  .v-ch06 figure{margin:0}
+  .v-ch06 figcaption{color:var(--muted);font-size:13px;margin-top:8px;line-height:1.6}
+  .v-ch06 .v-ch06-card{background:var(--panel2);border:1px solid var(--border);border-radius:12px;padding:14px 16px}
+  .v-ch06 .v-ch06-title{font-weight:600;color:var(--accent);margin-bottom:8px;font-size:15px}
+  .v-ch06 svg{width:100%;height:auto;display:block}
+  .v-ch06 .v-ch06-ctl{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:10px}
+  .v-ch06 .v-ch06-btn{cursor:pointer;border:1px solid var(--border);background:var(--panel);
+    color:var(--fg);border-radius:8px;padding:6px 14px;font-size:13.5px}
+  .v-ch06 .v-ch06-btn:hover{border-color:var(--accent);color:var(--accent)}
+  .v-ch06 .v-ch06-readout{font-size:13px;color:var(--muted)}
+  .v-ch06 .v-ch06-readout b{color:var(--fg);font-weight:600}
+  .v-ch06 .v-ch06-pill{display:inline-block;border:1px solid var(--border);border-radius:20px;
+    padding:2px 10px;font-size:12.5px;color:var(--muted)}
+</style>
+
+<!-- ============ 图 1a：单次迭代 = 两次反射 ============ -->
+<figure class="v-ch06-card">
+  <div class="v-ch06-title">图 1 · Grover 迭代的几何：两次反射 = 一次旋转</div>
+  <svg viewBox="0 0 520 330" role="img" aria-label="Grover 两次反射示意">
+    <!-- 坐标轴 -->
+    <line x1="80" y1="230" x2="480" y2="230" stroke="var(--border)" stroke-width="1.4"/>
+    <polygon points="480,230 470,226 470,234" fill="var(--border)"/>
+    <line x1="80" y1="230" x2="80" y2="40" stroke="var(--border)" stroke-width="1.4"/>
+    <polygon points="80,40 76,50 84,50" fill="var(--border)"/>
+    <line x1="80" y1="230" x2="80" y2="305" stroke="var(--border)" stroke-width="1" stroke-dasharray="3 4"/>
+    <text x="486" y="234" fill="var(--muted)" font-size="14">|α⟩ 非解</text>
+    <text x="60" y="34" fill="var(--muted)" font-size="14">|β⟩ 解</text>
+    <!-- 反射轴提示 -->
+    <line x1="80" y1="230" x2="263" y2="187" stroke="var(--accent2)" stroke-width="1" stroke-dasharray="2 4" opacity="0.6"/>
+    <!-- 旋转弧 θ -->
+    <path d="M 167.7 209.8 A 90 90 0 0 0 149.9 173.4" fill="none" stroke="var(--accent)" stroke-width="1.4"/>
+    <text x="170" y="180" fill="var(--accent)" font-size="13">θ</text>
+    <!-- θ/2 弧（上、下） -->
+    <path d="M 136 230 A 56 56 0 0 0 134.5 217.4" fill="none" stroke="var(--muted)" stroke-width="1"/>
+    <path d="M 136 230 A 56 56 0 0 1 134.5 242.6" fill="none" stroke="var(--muted)" stroke-width="1"/>
+    <text x="142" y="214" fill="var(--muted)" font-size="11">θ/2</text>
+    <text x="142" y="252" fill="var(--muted)" font-size="11">θ/2</text>
+    <!-- 三个向量 -->
+    <line x1="80" y1="230" x2="260" y2="188" stroke="var(--accent2)" stroke-width="2.6"/>
+    <polygon points="260,188 249,188 256,196" fill="var(--accent2)"/>
+    <text x="266" y="184" fill="var(--accent2)" font-size="13.5">|ψ⟩</text>
+
+    <line x1="80" y1="230" x2="260" y2="272" stroke="var(--muted)" stroke-width="2" opacity="0.85"/>
+    <polygon points="260,272 250,266 254,276" fill="var(--muted)"/>
+    <text x="266" y="284" fill="var(--muted)" font-size="12.5">O|ψ⟩ 关于|α⟩反射</text>
+
+    <line x1="80" y1="230" x2="224" y2="114" stroke="var(--accent)" stroke-width="2.6"/>
+    <polygon points="224,114 224,125 233,118" fill="var(--accent)"/>
+    <text x="186" y="104" fill="var(--accent)" font-size="13.5">G|ψ⟩ = −HO|ψ⟩</text>
+  </svg>
+  <figcaption>
+    预言机 <b>O</b>：关于 |α⟩ 反射（解分量取负），|ψ⟩→O|ψ⟩。再作扩散 <b>H=2|ψ⟩⟨ψ|−I</b>：关于 |ψ⟩ 反射，O|ψ⟩→G|ψ⟩。
+    两次反射复合即朝 |β⟩ 方向旋转固定角 <b>θ</b>，其中 sin(θ/2)=√(M/N)。
+  </figcaption>
+</figure>
+
+<!-- ============ 图 1b：交互式旋转 ============ -->
+<figure class="v-ch06-card">
+  <div class="v-ch06-title">图 2 · 交互：每次迭代旋转 θ（N=64, M=1）</div>
+  <svg viewBox="0 0 560 320" role="img" aria-label="Grover 旋转交互">
+    <!-- 轴 -->
+    <line x1="200" y1="250" x2="520" y2="250" stroke="var(--border)" stroke-width="1.4"/>
+    <polygon points="520,250 510,246 510,254" fill="var(--border)"/>
+    <line x1="200" y1="250" x2="40" y2="250" stroke="var(--border)" stroke-width="1" stroke-dasharray="3 4"/>
+    <line x1="200" y1="250" x2="200" y2="40" stroke="var(--border)" stroke-width="1.4"/>
+    <polygon points="200,40 196,50 204,50" fill="var(--border)"/>
+    <text x="524" y="254" fill="var(--muted)" font-size="13">|α⟩</text>
+    <text x="186" y="34" fill="var(--muted)" font-size="13">|β⟩</text>
+    <!-- 初态参考线（θ/2） -->
+    <line x1="200" y1="250" x2="373" y2="228" stroke="var(--muted)" stroke-width="1" stroke-dasharray="2 4" opacity="0.55"/>
+    <text x="360" y="244" fill="var(--muted)" font-size="11">|ψ₀⟩</text>
+    <!-- 当前角弧 -->
+    <path id="v-ch06-arc" d="" fill="none" stroke="var(--accent)" stroke-width="1.3"/>
+    <!-- 当前态向量 -->
+    <line id="v-ch06-psi" x1="200" y1="250" x2="373" y2="228" stroke="var(--accent)" stroke-width="2.8"/>
+    <circle id="v-ch06-tip" cx="373" cy="228" r="4.5" fill="var(--accent)"/>
+    <text id="v-ch06-lbl" x="392" y="226" fill="var(--accent)" font-size="13">|ψₖ⟩</text>
+  </svg>
+  <div class="v-ch06-ctl">
+    <button class="v-ch06-btn" id="v-ch06-step">迭代 ▶</button>
+    <button class="v-ch06-btn" id="v-ch06-reset">重置</button>
+    <span class="v-ch06-readout">迭代 k=<b id="v-ch06-k">0</b> · 角度 <b id="v-ch06-ang">7.2°</b> · 成功概率 <b id="v-ch06-p">1.6%</b></span>
+  </div>
+  <figcaption>
+    点击「迭代」每次将态朝 |β⟩ 旋转 θ≈14.4°。约 k≈6 次时最接近 |β⟩（成功概率最高）；继续迭代会「转过头」，概率回落。
+  </figcaption>
+</figure>
+
+<!-- ============ 图 3：成功概率 vs 迭代次数 ============ -->
+<figure class="v-ch06-card">
+  <div class="v-ch06-title">图 3 · 成功概率 P(k)=sin²((2k+1)θ/2)（N=64, M=1）</div>
+  <svg viewBox="0 0 560 320" role="img" aria-label="成功概率曲线">
+    <!-- 网格与坐标轴 -->
+    <line x1="60" y1="40" x2="60" y2="260" stroke="var(--border)" stroke-width="1.4"/>
+    <line x1="60" y1="260" x2="525" y2="260" stroke="var(--border)" stroke-width="1.4"/>
+    <line x1="60" y1="40" x2="525" y2="40" stroke="var(--border)" stroke-width="0.8" stroke-dasharray="3 5" opacity="0.5"/>
+    <text x="30" y="44" fill="var(--muted)" font-size="11">1.0</text>
+    <text x="30" y="155" fill="var(--muted)" font-size="11">0.5</text>
+    <text x="38" y="264" fill="var(--muted)" font-size="11">0</text>
+    <text x="500" y="280" fill="var(--muted)" font-size="12">迭代次数 k</text>
+    <text x="20" y="30" fill="var(--muted)" font-size="12">P</text>
+    <!-- 最优点竖线 -->
+    <line id="v-ch06-opt" x1="0" y1="40" x2="0" y2="260" stroke="var(--accent2)" stroke-width="1" stroke-dasharray="4 4"/>
+    <!-- 曲线与散点（JS 填充） -->
+    <polyline id="v-ch06-curve" fill="none" stroke="var(--accent)" stroke-width="2" points=""/>
+    <g id="v-ch06-dots"></g>
+    <text id="v-ch06-optlbl" x="0" y="34" fill="var(--accent2)" font-size="12" text-anchor="middle"></text>
+  </svg>
+  <figcaption>
+    约 <b>(π/4)√N ≈ 6</b> 次迭代达到最大成功概率（峰值 ≈ 99.7%）。成功概率随迭代次数<b>振荡</b>——过度迭代会「转过头」使概率下降，故迭代次数必须卡准。
+  </figcaption>
+</figure>
+
+<script>
+(function(){
+  var root=document.querySelector('.v-ch06'); if(!root) return;
+  var rad=function(d){return d*Math.PI/180;};
+  var THETA=14.3616, HALF=THETA/2;           // sin(θ/2)=√(1/64)=1/8 ⇒ θ≈14.36°
+
+  // ---- 图 2：交互旋转 ----
+  var ox=200, oy=250, L=173, KMAX=12;
+  var psi=root.querySelector('#v-ch06-psi'), tip=root.querySelector('#v-ch06-tip'),
+      lbl=root.querySelector('#v-ch06-lbl'), arc=root.querySelector('#v-ch06-arc'),
+      lk=root.querySelector('#v-ch06-k'), la=root.querySelector('#v-ch06-ang'),
+      lp=root.querySelector('#v-ch06-p');
+  var k=0;
+  function render(){
+    var phi=(2*k+1)*HALF;
+    var x=ox+L*Math.cos(rad(phi)), y=oy-L*Math.sin(rad(phi));
+    psi.setAttribute('x2',x.toFixed(1)); psi.setAttribute('y2',y.toFixed(1));
+    tip.setAttribute('cx',x.toFixed(1)); tip.setAttribute('cy',y.toFixed(1));
+    lbl.setAttribute('x',(x+ (phi>90?-34:14)).toFixed(1)); lbl.setAttribute('y',(y-6).toFixed(1));
+    var r=44, ex=ox+r*Math.cos(rad(phi)), ey=oy-r*Math.sin(rad(phi));
+    arc.setAttribute('d','M '+(ox+r)+' '+oy+' A '+r+' '+r+' 0 0 0 '+ex.toFixed(1)+' '+ey.toFixed(1));
+    var p=Math.pow(Math.sin(rad(phi)),2);
+    lk.textContent=k; la.textContent=phi.toFixed(1)+'°'; lp.textContent=(p*100).toFixed(1)+'%';
+  }
+  root.querySelector('#v-ch06-step').addEventListener('click',function(){ if(k<KMAX) k++; render(); });
+  root.querySelector('#v-ch06-reset').addEventListener('click',function(){ k=0; render(); });
+  render();
+
+  // ---- 图 3：成功概率曲线 ----
+  var gx0=60, gx1=525, gy0=260, gy1=40, KM=14, NS='http://www.w3.org/2000/svg';
+  function X(kk){return gx0+(kk/KM)*(gx1-gx0);}
+  function Y(p){return gy0-p*(gy0-gy1);}
+  function P(kk){var s=Math.sin(rad((2*kk+1)*HALF)); return s*s;}
+  var pts=[];
+  for(var t=0;t<=KM*4;t++){var kk=t/4; pts.push(X(kk).toFixed(1)+','+Y(P(kk)).toFixed(1));}
+  root.querySelector('#v-ch06-curve').setAttribute('points',pts.join(' '));
+  // 最优 k = round((π/4)√N) = 6
+  var kopt=Math.round((Math.PI/4)*Math.sqrt(64));
+  var ol=root.querySelector('#v-ch06-opt'); ol.setAttribute('x1',X(kopt)); ol.setAttribute('x2',X(kopt));
+  var oll=root.querySelector('#v-ch06-optlbl'); oll.setAttribute('x',X(kopt)); oll.textContent='最优 k≈'+kopt;
+  var g=root.querySelector('#v-ch06-dots');
+  for(var kk=0;kk<=KM;kk++){
+    var c=document.createElementNS(NS,'circle');
+    c.setAttribute('cx',X(kk).toFixed(1)); c.setAttribute('cy',Y(P(kk)).toFixed(1));
+    var best=(kk===kopt);
+    c.setAttribute('r',best?5:3.2);
+    c.setAttribute('fill',best?'var(--accent2)':'var(--accent)');
+    g.appendChild(c);
+    if(kk%2===0){
+      var tx=document.createElementNS(NS,'text');
+      tx.setAttribute('x',X(kk).toFixed(1)); tx.setAttribute('y',274);
+      tx.setAttribute('fill','var(--muted)'); tx.setAttribute('font-size','10');
+      tx.setAttribute('text-anchor','middle'); tx.textContent=kk;
+      g.appendChild(tx);
+    }
+  }
+})();
+</script>
+</div>

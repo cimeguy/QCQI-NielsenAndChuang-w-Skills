@@ -1,0 +1,155 @@
+<div class="v-ch04">
+<style>
+.v-ch04{display:flex;flex-direction:column;gap:16px}
+.v-ch04 figure{margin:0;background:var(--panel2);border:1px solid var(--border);border-radius:12px;padding:14px 16px}
+.v-ch04 .v-ch04-title{color:var(--accent);font-weight:600;font-size:15px;margin:0 0 4px}
+.v-ch04 figcaption{color:var(--muted);font-size:12.5px;margin-top:8px;line-height:1.6}
+.v-ch04 svg{width:100%;height:auto;display:block}
+.v-ch04 .v-ch04-wire{stroke:var(--muted);stroke-width:1.6;fill:none}
+.v-ch04 .v-ch04-cwire{stroke:var(--muted);stroke-width:1.1;fill:none}
+.v-ch04 .v-ch04-link{stroke:var(--accent);stroke-width:1.8;fill:none}
+.v-ch04 .v-ch04-box{fill:var(--panel);stroke:var(--accent);stroke-width:1.7}
+.v-ch04 .v-ch04-box2{fill:var(--panel);stroke:var(--accent2);stroke-width:1.7}
+.v-ch04 .v-ch04-tok{fill:var(--panel);stroke:var(--accent);stroke-width:2.2}
+.v-ch04 .v-ch04-pan{fill:var(--panel);stroke:var(--border);stroke-width:1.2}
+.v-ch04 .v-ch04-ctrl{fill:var(--accent);stroke:none}
+.v-ch04 .v-ch04-tg{stroke:var(--accent);stroke-width:1.8;fill:none}
+.v-ch04 .v-ch04-gt{fill:var(--fg);font-size:16px;font-weight:600;text-anchor:middle}
+.v-ch04 .v-ch04-big{fill:var(--fg);font-size:30px;text-anchor:middle}
+.v-ch04 .v-ch04-lbl{fill:var(--muted);font-size:12px;text-anchor:middle}
+.v-ch04 .v-ch04-key{fill:var(--accent2);font-size:13px;font-weight:600}
+.v-ch04 .v-ch04-mut{fill:var(--muted);font-size:12.5px}
+</style>
+
+<!-- ============ 图 1 · 量子门图例 ============ -->
+<figure>
+  <p class="v-ch04-title">① 量子门与测量图例（在 qubit 线上的标准记号）</p>
+  <svg viewBox="0 0 720 300" style="width:100%;height:auto;max-width:760px" role="img" aria-label="量子门图例">
+    <!-- H -->
+    <path class="v-ch04-wire" d="M30,55 H210"/>
+    <rect class="v-ch04-box" x="100" y="35" width="40" height="40" rx="4"/>
+    <text class="v-ch04-gt" x="120" y="61">H</text>
+    <text class="v-ch04-lbl" x="120" y="100">H · 单比特门</text>
+    <!-- CNOT -->
+    <path class="v-ch04-wire" d="M270,45 H450"/>
+    <path class="v-ch04-wire" d="M270,82 H450"/>
+    <path class="v-ch04-link" d="M360,45 V82"/>
+    <circle class="v-ch04-ctrl" cx="360" cy="45" r="5"/>
+    <circle class="v-ch04-tg" cx="360" cy="82" r="12"/>
+    <path class="v-ch04-tg" d="M348,82 H372 M360,70 V94"/>
+    <text class="v-ch04-lbl" x="360" y="112">CNOT · 受控非（• 控制 → ⊕ 目标）</text>
+    <!-- CZ -->
+    <path class="v-ch04-wire" d="M510,45 H690"/>
+    <path class="v-ch04-wire" d="M510,82 H690"/>
+    <path class="v-ch04-link" d="M600,45 V82"/>
+    <circle class="v-ch04-ctrl" cx="600" cy="45" r="5"/>
+    <circle class="v-ch04-ctrl" cx="600" cy="82" r="5"/>
+    <text class="v-ch04-lbl" x="600" y="112">CZ · 受控Z（对称，两端皆控制）</text>
+    <!-- SWAP -->
+    <path class="v-ch04-wire" d="M30,175 H210"/>
+    <path class="v-ch04-wire" d="M30,225 H210"/>
+    <path class="v-ch04-link" d="M120,175 V225"/>
+    <path class="v-ch04-tg" d="M113,168 L127,182 M127,168 L113,182"/>
+    <path class="v-ch04-tg" d="M113,218 L127,232 M127,218 L113,232"/>
+    <text class="v-ch04-lbl" x="120" y="255">SWAP · 交换（×—×，= 3 CNOT）</text>
+    <!-- Toffoli -->
+    <path class="v-ch04-wire" d="M270,165 H450"/>
+    <path class="v-ch04-wire" d="M270,195 H450"/>
+    <path class="v-ch04-wire" d="M270,225 H450"/>
+    <path class="v-ch04-link" d="M360,165 V225"/>
+    <circle class="v-ch04-ctrl" cx="360" cy="165" r="5"/>
+    <circle class="v-ch04-ctrl" cx="360" cy="195" r="5"/>
+    <circle class="v-ch04-tg" cx="360" cy="225" r="12"/>
+    <path class="v-ch04-tg" d="M348,225 H372 M360,213 V237"/>
+    <text class="v-ch04-lbl" x="360" y="255">Toffoli · CCNOT（两控制 + ⊕）</text>
+    <!-- Measurement meter -->
+    <path class="v-ch04-wire" d="M510,195 H600"/>
+    <rect class="v-ch04-box" x="600" y="178" width="36" height="34" rx="4"/>
+    <path class="v-ch04-tg" d="M608,205 A 10 10 0 0 1 628,205"/>
+    <path class="v-ch04-tg" d="M618,205 L626,191"/>
+    <path class="v-ch04-cwire" d="M636,192 H690 M636,198 H690"/>
+    <text class="v-ch04-lbl" x="600" y="255">测量 · 半圆表盘 → 双线经典位</text>
+  </svg>
+  <figcaption>单线 = 量子位，双线 = 经典位。实心点为控制位，⊕ 为受控非目标，表盘符号读出测量结果并输出到经典线。</figcaption>
+</figure>
+
+<!-- ============ 图 2 · z-y-z 分解 ============ -->
+<figure>
+  <p class="v-ch04-title">② z-y-z 分解：任意单比特门 U = e<sup>iα</sup> R<sub>z</sub>(β) R<sub>y</sub>(γ) R<sub>z</sub>(δ)</p>
+  <svg viewBox="0 0 720 160" style="width:100%;height:auto;max-width:760px" role="img" aria-label="z-y-z 分解">
+    <!-- U box -->
+    <path class="v-ch04-wire" d="M20,60 H86"/>
+    <rect class="v-ch04-box" x="40" y="38" width="46" height="44" rx="5"/>
+    <text class="v-ch04-gt" x="63" y="66">U</text>
+    <text class="v-ch04-lbl" x="63" y="100">任意单比特门</text>
+    <text class="v-ch04-big" x="118" y="70">=</text>
+    <!-- decomposition wire -->
+    <path class="v-ch04-wire" d="M150,60 H660"/>
+    <!-- phase token -->
+    <rect class="v-ch04-box2" x="156" y="42" width="56" height="36" rx="6"/>
+    <text class="v-ch04-gt" x="184" y="65">e<tspan font-size="11" dy="-7">iα</tspan></text>
+    <!-- Rz(δ) -->
+    <rect class="v-ch04-box" x="244" y="40" width="86" height="40" rx="5"/>
+    <text class="v-ch04-gt" x="287" y="65">R<tspan font-size="11" dy="4">z</tspan><tspan dy="-4">(δ)</tspan></text>
+    <!-- Ry(γ) -->
+    <rect class="v-ch04-box2" x="362" y="40" width="86" height="40" rx="5"/>
+    <text class="v-ch04-gt" x="405" y="65">R<tspan font-size="11" dy="4">y</tspan><tspan dy="-4">(γ)</tspan></text>
+    <!-- Rz(β) -->
+    <rect class="v-ch04-box" x="480" y="40" width="86" height="40" rx="5"/>
+    <text class="v-ch04-gt" x="523" y="65">R<tspan font-size="11" dy="4">z</tspan><tspan dy="-4">(β)</tspan></text>
+    <text class="v-ch04-lbl" x="405" y="100">先作用 R<tspan font-size="9" dy="3">z</tspan><tspan dy="-3">(δ)</tspan> → … → R<tspan font-size="9" dy="3">z</tspan><tspan dy="-3">(β)</tspan>，再加全局相位</text>
+    <text class="v-ch04-key" x="150" y="140">SU(2) ↔ SO(3)：2 维希尔伯特空间旋转 ↔ 3 维 Bloch 球旋转</text>
+  </svg>
+  <figcaption>欧拉角分解——任意 U(2) 门可拆成绕 z、y、z 的三次旋转加全局相位 e<sup>iα</sup>；Ry 与相位即可生成全部单比特门。</figcaption>
+</figure>
+
+<!-- ============ 图 3 · 通用门集 ============ -->
+<figure>
+  <p class="v-ch04-title">③ 通用门集 {H, T, CNOT}</p>
+  <svg viewBox="0 0 720 180" style="width:100%;height:auto;max-width:760px" role="img" aria-label="通用门集">
+    <!-- H token -->
+    <rect class="v-ch04-tok" x="40" y="40" width="70" height="70" rx="11"/>
+    <text class="v-ch04-gt" x="75" y="84" font-size="26">H</text>
+    <text class="v-ch04-lbl" x="75" y="128">阿达玛</text>
+    <!-- T token -->
+    <rect class="v-ch04-tok" x="140" y="40" width="70" height="70" rx="11"/>
+    <text class="v-ch04-gt" x="175" y="84" font-size="26">T</text>
+    <text class="v-ch04-lbl" x="175" y="128">π/8 相位</text>
+    <!-- CNOT token -->
+    <rect class="v-ch04-tok" x="240" y="40" width="130" height="70" rx="11"/>
+    <path class="v-ch04-wire" d="M256,64 H354"/>
+    <path class="v-ch04-wire" d="M256,90 H354"/>
+    <path class="v-ch04-link" d="M305,64 V90"/>
+    <circle class="v-ch04-ctrl" cx="305" cy="64" r="4.5"/>
+    <circle class="v-ch04-tg" cx="305" cy="90" r="9"/>
+    <path class="v-ch04-tg" d="M296,90 H314 M305,81 V99"/>
+    <text class="v-ch04-lbl" x="305" y="128">CNOT · 纠缠</text>
+    <!-- 三禁忌 panel -->
+    <rect class="v-ch04-pan" x="420" y="34" width="276" height="118" rx="10"/>
+    <text class="v-ch04-key" x="438" y="60">线路三禁忌</text>
+    <text class="v-ch04-mut" x="440" y="86">· 无环：有向无环图 (DAG)</text>
+    <text class="v-ch04-mut" x="440" y="110">· 不扇入：禁止连线汇合</text>
+    <text class="v-ch04-mut" x="440" y="134">· 不扇出：禁止复制量子位</text>
+  </svg>
+  <figcaption>该门集对任意幺正变换通用；达到精度 ε 仅需 O(log<sup>c</sup>(1/ε)) 个门（Solovay–Kitaev 定理）。</figcaption>
+</figure>
+
+<!-- ============ 图 4 · Trotter 分解 ============ -->
+<figure>
+  <p class="v-ch04-title">④ 量子模拟 · Trotter 分解</p>
+  <svg viewBox="0 0 720 130" style="width:100%;height:auto;max-width:760px" role="img" aria-label="Trotter 分解">
+    <rect class="v-ch04-box" x="18" y="40" width="150" height="44" rx="7"/>
+    <text class="v-ch04-gt" x="93" y="67" font-size="14">e<tspan font-size="10" dy="-7">-i(A+B)t</tspan></text>
+    <text class="v-ch04-big" x="196" y="72">≈</text>
+    <text class="v-ch04-big" x="232" y="72">(</text>
+    <rect class="v-ch04-box2" x="248" y="42" width="78" height="42" rx="6"/>
+    <text class="v-ch04-gt" x="287" y="68" font-size="13">e<tspan font-size="10" dy="-6">-iAt/n</tspan></text>
+    <rect class="v-ch04-box" x="332" y="42" width="78" height="42" rx="6"/>
+    <text class="v-ch04-gt" x="371" y="68" font-size="13">e<tspan font-size="10" dy="-6">-iBt/n</tspan></text>
+    <text class="v-ch04-big" x="424" y="72">)</text>
+    <text class="v-ch04-key" x="436" y="52" font-size="16">n</text>
+    <text class="v-ch04-mut" x="470" y="68">重复 n 步，n→∞ 收敛于精确演化</text>
+  </svg>
+  <figcaption>把演化切片后交替施加局域哈密顿量的指数；误差来自 [A,B]≠0，由 BCH 公式给出（一阶 Trotter 误差 ~ O(t²/n)）。</figcaption>
+</figure>
+</div>

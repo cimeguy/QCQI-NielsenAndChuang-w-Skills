@@ -1,0 +1,156 @@
+<div class="v-ch02">
+<style>
+.v-ch02{display:block}
+.v-ch02 .v-ch02-grid{display:grid;gap:18px;grid-template-columns:1fr}
+.v-ch02 .v-ch02-row{display:grid;gap:18px;grid-template-columns:1fr 1fr}
+@media (max-width:620px){.v-ch02 .v-ch02-row{grid-template-columns:1fr}}
+.v-ch02 figure{margin:0;background:var(--panel2);border:1px solid var(--border);border-radius:12px;padding:14px 16px}
+.v-ch02 figure h3{color:var(--accent2);margin:.1em 0 .7em;font-size:16px}
+.v-ch02 figcaption{color:var(--muted);font-size:12.5px;margin-top:9px;line-height:1.6}
+.v-ch02 svg{width:100%;height:auto;display:block;max-width:520px;margin:0 auto}
+.v-ch02 .v-ch02-mut{fill:var(--muted);font-size:12px}
+.v-ch02 .v-ch02-fg{fill:var(--fg);font-size:13px}
+.v-ch02 .v-ch02-bold{fill:var(--fg);font-size:13px;font-weight:600}
+.v-ch02 .v-ch02-ac{fill:var(--accent);font-size:13px}
+.v-ch02 .v-ch02-ac2{fill:var(--accent2);font-size:13px}
+.v-ch02 .v-ch02-sphere{fill:var(--accent);opacity:.06;stroke:var(--border);stroke-width:1.4}
+.v-ch02 .v-ch02-orbit{fill:none;stroke:var(--border);stroke-width:1.1}
+.v-ch02 .v-ch02-orbit-b{fill:none;stroke:var(--border);stroke-width:1.1;stroke-dasharray:4 4;opacity:.55}
+.v-ch02 .v-ch02-axis{stroke:var(--muted);stroke-width:1;opacity:.7}
+</style>
+
+<div class="v-ch02-grid">
+
+  <!-- ============ 1. 密度矩阵：纯态 vs 混态 ============ -->
+  <figure>
+    <h3>① 密度矩阵 ρ：纯态在球面，混态在球内</h3>
+    <svg viewBox="0 0 440 330" role="img" aria-label="Bloch 球上的纯态与混态">
+      <defs>
+        <marker id="v-ch02-arr" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+          <path d="M0,0 L9,4.5 L0,9 Z" fill="var(--fg)"/>
+        </marker>
+        <marker id="v-ch02-arrp" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+          <path d="M0,0 L9,4.5 L0,9 Z" fill="var(--accent)"/>
+        </marker>
+        <marker id="v-ch02-arrm" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+          <path d="M0,0 L9,4.5 L0,9 Z" fill="var(--accent2)"/>
+        </marker>
+      </defs>
+      <!-- sphere -->
+      <circle class="v-ch02-sphere" cx="200" cy="165" r="130"/>
+      <!-- equator: back dashed + front solid -->
+      <path class="v-ch02-orbit-b" d="M70,165 A130,42 0 0 1 330,165"/>
+      <path class="v-ch02-orbit" d="M70,165 A130,42 0 0 0 330,165"/>
+      <!-- meridian -->
+      <ellipse class="v-ch02-orbit" cx="200" cy="165" rx="42" ry="130"/>
+      <!-- z axis -->
+      <line class="v-ch02-axis" x1="200" y1="300" x2="200" y2="42" marker-end="url(#v-ch02-arr)"/>
+      <text class="v-ch02-fg" x="208" y="40">z · |0⟩</text>
+      <text class="v-ch02-mut" x="206" y="312">|1⟩</text>
+      <!-- y axis -->
+      <line class="v-ch02-axis" x1="200" y1="165" x2="328" y2="150" marker-end="url(#v-ch02-arr)"/>
+      <text class="v-ch02-mut" x="332" y="150">y</text>
+      <!-- x axis -->
+      <line class="v-ch02-axis" x1="200" y1="165" x2="118" y2="222" marker-end="url(#v-ch02-arr)"/>
+      <text class="v-ch02-mut" x="100" y="236">x</text>
+
+      <!-- pure state: tip on surface -->
+      <line x1="200" y1="165" x2="288" y2="70" stroke="var(--accent)" stroke-width="2.4" marker-end="url(#v-ch02-arrp)"/>
+      <circle cx="288" cy="70" r="4.5" fill="var(--accent)"/>
+      <text class="v-ch02-ac" x="296" y="64">纯态 |r|=1</text>
+
+      <!-- mixed state: inside -->
+      <line x1="200" y1="165" x2="150" y2="205" stroke="var(--accent2)" stroke-width="2.4" marker-end="url(#v-ch02-arrm)"/>
+      <circle cx="150" cy="205" r="4.5" fill="var(--accent2)"/>
+      <text class="v-ch02-ac2" x="36" y="200">混态 |r|&lt;1</text>
+
+      <!-- maximally mixed center -->
+      <circle cx="200" cy="165" r="4" fill="var(--fg)"/>
+      <text class="v-ch02-bold" x="208" y="183">I/2</text>
+    </svg>
+    <figcaption>
+      ρ = ½(I + <strong>r</strong>·<strong>σ</strong>)，满足 Tr(ρ)=1、ρ≥0（半正定）。
+      纯态 Tr(ρ²)=1 落在球面（|<strong>r</strong>|=1）；混态 Tr(ρ²)&lt;1 落在球内；
+      最大混态 I/2 位于球心（|<strong>r</strong>|=0）。
+    </figcaption>
+  </figure>
+
+  <!-- ============ 2. PVM vs POVM ============ -->
+  <div class="v-ch02-row">
+    <figure>
+      <h3>② PVM：正交投影测量</h3>
+      <svg viewBox="0 0 300 300" role="img" aria-label="PVM 正交投影">
+        <!-- axes |0> horizontal, |1> vertical -->
+        <line class="v-ch02-axis" x1="40" y1="180" x2="250" y2="180" marker-end="url(#v-ch02-arr)"/>
+        <line class="v-ch02-axis" x1="40" y1="180" x2="40" y2="30" marker-end="url(#v-ch02-arr)"/>
+        <text class="v-ch02-mut" x="252" y="196">|0⟩</text>
+        <text class="v-ch02-mut" x="20" y="34">|1⟩</text>
+        <!-- state vector -->
+        <line x1="40" y1="180" x2="190" y2="80" stroke="var(--accent)" stroke-width="2.4" marker-end="url(#v-ch02-arrp)"/>
+        <text class="v-ch02-ac" x="196" y="76">|ψ⟩</text>
+        <!-- projections -->
+        <line x1="190" y1="80" x2="190" y2="180" stroke="var(--accent)" stroke-width="1" stroke-dasharray="4 3" opacity=".7"/>
+        <line x1="190" y1="80" x2="40" y2="80" stroke="var(--accent)" stroke-width="1" stroke-dasharray="4 3" opacity=".7"/>
+        <!-- prob bars -->
+        <rect x="70" y="220" width="90" height="20" rx="3" fill="var(--accent)" opacity=".8"/>
+        <text class="v-ch02-fg" x="70" y="256">p₀=Tr(ρP₀)=0.7</text>
+        <rect x="70" y="262" width="39" height="20" rx="3" fill="var(--accent2)" opacity=".8"/>
+        <text class="v-ch02-fg" x="118" y="278">p₁=0.3</text>
+      </svg>
+      <figcaption>正交 {P₀,P₁}：PₘPₙ=δₘₙPₘ，ΣPₘ=I。结果数 = 维数 2。</figcaption>
+    </figure>
+    <figure>
+      <h3>③ POVM：广义测量</h3>
+      <svg viewBox="0 0 300 300" role="img" aria-label="POVM 三结果测量">
+        <!-- three non-orthogonal effects at 120 deg -->
+        <line class="v-ch02-axis" x1="150" y1="160" x2="150" y2="40" marker-end="url(#v-ch02-arr)"/>
+        <line class="v-ch02-axis" x1="150" y1="160" x2="46" y2="220" marker-end="url(#v-ch02-arr)"/>
+        <line class="v-ch02-axis" x1="150" y1="160" x2="254" y2="220" marker-end="url(#v-ch02-arr)"/>
+        <text class="v-ch02-mut" x="156" y="40">E₁</text>
+        <text class="v-ch02-mut" x="22" y="224">E₂</text>
+        <text class="v-ch02-mut" x="258" y="224">E₃</text>
+        <circle cx="150" cy="160" r="3.5" fill="var(--fg)"/>
+        <!-- prob bars: 3 outcomes -->
+        <rect x="40" y="248" width="56" height="18" rx="3" fill="var(--accent)" opacity=".8"/>
+        <text class="v-ch02-mut" x="100" y="262">p₁=.45</text>
+        <rect x="40" y="270" width="44" height="18" rx="3" fill="var(--accent2)" opacity=".8"/>
+        <text class="v-ch02-mut" x="100" y="284">p₂=.35</text>
+        <rect x="170" y="270" width="25" height="18" rx="3" fill="var(--fg)" opacity=".6"/>
+        <text class="v-ch02-mut" x="200" y="284">p₃=.20</text>
+      </svg>
+      <figcaption>{Eₘ}：Eₘ≥0、ΣEₘ=I，但无需正交。结果数 3 &gt; 维数 2，pₘ=Tr(ρEₘ)。</figcaption>
+    </figure>
+  </div>
+
+  <!-- ============ 4. Schmidt 分解 / 纠缠 ============ -->
+  <figure>
+    <h3>④ Schmidt 分解与纠缠：|ψ⟩<sub>AB</sub> = Σ λᵢ |i⟩<sub>A</sub>|i⟩<sub>B</sub></h3>
+    <svg viewBox="0 0 460 240" role="img" aria-label="Schmidt 分解配对">
+      <text class="v-ch02-ac" x="60" y="28" text-anchor="middle">子系统 A</text>
+      <text class="v-ch02-ac" x="400" y="28" text-anchor="middle">子系统 B</text>
+      <!-- pair 0: thick link, lambda0=0.8 -->
+      <rect x="18" y="55" width="84" height="40" rx="7" fill="var(--panel)" stroke="var(--accent)" stroke-width="1.4"/>
+      <text class="v-ch02-fg" x="60" y="80" text-anchor="middle">|0⟩A</text>
+      <rect x="358" y="55" width="84" height="40" rx="7" fill="var(--panel)" stroke="var(--accent)" stroke-width="1.4"/>
+      <text class="v-ch02-fg" x="400" y="80" text-anchor="middle">|0⟩B</text>
+      <line x1="102" y1="75" x2="358" y2="75" stroke="var(--accent)" stroke-width="6" opacity=".85"/>
+      <text class="v-ch02-bold" x="230" y="66" text-anchor="middle">λ₀ = 0.8</text>
+      <!-- pair 1: thinner link, lambda1=0.6 -->
+      <rect x="18" y="135" width="84" height="40" rx="7" fill="var(--panel)" stroke="var(--accent2)" stroke-width="1.4"/>
+      <text class="v-ch02-fg" x="60" y="160" text-anchor="middle">|1⟩A</text>
+      <rect x="358" y="135" width="84" height="40" rx="7" fill="var(--panel)" stroke="var(--accent2)" stroke-width="1.4"/>
+      <text class="v-ch02-fg" x="400" y="160" text-anchor="middle">|1⟩B</text>
+      <line x1="102" y1="155" x2="358" y2="155" stroke="var(--accent2)" stroke-width="3.4" opacity=".85"/>
+      <text class="v-ch02-bold" x="230" y="146" text-anchor="middle">λ₁ = 0.6</text>
+      <!-- normalization note -->
+      <text class="v-ch02-mut" x="230" y="206" text-anchor="middle">Σ λᵢ² = 0.64 + 0.36 = 1 ，Schmidt 数 = 2 ⇒ 纠缠态</text>
+    </svg>
+    <figcaption>
+      任意二分纯态可写成对角形式，配对系数 λᵢ≥0 即 Schmidt 系数；
+      非零项数（Schmidt 数）&gt;1 即纠缠，=1 则可分。约化态 ρ_A=Σλᵢ²|i⟩⟨i| 的混合度量化纠缠。
+      <br><strong>Bell 不等式：</strong>局域实在论 |⟨S⟩|≤2，量子可达 2√2≈2.83（Tsirelson 界）⇒ 否定局域实在论。
+    </figcaption>
+  </figure>
+
+</div>
+</div>

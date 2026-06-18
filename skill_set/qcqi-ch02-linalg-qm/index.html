@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>第二章 · 线性代数与量子力学 · QCQI 知识库</title>
+<style>
+:root{--bg:#0f1419;--panel:#1a2330;--panel2:#141c27;--fg:#e6edf3;--muted:#8b98a9;
+--accent:#5ab0ff;--accent2:#9d7bff;--border:#26313f;--code:#1e2a38;--th:#1d2733;}
+[data-theme=light]{--bg:#f6f8fa;--panel:#fff;--panel2:#f0f3f7;--fg:#1f2733;--muted:#5a6b7d;
+--accent:#0969da;--accent2:#7b4bff;--border:#d6dee7;--code:#eef2f6;--th:#eaf0f6;}
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,"PingFang SC","Microsoft YaHei",Segoe UI,system-ui,sans-serif;
+background:var(--bg);color:var(--fg);line-height:1.7;font-size:15px}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+.layout{display:flex;min-height:100vh}
+.sidebar{width:280px;flex:0 0 280px;background:var(--panel2);border-right:1px solid var(--border);
+position:sticky;top:0;height:100vh;overflow-y:auto;padding:20px 0}
+.sidebar h2{font-size:14px;margin:0 18px 6px;color:var(--muted);font-weight:600;letter-spacing:.04em}
+.brand{padding:0 18px 14px;border-bottom:1px solid var(--border);margin-bottom:12px}
+.brand .t{font-size:17px;font-weight:700}
+.brand .s{font-size:12px;color:var(--muted);margin-top:3px}
+.search{margin:0 14px 12px;width:calc(100% - 28px);padding:8px 10px;border-radius:8px;
+border:1px solid var(--border);background:var(--panel);color:var(--fg);font-size:13px}
+.nav a{display:block;padding:6px 18px;color:var(--fg);font-size:13.5px;border-left:3px solid transparent}
+.nav a:hover{background:var(--panel);text-decoration:none}
+.nav a.active{border-left-color:var(--accent);background:var(--panel);color:var(--accent)}
+.nav a.hidden{display:none}
+.main{flex:1;min-width:0;padding:34px 48px 80px;max-width:1000px}
+.topbar{display:flex;align-items:center;gap:14px;margin-bottom:8px}
+.topbar .home{font-size:13px;color:var(--muted)}
+.toggle{margin-left:auto;cursor:pointer;border:1px solid var(--border);background:var(--panel);
+color:var(--fg);border-radius:8px;padding:6px 12px;font-size:13px}
+section{scroll-margin-top:20px;padding:18px 0;border-bottom:1px solid var(--border)}
+h1{font-size:26px;margin:.2em 0 .5em}h2{font-size:20px;margin:1.2em 0 .5em;color:var(--accent)}
+h3{font-size:16.5px;margin:1em 0 .4em;color:var(--accent2)}h4{font-size:15px;margin:.9em 0 .3em}
+code{background:var(--code);padding:1.5px 6px;border-radius:5px;font-size:.9em;
+font-family:"SF Mono",Menlo,Consolas,monospace}
+pre{background:var(--code);padding:14px 16px;border-radius:10px;overflow-x:auto;border:1px solid var(--border)}
+pre code{background:none;padding:0}
+table{border-collapse:collapse;width:100%;margin:12px 0;font-size:13.5px;overflow:hidden;border-radius:8px}
+th,td{border:1px solid var(--border);padding:7px 11px;text-align:left;vertical-align:top}
+th{background:var(--th);font-weight:600}
+tr:nth-child(even) td{background:rgba(127,127,127,.05)}
+blockquote{border-left:4px solid var(--accent2);margin:10px 0;padding:6px 16px;color:var(--muted);
+background:var(--panel);border-radius:0 8px 8px 0}
+ul,ol{padding-left:24px}li{margin:3px 0}
+hr{border:none;border-top:1px dashed var(--border);margin:16px 0}
+.viz{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:20px 22px;margin:14px 0 26px}
+.viz h2{margin-top:0;color:var(--accent)}
+.viz svg{max-width:100%;height:auto}
+.badge{display:inline-block;background:var(--accent);color:#fff;border-radius:6px;padding:2px 9px;font-size:12px;font-weight:600}
+@media(max-width:820px){.sidebar{display:none}.main{padding:24px 18px}}
+</style>
+</head>
+<body>
+<div class="layout">
+<aside class="sidebar">
+<div class="brand"><div class="t">QCQI 知识库</div><div class="s">第二章 · 线性代数与量子力学</div></div>
+<input class="search" id="search" placeholder="过滤小节…">
+<nav class="nav">
+<a href="index.html" style="color:var(--muted)">← 返回门户</a>
+<a href="#viz">可视化图示</a>
+<a href="#top">概览</a>
+<a href="#sec-sec2-1-axioms">2.1 量子力学公理</a>
+<a href="#sec-sec2-2-linear-algebra">2.2 线性代数基础</a>
+<a href="#sec-sec2-3-quantum-state">2.3 量子态</a>
+<a href="#sec-sec2-4-evolution-measurement">2.4 演化与测量</a>
+<a href="#sec-sec2-5-composite-systems">2.5 复合系统：偏迹、施密特分解与纯化</a>
+<a href="#sec-sec2-6-applications">2.6 量子力学的应用：EPR/Bell、态区分、超密编码</a>
+<a href="#sec-glossary">术语表</a>
+<a href="#sec-patterns">技巧/构件</a>
+<a href="#sec-cheatsheet">速查表</a>
+</nav></aside>
+<main class="main">
+<div class="topbar"><span class="badge">QCQI</span><span class="home">第二章 · 线性代数与量子力学</span><button class="toggle" id="themeToggle">🌓 深/浅色</button></div>
+<section id="viz" class="viz"><h2>可视化图示</h2><div class="v-ch02">
+<style>
+.v-ch02{display:block}
+.v-ch02 .v-ch02-grid{display:grid;gap:18px;grid-template-columns:1fr}
+.v-ch02 .v-ch02-row{display:grid;gap:18px;grid-template-columns:1fr 1fr}
+@media (max-width:620px){.v-ch02 .v-ch02-row{grid-template-columns:1fr}}
+.v-ch02 figure{margin:0;background:var(--panel2);border:1px solid var(--border);border-radius:12px;padding:14px 16px}
+.v-ch02 figure h3{color:var(--accent2);margin:.1em 0 .7em;font-size:16px}
+.v-ch02 figcaption{color:var(--muted);font-size:12.5px;margin-top:9px;line-height:1.6}
+.v-ch02 svg{width:100%;height:auto;display:block;max-width:520px;margin:0 auto}
+.v-ch02 .v-ch02-mut{fill:var(--muted);font-size:12px}
+.v-ch02 .v-ch02-fg{fill:var(--fg);font-size:13px}
+.v-ch02 .v-ch02-bold{fill:var(--fg);font-size:13px;font-weight:600}
+.v-ch02 .v-ch02-ac{fill:var(--accent);font-size:13px}
+.v-ch02 .v-ch02-ac2{fill:var(--accent2);font-size:13px}
+.v-ch02 .v-ch02-sphere{fill:var(--accent);opacity:.06;stroke:var(--border);stroke-width:1.4}
+.v-ch02 .v-ch02-orbit{fill:none;stroke:var(--border);stroke-width:1.1}
+.v-ch02 .v-ch02-orbit-b{fill:none;stroke:var(--border);stroke-width:1.1;stroke-dasharray:4 4;opacity:.55}
+.v-ch02 .v-ch02-axis{stroke:var(--muted);stroke-width:1;opacity:.7}
+</style>
+
+<div class="v-ch02-grid">
+
+  <!-- ============ 1. 密度矩阵：纯态 vs 混态 ============ -->
+  <figure>
+    <h3>① 密度矩阵 ρ：纯态在球面，混态在球内</h3>
+    <svg viewBox="0 0 440 330" role="img" aria-label="Bloch 球上的纯态与混态">
+      <defs>
+        <marker id="v-ch02-arr" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+          <path d="M0,0 L9,4.5 L0,9 Z" fill="var(--fg)"/>
+        </marker>
+        <marker id="v-ch02-arrp" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+          <path d="M0,0 L9,4.5 L0,9 Z" fill="var(--accent)"/>
+        </marker>
+        <marker id="v-ch02-arrm" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+          <path d="M0,0 L9,4.5 L0,9 Z" fill="var(--accent2)"/>
+        </marker>
+      </defs>
+      <!-- sphere -->
+      <circle class="v-ch02-sphere" cx="200" cy="165" r="130"/>
+      <!-- equator: back dashed + front solid -->
+      <path class="v-ch02-orbit-b" d="M70,165 A130,42 0 0 1 330,165"/>
+      <path class="v-ch02-orbit" d="M70,165 A130,42 0 0 0 330,165"/>
+      <!-- meridian -->
+      <ellipse class="v-ch02-orbit" cx="200" cy="165" rx="42" ry="130"/>
+      <!-- z axis -->
+      <line class="v-ch02-axis" x1="200" y1="300" x2="200" y2="42" marker-end="url(#v-ch02-arr)"/>
+      <text class="v-ch02-fg" x="208" y="40">z · |0⟩</text>
+      <text class="v-ch02-mut" x="206" y="312">|1⟩</text>
+      <!-- y axis -->
+      <line class="v-ch02-axis" x1="200" y1="165" x2="328" y2="150" marker-end="url(#v-ch02-arr)"/>
+      <text class="v-ch02-mut" x="332" y="150">y</text>
+      <!-- x axis -->
+      <line class="v-ch02-axis" x1="200" y1="165" x2="118" y2="222" marker-end="url(#v-ch02-arr)"/>
+      <text class="v-ch02-mut" x="100" y="236">x</text>
+
+      <!-- pure state: tip on surface -->
+      <line x1="200" y1="165" x2="288" y2="70" stroke="var(--accent)" stroke-width="2.4" marker-end="url(#v-ch02-arrp)"/>
+      <circle cx="288" cy="70" r="4.5" fill="var(--accent)"/>
+      <text class="v-ch02-ac" x="296" y="64">纯态 |r|=1</text>
+
+      <!-- mixed state: inside -->
+      <line x1="200" y1="165" x2="150" y2="205" stroke="var(--accent2)" stroke-width="2.4" marker-end="url(#v-ch02-arrm)"/>
+      <circle cx="150" cy="205" r="4.5" fill="var(--accent2)"/>
+      <text class="v-ch02-ac2" x="36" y="200">混态 |r|&lt;1</text>
+
+      <!-- maximally mixed center -->
+      <circle cx="200" cy="165" r="4" fill="var(--fg)"/>
+      <text class="v-ch02-bold" x="208" y="183">I/2</text>
+    </svg>
+    <figcaption>
+      ρ = ½(I + <strong>r</strong>·<strong>σ</strong>)，满足 Tr(ρ)=1、ρ≥0（半正定）。
+      纯态 Tr(ρ²)=1 落在球面（|<strong>r</strong>|=1）；混态 Tr(ρ²)&lt;1 落在球内；
+      最大混态 I/2 位于球心（|<strong>r</strong>|=0）。
+    </figcaption>
+  </figure>
+
+  <!-- ============ 2. PVM vs POVM ============ -->
+  <div class="v-ch02-row">
+    <figure>
+      <h3>② PVM：正交投影测量</h3>
+      <svg viewBox="0 0 300 300" role="img" aria-label="PVM 正交投影">
+        <!-- axes |0> horizontal, |1> vertical -->
+        <line class="v-ch02-axis" x1="40" y1="180" x2="250" y2="180" marker-end="url(#v-ch02-arr)"/>
+        <line class="v-ch02-axis" x1="40" y1="180" x2="40" y2="30" marker-end="url(#v-ch02-arr)"/>
+        <text class="v-ch02-mut" x="252" y="196">|0⟩</text>
+        <text class="v-ch02-mut" x="20" y="34">|1⟩</text>
+        <!-- state vector -->
+        <line x1="40" y1="180" x2="190" y2="80" stroke="var(--accent)" stroke-width="2.4" marker-end="url(#v-ch02-arrp)"/>
+        <text class="v-ch02-ac" x="196" y="76">|ψ⟩</text>
+        <!-- projections -->
+        <line x1="190" y1="80" x2="190" y2="180" stroke="var(--accent)" stroke-width="1" stroke-dasharray="4 3" opacity=".7"/>
+        <line x1="190" y1="80" x2="40" y2="80" stroke="var(--accent)" stroke-width="1" stroke-dasharray="4 3" opacity=".7"/>
+        <!-- prob bars -->
+        <rect x="70" y="220" width="90" height="20" rx="3" fill="var(--accent)" opacity=".8"/>
+        <text class="v-ch02-fg" x="70" y="256">p₀=Tr(ρP₀)=0.7</text>
+        <rect x="70" y="262" width="39" height="20" rx="3" fill="var(--accent2)" opacity=".8"/>
+        <text class="v-ch02-fg" x="118" y="278">p₁=0.3</text>
+      </svg>
+      <figcaption>正交 {P₀,P₁}：PₘPₙ=δₘₙPₘ，ΣPₘ=I。结果数 = 维数 2。</figcaption>
+    </figure>
+    <figure>
+      <h3>③ POVM：广义测量</h3>
+      <svg viewBox="0 0 300 300" role="img" aria-label="POVM 三结果测量">
+        <!-- three non-orthogonal effects at 120 deg -->
+        <line class="v-ch02-axis" x1="150" y1="160" x2="150" y2="40" marker-end="url(#v-ch02-arr)"/>
+        <line class="v-ch02-axis" x1="150" y1="160" x2="46" y2="220" marker-end="url(#v-ch02-arr)"/>
+        <line class="v-ch02-axis" x1="150" y1="160" x2="254" y2="220" marker-end="url(#v-ch02-arr)"/>
+        <text class="v-ch02-mut" x="156" y="40">E₁</text>
+        <text class="v-ch02-mut" x="22" y="224">E₂</text>
+        <text class="v-ch02-mut" x="258" y="224">E₃</text>
+        <circle cx="150" cy="160" r="3.5" fill="var(--fg)"/>
+        <!-- prob bars: 3 outcomes -->
+        <rect x="40" y="248" width="56" height="18" rx="3" fill="var(--accent)" opacity=".8"/>
+        <text class="v-ch02-mut" x="100" y="262">p₁=.45</text>
+        <rect x="40" y="270" width="44" height="18" rx="3" fill="var(--accent2)" opacity=".8"/>
+        <text class="v-ch02-mut" x="100" y="284">p₂=.35</text>
+        <rect x="170" y="270" width="25" height="18" rx="3" fill="var(--fg)" opacity=".6"/>
+        <text class="v-ch02-mut" x="200" y="284">p₃=.20</text>
+      </svg>
+      <figcaption>{Eₘ}：Eₘ≥0、ΣEₘ=I，但无需正交。结果数 3 &gt; 维数 2，pₘ=Tr(ρEₘ)。</figcaption>
+    </figure>
+  </div>
+
+  <!-- ============ 4. Schmidt 分解 / 纠缠 ============ -->
+  <figure>
+    <h3>④ Schmidt 分解与纠缠：|ψ⟩<sub>AB</sub> = Σ λᵢ |i⟩<sub>A</sub>|i⟩<sub>B</sub></h3>
+    <svg viewBox="0 0 460 240" role="img" aria-label="Schmidt 分解配对">
+      <text class="v-ch02-ac" x="60" y="28" text-anchor="middle">子系统 A</text>
+      <text class="v-ch02-ac" x="400" y="28" text-anchor="middle">子系统 B</text>
+      <!-- pair 0: thick link, lambda0=0.8 -->
+      <rect x="18" y="55" width="84" height="40" rx="7" fill="var(--panel)" stroke="var(--accent)" stroke-width="1.4"/>
+      <text class="v-ch02-fg" x="60" y="80" text-anchor="middle">|0⟩A</text>
+      <rect x="358" y="55" width="84" height="40" rx="7" fill="var(--panel)" stroke="var(--accent)" stroke-width="1.4"/>
+      <text class="v-ch02-fg" x="400" y="80" text-anchor="middle">|0⟩B</text>
+      <line x1="102" y1="75" x2="358" y2="75" stroke="var(--accent)" stroke-width="6" opacity=".85"/>
+      <text class="v-ch02-bold" x="230" y="66" text-anchor="middle">λ₀ = 0.8</text>
+      <!-- pair 1: thinner link, lambda1=0.6 -->
+      <rect x="18" y="135" width="84" height="40" rx="7" fill="var(--panel)" stroke="var(--accent2)" stroke-width="1.4"/>
+      <text class="v-ch02-fg" x="60" y="160" text-anchor="middle">|1⟩A</text>
+      <rect x="358" y="135" width="84" height="40" rx="7" fill="var(--panel)" stroke="var(--accent2)" stroke-width="1.4"/>
+      <text class="v-ch02-fg" x="400" y="160" text-anchor="middle">|1⟩B</text>
+      <line x1="102" y1="155" x2="358" y2="155" stroke="var(--accent2)" stroke-width="3.4" opacity=".85"/>
+      <text class="v-ch02-bold" x="230" y="146" text-anchor="middle">λ₁ = 0.6</text>
+      <!-- normalization note -->
+      <text class="v-ch02-mut" x="230" y="206" text-anchor="middle">Σ λᵢ² = 0.64 + 0.36 = 1 ，Schmidt 数 = 2 ⇒ 纠缠态</text>
+    </svg>
+    <figcaption>
+      任意二分纯态可写成对角形式，配对系数 λᵢ≥0 即 Schmidt 系数；
+      非零项数（Schmidt 数）&gt;1 即纠缠，=1 则可分。约化态 ρ_A=Σλᵢ²|i⟩⟨i| 的混合度量化纠缠。
+      <br><strong>Bell 不等式：</strong>局域实在论 |⟨S⟩|≤2，量子可达 2√2≈2.83（Tsirelson 界）⇒ 否定局域实在论。
+    </figcaption>
+  </figure>
+
+</div>
+</div>
+</section>
+<section id="top"><h1>量子计算与量子信息 · 第二章 线性代数与量子力学</h1>
+<p><strong>原著</strong>: M. Nielsen &amp; I. Chuang《Quantum Computation and Quantum Information》| <strong>来源</strong>: 中文学习笔记 (.nb) | <strong>生成</strong>: 2026-06-19</p>
+<h2>如何使用本 skill</h2>
+<ul><li><strong>不带参数</strong> — 加载第二章的核心数学/物理框架</li><li><strong>带主题</strong> — 问 <code>密度矩阵</code>、<code>Schmidt 分解</code>、<code>POVM</code>、<code>偏迹</code>、<code>Bell 不等式</code> 等，我会读对应小节文件再回答</li><li><strong>带小节号</strong> — 问 <code>2.4</code> 或 <code>sec2.4</code>，加载该小节</li><li><strong>浏览</strong> — 问"有哪些小节？"查看完整索引</li></ul>
+<p>当你问的主题不在下面的核心框架里，我会先读相关小节文件再回答。</p>
+<hr>
+<h2>核心概念框架</h2>
+<p><strong>量子力学四公理</strong>：① 系统状态 = 希尔伯特空间中的态矢/密度算符；② 演化 = 幺正变换（薛定谔方程）；③ 测量 = 一组测量算符/PVM；④ 复合系统 = 子系统希尔伯特空间的张量积。第二章用线性代数把这四条公理精确化。</p>
+<p><strong>线性代数骨架</strong>：线性空间 → 线性映射（算符）→ 内积空间 → 标准正交基 (ONB) 完备性关系 → 矩阵分类（正规/Hermite/幺正/正定/投影）→ 奇异值分解 (SVD) 与极分解 → 张量积。这是量子力学的"语言"。</p>
+<p><strong>量子态 = 迹为 1 的正定算符 ρ</strong>：纯态 ρ=|ψ⟩⟨ψ|（秩 1，不可写成其他态的凸组合）；混态是纯态的概率混合（球内，秩&gt;1）。知道 ρ 就能算任何可观测量的期望与方差。单 qubit 用 Bloch 矢量参数化。</p>
+<p><strong>演化 = 幺正变换</strong>：U†U=I 保持内积与归一。定态（哈密顿量本征态）的演化只是乘一个相位因子 e^{−iEt/ℏ}，概率分布不变。</p>
+<p><strong>测量公理 (PVM/POVM)</strong>：每个可观测量 ↔ 一个 PVM {Pᵢ}（正交投影、求和为 I），用 Hermite 算符 A=ΣaᵢPᵢ 表示物理量。POVM {Eᵢ} 是 PVM 的推广（只要正定且求和为 I，不必正交/幂等），用于最优态区分。测量给出结果概率 Tr(ρPᵢ) 和测后态。</p>
+<p><strong>复合系统工具</strong>：偏迹 → 约化密度矩阵（描述子系统）；施密特分解 |Ψ⟩=Σλᵢ|iₐ⟩|i_b⟩（施密特数 = 纠缠度量）；纯化（任何混态都能视为更大系统纯态的约化）。</p>
+<p><strong>纠缠与局域实在论</strong>：纠缠 = 不可分解为张量积的关联。EPR 悖论 + Bell 不等式：实验中 Bell 态违反 Bell 不等式，否定"局域隐变量"，确认量子力学正确。</p>
+<hr>
+<h2>小节索引</h2>
+<table><thead><tr><th>小节</th><th>标题</th><th>关键概念</th></tr></thead><tbody><tr><td><a href="#sec-sec2-1-axioms">2.1</a></td><td>量子力学公理</td><td>四公理总览：态/演化/测量/复合</td></tr><tr><td><a href="#sec-sec2-2-linear-algebra">2.2</a></td><td>线性代数基础</td><td>线性空间、算符、内积、SVD、极分解、张量积、矩阵分类</td></tr><tr><td><a href="#sec-sec2-3-quantum-state">2.3</a></td><td>量子态</td><td>qubit、Bloch 矢量、密度矩阵、纯态 vs 混态、希尔伯特空间距离</td></tr><tr><td><a href="#sec-sec2-4-evolution-measurement">2.4</a></td><td>演化与测量</td><td>幺正演化、定态、PVM/POVM、期望与方差、海森堡不确定性</td></tr><tr><td><a href="#sec-sec2-5-composite-systems">2.5</a></td><td>复合系统</td><td>偏迹、约化密度矩阵、施密特分解、纯化、纠缠</td></tr><tr><td><a href="#sec-sec2-6-applications">2.6</a></td><td>量子力学应用</td><td>EPR/Bell、态区分 (POVM)、超密编码、不可克隆定理</td></tr></tbody></table>
+<h2>主题索引</h2>
+<ul><li><strong>Bloch 矢量 / qubit 参数化</strong> → 2.3</li><li><strong>EPR / Bell 不等式 / 局域实在论</strong> → 2.6</li><li><strong>POVM / PVM / 测量公理</strong> → 2.4</li><li><strong>Schmidt 分解 / 纯化</strong> → 2.5</li><li><strong>奇异值分解 (SVD) / 极分解</strong> → 2.2</li><li><strong>密度矩阵 / 纯态 / 混态</strong> → 2.3</li><li><strong>张量积</strong> → 2.2</li><li><strong>态区分 / 超密编码 / 不可克隆</strong> → 2.6</li><li><strong>偏迹 / 约化密度矩阵</strong> → 2.5</li><li><strong>海森堡不确定性 / 期望方差</strong> → 2.4</li><li><strong>矩阵分类 (正规/Hermite/幺正/投影)</strong> → 2.2</li><li><strong>纠缠</strong> → 2.5, 2.6</li><li><strong>量子力学四公理</strong> → 2.1</li><li><strong>薛定谔方程 / 幺正演化 / 定态</strong> → 2.4</li></ul>
+<h2>辅助文件</h2>
+<ul><li><a href="#sec-glossary">glossary.md</a> — 关键术语表（中英对照）</li><li><a href="#sec-patterns">patterns.md</a> — 线性代数/量子力学计算技巧</li><li><a href="#sec-cheatsheet">cheatsheet.md</a> — 算符分类与测量速查</li></ul>
+<hr>
+<h2>范围与限制</h2>
+<p>本 skill 仅覆盖 QCQI 第二章（线性代数与量子力学）的概念框架，源自一份中文 Mathematica 笔记。公式以纯文本/Unicode 近似表示，精确推导与证明请参阅原书。具体的数值算例、图像在笔记中以代码/图片形式存在，未完整转录。</p></section>
+<section id="sec-sec2-1-axioms"><h1>2.1 量子力学公理</h1>
+<h2>核心思想</h2>
+<p>量子力学可由四条公理完整刻画。第二章用线性代数把这些公理精确化——所有后续概念（态、门、测量、纠缠）都是这四条的推论。</p>
+<h2>四条公理</h2>
+<ul><li><strong>公理 1（状态）</strong>：孤立量子系统的状态由其希尔伯特空间中的单位态矢 |ψ⟩ 描述；更一般地由密度算符 ρ（迹为 1 的正定算符）描述。知道 ρ 就能得到该系统关于任何物理量的任何命题的正确性，进而得到期望与方差等统计性质。</li><li><strong>公理 2（演化）</strong>：封闭系统的演化由幺正变换描述，|ψ'⟩=U|ψ⟩；连续时间下由薛定谔方程 iℏ d|ψ⟩/dt = H|ψ⟩ 给出。</li><li><strong>公理 3（测量）</strong>：测量由一组测量算符 {Mᵢ} 描述；可观测量 ↔ 一个 PVM（投影算符值测度），用 Hermite 算符表示物理量。测量给出结果概率与测后态。</li><li><strong>公理 4（复合系统）</strong>：复合系统的希尔伯特空间是各子系统希尔伯特空间的张量积 H_A ⊗ H_B。</li></ul>
+<h2>关键概念</h2>
+<ul><li><strong>正交投影算符就是"命题"</strong>：投影 P 对应一个是/非命题，⟨ψ|P|ψ⟩ 给出该命题为真的概率。</li><li><strong>态矢 vs 密度算符</strong>：纯态可用 |ψ⟩；混态必须用 ρ。ρ 是更普适的描述。</li></ul>
+<h2>关键要点</h2>
+<ol><li>四公理 = 态 / 演化 / 测量 / 复合，分别对应希尔伯特空间、幺正群、PVM、张量积。</li><li>量子态的本质是"迹为 1 的正定算符"，它编码了所有可测的统计信息。</li><li>测量是唯一把量子信息变成经典信息的环节，且会改变态。</li></ol>
+<h2>关联</h2>
+<ul><li><strong>2.2</strong>：四公理的数学工具（线性空间、内积、张量积）。</li><li><strong>2.4</strong>：公理 2、3 的展开（幺正演化与 PVM/POVM）。</li><li><strong>第一章</strong>：这里把第 1 章直觉性的 qubit/门/测量严格化。</li></ul></section>
+<section id="sec-sec2-2-linear-algebra"><h1>2.2 线性代数基础</h1>
+<h2>核心思想</h2>
+<p>量子力学的数学语言：线性空间 → 算符 → 内积空间 → 矩阵分类 → SVD/极分解 → 张量积。用狄拉克符号统一几何与代数。</p>
+<h2>框架与工具</h2>
+<ul><li><strong>线性映射（算符）与秩</strong>：秩的代数定义——若 A 中至少有一个 r 阶子式不为零，且当 r&lt;min(m,n) 时所有 r+1 阶子式全为零，则 rank(A)=r。本征值与本征向量是算符的核心不变量。</li><li><strong>内积空间</strong>：复内积空间到自身的同构 = 幺正变换。等距未必同构（例：维数不匹配）。ONB（标准正交基）满足完备性关系 Σᵢ|i⟩⟨i| = I。</li><li><strong>常见算符分类</strong>：</li><ul><li><strong>正规算符 A</strong>：AA†=A†A，可被幺正对角化（谱定理）。</li><li><strong>Hermite 算符 T</strong>：T†=T，本征值实，表示物理量（可观测量）。</li><li><strong>投影算符 P</strong>：P²=P 且 P†=P，对应"命题"。</li><li><strong>幺正算符 U</strong>：U†U=I，复内积空间到自身的同构，保内积。</li></ul><li><strong>奇异值分解 (SVD)</strong>：任意矩阵 A = U D V†，D 为非负对角（奇异值）。奇异值非简并时，若要求降序排列则 SVD 唯一；简并时在奇异值子空间上有旋转自由度。可用来确定秩为 r 矩阵的自由度。</li><li><strong>极分解</strong>：A = U P（幺正 × 正算符），类比复数的模-相位分解。</li><li><strong>张量积</strong>：张量积空间 = 笛卡尔积除以双线性关系。为什么用张量积？因为双线性——分别有 m、n 个能级的两系统合在一起应有 m×n 个能级。可在算符上定义张量积。</li></ul>
+<h2>关键概念</h2>
+<ul><li><strong>谱定理</strong>：正规算符可被一组 ONB 对角化。</li><li><strong>为何投影而非一般正算符</strong>（纠错条件中）：投影算符对应可完美区分的正交子空间，是可恢复性的关键。</li></ul>
+<h2>关键要点</h2>
+<ol><li>算符按代数性质分类（正规/Hermite/幺正/投影/正定），每类对应一种物理角色。</li><li>SVD 是最通用的分解，揭示秩、自由度、几何（旋转-缩放-旋转）。</li><li>张量积来自"双线性 ⇒ 能级相乘"的物理需求，是复合系统的数学基础。</li></ol>
+<h2>关联</h2>
+<ul><li><strong>2.1</strong>：这些工具实现四公理。</li><li><strong>2.3</strong>：密度矩阵是正定 Hermite 算符；Bloch 用本征分解。</li><li><strong>2.5</strong>：施密特分解本质就是对二分态矢做 SVD。</li></ul></section>
+<section id="sec-sec2-3-quantum-state"><h1>2.3 量子态</h1>
+<h2>核心思想</h2>
+<p>量子态 = 迹为 1 的正定算符 ρ。纯态是其极端情形（秩 1），混态是纯态的概率混合。单 qubit 可用 Bloch 矢量几何化。</p>
+<h2>框架</h2>
+<ul><li><strong>物理状态 vs 物理量（经典 vs 量子）</strong>：经典态是相空间一点、物理量是其上的函数；量子态是 ρ、物理量是 Hermite 算符，二者通过 Tr(ρA) 配对得期望。</li><li><strong>单 qubit 参数化</strong>：|ψ⟩=cos(θ/2)|0⟩+e^{iφ}sin(θ/2)|1⟩ ↔ Bloch 矢量 r=(sinθcosφ, sinθsinφ, cosθ)。U3 门 = 用欧拉角参数化 U(2) 群元。</li><li><strong>密度算符</strong>：ρ=Σpᵢ|ψᵢ⟩⟨ψᵢ|，Tr(ρ)=1，ρ≥0。rᵢ=Tr(ρσᵢ) 给出 Bloch 分量。</li><li><strong>多比特计算基与 Bell 基</strong>：n 比特计算基 {|0…0⟩,…,|1…1⟩}；Bell 基是 4 个最大纠缠两比特态。在计算基下测量 Bell 态，Alice 和 Bob 总是得到相同结果（强关联）。</li><li><strong>希尔伯特空间上的距离</strong>：d(u,v) 由内积导出，如 Re⟨u|v⟩ 相关的保真度/迹距离类度量。</li></ul>
+<h2>纯态 vs 混态判据</h2>
+<ul><li><strong>纯态</strong>：Tr(ρ²)=1；不能写成另外两个量子态的凸线性组合；密度矩阵秩为 1；Bloch 矢量在球面 |r|=1。</li><li><strong>混态</strong>：Tr(ρ²)&lt;1；秩&gt;1；|r|&lt;1（球内）；最大混合 ρ=I/2 → 球心。</li></ul>
+<h2>关键要点</h2>
+<ol><li>ρ 是迹 1 正定算符；它编码系统所有可测统计信息。</li><li>单 qubit ↔ Bloch 球：纯态在面、混态在内、最大混合在心。</li><li>纯/混判据：Tr(ρ²)、秩、凸组合可分解性、|r| 四者等价。</li></ol>
+<h2>关联</h2>
+<ul><li><strong>2.2</strong>：ρ 是 Hermite 正定算符，用本征分解写成纯态混合。</li><li><strong>2.4</strong>：ρ 经幺正演化 ρ→UρU†；测量给出 Tr(ρPᵢ)。</li><li><strong>2.5</strong>：约化密度矩阵通常是混态，即使全局是纯态（纠缠的标志）。</li></ul></section>
+<section id="sec-sec2-4-evolution-measurement"><h1>2.4 演化与测量</h1>
+<h2>核心思想</h2>
+<p>封闭系统按幺正变换演化（公理 2）；测量按 PVM/POVM 给出概率与测后态（公理 3）。这两条把"态如何变化"和"如何提取信息"精确化。</p>
+<h2>幺正演化</h2>
+<ul><li><strong>薛定谔方程</strong>：iℏ d|ψ⟩/dt = H|ψ⟩，解为 |ψ(t)⟩=U(t)|ψ(0)⟩，U=e^{−iHt/ℏ} 幺正。</li><li><strong>定态</strong>：哈密顿量本征态 H|E⟩=E|E⟩，演化只是乘相位 e^{−iEt/ℏ}，概率分布不随时间变化。</li><li><strong>密度算符演化</strong>：ρ→UρU†。</li></ul>
+<h2>测量：PVM 与 POVM</h2>
+<ul><li><strong>PVM（投影算符值测度）</strong>：一族投影 {Pᵢ}，满足 Pᵢ正交幂等 + ΣPᵢ=I。从 PVM 构建物理量 A=ΣaᵢPᵢ（Hermite）。</li><ul><li>结果 i 的概率 = Tr(ρPᵢ)（纯态 = ⟨ψ|Pᵢ|ψ⟩）；测后态 = PᵢρPᵢ/Tr(ρPᵢ)。</li></ul><li><strong>POVM</strong>：一族正定算符 {Eᵢ}，只需 Eᵢ≥0 且 ΣEᵢ=I（不要求正交/幂等）。是 PVM 的推广，用于不关心测后态、只求最优区分概率的场景。</li><li><strong>单 qubit 测量</strong>：计算基测量 = 用 {|0⟩⟨0|,|1⟩⟨1|}；测 σ_x 则用 {|+⟩⟨+|,|−⟩⟨−|}（非计算基方向）。</li><li><strong>Bell 基测量</strong>：在计算基下测 Bell 态，两方结果总相同（关联）。</li></ul>
+<h2>统计量与不确定性</h2>
+<ul><li><strong>期望</strong>：⟨A⟩=Tr(ρA)。</li><li><strong>方差</strong>：(ΔA)²=⟨A²⟩−⟨A⟩²。</li><li><strong>海森堡不确定性关系</strong>：ΔA·ΔB ≥ ½|⟨[A,B]⟩|，源于算符不对易。</li></ul>
+<h2>关键要点</h2>
+<ol><li>演化幺正、可逆；测量非幺正、不可逆且改变态。</li><li>可观测量 ↔ PVM ↔ Hermite 算符，三位一体。</li><li>POVM 比 PVM 更灵活，是态区分等任务的最优测量框架。</li><li>不对易算符不能同时确定 ⇒ 不确定性关系。</li></ol>
+<h2>关联</h2>
+<ul><li><strong>2.1</strong>：本节是公理 2、3 的展开。</li><li><strong>2.3</strong>：测量作用于 ρ，给出 Tr(ρPᵢ)。</li><li><strong>2.6</strong>：POVM 用于非正交态的最优区分。</li></ul></section>
+<section id="sec-sec2-5-composite-systems"><h1>2.5 复合系统：偏迹、施密特分解与纯化</h1>
+<h2>核心思想</h2>
+<p>描述复合系统的子系统、量化纠缠的核心工具：偏迹给出约化密度矩阵；施密特分解给出二分态的标准型；纯化把混态升格为更大系统的纯态。</p>
+<h2>偏迹与约化密度矩阵</h2>
+<ul><li><strong>约化密度矩阵</strong>：ρ_A = Tr_B(ρ_AB)，对 B 取偏迹，描述只看 A 子系统时的状态。</li><li><strong>偏迹的两种惯例</strong>：不同教材对指标顺序约定不同（惯例 1 / 惯例 2），结果一致但写法有别。</li><li><strong>性质</strong>：偏迹是线性映射。</li><li><strong>关键现象</strong>：即使 ρ_AB 是纯态，ρ_A 也可能是混态——这正是纠缠的标志。</li></ul>
+<h2>施密特分解 (Schmidt)</h2>
+<ul><li><strong>形式</strong>：任意二分纯态 |Ψ⟩=Σᵢ λᵢ |iₐ⟩⊗|i_b⟩，λᵢ≥0 且 Σλᵢ²=1。</li><li><strong>本质</strong>：对态矢的系数矩阵做 SVD，λᵢ 是奇异值。</li><li><strong>施密特数</strong>（非零 λᵢ 个数）= 纠缠度量；施密特数=1 ⟺ 可分（无纠缠）。</li><li>ρ_A 与 ρ_B 有相同的非零本征值 {λᵢ²}。</li></ul>
+<h2>纠缠</h2>
+<ul><li><strong>定义</strong>：不可写成张量积 |a⟩⊗|b⟩ 的态。复合量子系统的奇妙特性。</li><li><strong>判据</strong>：施密特数 &gt; 1 ⟺ 纠缠。</li></ul>
+<h2>纯化 (Purification)</h2>
+<ul><li><strong>思想</strong>：任何混态 ρ_A 都可视为某个更大系统纯态 |Ψ⟩_AB 的约化：ρ_A = Tr_B(|Ψ⟩⟨Ψ|)。</li><li><strong>规范自由度</strong>：|Ψ⟩=Σ_{i,k} |ψᵢ⟩⊗(|e_k⟩ u_{ik})，纯化不唯一，差一个辅助系统上的幺正 u。</li></ul>
+<h2>关键要点</h2>
+<ol><li>偏迹 → 子系统状态；纯态的子系统可以是混态（纠缠的指纹）。</li><li>施密特分解 = 二分态的 SVD；施密特数量化纠缠。</li><li>纯化：混态总能"提纯"为更大纯态，差一个辅助幺正自由度。</li></ol>
+<h2>关联</h2>
+<ul><li><strong>2.2</strong>：施密特分解 = SVD 的物理版本。</li><li><strong>2.3</strong>：约化态通常是混态 ρ。</li><li><strong>2.6</strong>：纠缠态违反 Bell 不等式。</li></ul></section>
+<section id="sec-sec2-6-applications"><h1>2.6 量子力学的应用：EPR/Bell、态区分、超密编码</h1>
+<h2>核心思想</h2>
+<p>用前面的公理与工具解决具体问题：纠缠能否被局域隐变量解释（Bell）？非正交态能区分到什么程度（态区分/POVM）？纠缠如何提升通信容量（超密编码）？</p>
+<h2>EPR 悖论与 Bell 不等式的违反</h2>
+<ul><li><strong>EPR</strong>：Einstein 等质疑量子力学不完备，设想存在"局域隐变量"。</li><li><strong>Bell 不等式</strong>：任何局域实在论模型都满足某不等式；量子纠缠态（Bell 态）的关联会<strong>违反</strong>该不等式。</li><li><strong>结论</strong>：实验确认违反 ⇒ 否定局域实在论，确认量子力学正确。纠缠是真实的非经典关联。</li></ul>
+<h2>态区分</h2>
+<ul><li><strong>正交态可完美区分</strong>：相互正交的两个态可被一组投影测量确定区分；非正交态无法完美区分。</li><li><strong>POVM 区分非正交态</strong>（Nielsen 2.2.4）：用 POVM 对非正交态做"无错但允许失败"的区分（unambiguous discrimination）。</li><li><strong>Worked Example（Bob 的判定）</strong>：Bob 收到两种等概率的可能态。设计 POVM {E₁,E₂,E?}：测到 E₁ 确定是态 1，E₂ 确定是态 2，测到 E? 则"无法判断"（弃权）。代价是有限的失败概率，换来零错误率。</li></ul>
+<h2>超密编码 (Superdense Coding)</h2>
+<ul><li><strong>思想</strong>：Alice 与 Bob 预共享一对 Bell 态，Alice 只对自己 1 个 qubit 施加 {I,X,Z,XZ} 之一，再把该 qubit 发给 Bob，Bob 做 Bell 测量即可读出 <strong>2 个经典比特</strong>。</li><li><strong>要点</strong>：1 个量子比特 + 预共享纠缠 = 传 2 经典比特。是隐形传态的"对偶"。</li></ul>
+<h2>不可克隆定理</h2>
+<ul><li><strong>内容</strong>：不存在能复制任意未知量子态的幺正操作。</li><li><strong>后果</strong>：禁止线路扇出；保障量子密码安全。</li></ul>
+<h2>关键要点</h2>
+<ol><li>Bell 不等式违反是纠缠非经典性的实验判决——否定局域实在论。</li><li>正交可完美区分，非正交只能用 POVM 做无错-允许弃权的区分。</li><li>超密编码：纠缠让 1 qubit 携带 2 经典比特；不可克隆禁止复制未知态。</li></ol>
+<h2>关联</h2>
+<ul><li><strong>2.5</strong>：纠缠（施密特数&gt;1）是本节所有协议的资源。</li><li><strong>2.4</strong>：态区分用 POVM；超密编码末端用 Bell 测量。</li><li><strong>第一章</strong>：隐形传态是超密编码的对偶协议。</li></ul></section>
+<section id="sec-glossary"><h1>术语表 · QCQI 第二章</h1>
+<p><strong>Bell 不等式</strong> — 局域实在论满足的不等式，量子纠缠态违反之 (2.6) <strong>Bloch 矢量</strong> — 单 qubit 态 ↔ 球内/面点 r=Tr(ρσ) (2.3) <strong>EPR 悖论</strong> — Einstein 等对量子力学完备性的质疑，引出局域隐变量 (2.6) <strong>Hermite 算符</strong> — T†=T，本征值实，表示可观测量/物理量 (2.2,2.4) <strong>ONB（标准正交基）</strong> — 满足完备性 Σ|i⟩⟨i|=I (2.2) <strong>POVM</strong> — 正算符值测度 {Eᵢ}，Eᵢ≥0 且 ΣEᵢ=I，PVM 的推广 (2.4) <strong>PVM（投影算符值测度）</strong> — 正交投影族 {Pᵢ}，ΣPᵢ=I，对应可观测量 (2.4) <strong>Schmidt 分解</strong> — 二分纯态 |Ψ⟩=Σλᵢ|iₐ⟩|i_b⟩，= 系数矩阵的 SVD (2.5) <strong>Schmidt 数</strong> — 非零施密特系数个数，纠缠度量；&gt;1 ⟺ 纠缠 (2.5) <strong>SVD（奇异值分解）</strong> — A=UDV†，D 非负对角；揭示秩与几何 (2.2) <strong>U3 门 / 欧拉角</strong> — 用三个角参数化 U(2) 群元 (2.3) <strong>von Neumann 测量</strong> — 由 PVM 描述的投影测量 (2.4) <strong>不可克隆定理</strong> — 任意未知态不可被完美复制 (2.6) <strong>偏迹 (partial trace)</strong> — Tr_B，对子系统求迹得约化密度矩阵 (2.5) <strong>几何意义 (SVD)</strong> — 旋转 → 沿轴缩放 → 旋转 (2.2) <strong>幺正算符 U</strong> — U†U=I，保内积，复内积空间到自身的同构 (2.2,2.4) <strong>态区分</strong> — 正交态可完美区分，非正交态须用 POVM (2.6) <strong>密度算符 ρ</strong> — 迹 1 正定算符；纯态 Tr(ρ²)=1，混态 &lt;1 (2.3) <strong>定态</strong> — 哈密顿量本征态，演化仅乘相位，分布不变 (2.4) <strong>张量积</strong> — 复合系统希尔伯特空间 H_A⊗H_B；源于双线性 (2.2) <strong>投影算符 P</strong> — P²=P, P†=P，对应"命题" (2.2) <strong>施密特数</strong> — 见 Schmidt 数 (2.5) <strong>极分解</strong> — A=UP，幺正×正算符 (2.2) <strong>正规算符</strong> — AA†=A†A，可被幺正对角化（谱定理） (2.2) <strong>海森堡不确定性</strong> — ΔA·ΔB≥½|⟨[A,B]⟩| (2.4) <strong>混态</strong> — 纯态的概率混合，Tr(ρ²)&lt;1，Bloch 球内 (2.3) <strong>纠缠</strong> — 不可写成张量积的态，施密特数&gt;1 (2.5,2.6) <strong>纯化 (purification)</strong> — 混态视为更大系统纯态的约化，差一辅助幺正 (2.5) <strong>纯态</strong> — ρ=|ψ⟩⟨ψ|，秩 1，Bloch 球面 (2.3) <strong>约化密度矩阵</strong> — ρ_A=Tr_B(ρ_AB)，子系统状态 (2.5) <strong>薛定谔方程</strong> — iℏ d|ψ⟩/dt=H|ψ⟩，给出幺正演化 (2.4) <strong>超密编码</strong> — 1 qubit + 共享纠缠传 2 经典比特 (2.6) <strong>谱定理</strong> — 正规算符可被一组 ONB 对角化 (2.2) <strong>量子力学四公理</strong> — 态/演化/测量/复合系统 (2.1) <strong>期望与方差</strong> — ⟨A⟩=Tr(ρA)，(ΔA)²=⟨A²⟩−⟨A⟩² (2.4) <strong>秩 (rank)</strong> — 最大非零子式阶数 (2.2)</p></section>
+<section id="sec-patterns"><h1>线性代数 / 量子力学计算技巧 · QCQI 第二章</h1>
+<h2>用本征分解写密度矩阵</h2>
+<p><strong>何时用</strong>：判断纯/混、算 Tr(ρ²)、求 Bloch 矢量。 <strong>怎么做</strong>：ρ=Σpᵢ|i⟩⟨i|（谱分解），pᵢ 为本征值（概率）。rₐ=Tr(ρσₐ)。 <strong>权衡</strong>：本征基随 ρ 变化；混态本征值不止一个非零。</p>
+<h2>对二分态做施密特分解</h2>
+<p><strong>何时用</strong>：判断/量化两体纯态纠缠，求约化密度矩阵本征值。 <strong>怎么做</strong>：把 |Ψ⟩ 的系数排成矩阵 C，做 SVD：C=UDV†，λᵢ=D 的奇异值；|Ψ⟩=Σλᵢ|iₐ⟩|i_b⟩。 <strong>权衡</strong>：仅适用于两体纯态；多体或混态需其他纠缠度量。</p>
+<h2>用偏迹求子系统状态</h2>
+<p><strong>何时用</strong>：只关心复合系统的一部分。 <strong>怎么做</strong>：ρ_A=Tr_B(ρ_AB)，对 B 的基求和 Σ_k ⟨k_B|ρ_AB|k_B⟩。注意惯例一致。 <strong>权衡</strong>：丢失关联信息；纯态偏迹后可能变混态。</p>
+<h2>用 POVM 做非正交态区分</h2>
+<p><strong>何时用</strong>：要无错地区分非正交态，可容忍"弃权"。 <strong>怎么做</strong>：构造 {E₁,E₂,E?}，ΣEᵢ=I；E₁/E₂ 确定判定，E? 弃权。 <strong>权衡</strong>：零错误率换取有限失败概率（无法判断的概率）。</p>
+<h2>用 SVD 求秩与自由度</h2>
+<p><strong>何时用</strong>：分析矩阵秩、低秩逼近、几何分解。 <strong>怎么做</strong>：A=UDV†；非零奇异值个数 = 秩；降序排列使分解唯一（非简并时）。 <strong>权衡</strong>：简并奇异值子空间上有旋转自由度，分解不唯一。</p>
+<h2>用欧拉角参数化单 qubit 门</h2>
+<p><strong>何时用</strong>：把任意 U(2) 编译为硬件旋转 / U3 门。 <strong>怎么做</strong>：U=e^{iα}Rz(β)Ry(γ)Rz(δ)，对应 Bloch 球上一次合成旋转。 <strong>权衡</strong>：同一目标态可由不同 (轴,角) 实现，参数化不唯一。</p>
+<h2>反模式</h2>
+<ul><li><strong>混淆纯态与混态判据</strong>：务必用 Tr(ρ²)=1 / 秩 1 / |r|=1 同时核验。</li><li><strong>偏迹惯例不一致</strong>：两种指标约定混用会算错约化矩阵。</li><li><strong>以为非正交态可完美区分</strong>：只有正交态可完美区分。</li><li><strong>忘记归一</strong>：测后态要除以 Tr(ρPᵢ)。</li></ul></section>
+<section id="sec-cheatsheet"><h1>速查表 · QCQI 第二章</h1>
+<h2>算符分类速查</h2>
+<table><thead><tr><th>算符</th><th>定义</th><th>角色</th></tr></thead><tbody><tr><td>正规</td><td>AA†=A†A</td><td>可幺正对角化（谱定理）</td></tr><tr><td>Hermite</td><td>A†=A</td><td>可观测量，本征值实</td></tr><tr><td>幺正</td><td>U†U=I</td><td>演化/门，保内积</td></tr><tr><td>投影</td><td>P²=P, P†=P</td><td>命题 / PVM 元</td></tr><tr><td>正定</td><td>A≥0</td><td>密度矩阵、POVM 元</td></tr></tbody></table>
+<h2>纯态 vs 混态判据（四者等价）</h2>
+<table><thead><tr><th>判据</th><th>纯态</th><th>混态</th></tr></thead><tbody><tr><td>Tr(ρ²)</td><td>=1</td><td>&lt;1</td></tr><tr><td>秩</td><td>1</td><td>&gt;1</td></tr><tr><td>凸分解</td><td>不可</td><td>可</td></tr><tr><td>Bloch \</td><td>r\</td><td></td><td>=1（面）</td><td>&lt;1（内），心=I/2</td></tr></tbody></table>
+<h2>测量速查</h2>
+<ul><li><strong>概率</strong>：P(i)=Tr(ρPᵢ)，纯态 =⟨ψ|Pᵢ|ψ⟩。</li><li><strong>测后态</strong>：PᵢρPᵢ/P(i)（PVM）。</li><li><strong>期望</strong>：⟨A⟩=Tr(ρA)；<strong>方差</strong> (ΔA)²=⟨A²⟩−⟨A⟩²。</li><li><strong>PVM</strong>：正交+幂等+ΣP=I（要测后态用它）。</li><li><strong>POVM</strong>：只需 E≥0 且 ΣE=I（只求概率/最优区分用它）。</li></ul>
+<h2>复合系统工具决策</h2>
+<ul><li>要<strong>子系统状态</strong> → 偏迹 ρ_A=Tr_B(ρ_AB)。</li><li>要<strong>判断/量化两体纠缠</strong> → 施密特分解，看施密特数。</li><li>要<strong>把混态变纯态</strong> → 纯化（加辅助系统）。</li><li>要<strong>判定全局纯态是否纠缠</strong> → 施密特数 &gt;1 ⟺ 纠缠。</li></ul>
+<h2>分解方法速记</h2>
+<table><thead><tr><th>分解</th><th>形式</th><th>用途</th></tr></thead><tbody><tr><td>谱分解</td><td>A=Σaᵢ\</td><td>i⟩⟨i\</td><td></td><td>正规算符对角化</td></tr><tr><td>SVD</td><td>A=UDV†</td><td>秩、自由度、低秩逼近</td></tr><tr><td>极分解</td><td>A=UP</td><td>模-相位类比</td></tr><tr><td>施密特</td><td>\</td><td>Ψ⟩=Σλᵢ\</td><td>iₐ⟩\</td><td>i_b⟩</td><td>两体纠缠</td></tr></tbody></table>
+<h2>核心红线</h2>
+<ol><li><strong>正交才能完美区分</strong>；非正交只能 POVM 无错-弃权区分。</li><li><strong>不可克隆</strong>：任意未知态不可复制。</li><li><strong>Bell 违反</strong>：纠缠否定局域实在论。</li><li><strong>偏迹惯例</strong>：全程统一一种指标约定。</li></ol></section>
+</main>
+</div>
+<script>
+const toggle=document.getElementById('themeToggle');
+const saved=localStorage.getItem('qcqi-theme');
+if(saved)document.documentElement.setAttribute('data-theme',saved);
+toggle&&toggle.addEventListener('click',()=>{
+ const cur=document.documentElement.getAttribute('data-theme')==='light'?'':'light';
+ document.documentElement.setAttribute('data-theme',cur);
+ localStorage.setItem('qcqi-theme',cur);
+});
+const links=[...document.querySelectorAll('.nav a')];
+const secs=[...document.querySelectorAll('section[id]')];
+const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){
+ links.forEach(l=>l.classList.toggle('active',l.getAttribute('href')==='#'+e.target.id));}})},
+ {rootMargin:'-10% 0px -80% 0px'});
+secs.forEach(s=>obs.observe(s));
+const box=document.getElementById('search');
+box&&box.addEventListener('input',()=>{const q=box.value.trim().toLowerCase();
+ links.forEach(l=>l.classList.toggle('hidden',q&&!l.textContent.toLowerCase().includes(q)));});
+</script>
+</body>
+</html>

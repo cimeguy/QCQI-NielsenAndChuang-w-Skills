@@ -30,6 +30,21 @@ qcqi-chNN-xxx/
 
 `SKILL.md` 的 `description` 字段决定智能体何时自动加载该 skill；`chapters/` 下的文件按需加载，避免一次性占用上下文。
 
+## HTML 可视化浏览（离线）
+
+除了作为 Agent Skill 加载，本仓库还提供一套**可离线浏览的 HTML 知识页面**，把每个 skill 的全部内容（SKILL.md + 各小节 + 术语表 + 技巧 + 速查表）渲染成单文件页面，并在页首附带该章的**手绘 SVG 可视化图示**（Bloch 球、量子线路图、QFT/Shor 流程、Grover 几何旋转、量子信道仿射变换、跨章思维导图等）。
+
+```bash
+python3 skill_set/build_html.py      # 纯标准库，无需安装依赖
+```
+
+生成物（已随仓库提交，可直接打开）：
+
+- `skill_set/index.html` — **门户页**，卡片式导航到各章。
+- `skill_set/<skill>/index.html` — 每个 skill 一页，含左侧小节导航、客户端搜索过滤、深/浅色切换、章节锚点、章首可视化面板。
+
+双击任一 `index.html` 即可在浏览器查阅（`file://` 直接可用，无 CDN/网络依赖）。修改 `.md` 笔记后重跑脚本即可重新生成；可视化片段存放在 `skill_set/_viz/<skill>.html`，会被脚本注入对应页面。
+
 ## 如何使用
 
 ### Claude Code
