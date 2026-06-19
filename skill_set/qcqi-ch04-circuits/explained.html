@@ -8,10 +8,12 @@
 :root{--bg:#fbf7f0;--panel:#fff;--panel2:#f3ede2;--fg:#2a2620;--muted:#7a7163;
 --accent:#c2410c;--accent2:#7c3aed;--border:#e6ddcd;--code:#f1ebde;--th:#efe7d6;
 --tip:#15803d;--tipbg:#ecfdf3;--analogy:#7c3aed;--analogybg:#f5f0ff;
---pitfall:#b45309;--pitfallbg:#fff7ed;--key:#0369a1;--keybg:#eff8ff;}
+--pitfall:#b45309;--pitfallbg:#fff7ed;--key:#0369a1;--keybg:#eff8ff;
+--matrix:#0d9488;--matrixbg:#effcfa;--example:#9333ea;--examplebg:#faf5ff;}
 [data-theme=dark]{--bg:#15110c;--panel:#1f1a13;--panel2:#1a1610;--fg:#ece3d4;--muted:#9a8f7d;
 --accent:#fb923c;--accent2:#c4b5fd;--border:#332b20;--code:#241e16;--th:#241e16;
---tipbg:#0f2417;--analogybg:#1c1430;--pitfallbg:#2a1d0c;--keybg:#0b1f2e;}
+--tipbg:#0f2417;--analogybg:#1c1430;--pitfallbg:#2a1d0c;--keybg:#0b1f2e;
+--matrixbg:#0c2422;--examplebg:#1e1230;}
 *{box-sizing:border-box}
 body{margin:0;font-family:-apple-system,"PingFang SC","Microsoft YaHei",Segoe UI,system-ui,sans-serif;
 background:var(--bg);color:var(--fg);line-height:1.85;font-size:16px}
@@ -55,6 +57,8 @@ blockquote.callout.tip{border-left-color:var(--tip);background:var(--tipbg)}
 blockquote.callout.analogy{border-left-color:var(--analogy);background:var(--analogybg)}
 blockquote.callout.pitfall{border-left-color:var(--pitfall);background:var(--pitfallbg)}
 blockquote.callout.key{border-left-color:var(--key);background:var(--keybg);font-weight:600}
+blockquote.callout.matrix{border-left-color:var(--matrix);background:var(--matrixbg)}
+blockquote.callout.example{border-left-color:var(--example);background:var(--examplebg)}
 .legend{display:flex;gap:10px;flex-wrap:wrap;margin:6px 0 18px;font-size:12.5px;color:var(--muted)}
 .legend span{background:var(--panel);border:1px solid var(--border);border-radius:20px;padding:3px 11px}
 .badge{display:inline-block;background:var(--accent);color:#fff;border-radius:6px;padding:2px 9px;font-size:12px;font-weight:700}
@@ -87,6 +91,7 @@ window.MathJax={
 <input class="search" id="search" placeholder="过滤小节…">
 <nav class="nav">
 <a href="../explained.html" style="color:var(--muted)">← 返回人话版门户</a>
+<a href="student.html" style="color:var(--muted)">🎓 看大学生版</a>
 <a href="index.html" style="color:var(--muted)">≡ 看公式精简版</a>
 <a href="#s0">导读</a>
 <a href="#s1">4.1 单比特门 = 状态向量上的可逆旋转</a>
@@ -98,7 +103,7 @@ window.MathJax={
 </nav></aside>
 <main class="main">
 <div class="topbar"><span class="badge">人话版</span><span class="home">第四章 · 量子线路与模拟</span><button class="toggle" id="themeToggle">🌓 深/浅色</button></div>
-<div class="legend"><span>💡 人话</span><span>🧠 类比</span><span>⚠️ 坑</span><span>🔑 记住</span></div>
+<div class="legend"><span>💡 人话</span><span>🧠 类比</span><span>📐 矩阵怎么看</span><span>🔢 算例</span><span>⚠️ 坑</span><span>🔑 记住</span></div>
 <section id="s0"><h1>第四章 量子线路与量子模拟 · 人话版</h1>
 <h2>导读</h2>
 <p>这一章是量子计算的「编程基础课」：把抽象的量子操作翻译成一张<strong>电路图 / 数据流图</strong>，再告诉你这张图能用哪几个「基本指令」拼出来。核心三件事——单比特门就是给状态向量做一次「可逆旋转」（纯函数变换），多比特受控门负责把比特纠缠在一起（类比 <code>if (control) target = f(target)</code>），而 <code>{H, T, CNOT}</code> 就是量子世界的「图灵完备指令集」（类比经典电路里只用 NAND 就能搭一切）。最后用 Trotter 公式把「模拟物理系统」这件难事编译成一串小步交替的门——就像数值积分里的算子分裂。</p>
@@ -110,12 +115,16 @@ window.MathJax={
 <p>几条最常用的具体门：</p>
 <p>$$H=\tfrac{1}{\sqrt 2}\begin{pmatrix}1&amp;1\\1&amp;-1\end{pmatrix},\quad S=\begin{pmatrix}1&amp;0\\0&amp;i\end{pmatrix},\quad T=\begin{pmatrix}1&amp;0\\0&amp;e^{i\pi/4}\end{pmatrix}$$</p>
 <ul><li>$H$（Hadamard）：把基态打成「五五开叠加」，$H\ket{0}=(\ket{0}+\ket{1})/\sqrt2$。这是产生叠加的标准入口。</li><li>$S$：相位门 $\mathrm{diag}(1,i)$，给 $\ket{1}$ 分量加 $90°$ 相位。</li><li>$T$：又叫 $\pi/8$ 门，给 $\ket{1}$ 加 $45°$ 相位。</li></ul>
+<blockquote class="callout matrix">📐 <strong>怎么看：</strong> $H=\tfrac{1}{\sqrt2}\begin{pmatrix}1&amp;1\\1&amp;-1\end{pmatrix}$ 的两列就是它把基态送到哪里：第 1 列 $\tfrac{1}{\sqrt2}\binom{1}{1}$ 是 $H\ket0$，第 2 列 $\tfrac{1}{\sqrt2}\binom{1}{-1}$ 是 $H\ket1$。一般地矩阵元 $\bra{i}H\ket{j}$ 读作"输入 $\ket j$、输出落到 $\ket i$ 上的振幅"。而 $S=\mathrm{diag}(1,i)$、$T=\mathrm{diag}(1,e^{i\pi/4})$ 是<strong>对角阵</strong>——对角阵不混振幅、只改相位，第 1 个对角元作用在 $\ket0$、第 2 个作用在 $\ket1$。</blockquote>
+<blockquote class="callout example">🔢 <strong>算例：</strong> 把 $H$ 作用到 $\ket0$ 就是矩阵乘列向量： $$H\ket0=\tfrac{1}{\sqrt2}\begin{pmatrix}1&amp;1\\1&amp;-1\end{pmatrix}\begin{pmatrix}1\\0\end{pmatrix}=\tfrac{1}{\sqrt2}\begin{pmatrix}1\\1\end{pmatrix}=\tfrac{\ket0+\ket1}{\sqrt2}$$ 同理 $H\ket1=\tfrac{1}{\sqrt2}\binom{1}{-1}=\tfrac{\ket0-\ket1}{\sqrt2}$。再作用一次应回到原点：$H^2=\tfrac12\begin{pmatrix}1&amp;1\\1&amp;-1\end{pmatrix}\begin{pmatrix}1&amp;1\\1&amp;-1\end{pmatrix}=\tfrac12\begin{pmatrix}2&amp;0\\0&amp;2\end{pmatrix}=I$，可见 $H$ 自逆（$H=H^\dagger=H^{-1}$）。</blockquote>
 <blockquote class="callout tip">💡 <strong>人话：</strong> 单比特门 = 作用在 2 维状态向量上的可逆矩阵。没有副作用、永远可逆、模长不变——就是一个能 undo 的纯函数变换。</blockquote>
 <blockquote class="callout analogy">🧠 <strong>类比：</strong> Bloch 球转 $\theta$ 度，向量公式里却写 $\theta/2$，这就像复数旋转里「角度减半」的味道——记成「球转一圈，态只转半圈」。</blockquote>
 <p><strong>门 = 旋转的严格版本（$SU(2)$–$SO(3)$）。</strong> 3 维实空间里的旋转群叫 $SO(3)$，作用在 qubit 这个 2 维复空间上的旋转群叫 $SU(2)$。两者通过群表示一一对应（其实是 2:1）。直觉例子：粒子处于 $\ket{0}$，若把新的 x 轴转到原来的 z 轴方向，新坐标下这个态就变成了 $\ket{+}$。</p>
 <p><strong>z-y-z 分解（欧拉角）：</strong> 任意单比特门都能拆成三次绕轴旋转。</p>
 <p>$$U=e^{i\alpha}\,R_z(\beta)\,R_y(\gamma)\,R_z(\delta)$$</p>
 <ul><li>含义：一次任意旋转 = 「绕 z 转 $\delta$ → 绕 y 转 $\gamma$ → 绕 z 转 $\beta$」再配个全局相位 $\alpha$，就是经典的欧拉角。</li><li>$R_y$ 配合 $R_z$ 和相位即可生成<strong>所有</strong>单比特门——硬件只给你这几种旋转也够用。</li></ul>
+<blockquote class="callout matrix">📐 <strong>怎么看：</strong> $R_z(\theta)=\begin{pmatrix}e^{-i\theta/2}&amp;0\\0&amp;e^{i\theta/2}\end{pmatrix}$ 是对角阵——它不混 $\ket0,\ket1$，只给两者各加一个<strong>相反的相位</strong>，所以叫"绕 z 轴转"。$R_y(\theta)=\begin{pmatrix}\cos\tfrac\theta2&amp;-\sin\tfrac\theta2\\\sin\tfrac\theta2&amp;\cos\tfrac\theta2\end{pmatrix}$ 就是你熟悉的平面旋转矩阵，它会真把 $\ket0,\ket1$ 的振幅搅在一起。注意指数和角都带半角 $\theta/2$（球转 $\theta$，态转 $\theta/2$）。</blockquote>
+<blockquote class="callout example">🔢 <strong>算例：</strong> 取 $\theta=\tfrac\pi2$：$R_y(\tfrac\pi2)=\begin{pmatrix}\cos\tfrac\pi4&amp;-\sin\tfrac\pi4\\\sin\tfrac\pi4&amp;\cos\tfrac\pi4\end{pmatrix}=\tfrac{1}{\sqrt2}\begin{pmatrix}1&amp;-1\\1&amp;1\end{pmatrix}$，作用到 $\ket0=\binom10$ 得 $\tfrac{1}{\sqrt2}\binom11=\tfrac{\ket0+\ket1}{\sqrt2}$——和 $H$ 一样造出等权叠加（仅差相位约定）。</blockquote>
 <blockquote class="callout analogy">🧠 <strong>类比：</strong> z-y-z 分解就是把一个高级 API 调用「编译」成三条底层指令的序列。硬件只认 $R_z/R_y$？没关系，编译器（分解）负责翻译。</blockquote>
 <p><strong>反模式：不存在「通用非门」。</strong> 有人想要一个门，对<strong>任意</strong> $\ket{\psi}$ 都输出它的正交态 $\ket{\psi^\perp}$。这不可能——这种操作不是 qubit 空间上的幺正旋转，物理上做不出来。</p>
 <blockquote class="callout pitfall">⚠️ <strong>坑：</strong> 别幻想有个「万能取反」门能把任意态翻到正交方向。经典的 NOT 能翻 0/1，但量子态是连续的，普适取反违反幺正性，不存在。</blockquote>
@@ -134,6 +143,8 @@ window.MathJax={
 <p><strong>量子线路的硬性规则（反模式）：</strong></p>
 <ul><li><strong>无环</strong>：不能有回路，是有向无环图（DAG）。</li><li><strong>禁止扇入</strong>：多条线合并成一条不可逆，违反幺正性。</li><li><strong>禁止扇出</strong>：复制一根线 = 量子克隆，违反<strong>不可克隆定理</strong>。</li></ul>
 <blockquote class="callout pitfall">⚠️ <strong>坑：</strong> 量子线路里<strong>不能复制比特</strong>（不能扇出）、<strong>不能合并</strong>（不能扇入）、<strong>不能成环</strong>。经典电路里随手画的「一根线接三个门」在量子里是非法的。</blockquote>
+<blockquote class="callout matrix">📐 <strong>怎么看：</strong> 在基序 $\ket{00},\ket{01},\ket{10},\ket{11}$ 下 $\mathrm{CNOT}=\begin{pmatrix}1&amp;0&amp;0&amp;0\\0&amp;1&amp;0&amp;0\\0&amp;0&amp;0&amp;1\\0&amp;0&amp;1&amp;0\end{pmatrix}$。它是个<strong>置换矩阵</strong>（每行每列恰好一个 1）。左上 $2\times2$ 块是单位阵——控制位为 0（前两个基态）时目标不动；右下 $2\times2$ 块是 $X=\begin{pmatrix}0&amp;1\\1&amp;0\end{pmatrix}$——控制位为 1（后两个基态）时目标翻转，所以 $\ket{10}\leftrightarrow\ket{11}$ 互换。整体就是分块对角 $\begin{pmatrix}I&amp;0\\0&amp;X\end{pmatrix}$，正是"if ctrl then X"。</blockquote>
+<blockquote class="callout example">🔢 <strong>算例（造 Bell 态）：</strong> 先把 $H$ 作用到控制位：$\ket{00}\xrightarrow{H\otimes I}\tfrac{1}{\sqrt2}(\ket{00}+\ket{10})$。再过 CNOT：$\ket{00}\mapsto\ket{00}$、$\ket{10}\mapsto\ket{11}$，于是得到 $\tfrac{1}{\sqrt2}(\ket{00}+\ket{11})$，这就是 Bell 态。用振幅向量看：$(\tfrac{1}{\sqrt2},0,\tfrac{1}{\sqrt2},0)^{T}\xrightarrow{\mathrm{CNOT}}(\tfrac{1}{\sqrt2},0,0,\tfrac{1}{\sqrt2})^{T}$——第 3、4 个分量被对调。</blockquote>
 <blockquote class="callout key">🔑 <strong>记住：</strong> CNOT 生纠缠；CZ 与 CNOT 只差目标侧两个 H；SWAP = 3 CNOT；Toffoli 通用于经典可逆计算；任意受控-U 用单比特门 + CNOT 的 ABC 法搭。</blockquote>
 <hr></section>
 <section id="s3"><h2>4.3 测量 = 把量子结果读回经典世界</h2>
@@ -185,6 +196,7 @@ window.MathJax={
 <p><strong>误差从哪来——BCH 公式：</strong></p>
 <p>$$\log\!\left(e^{X}e^{Y}\right)=X+Y+\tfrac{1}{2}[X,Y]+\cdots$$</p>
 <ul><li>$[X,Y]=XY-YX$ 是对易子。若 $A,B$ 对易（$[A,B]=0$），拆分就<strong>没有误差</strong>；正是 $[A,B]\ne 0$ 这一项制造了 Trotter 误差。</li></ul>
+<blockquote class="callout example">🔢 <strong>算例（对易子非零 ⇒ 有误差）：</strong> 取 $A=X,B=Z$。逐个算矩阵乘法：$XZ=\begin{pmatrix}0&amp;1\\1&amp;0\end{pmatrix}\begin{pmatrix}1&amp;0\\0&amp;-1\end{pmatrix}=\begin{pmatrix}0&amp;-1\\1&amp;0\end{pmatrix}$，$ZX=\begin{pmatrix}1&amp;0\\0&amp;-1\end{pmatrix}\begin{pmatrix}0&amp;1\\1&amp;0\end{pmatrix}=\begin{pmatrix}0&amp;1\\-1&amp;0\end{pmatrix}$，于是 $[X,Z]=XZ-ZX=\begin{pmatrix}0&amp;-2\\2&amp;0\end{pmatrix}=-2iY$（因为 $Y=\begin{pmatrix}0&amp;-i\\i&amp;0\end{pmatrix}$）。它非零，所以 $e^{-i(X+Z)t}\neq e^{-iXt}e^{-iZt}$；BCH 展开的首个误差项 $\tfrac12[X,Z]t^2=-iY\,t^2$ 就是 Trotter 误差的来源，必须靠把时间切小（$t\to t/n$）来压。</blockquote>
 <p>伴随恒等式（分析误差时的工具）：</p>
 <p>$$e^{X}Y e^{-X}=\sum_{n}\frac{1}{n!}[X^{(n)},Y]=\mathrm{Ad}_{e^{X}}(Y)=e^{\mathrm{ad}_X}(Y)$$</p>
 <ul><li>$\mathrm{Ad}_X(Y)=XYX^{-1}$（共轭作用），$\mathrm{ad}_X(Y)=[X,Y]$（取对易子）。</li></ul>

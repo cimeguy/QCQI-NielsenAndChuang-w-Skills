@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
-"""QCQI skill_set -> plain-language ("人话版") static HTML generator.
+"""QCQI skill_set -> college-student ("大学生版") static HTML generator.
 
-Renders each skill's `explained.md` (authored by the qcqi-explained team) into a
-self-contained, programmer-friendly `<skill>/explained.html` (offline, local
-MathJax). Callout blockquotes (💡 人话 / 🧠 类比 / ⚠️ 坑 / 🔑 记住) get colored
-boxes. A root `explained.html` hub links all chapters. Reuses the math pipeline
+Renders each skill's `student.md` (authored for readers who just learned matrices /
+probability / linear algebra but have a shaky foundation) into a self-contained
+`<skill>/student.html` (offline, local MathJax). It re-teaches the prerequisite
+math inline. Callout blockquotes get colored boxes:
+  📖 补基础 / 🧮 一步步算 / 💭 直觉 / ⚠️ 常见错误 / ✅ 小结
+A root `student.html` hub links all chapters. Reuses the math pipeline
 (md_to_html + MathJax config) from build_html.py.
 """
 import html
@@ -17,7 +19,7 @@ ROOT = Path(__file__).resolve().parent
 SKILLS = bh.SKILLS
 
 # callout marker -> css class
-CALLOUTS = {"💡": "tip", "🧠": "analogy", "⚠️": "pitfall", "🔑": "key", "📐": "matrix", "🔢": "example"}
+CALLOUTS = {"🎯": "purpose", "📖": "review", "🧮": "calc", "💭": "intuition", "⚠️": "mistake", "✅": "summary"}
 
 
 def split_sections(md):
@@ -29,10 +31,9 @@ def split_sections(md):
     md = bh.strip_frontmatter(md)
     lines = md.split("\n")
     title = None
-    pre = []          # content before first ##
-    sections = []
     cur_title = None
     cur_body = []
+    sections = []
     for ln in lines:
         m1 = re.match(r"^#\s+(.*)", ln)
         m2 = re.match(r"^##\s+(.*)", ln)
@@ -56,7 +57,7 @@ def split_sections(md):
         body = "\n".join(cur_body).strip()
         if body:
             sections.append(("正文", body))
-    return title or "人话版", sections
+    return title or "大学生版", sections
 
 
 def style_callouts(html_text):
@@ -65,23 +66,23 @@ def style_callouts(html_text):
         emoji = m.group(1)
         cls = CALLOUTS.get(emoji, "")
         return f'<blockquote class="callout {cls}">{emoji}'
-    # blockquote may start with whitespace before the emoji
-    return re.sub(r"<blockquote>\s*(💡|🧠|⚠️|🔑|📐|🔢)", repl, html_text)
+    return re.sub(r"<blockquote>\s*(🎯|📖|🧮|💭|⚠️|✅)", repl, html_text)
 
 
 CSS = """
-:root{--bg:#fbf7f0;--panel:#fff;--panel2:#f3ede2;--fg:#2a2620;--muted:#7a7163;
---accent:#c2410c;--accent2:#7c3aed;--border:#e6ddcd;--code:#f1ebde;--th:#efe7d6;
---tip:#15803d;--tipbg:#ecfdf3;--analogy:#7c3aed;--analogybg:#f5f0ff;
---pitfall:#b45309;--pitfallbg:#fff7ed;--key:#0369a1;--keybg:#eff8ff;
---matrix:#0d9488;--matrixbg:#effcfa;--example:#9333ea;--examplebg:#faf5ff;}
-[data-theme=dark]{--bg:#15110c;--panel:#1f1a13;--panel2:#1a1610;--fg:#ece3d4;--muted:#9a8f7d;
---accent:#fb923c;--accent2:#c4b5fd;--border:#332b20;--code:#241e16;--th:#241e16;
---tipbg:#0f2417;--analogybg:#1c1430;--pitfallbg:#2a1d0c;--keybg:#0b1f2e;
---matrixbg:#0c2422;--examplebg:#1e1230;}
+:root{--bg:#f4f7fb;--panel:#fff;--panel2:#eaf0f8;--fg:#1c2733;--muted:#64748b;
+--accent:#2563eb;--accent2:#0891b2;--border:#d7e1ee;--code:#eef3f9;--th:#e6eef8;
+--purpose:#ea580c;--purposebg:#fff5ec;
+--review:#7c3aed;--reviewbg:#f5f1ff;--calc:#0891b2;--calcbg:#ecfbfd;
+--intuition:#2563eb;--intuitionbg:#eef4ff;--mistake:#dc2626;--mistakebg:#fef2f2;
+--summary:#15803d;--summarybg:#ecfdf3;}
+[data-theme=dark]{--bg:#0d1320;--panel:#161f30;--panel2:#121a29;--fg:#e3eaf3;--muted:#8595a8;
+--accent:#60a5fa;--accent2:#22d3ee;--border:#27344a;--code:#16203200;--th:#1a2538;
+--purposebg:#2a1709;
+--reviewbg:#1f1633;--calcbg:#0a2730;--intuitionbg:#10203b;--mistakebg:#2a1414;--summarybg:#0f2417;}
 *{box-sizing:border-box}
 body{margin:0;font-family:-apple-system,"PingFang SC","Microsoft YaHei",Segoe UI,system-ui,sans-serif;
-background:var(--bg);color:var(--fg);line-height:1.85;font-size:16px}
+background:var(--bg);color:var(--fg);line-height:1.9;font-size:16px}
 a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
 .layout{display:flex;min-height:100vh}
 .sidebar{width:300px;flex:0 0 300px;background:var(--panel2);border-right:1px solid var(--border);
@@ -118,12 +119,12 @@ blockquote{border-left:4px solid var(--accent2);margin:12px 0;padding:8px 16px;c
 background:var(--panel);border-radius:0 8px 8px 0}
 blockquote.callout{border-left-width:5px;border-radius:10px;padding:12px 18px;color:var(--fg);
 margin:14px 0;font-size:15px}
-blockquote.callout.tip{border-left-color:var(--tip);background:var(--tipbg)}
-blockquote.callout.analogy{border-left-color:var(--analogy);background:var(--analogybg)}
-blockquote.callout.pitfall{border-left-color:var(--pitfall);background:var(--pitfallbg)}
-blockquote.callout.key{border-left-color:var(--key);background:var(--keybg);font-weight:600}
-blockquote.callout.matrix{border-left-color:var(--matrix);background:var(--matrixbg)}
-blockquote.callout.example{border-left-color:var(--example);background:var(--examplebg)}
+blockquote.callout.review{border-left-color:var(--review);background:var(--reviewbg)}
+blockquote.callout.purpose{border-left-color:var(--purpose);background:var(--purposebg)}
+blockquote.callout.calc{border-left-color:var(--calc);background:var(--calcbg)}
+blockquote.callout.intuition{border-left-color:var(--intuition);background:var(--intuitionbg)}
+blockquote.callout.mistake{border-left-color:var(--mistake);background:var(--mistakebg)}
+blockquote.callout.summary{border-left-color:var(--summary);background:var(--summarybg);font-weight:600}
 .legend{display:flex;gap:10px;flex-wrap:wrap;margin:6px 0 18px;font-size:12.5px;color:var(--muted)}
 .legend span{background:var(--panel);border:1px solid var(--border);border-radius:20px;padding:3px 11px}
 .badge{display:inline-block;background:var(--accent);color:#fff;border-radius:6px;padding:2px 9px;font-size:12px;font-weight:700}
@@ -155,17 +156,17 @@ def page(title, sidebar, body):
 
 
 def build_skill(slug, label):
-    path = ROOT / slug / "explained.md"
+    path = ROOT / slug / "student.md"
     if not path.exists():
         return None
     page_title, sections = split_sections(path.read_text(encoding="utf-8"))
 
     nav = ['<aside class="sidebar">',
-           f'<div class="brand"><div class="t">QCQI · 人话版</div><div class="s">{html.escape(label)}</div></div>',
+           f'<div class="brand"><div class="t">QCQI · 大学生版</div><div class="s">{html.escape(label)}</div></div>',
            '<input class="search" id="search" placeholder="过滤小节…">',
            '<nav class="nav">',
-           '<a href="../explained.html" style="color:var(--muted)">← 返回人话版门户</a>',
-           '<a href="student.html" style="color:var(--muted)">🎓 看大学生版</a>',
+           '<a href="../student.html" style="color:var(--muted)">← 返回大学生版门户</a>',
+           '<a href="explained.html" style="color:var(--muted)">🗣️ 看人话版</a>',
            f'<a href="index.html" style="color:var(--muted)">≡ 看公式精简版</a>']
     secs_html = []
     for idx, (stitle, body) in enumerate(sections):
@@ -175,34 +176,33 @@ def build_skill(slug, label):
         secs_html.append(f'<section id="{anchor}">{inner}</section>')
     nav.append("</nav></aside>")
 
-    legend = ('<div class="legend"><span>💡 人话</span><span>🧠 类比</span>'
-              '<span>📐 矩阵怎么看</span><span>🔢 算例</span>'
-              '<span>⚠️ 坑</span><span>🔑 记住</span></div>')
-    body = ['<div class="topbar"><span class="badge">人话版</span>'
+    legend = ('<div class="legend"><span>🎯 用来干嘛</span><span>📖 补基础</span><span>🧮 一步步算</span>'
+              '<span>💭 直觉</span><span>⚠️ 常见错误</span><span>✅ 小结</span></div>')
+    body = ['<div class="topbar"><span class="badge">大学生版</span>'
             f'<span class="home">{html.escape(label)}</span>'
             '<button class="toggle" id="themeToggle">🌓 深/浅色</button></div>',
             legend]
     body.extend(secs_html)
 
-    out = page(f"{label} · 人话版 · QCQI", "\n".join(nav), "\n".join(body))
-    (ROOT / slug / "explained.html").write_text(out, encoding="utf-8")
+    out = page(f"{label} · 大学生版 · QCQI", "\n".join(nav), "\n".join(body))
+    (ROOT / slug / "student.html").write_text(out, encoding="utf-8")
     return len(sections)
 
 
 HUB_CSS = """
-body{margin:0;min-height:100vh;background:radial-gradient(1200px 600px at 70% -10%,#f6ad55,#fbf7f0);
-color:#2a2620;font-family:-apple-system,"PingFang SC","Microsoft YaHei",system-ui,sans-serif}
+body{margin:0;min-height:100vh;background:radial-gradient(1200px 600px at 70% -10%,#93c5fd,#f4f7fb);
+color:#1c2733;font-family:-apple-system,"PingFang SC","Microsoft YaHei",system-ui,sans-serif}
 .wrap{max-width:980px;margin:0 auto;padding:70px 24px}
-h1{font-size:34px;margin:0 0 6px}.sub{color:#7a7163;margin-bottom:14px;font-size:15px;line-height:1.7}
-.legend{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:30px;font-size:13px;color:#7a7163}
-.legend span{background:#fff;border:1px solid #e6ddcd;border-radius:20px;padding:4px 13px}
+h1{font-size:34px;margin:0 0 6px}.sub{color:#64748b;margin-bottom:14px;font-size:15px;line-height:1.7}
+.legend{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:30px;font-size:13px;color:#64748b}
+.legend span{background:#fff;border:1px solid #d7e1ee;border-radius:20px;padding:4px 13px}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:18px}
-.card{display:block;background:#fff;border:1px solid #e6ddcd;border-radius:16px;padding:22px;
-color:#2a2620;text-decoration:none;transition:.18s}
-.card:hover{transform:translateY(-3px);border-color:#c2410c;box-shadow:0 10px 30px rgba(120,60,0,.18)}
-.ct{font-size:18px;font-weight:800;margin-bottom:8px}.cs{color:#7a7163;font-size:13px}
-.foot{margin-top:40px;color:#7a7163;font-size:13px;line-height:1.8}
-.foot a{color:#c2410c}
+.card{display:block;background:#fff;border:1px solid #d7e1ee;border-radius:16px;padding:22px;
+color:#1c2733;text-decoration:none;transition:.18s}
+.card:hover{transform:translateY(-3px);border-color:#2563eb;box-shadow:0 10px 30px rgba(37,99,235,.18)}
+.ct{font-size:18px;font-weight:800;margin-bottom:8px}.cs{color:#64748b;font-size:13px}
+.foot{margin-top:40px;color:#64748b;font-size:13px;line-height:1.8}
+.foot a{color:#2563eb}
 """
 
 
@@ -212,38 +212,38 @@ def build_hub(built):
         if slug not in built:
             continue
         cards.append(
-            f'<a class="card" href="{slug}/explained.html"><div class="ct">{html.escape(label)}</div>'
-            f'<div class="cs">{built[slug]} 节 · 人话讲解</div></a>')
+            f'<a class="card" href="{slug}/student.html"><div class="ct">{html.escape(label)}</div>'
+            f'<div class="cs">{built[slug]} 节 · 从零补基础</div></a>')
     body = f"""<div class="wrap">
-<h1>QCQI 知识库 · 人话版 🗣️</h1>
-<div class="sub">把晦涩的量子数学翻译成「程序员能懂的人话」：每条公式都配直觉解释、编程类比与避坑提示。<br>
-想看严谨的公式精简版？打开 <a href="index.html">公式版门户</a>；数学基础还不牢？看 <a href="student.html">🎓 大学生版门户</a>。</div>
-<div class="legend"><span>💡 人话＝公式在说什么</span><span>🧠 类比＝用代码/数据结构理解</span>
-<span>📐 矩阵怎么看＝逐个元素读懂</span><span>🔢 算例＝带数字分步演算</span>
-<span>⚠️ 坑＝容易误解的地方</span><span>🔑 记住＝一句话带走</span></div>
+<h1>QCQI 知识库 · 大学生版 🎓</h1>
+<div class="sub">写给刚学过矩阵、概率、线性代数但基础还不太牢的同学：每个量子概念都先把用到的数学基础<b>从头讲一遍</b>，
+再一步步代数字演算，标出最容易踩的坑。<br>
+已经能看懂公式？试试 <a href="index.html">公式精简版</a>；有编程背景想要类比？看 <a href="explained.html">🗣️ 人话版</a>。</div>
+<div class="legend"><span>🎯 用来干嘛＝先搞懂它解决什么问题</span><span>📖 补基础＝先复习这块线代/概率</span><span>🧮 一步步算＝每一步都不跳</span>
+<span>💭 直觉＝它到底在干什么</span><span>⚠️ 常见错误＝同学最常栽的地方</span><span>✅ 小结＝一句话记住</span></div>
 <div class="grid">{''.join(cards)}</div>
-<div class="foot">面向计算机背景读者，无需物理基础。源自 <code>skill_set/&lt;skill&gt;/explained.md</code>，
-由 <code>build_explained.py</code> 静态生成（纯标准库 + 内置 MathJax，离线可用）。</div>
+<div class="foot">面向数学基础薄弱的本科生，不假设你学好了线代/概率。源自 <code>skill_set/&lt;skill&gt;/student.md</code>，
+由 <code>build_student.py</code> 静态生成（纯标准库 + 内置 MathJax，离线可用）。</div>
 </div>"""
     out = f"""<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>QCQI 人话版 · 门户</title><style>{HUB_CSS}</style></head>
+<title>QCQI 大学生版 · 门户</title><style>{HUB_CSS}</style></head>
 <body>{body}</body></html>"""
-    (ROOT / "explained.html").write_text(out, encoding="utf-8")
+    (ROOT / "student.html").write_text(out, encoding="utf-8")
 
 
 def main():
-    print("Building plain-language (人话版) pages…")
+    print("Building college-student (大学生版) pages…")
     built = {}
     for slug, label in SKILLS:
         n = build_skill(slug, label)
         if n is None:
-            print(f"  {slug:32s} — (no explained.md, skipped)")
+            print(f"  {slug:32s} — (no student.md, skipped)")
         else:
             built[slug] = n
             print(f"  {slug:32s} {n:2d} sections  ✓")
     build_hub(built)
-    print(f"Hub: explained.html  ({len(built)} skills)")
+    print(f"Hub: student.html  ({len(built)} skills)")
     print("Done.")
 
 

@@ -54,6 +54,8 @@ $$J(\mathcal{E}) = (\mathcal{E}\otimes I)(\ketbra{\Omega}{\Omega}), \qquad \ket{
 - $\mathcal{E}\otimes I$：只对纠缠态的"一半"施加信道，另一半放着不动（$I$ 是恒等）。
 - $\ketbra{\Omega}{\Omega}$：纠缠态对应的密度矩阵。
 
+> 📐 **怎么看：** 对单 qubit，$\ket{\Omega}=\ket{00}+\ket{11}$，密度矩阵 $\ketbra{\Omega}{\Omega}$ 是个 $4\times 4$ 矩阵。实际计算 $J$ 有个等价的"逐块"配方：$J=\sum_{i,j}\mathcal{E}(\ketbra{i}{j})\otimes\ketbra{i}{j}$。也就是说，把 $J$ 切成 $2\times 2$ 个小块（按 $B$ 子系统的 $\ketbra{i}{j}$ 编号），**第 $(i,j)$ 块就等于把信道作用到 $\ketbra{i}{j}$ 上的结果** $\mathcal{E}(\ketbra{i}{j})$。这样只要算四个 $2\times 2$ 小块 $\mathcal{E}(\ketbra{0}{0}),\mathcal{E}(\ketbra{0}{1}),\mathcal{E}(\ketbra{1}{0}),\mathcal{E}(\ketbra{1}{1})$，拼起来就是整个 $J$。
+
 这个对应关系叫 **Choi–Jamiołkowski 同构**：信道 $\mathcal{E}$ 和矩阵 $J(\mathcal{E})$ 一一对应，而且合法性条件也变简单了——
 
 $$\mathcal{E}\ \text{是 CP} \iff J(\mathcal{E}) \ge 0$$
@@ -67,6 +69,10 @@ $$\mathcal{E}\ \text{是 CP} \iff J(\mathcal{E}) \ge 0$$
 $$\mathcal{E}(\rho)=(1-p)\,\rho + p\,X\rho X$$
 
 按定义把它作用在最大纠缠态上，就能算出对应的 $J$，作为下一步（8.2）求 Kraus 的输入。
+
+> 🔢 **算例：** 用上面的逐块配方算比特翻转的 $J$。四个块：$\mathcal{E}(\ketbra{0}{0})=(1-p)\ketbra{0}{0}+p\ketbra{1}{1}=\begin{pmatrix}1-p&0\\0&p\end{pmatrix}$，$\mathcal{E}(\ketbra{1}{1})=\begin{pmatrix}p&0\\0&1-p\end{pmatrix}$，$\mathcal{E}(\ketbra{0}{1})=(1-p)\ketbra{0}{1}+p\ketbra{1}{0}=\begin{pmatrix}0&1-p\\p&0\end{pmatrix}$，$\mathcal{E}(\ketbra{1}{0})=\begin{pmatrix}0&p\\1-p&0\end{pmatrix}$。拼成 $4\times 4$：
+> $$J=\begin{pmatrix}1-p&0&0&1-p\\0&p&p&0\\0&p&p&0\\1-p&0&0&1-p\end{pmatrix}$$
+> 取 $p=1/4$：$J=\begin{pmatrix}3/4&0&0&3/4\\0&1/4&1/4&0\\0&1/4&1/4&0\\3/4&0&0&3/4\end{pmatrix}$。它的本征值是 $\{3/2,\ 1/2,\ 0,\ 0\}$——全都 $\ge 0$，所以信道是 CP（合法）；**两个非零本征值**预示着比特翻转只需 2 个 Kraus 算符。这个 $J$ 正是下一节谱分解的输入。
 
 ---
 
@@ -85,6 +91,12 @@ $$\mathcal{E}(\rho)=\sum_k E_k \rho E_k^\dagger, \qquad \sum_k E_k^\dagger E_k =
 - $\mathrm{mat}(\ket{v_k})$：把 $d^2$ 维向量 **reshape** 成 $d\times d$ 矩阵（向量化的逆操作）。
 - $E_k$：第 $k$ 个 Kraus 算符。
 - $\sum_k E_k^\dagger E_k = I$：保迹条件（TP 的 Kraus 版写法）。
+
+> 📐 **怎么看：** $\mathrm{mat}(\ket{v_k})$ 这一步是把长度 $d^2$ 的本征向量按行优先折成 $d\times d$ 矩阵：对单 qubit（$d=2$），向量 $(a,b,c,d)^\top \to \begin{pmatrix}a&b\\c&d\end{pmatrix}$。前面乘的 $\sqrt{\lambda_k}$ 是个标量，把本征值的"权重"开方后塞进算符里——本征值大的分支，对应的 Kraus 算符整体振幅就大。最后 $E_k=\sqrt{\lambda_k}\,\mathrm{mat}(\ket{v_k})$ 就是一个普通的 $2\times 2$ 矩阵。
+
+> 🔢 **算例：** 接上一节 $p=1/4$ 的比特翻转 $J$。它的两个非零本征对是：$\lambda_0=3/2$，本征向量 $\ket{v_0}=\tfrac{1}{\sqrt2}(1,0,0,1)^\top$；$\lambda_1=1/2$，本征向量 $\ket{v_1}=\tfrac{1}{\sqrt2}(0,1,1,0)^\top$。reshape 再乘 $\sqrt{\lambda_k}$：
+> $$E_0=\sqrt{\tfrac32}\cdot\tfrac{1}{\sqrt2}\begin{pmatrix}1&0\\0&1\end{pmatrix}=\tfrac{\sqrt3}{2}\,I,\qquad E_1=\sqrt{\tfrac12}\cdot\tfrac{1}{\sqrt2}\begin{pmatrix}0&1\\1&0\end{pmatrix}=\tfrac12\,X$$
+> 正好是 $E_0=\sqrt{1-p}\,I=\sqrt{3/4}\,I$、$E_1=\sqrt{p}\,X=\sqrt{1/4}\,X$（因为 $p=1/4$）。验证保迹：$E_0^\dagger E_0+E_1^\dagger E_1=\tfrac34 I+\tfrac14 I=I$。✓ 一条龙跑通了 **信道 → 蔡氏矩阵 → 谱分解 → Kraus**。
 
 > 🧠 **类比：** $\mathrm{mat}(\cdot)$ 就是 `reshape(vec, (d, d))`——把一维数组重新折成二维矩阵。整个 8.2 就是**反序列化**：把打包成大矩阵的信道，拆回一组算子。而 8.1 是序列化，正好相反。
 
@@ -111,6 +123,12 @@ $$\vec r \;\mapsto\; M\vec r + \vec c$$
 
 > 🧠 **类比：** 这就是 3D 图形里的**仿射变换**——$M$ 是缩放/旋转矩阵，$\vec c$ 是平移。噪声让 Bloch 球缩水（信息丢失）、有时还整体挪位。可逆的纯门只会旋转球（$M$ 是旋转、不缩小），而信道会把球**压扁**。
 
+> 📐 **怎么看：** 表里的 $M$ 都是对角阵 $\mathrm{diag}(m_x,m_y,m_z)$，所以变换是**逐坐标独立缩放**：Bloch 向量 $\vec r=(r_x,r_y,r_z)$ 的每个分量各乘一个因子，$r_x\to m_x r_x$ 等。某个 $m$ 接近 $0$ 表示那根轴被压扁（对应方向的相干/信息几乎全丢），$m=1$ 表示该轴不受影响。$\vec c=(c_x,c_y,c_z)$ 是缩放后整体平移——$\vec c\ne 0$ 意味着球心被搬离原点，这只有"有能量定向流失"的信道（振幅阻尼）才会发生。
+
+> 🔢 **算例：** 振幅阻尼 $\gamma=1/2$，作用到激发态 $\ket{1}$，它的 Bloch 向量是 $\vec r=(0,0,-1)$（南极）。代 $M=\mathrm{diag}(\sqrt{1-\gamma},\sqrt{1-\gamma},1-\gamma)$、$\vec c=(0,0,\gamma)$：
+> $$\vec r\,'=M\vec r+\vec c=\big(0,\ 0,\ (1-\gamma)\cdot(-1)+\gamma\big)=(0,\ 0,\ 2\gamma-1)$$
+> 代 $\gamma=1/2$ 得 $\vec r\,'=(0,0,0)$——Bloch 向量缩到球心，正是最大混合态 $I/2$。这和前面用 Kraus 算 $\mathcal{E}(\ketbra{1}{1})=I/2$ 的结果**完全一致**，两种描述对上了。
+
 下面是几种典型信道的两种描述（$p$ 是出错概率，$\gamma$ 是阻尼率）：
 
 | 信道 | Kraus 算符 | $M=\mathrm{diag}(\cdot)$ | $\vec c$ |
@@ -128,10 +146,26 @@ $$\vec r \;\mapsto\; M\vec r + \vec c$$
 - **去极化**：以概率 $p$ 把态彻底打乱成最大混合态，Bloch 球**各向同性**地朝球心整体缩小。
 - **振幅阻尼**：描述能量耗散 $\ket{1}\to\ket{0}$（比如自发辐射），球收缩**并向北极 $\ket{0}$ 平移**。
 
+> 🔢 **算例：** 比特翻转 $p=1/4$ 作用到 $\rho=\ketbra{0}{0}=\begin{pmatrix}1&0\\0&0\end{pmatrix}$。用 $\mathcal{E}(\rho)=(1-p)\rho+pX\rho X$，其中 $X\rho X=\begin{pmatrix}0&0\\0&1\end{pmatrix}=\ketbra{1}{1}$：
+> $$\mathcal{E}(\rho)=\tfrac34\begin{pmatrix}1&0\\0&0\end{pmatrix}+\tfrac14\begin{pmatrix}0&0\\0&1\end{pmatrix}=\begin{pmatrix}3/4&0\\0&1/4\end{pmatrix}$$
+> 也就是有 $1/4$ 的概率被翻到了 $\ket{1}$。用 Bloch 描述对照：$\ket{0}$ 的 $\vec r=(0,0,1)$，比特翻转 $M=\mathrm{diag}(1,\,1-2p,\,1-2p)$（不动轴是 $x$），$\vec c=0$。代 $p=1/4$ 即 $M=\mathrm{diag}(1,\,1/2,\,1/2)$：
+> $$\vec r\,'=M\vec r+\vec c=(1\cdot 0,\ \tfrac12\cdot 0,\ \tfrac12\cdot 1)=(0,\ 0,\ 1/2)$$
+> 把 $\vec r\,'$ 换回密度矩阵，对角元 $=\tfrac{1\pm r_z'}{2}=\tfrac{1\pm 1/2}{2}=\{3/4,\ 1/4\}$。✓ 和上面直接算 $\mathcal{E}(\rho)$ 的结果一致。
+
 $$E_0^{\text{amp}}=\begin{pmatrix}1&0\\0&\sqrt{1-\gamma}\end{pmatrix}, \qquad E_1^{\text{amp}}=\begin{pmatrix}0&\sqrt{\gamma}\\0&0\end{pmatrix}$$
 
 - $E_0$：以振幅 $\sqrt{1-\gamma}$ 保留 $\ket{1}$（什么都没掉下来的分支）。
 - $E_1$：以振幅 $\sqrt{\gamma}$ 把 $\ket{1}$ 打到 $\ket{0}$（一个光子掉下来的分支）。
+
+> 📐 **怎么看：** 把 $E_0,E_1$ 当成作用在列向量 $\binom{c_0}{c_1}$（$c_0$ 是 $\ket{0}$ 振幅、$c_1$ 是 $\ket{1}$ 振幅）上的矩阵，逐元素读：
+> - $E_0$ 的 $(0,0)=1$：$\ket{0}$ 分量原封不动（基态不会自发往上跳）。$(1,1)=\sqrt{1-\gamma}$：$\ket{1}$ 分量被打了个 $\sqrt{1-\gamma}$ 的折扣（有概率衰减掉，所以保留的振幅变小）。两个对角元、非对角全 $0$，说明这个分支不混合 $\ket{0}\ket{1}$，只做幅度缩放。
+> - $E_1$ 只有 $(0,1)=\sqrt{\gamma}$ 一个非零元：它把输入的 $\ket{1}$ 分量（第 2 列）搬到输出的 $\ket{0}$ 分量（第 1 行），振幅 $\sqrt{\gamma}$。这就是"激发态掉到基态、放出一个光子"那条跃迁。第 1 列全 $0$ 意味着 $\ket{0}$ 不可能触发这个分支。
+
+> 🔢 **算例：** 取 $\gamma=1/2$，把振幅阻尼作用到激发态 $\rho=\ketbra{1}{1}=\begin{pmatrix}0&0\\0&1\end{pmatrix}$，算 $\sum_k E_k\rho E_k^\dagger$：
+> $$E_0\rho E_0^\dagger=\begin{pmatrix}1&0\\0&\sqrt{1-\gamma}\end{pmatrix}\begin{pmatrix}0&0\\0&1\end{pmatrix}\begin{pmatrix}1&0\\0&\sqrt{1-\gamma}\end{pmatrix}=\begin{pmatrix}0&0\\0&1-\gamma\end{pmatrix}$$
+> $$E_1\rho E_1^\dagger=\begin{pmatrix}0&\sqrt{\gamma}\\0&0\end{pmatrix}\begin{pmatrix}0&0\\0&1\end{pmatrix}\begin{pmatrix}0&0\\\sqrt{\gamma}&0\end{pmatrix}=\begin{pmatrix}\gamma&0\\0&0\end{pmatrix}$$
+> 相加得 $\mathcal{E}(\rho)=\begin{pmatrix}\gamma&0\\0&1-\gamma\end{pmatrix}$。代 $\gamma=1/2$ 得 $\begin{pmatrix}1/2&0\\0&1/2\end{pmatrix}=I/2$——一半布居衰减到了 $\ket{0}$，态从纯 $\ket{1}$ 变成了最大混合。
+> 再验证保迹 $\sum_k E_k^\dagger E_k=I$：$E_0^\dagger E_0=\begin{pmatrix}1&0\\0&1-\gamma\end{pmatrix}$，$E_1^\dagger E_1=\begin{pmatrix}0&0\\0&\gamma\end{pmatrix}$，相加 $=\begin{pmatrix}1&0\\0&1\end{pmatrix}=I$。✓ 对任意 $\gamma$ 都成立。
 
 > 💡 **人话：** 相位阻尼和相位翻转**效果一样**（笔记原话："相位阻尼和相位反转一样"）——都只衰减相干项，不改变布居（对角元）。
 

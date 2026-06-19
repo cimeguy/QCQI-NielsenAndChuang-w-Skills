@@ -23,6 +23,14 @@
 
 正交投影算符 $P$ 对应一个「是/非命题」，$\bra{\psi}P\ket{\psi}$ 给出命题为真的概率。这相当于：每个布尔判定都对应一个投影矩阵，把状态投影一下、量一下长度，就是它为真的概率。
 
+> 📐 **怎么看：** 投影算符 $P=\ketbra{\psi}{\psi}$ 是一个方阵，它把任意向量「压」到 $\ket{\psi}$ 这条轴上。$\bra{\psi}P\ket{\psi}$ 这个标量 = 先用 $P$ 投影、再取投影后向量长度的平方 = 命题为真的概率。它的对角元 $P_{ii}=\lvert\langle i\mid\psi\rangle\rvert^2$ 就是「态在基矢 $\ket{i}$ 上的分量占比」。
+
+> 🔢 **算例：** 取 $\ket{\psi}=\ket{+}=\tfrac{1}{\sqrt2}(\ket{0}+\ket{1})$，对应的投影算符
+> $$P_+=\ketbra{+}{+}=\frac12\begin{pmatrix}1&1\\1&1\end{pmatrix}.$$
+> 现在系统处于 $\ket{0}=\begin{pmatrix}1\\0\end{pmatrix}$，问「它是 $\ket{+}$ 吗」的概率：
+> $$\bra{0}P_+\ket{0}=\frac12\begin{pmatrix}1&0\end{pmatrix}\begin{pmatrix}1&1\\1&1\end{pmatrix}\begin{pmatrix}1\\0\end{pmatrix}=\frac12.$$
+> 答案 50% —— 和「$\ket{0}$ 在 $\ket{\pm}$ 上各占一半」完全吻合。
+
 > 🔑 **记住：** 纯态可以只用 $\ket{\psi}$ 写；但混态必须用 $\rho$。$\rho$ 才是最通用的状态表示。
 
 ---
@@ -38,6 +46,12 @@
 $$\sum_i \ketbra{i}{i} = I$$
 
 逐项解释：$\ket{i}$ 是第 $i$ 个基向量，$\ketbra{i}{i}$ 是投到该方向的投影矩阵，全部加起来等于单位算符 $I$。
+
+> 📐 **怎么看：** $\ketbra{i}{i}$ 是「列向量 × 行向量」= 一个矩阵，在自己这组基下只有对角线第 $i$ 个位置为 1、其余全 0。把所有这些「只点亮一个对角元」的矩阵叠加，正好拼出单位矩阵 $I$ —— 每个方向各分到一根坐标轴。
+
+> 🔢 **算例：** 单 qubit 计算基 $\ket{0},\ket{1}$：
+> $$\ketbra{0}{0}=\begin{pmatrix}1&0\\0&0\end{pmatrix},\quad \ketbra{1}{1}=\begin{pmatrix}0&0\\0&1\end{pmatrix},$$
+> 两者相加 $=\begin{pmatrix}1&0\\0&1\end{pmatrix}=I$。✓
 
 > 🧠 **类比：** 完备性关系就是「一组正交基张成整个空间」的矩阵写法 —— 等价于说一组单位正交向量构成一组完整的坐标轴，任何向量都能用它们线性组合。
 
@@ -86,11 +100,24 @@ $$\ket{\psi}=\cos(\theta/2)\ket{0}+e^{i\phi}\sin(\theta/2)\ket{1}$$
 
 对应 Bloch 矢量 $r=(\sin\theta\cos\phi,\ \sin\theta\sin\phi,\ \cos\theta)$。其中 $\theta,\phi$ 是球面上的两个角，$\ket{0},\ket{1}$ 是计算基。Bloch 分量可由 $r_i=\Tr(\rho\sigma_i)$ 算出（$\sigma_i$ 是泡利矩阵）。
 
+> 📐 **怎么看：** 三个泡利矩阵是单 qubit 世界的「三把尺子」：
+> $$\sigma_x=\begin{pmatrix}0&1\\1&0\end{pmatrix},\quad \sigma_y=\begin{pmatrix}0&-i\\i&0\end{pmatrix},\quad \sigma_z=\begin{pmatrix}1&0\\0&-1\end{pmatrix}.$$
+> $\sigma_z$ 是对角阵，量的是「在 $\ket0$ 还是 $\ket1$」的布居差；$\sigma_x,\sigma_y$ 全是非对角元，量的是叠加态的「相干 / 相位」。$r_i=\Tr(\rho\sigma_i)$ 就是把 $\rho$ 往这三把尺子上各投影一次，读出 Bloch 矢量的三个坐标。
+
 **密度算符的谱分解**：
 
 $$\rho=\sum_i p_i \ketbra{\psi_i}{\psi_i},\quad \Tr(\rho)=1,\quad \rho\ge 0$$
 
 $p_i$ 是概率（非负、和为 1），$\ketbra{\psi_i}{\psi_i}$ 是第 $i$ 个纯态的投影。
+
+> 📐 **怎么看：** 单 qubit 密度矩阵
+> $$\rho=\begin{pmatrix}\rho_{00}&\rho_{01}\\\rho_{10}&\rho_{11}\end{pmatrix}$$
+> 的每个元素都有名字：对角元 $\rho_{00},\rho_{11}$ 是**布居**（在计算基下测到 $\ket0/\ket1$ 的概率，二者相加 $=\Tr\rho=1$）；非对角元 $\rho_{01}$ 与 $\rho_{10}=\rho_{01}^*$ 是**相干**（叠加态的「内部相位关系」，纯叠加时非零，经典混合时为 0）。合法的 $\rho$ 必须 Hermite（$\rho_{10}=\rho_{01}^*$）、迹为 1、半正定。
+
+> 🔢 **算例（叠加 vs 经典混合）：**
+> 纯态 $\ket{+}$：$\rho_+=\ketbra{+}{+}=\frac12\begin{pmatrix}1&1\\1&1\end{pmatrix}$，对角各 0.5（50/50），**非对角 0.5 ≠ 0 → 有相干**。纯度 $\Tr(\rho_+^2)=\frac14(1+1+1+1)=1$ ✓ 是纯态。
+> 经典混合「一半 $\ket0$、一半 $\ket1$」：$\rho_{\mathrm{mix}}=\frac12\begin{pmatrix}1&0\\0&0\end{pmatrix}+\frac12\begin{pmatrix}0&0\\0&1\end{pmatrix}=\frac12 I$，对角同样 50/50，但**非对角为 0 → 无相干**。纯度 $\Tr(\rho_{\mathrm{mix}}^2)=\frac14+\frac14=\frac12<1$ → 是混态。
+> 同样的对角线、不同的非对角线 —— 这就是「量子叠加」和「经典随机」的本质区别。
 
 > 💡 **人话：** 单 qubit 状态正好能塞进一个 3D 球（Bloch 球）：纯态在**球面**，混态在**球内**，最大混合态 $\rho=I/2$ 在**球心**（相当于「啥都不知道」的 50/50）。
 
@@ -127,6 +154,12 @@ $$P(i)=\Tr(\rho P_i),\qquad \rho \to \frac{P_i\rho P_i}{\Tr(\rho P_i)}$$
 
 左式是测到结果 $i$ 的概率（纯态时 $=\bra{\psi}P_i\ket{\psi}$），右式是测后归一化的新状态。$a_i$ 是结果 $i$ 对应的物理读数。
 
+> 📐 **怎么看：** $\Tr(\rho P_i)$ 读作「把 $\rho$ 和投影 $P_i$ 相乘后取对角元之和」。直觉上 $P_i$ 像一个掩码（mask），只保留落在第 $i$ 个子空间里的那部分概率，迹再把它加总成一个 $0\sim1$ 的数。测后态 $\frac{P_i\rho P_i}{\Tr(\rho P_i)}$ 就是「掩码切出来的块 + 重新归一化」。
+
+> 🔢 **算例：** 状态 $\rho_+=\frac12\begin{pmatrix}1&1\\1&1\end{pmatrix}$（即 $\ket+$），在计算基做 PVM $\{P_0=\ketbra{0}{0},\ P_1=\ketbra{1}{1}\}$：
+> $$P_0\rho_+=\begin{pmatrix}1&0\\0&0\end{pmatrix}\cdot\frac12\begin{pmatrix}1&1\\1&1\end{pmatrix}=\frac12\begin{pmatrix}1&1\\0&0\end{pmatrix},\quad \Tr(P_0\rho_+)=\frac12.$$
+> 同理测到 $\ket1$ 的概率也是 $\frac12$。测到 0 后状态塌缩成 $\frac{P_0\rho_+P_0}{1/2}=\ketbra{0}{0}$ —— 相干被这一次测量彻底抹掉。
+
 POVM 是一族正定算符 $\{E_i\}$，只要求 $E_i\ge 0$ 且 $\sum_i E_i=I$，**不要求正交或幂等**，用于不关心测后态、只想最优区分的场景。
 
 > 💡 **人话：** PVM ＝ 一组互斥又穷尽的桶（正交投影），`read` 时把状态扔进某个桶并塌缩成那个桶。POVM 是更宽松的版本：只要「一堆非负权重加起来等于 1」就行，桶之间可以不正交，桶的数量甚至可以多于维数。
@@ -153,6 +186,14 @@ $$\rho_A = \Tr_B(\rho_{AB})$$
 
 对子系统 B 求迹（「迹掉 B」），得到只看 A 时的状态 $\rho_A$。偏迹是线性映射；不同教材对指标顺序有两种惯例，结果一致但写法不同。
 
+> 📐 **怎么看：** 两 qubit 的 $\rho_{AB}$ 是 $4\times4$ 矩阵，行列用 $\ket{00},\ket{01},\ket{10},\ket{11}$ 标号。「迹掉 B」= 把 B 的两个取值（0/1）配对加起来，留下 $2\times2$ 的 $\rho_A$：$(\rho_A)_{ij}=\sum_{b}\bra{i\,b}\rho_{AB}\ket{j\,b}$，其中 $b$ 跑遍 B 的基态。直觉上就是「沿 B 这一维求和、把它折叠掉」。
+
+> 🔢 **算例（最经典的一道题）：** Bell 态 $\ket{\Phi^+}=\frac{1}{\sqrt2}(\ket{00}+\ket{11})$，其密度矩阵
+> $$\rho_{AB}=\ketbra{\Phi^+}{\Phi^+}=\frac12\begin{pmatrix}1&0&0&1\\0&0&0&0\\0&0&0&0\\1&0&0&1\end{pmatrix}$$
+> （行列序为 $00,01,10,11$）。迹掉 B：$A=0$ 的块对应行列 $\{00,01\}$，对角贡献 $\frac12+0=\frac12$；$A=1$ 的块对应 $\{10,11\}$，对角贡献 $0+\frac12=\frac12$；A 的非对角项 $\sum_b\bra{0\,b}\rho\ket{1\,b}=0$。于是
+> $$\rho_A=\Tr_B(\rho_{AB})=\begin{pmatrix}\tfrac12&0\\0&\tfrac12\end{pmatrix}=\frac12 I.$$
+> 整体是纯态（$\Tr\rho_{AB}^2=1$），可子系统 $\rho_A=\frac12 I$ 却是**最大混合态**（$\Tr\rho_A^2=\frac12$）—— 这正是纠缠的指纹。
+
 > 🧠 **类比：** 偏迹就是对联合分布做 **marginalize（边缘化）**：你有 $P(A,B)$，对 B 求和得到 $P(A)$。$\Tr_B$ 在量子里干的就是这件事 —— 把不关心的自由度求和消掉。
 
 > ⚠️ **坑：** 偏迹有两种指标约定，全程必须只用其中一种。混用会算出错误的约化矩阵 —— 这是手算最常见的翻车点。
@@ -164,6 +205,10 @@ $$\rho_A = \Tr_B(\rho_{AB})$$
 $$\ket{\Psi}=\sum_i \lambda_i \ket{i}_A\otimes\ket{i}_B,\quad \lambda_i\ge 0,\ \sum_i \lambda_i^2=1$$
 
 本质就是对态矢的系数矩阵做 SVD，$\lambda_i$ 是奇异值。非零 $\lambda_i$ 的个数叫**施密特数** = 纠缠度量；施密特数 $=1$ ⟺ 可分（无纠缠）。$\rho_A$ 与 $\rho_B$ 有相同的非零本征值 $\{\lambda_i^2\}$。
+
+> 🔢 **算例（施密特分解）：** 取态 $\ket\Psi=\frac{1}{\sqrt2}\ket{00}+\frac12\ket{01}+\frac12\ket{10}$。把系数排成「A 行 × B 列」的矩阵
+> $$C=\begin{pmatrix}\tfrac{1}{\sqrt2}&\tfrac12\\[2pt]\tfrac12&0\end{pmatrix}$$
+> （行 $=\ket{0}_A,\ket{1}_A$；列 $=\ket{0}_B,\ket{1}_B$）。对 $C$ 做 SVD 得奇异值 $\lambda_1\approx0.966,\ \lambda_2\approx0.259$（满足 $\lambda_1^2+\lambda_2^2=1$）。两个奇异值都非零 → 施密特数 $=2$ → **有纠缠**。反之若某个态算出的 $C$ 只有一个非零奇异值（例如 $C=\begin{pmatrix}1&0\\0&0\end{pmatrix}$ 对应 $\ket{00}$），施密特数 $=1$ → 可分、无纠缠。
 
 > 🧠 **类比：** 施密特分解 = 你熟的 SVD 换了身物理皮肤。把两体态的系数排成矩阵做 SVD，奇异值的个数就告诉你这两个子系统「纠缠得多深」。
 
@@ -191,11 +236,28 @@ $$\rho_A = \Tr_B(\ketbra{\Psi}{\Psi})$$
 
 构造 POVM $\{E_1,E_2,E_?\}$，满足 $\sum_i E_i=I$：测到 $E_1$ 确定是态 1，$E_2$ 确定是态 2，测到 $E_?$ 则弃权（无法判断）。代价是有限的失败概率，换来零错误率。
 
+> 🔢 **算例（POVM 区分非正交态）：** 要无错区分 $\ket{\psi_1}=\ket0$ 与 $\ket{\psi_2}=\ket+$。构造
+> $$E_1=(2-\sqrt2)\,\ketbra{-}{-},\quad E_2=(2-\sqrt2)\,\ketbra{1}{1},\quad E_?=I-E_1-E_2,$$
+> 其中 $\ket-=\frac{1}{\sqrt2}(\ket0-\ket1)$。关键在于 $E_1$ 对「被它排除的态」恰好给 0：
+> $$\Tr(E_1\ketbra{\psi_2}{\psi_2})=(2-\sqrt2)\,\lvert\braket{-}{+}\rvert^2=0,$$
+> 所以测到 $E_1$ 时**绝不会**是 $\ket{\psi_2}$，必是 $\ket{\psi_1}$。代价：正确识别概率仅 $\Tr(E_1\ketbra{\psi_1}{\psi_1})=(2-\sqrt2)\cdot\tfrac12=1-\tfrac{1}{\sqrt2}\approx0.293$，其余落入弃权分支 $E_?$。这正是「无错但允许失败」的数字化身。
+
 > 🧠 **类比：** 这就是「宁可返回 `Unknown` 也绝不返回错答案」的设计。$E_?$ 是 `null`/弃权分支：只要给出判定就 100% 对，代价是有时给不出判定。
 
 > ⚠️ **坑：** 别以为非正交态能完美区分。只有**正交态**才能。非正交态在数学上就是分不干净，最多做到无错-弃权。
 
 **超密编码（Superdense Coding）**：Alice 和 Bob 预先共享一对 Bell 态，Alice 只对自己手里那 1 个 qubit 施加 $\{I,X,Z,XZ\}$ 中之一，再把这个 qubit 发给 Bob，Bob 做 Bell 测量就能读出 **2 个经典比特**。
+
+> 📐 **怎么看：** 四个 Bell 态是 $4$ 维空间里的一组正交基，每个都是 $\frac{1}{\sqrt2}$ 配上两个分量：
+> $$\ket{\Phi^\pm}=\tfrac{1}{\sqrt2}(\ket{00}\pm\ket{11}),\qquad \ket{\Psi^\pm}=\tfrac{1}{\sqrt2}(\ket{01}\pm\ket{10}).$$
+> Alice 对**自己那一个 qubit** 作用 $\{I,X,Z,XZ\}$，就能在这四个正交态之间切换；因为正交，Bob 用一次 Bell 测量即可**完美区分**，于是读出 2 比特。
+
+> 🔢 **算例：** 共享 $\ket{\Phi^+}=\frac{1}{\sqrt2}(\ket{00}+\ket{11})$，Alice 在第 1 个 qubit 上操作：
+> - 作 $I$：仍是 $\ket{\Phi^+}$ —— 编码 `00`。
+> - 作 $Z$（翻 $\ket1$ 的符号）：$\frac{1}{\sqrt2}(\ket{00}-\ket{11})=\ket{\Phi^-}$ —— 编码 `01`。
+> - 作 $X$（翻转 $\ket0\leftrightarrow\ket1$）：$\frac{1}{\sqrt2}(\ket{10}+\ket{01})=\ket{\Psi^+}$ —— 编码 `10`。
+> - 作 $XZ$：$\frac{1}{\sqrt2}(\ket{10}-\ket{01})=-\ket{\Psi^-}$（差一个全局相位，不影响测量）—— 编码 `11`。
+> 四种本地操作把同一个起点送到四个互相正交的终点，Bob 一测便知是哪一个。
 
 > 🔑 **记住：** 超密编码 = 1 qubit + 预共享纠缠 ⇒ 传 2 经典比特。它是量子隐形传态的「对偶」协议。注意：纠缠是预先就要建立好的资源。
 

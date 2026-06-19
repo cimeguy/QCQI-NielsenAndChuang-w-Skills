@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>第八章补充 · 量子信道 · 大学生版 · QCQI</title>
+<style>
+:root{--bg:#f4f7fb;--panel:#fff;--panel2:#eaf0f8;--fg:#1c2733;--muted:#64748b;
+--accent:#2563eb;--accent2:#0891b2;--border:#d7e1ee;--code:#eef3f9;--th:#e6eef8;
+--purpose:#ea580c;--purposebg:#fff5ec;
+--review:#7c3aed;--reviewbg:#f5f1ff;--calc:#0891b2;--calcbg:#ecfbfd;
+--intuition:#2563eb;--intuitionbg:#eef4ff;--mistake:#dc2626;--mistakebg:#fef2f2;
+--summary:#15803d;--summarybg:#ecfdf3;}
+[data-theme=dark]{--bg:#0d1320;--panel:#161f30;--panel2:#121a29;--fg:#e3eaf3;--muted:#8595a8;
+--accent:#60a5fa;--accent2:#22d3ee;--border:#27344a;--code:#16203200;--th:#1a2538;
+--purposebg:#2a1709;
+--reviewbg:#1f1633;--calcbg:#0a2730;--intuitionbg:#10203b;--mistakebg:#2a1414;--summarybg:#0f2417;}
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,"PingFang SC","Microsoft YaHei",Segoe UI,system-ui,sans-serif;
+background:var(--bg);color:var(--fg);line-height:1.9;font-size:16px}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+.layout{display:flex;min-height:100vh}
+.sidebar{width:300px;flex:0 0 300px;background:var(--panel2);border-right:1px solid var(--border);
+position:sticky;top:0;height:100vh;overflow-y:auto;padding:20px 0}
+.sidebar h2{font-size:14px;margin:0 18px 6px;color:var(--muted);font-weight:600}
+.brand{padding:0 18px 14px;border-bottom:1px solid var(--border);margin-bottom:12px}
+.brand .t{font-size:18px;font-weight:800}
+.brand .s{font-size:12.5px;color:var(--muted);margin-top:3px}
+.search{margin:0 14px 12px;width:calc(100% - 28px);padding:9px 11px;border-radius:9px;
+border:1px solid var(--border);background:var(--panel);color:var(--fg);font-size:13px}
+.nav a{display:block;padding:6px 18px;color:var(--fg);font-size:13.5px;border-left:3px solid transparent}
+.nav a:hover{background:var(--panel);text-decoration:none}
+.nav a.active{border-left-color:var(--accent);background:var(--panel);color:var(--accent)}
+.nav a.hidden{display:none}
+.main{flex:1;min-width:0;padding:34px 52px 90px;max-width:920px}
+.topbar{display:flex;align-items:center;gap:14px;margin-bottom:8px;flex-wrap:wrap}
+.topbar .home{font-size:13px;color:var(--muted)}
+.toggle{margin-left:auto;cursor:pointer;border:1px solid var(--border);background:var(--panel);
+color:var(--fg);border-radius:8px;padding:6px 12px;font-size:13px}
+section{scroll-margin-top:20px;padding:16px 0;border-bottom:1px solid var(--border)}
+h1{font-size:28px;margin:.2em 0 .5em;line-height:1.3}
+h2{font-size:21px;margin:1.1em 0 .5em;color:var(--accent)}
+h3{font-size:17px;margin:1em 0 .4em;color:var(--accent2)}h4{font-size:15.5px;margin:.9em 0 .3em}
+code{background:var(--code);padding:1.5px 6px;border-radius:5px;font-size:.9em;
+font-family:"SF Mono",Menlo,Consolas,monospace}
+pre{background:var(--code);padding:14px 16px;border-radius:10px;overflow-x:auto;border:1px solid var(--border)}
+pre code{background:none;padding:0}
+table{border-collapse:collapse;width:100%;margin:12px 0;font-size:14px;border-radius:8px;overflow:hidden}
+th,td{border:1px solid var(--border);padding:7px 11px;text-align:left;vertical-align:top}
+th{background:var(--th);font-weight:600}
+ul,ol{padding-left:24px}li{margin:4px 0}
+hr{border:none;border-top:1px dashed var(--border);margin:16px 0}
+blockquote{border-left:4px solid var(--accent2);margin:12px 0;padding:8px 16px;color:var(--muted);
+background:var(--panel);border-radius:0 8px 8px 0}
+blockquote.callout{border-left-width:5px;border-radius:10px;padding:12px 18px;color:var(--fg);
+margin:14px 0;font-size:15px}
+blockquote.callout.review{border-left-color:var(--review);background:var(--reviewbg)}
+blockquote.callout.purpose{border-left-color:var(--purpose);background:var(--purposebg)}
+blockquote.callout.calc{border-left-color:var(--calc);background:var(--calcbg)}
+blockquote.callout.intuition{border-left-color:var(--intuition);background:var(--intuitionbg)}
+blockquote.callout.mistake{border-left-color:var(--mistake);background:var(--mistakebg)}
+blockquote.callout.summary{border-left-color:var(--summary);background:var(--summarybg);font-weight:600}
+.legend{display:flex;gap:10px;flex-wrap:wrap;margin:6px 0 18px;font-size:12.5px;color:var(--muted)}
+.legend span{background:var(--panel);border:1px solid var(--border);border-radius:20px;padding:3px 11px}
+.badge{display:inline-block;background:var(--accent);color:#fff;border-radius:6px;padding:2px 9px;font-size:12px;font-weight:700}
+@media(max-width:820px){.sidebar{display:none}.main{padding:24px 18px}}
+</style>
+<script>
+window.MathJax={
+ tex:{
+  inlineMath:[['$','$'],['\\(','\\)']],
+  displayMath:[['$$','$$'],['\\[','\\]']],
+  macros:{
+   ket:['{\\lvert #1\\rangle}',1],
+   bra:['{\\langle #1\\rvert}',1],
+   braket:['{\\langle #1\\vert #2\\rangle}',2],
+   ketbra:['{\\lvert #1\\rangle\\langle #2\\rvert}',2],
+   Tr:'{\\operatorname{Tr}}',
+   tr:'{\\operatorname{tr}}'
+  }
+ },
+ svg:{fontCache:'global'},
+ options:{skipHtmlTags:['script','style','textarea','pre','code'],ignoreHtmlClass:'viz'}
+};
+</script>
+<script src="../vendor/tex-svg.js" id="MathJax-script" async></script>
+</head>
+<body>
+<div class="layout">
+<aside class="sidebar">
+<div class="brand"><div class="t">QCQI · 大学生版</div><div class="s">第八章补充 · 量子信道</div></div>
+<input class="search" id="search" placeholder="过滤小节…">
+<nav class="nav">
+<a href="../student.html" style="color:var(--muted)">← 返回大学生版门户</a>
+<a href="explained.html" style="color:var(--muted)">🗣️ 看人话版</a>
+<a href="index.html" style="color:var(--muted)">≡ 看公式精简版</a>
+<a href="#s0">导读</a>
+<a href="#s1">1. 量子信道是什么：带噪声的不可逆变换</a>
+<a href="#s2">2. 三种等价描述：同一个对象的三种写法</a>
+<a href="#s3">3.（8.1）从信道到蔡氏矩阵：把&quot;变换&quot;打包成&quot;矩阵&quot;</a>
+<a href="#s4">4.（8.2）从蔡氏矩阵到 Kraus：对矩阵做&quot;分解&quot;还原出算子</a>
+<a href="#s5">5.（8.3）几种典型信道：Kraus 算符 + Bloch 球上的仿射变换</a>
+<a href="#s6">6.（8.4）算例与验证：把流程跑一遍并核对结果</a>
+<a href="#s7">一句话总览</a>
+</nav></aside>
+<main class="main">
+<div class="topbar"><span class="badge">大学生版</span><span class="home">第八章补充 · 量子信道</span><button class="toggle" id="themeToggle">🌓 深/浅色</button></div>
+<div class="legend"><span>🎯 用来干嘛</span><span>📖 补基础</span><span>🧮 一步步算</span><span>💭 直觉</span><span>⚠️ 常见错误</span><span>✅ 小结</span></div>
+<section id="s0"><h1>第八章补充 量子信道 · 大学生版</h1>
+<h2>导读</h2>
+<p>这一章讲"量子比特在现实里会被噪声搞坏"这件事，以及怎么用数学描述这个变坏的过程。核心对象叫<strong>量子信道</strong>——可以把它当成一个作用在量子态上的"带噪声的变换"。本章告诉你：这个变换有三种等价写法（信道映射、Kraus 算符、蔡氏矩阵），它们怎么互相转换，常见噪声长什么样，怎么用这套工具做数值验证。</p>
+<p>用到的数学不多，但都得补牢：<strong>密度矩阵 $\rho$ 是什么</strong>、<strong>矩阵的谱分解（本征值分解）</strong>、<strong>向量化 / reshape（把向量折成矩阵）</strong>、<strong>矩阵分块</strong>、以及一个保概率条件 $\sum_k E_k^\dagger E_k=I$ 到底在说什么。每处都当场补清楚，再代具体小数字算给你看。</p>
+<blockquote class="callout intuition">💭 <strong>直觉：</strong> 理想量子门是<strong>可逆</strong>的（像无损的纯函数），但现实里 qubit 会和环境纠缠、漏信息，这个过程不可逆。量子信道就是描述这种"有损变换"的数学对象：输入一个干净的态，输出一个被污染、信息可能丢了的态。</blockquote>
+<hr></section>
+<section id="s1"><h2>1. 量子信道是什么：带噪声的不可逆变换</h2>
+<p>量子信道 $\mathcal{E}$ 作用在<strong>密度矩阵</strong> $\rho$ 上：$\rho\to\mathcal{E}(\rho)$。</p>
+<blockquote class="callout purpose">🎯 <strong>用来干嘛：</strong> 量子信道是用来<strong>描述真实硬件里量子态怎么被噪声、环境弄脏</strong>的数学工具——比特随机翻转、相位丢失、能量耗散都能用它刻画。它是量子纠错的基础：你得先能写下"错误长什么样"，才能设计电路去纠正它。</blockquote>
+<blockquote class="callout review">📖 <strong>补基础：密度矩阵 $\rho$ 回顾。</strong> 之前我们用列向量 $\ket\psi$ 表示量子态，但那只能描述"纯态"。一旦有噪声、有概率混合，就要升级成<strong>密度矩阵</strong> $\rho$——一个 $d\times d$ 的方阵，满足三条：① <strong>厄米</strong> $\rho=\rho^\dagger$（共轭转置等于自己）；② <strong>半正定</strong> $\rho\ge0$（所有本征值 $\ge0$，保证概率非负）；③ <strong>迹为 1</strong> $\Tr(\rho)=1$（对角元之和为 1，即总概率）。例：纯态 $\ket0$ 写成 $\rho=\ketbra{0}{0}=\begin{pmatrix}1&amp;0\\0&amp;0\end{pmatrix}$；"一半 $\ket0$ 一半 $\ket1$"的混合态写成 $\tfrac12 I=\begin{pmatrix}1/2&amp;0\\0&amp;1/2\end{pmatrix}$（叫<strong>最大混合态</strong>，信息完全丢失）。对角元是"测到各结果的概率"，非对角元叫<strong>相干项</strong>，反映量子叠加。</blockquote>
+<p>一个合法的量子信道必须是 <strong>CPTP 映射</strong>（完全正定＋保迹）：</p>
+<p>$$\mathcal{E}\otimes I \ge 0 \quad(\text{CP}), \qquad \Tr(\mathcal{E}(\rho)) = \Tr(\rho) \quad(\text{TP})$$</p>
+<ul><li><strong>CP（完全正定）</strong>：哪怕把这个 qubit 和任意大的旁观系统纠缠在一起，一起变换后结果仍是合法量子态（概率非负）。</li><li><strong>TP（保迹）</strong>：变换前后总概率守恒，都等于 1。</li></ul>
+<blockquote class="callout intuition">💭 <strong>直觉：</strong> "完全正定"是说这个变换不能算出"负概率"这种非法结果，哪怕和别的系统挂钩也不行；"保迹"是说概率加起来始终是 1，没凭空多出来或漏掉。两条合起来＝"物理上说得通的有损变换"。</blockquote>
+<blockquote class="callout mistake">⚠️ <strong>常见错误：</strong> 只检查 CP 不够，TP 也得查；缺一个这个映射就不是合法信道。</blockquote>
+<hr></section>
+<section id="s2"><h2>2. 三种等价描述：同一个对象的三种写法</h2>
+<p>同一个信道 $\mathcal{E}$ 有三种写法，彼此一一对应、可互转：</p>
+<table><thead><tr><th>描述</th><th>形式</th><th>合法性条件</th></tr></thead><tbody><tr><td>信道映射 $\mathcal{E}$</td><td>$\rho \to \mathcal{E}(\rho)$</td><td>CPTP</td></tr><tr><td>Kraus 算符 $\{E_k\}$</td><td>$\mathcal{E}(\rho)=\sum_k E_k \rho E_k^\dagger$</td><td>$\sum_k E_k^\dagger E_k = I$</td></tr><tr><td>蔡氏矩阵 $J$</td><td>$(\mathcal{E}\otimes I)\ketbra{\Omega}{\Omega}$</td><td>$J\ge 0$ 且部分迹 $=I$</td></tr></tbody></table>
+<blockquote class="callout intuition">💭 <strong>直觉：</strong> 这三种是同一个变换的三种"写法"：信道映射是"行为描述"，Kraus 是"一组矩阵"，蔡氏矩阵是"打包成的一个大矩阵"。研究哪种方便就转成哪种。</blockquote>
+<blockquote class="callout summary">✅ <strong>小结：</strong> 转换主线是 <strong>信道 → 蔡氏矩阵 → 谱分解 → Kraus</strong>。蔡氏矩阵是中转站，因为它把"映射"变成了"普通矩阵"，可以直接做线性代数。</blockquote>
+<hr></section>
+<section id="s3"><h2>3.（8.1）从信道到蔡氏矩阵：把"变换"打包成"矩阵"</h2>
+<p>要研究一个变换，一个聪明办法是喂它一个特殊输入，用输出反推整个变换。蔡氏矩阵就是这么干的：把信道作用在<strong>最大纠缠态</strong>的一半上，得到的矩阵就完整编码了整个信道。</p>
+<blockquote class="callout purpose">🎯 <strong>用来干嘛：</strong> Choi（蔡氏）矩阵是把"信道"这个抽象映射<strong>打包成一个普通矩阵</strong>，好处有二：① 判断信道合不合法（是否 CP）只要看它本征值有没有负的；② 它是"信道 → Kraus"转换的中转站，能直接上线性代数工具。</blockquote>
+<p>$$J(\mathcal{E}) = (\mathcal{E}\otimes I)(\ketbra{\Omega}{\Omega}), \qquad \ket{\Omega}=\sum_i \ket{ii}$$</p>
+<ul><li>$J(\mathcal{E})$：信道对应的蔡氏矩阵（Choi matrix），$d^2\times d^2$。</li><li>$\ket{\Omega}=\sum_i\ket{ii}$：未归一的最大纠缠态（单 qubit 时 $\ket{00}+\ket{11}$）。</li><li>$\mathcal{E}\otimes I$：只对纠缠态的"一半"施加信道，另一半放着不动。</li></ul>
+<blockquote class="callout review">📖 <strong>补基础：矩阵分块。</strong> 一个 $4\times4$ 矩阵可以切成 $2\times2$ 个"小块"，每块是 $2\times2$ 矩阵： $$\begin{pmatrix}A&amp;B\\C&amp;D\end{pmatrix},\quad A,B,C,D\text{ 都是 }2\times2.$$ 蔡氏矩阵正好这样按块组织——这让"算一个大矩阵"变成"算四个小块再拼起来"。</blockquote>
+<blockquote class="callout calc">🧮 <strong>一步步算：逐块配方。</strong> 对单 qubit，有等价公式 $J=\sum_{i,j}\mathcal{E}(\ketbra{i}{j})\otimes\ketbra{i}{j}$。意思是：把 $J$ 切成 $2\times2$ 个小块（按 $\ketbra{i}{j}$ 编号），<strong>第 $(i,j)$ 块就等于把信道作用到 $\ketbra{i}{j}$ 上的结果</strong> $\mathcal{E}(\ketbra{i}{j})$。所以只要算四个 $2\times2$ 小块 $\mathcal{E}(\ketbra00),\mathcal{E}(\ketbra01),\mathcal{E}(\ketbra10),\mathcal{E}(\ketbra11)$，按 $\begin{pmatrix}\mathcal{E}(\ketbra00)&amp;\mathcal{E}(\ketbra01)\\\mathcal{E}(\ketbra10)&amp;\mathcal{E}(\ketbra11)\end{pmatrix}$ 拼起来就是整个 $J$。</blockquote>
+<p>这个对应关系叫 <strong>Choi–Jamiołkowski 同构</strong>：信道 $\mathcal{E}$ 和矩阵 $J(\mathcal{E})$ 一一对应，而且合法性条件也变简单了——</p>
+<p>$$\mathcal{E}\ \text{是 CP} \iff J(\mathcal{E}) \ge 0$$</p>
+<blockquote class="callout summary">✅ <strong>小结：</strong> "映射是否物理（CP）"这个抽象问题，被翻译成了"矩阵是否半正定（$J\ge0$）"这个能直接算的问题。判 CP 就去查 $J$ 的本征值有没有负的。</blockquote>
+<p><strong>例子：比特翻转信道。</strong> 它以概率 $p$ 对 qubit 施加一次 Pauli-X：</p>
+<p>$$\mathcal{E}(\rho)=(1-p)\,\rho + p\,X\rho X,\qquad X=\begin{pmatrix}0&amp;1\\1&amp;0\end{pmatrix}$$</p>
+<blockquote class="callout calc">🧮 <strong>一步步算：算比特翻转的 $J$（取 $p=\tfrac14$）。</strong> 用逐块配方。注意 $X\ketbra00 X=\ketbra11$、$X\ketbra11 X=\ketbra00$、$X\ketbra01 X=\ketbra10$。四个块： $$\mathcal{E}(\ketbra00)=(1-p)\ketbra00+p\ketbra11=\begin{pmatrix}1-p&amp;0\\0&amp;p\end{pmatrix},\quad \mathcal{E}(\ketbra11)=\begin{pmatrix}p&amp;0\\0&amp;1-p\end{pmatrix},$$ $$\mathcal{E}(\ketbra01)=\begin{pmatrix}0&amp;1-p\\p&amp;0\end{pmatrix},\quad \mathcal{E}(\ketbra10)=\begin{pmatrix}0&amp;p\\1-p&amp;0\end{pmatrix}.$$ 拼成 $4\times4$： $$J=\begin{pmatrix}1-p&amp;0&amp;0&amp;1-p\\0&amp;p&amp;p&amp;0\\0&amp;p&amp;p&amp;0\\1-p&amp;0&amp;0&amp;1-p\end{pmatrix}.$$ 代 $p=\tfrac14$：$J=\begin{pmatrix}3/4&amp;0&amp;0&amp;3/4\\0&amp;1/4&amp;1/4&amp;0\\0&amp;1/4&amp;1/4&amp;0\\3/4&amp;0&amp;0&amp;3/4\end{pmatrix}$。它的本征值是 $\{\tfrac32,\tfrac12,0,0\}$——全 $\ge0$，所以信道是 CP（合法）；<strong>两个非零本征值</strong>预示比特翻转只需 2 个 Kraus 算符。这个 $J$ 正是下一节谱分解的输入。</blockquote>
+<hr></section>
+<section id="s4"><h2>4.（8.2）从蔡氏矩阵到 Kraus：对矩阵做"分解"还原出算子</h2>
+<p>蔡氏矩阵 $J$ 是半正定的，所以能做<strong>谱分解</strong>，每个本征对都能还原出一个 Kraus 算符。</p>
+<blockquote class="callout purpose">🎯 <strong>用来干嘛：</strong> Kraus 算符是信道<strong>最好用的一种写法</strong>——一组矩阵 $\{E_k\}$，把噪声拆成"可能发生的几种操作"（如"什么都没坏"分支、"翻转了"分支）。算噪声后的态、上数值模拟、推纠错条件，都直接用 $\mathcal{E}(\rho)=\sum_k E_k\rho E_k^\dagger$ 这个式子。</blockquote>
+<blockquote class="callout review">📖 <strong>补基础：谱分解（本征值分解）。</strong> 对一个厄米矩阵 $J$，总能找到一组<strong>正交的单位本征向量</strong> $\ket{v_k}$ 和对应的实<strong>本征值</strong> $\lambda_k$（满足 $J\ket{v_k}=\lambda_k\ket{v_k}$），并把 $J$ 写成 $$J=\sum_k \lambda_k\,\ketbra{v_k}{v_k}.$$ 这叫谱分解。若 $J$ 还半正定，则所有 $\lambda_k\ge0$，可以开方 $\sqrt{\lambda_k}$。直觉上：谱分解把一个复杂矩阵拆成几个"纯方向"$\ketbra{v_k}{v_k}$ 的加权叠加，权重就是本征值。</blockquote>
+<blockquote class="callout review">📖 <strong>补基础：向量化与 reshape（$\mathrm{mat}$）。</strong> 一个 $d\times d$ 矩阵有 $d^2$ 个元素，把它们排成一列就是长度 $d^2$ 的<strong>向量化</strong>；反过来，把长度 $d^2$ 的向量按行优先折回 $d\times d$ 矩阵，就是 $\mathrm{mat}(\cdot)$（reshape 的逆操作）。单 qubit（$d=2$）时： $$(a,b,c,d)^\top \;\xrightarrow{\ \mathrm{mat}\ }\; \begin{pmatrix}a&amp;b\\c&amp;d\end{pmatrix}.$$</blockquote>
+<p>谱分解 → Kraus 的公式：</p>
+<p>$$J = \sum_k \lambda_k \ketbra{v_k}{v_k}, \qquad E_k = \sqrt{\lambda_k}\,\cdot\,\mathrm{mat}(\ket{v_k})$$</p>
+<p>最终重建出 Kraus 表示：</p>
+<p>$$\mathcal{E}(\rho)=\sum_k E_k \rho E_k^\dagger, \qquad \sum_k E_k^\dagger E_k = I$$</p>
+<blockquote class="callout review">📖 <strong>补基础：$\sum_k E_k^\dagger E_k=I$ 是什么意思（保概率）。</strong> $E_k^\dagger$ 是 $E_k$ 的共轭转置。这个条件是"保迹（TP）"在 Kraus 写法下的样子，作用是<strong>保证总概率守恒</strong>：变换后 $\Tr(\mathcal{E}(\rho))=\Tr\big(\sum_k E_k\rho E_k^\dagger\big)=\Tr\big(\rho\sum_k E_k^\dagger E_k\big)=\Tr(\rho I)=\Tr(\rho)=1$（用到迹的循环性 $\Tr(AB)=\Tr(BA)$）。换句话说，各噪声分支的"概率"加起来必须正好是 1，不多不少。</blockquote>
+<blockquote class="callout calc">🧮 <strong>一步步算：接上节 $p=\tfrac14$ 的比特翻转 $J$。</strong> 它的两个非零本征对是 $\lambda_0=\tfrac32,\ \ket{v_0}=\tfrac{1}{\sqrt2}(1,0,0,1)^\top$ 和 $\lambda_1=\tfrac12,\ \ket{v_1}=\tfrac{1}{\sqrt2}(0,1,1,0)^\top$。先 $\mathrm{mat}$ 折成矩阵、再乘 $\sqrt{\lambda_k}$： $$E_0=\sqrt{\tfrac32}\cdot\tfrac{1}{\sqrt2}\begin{pmatrix}1&amp;0\\0&amp;1\end{pmatrix}=\tfrac{\sqrt3}{2}\,I,\qquad E_1=\sqrt{\tfrac12}\cdot\tfrac{1}{\sqrt2}\begin{pmatrix}0&amp;1\\1&amp;0\end{pmatrix}=\tfrac12\,X.$$ 正好是 $E_0=\sqrt{1-p}\,I=\sqrt{3/4}\,I$、$E_1=\sqrt{p}\,X=\sqrt{1/4}\,X$。验证保迹：$E_0^\dagger E_0+E_1^\dagger E_1=\tfrac34 I+\tfrac14 I=I$。✓ 一条龙跑通了 <strong>信道 → 蔡氏矩阵 → 谱分解 → Kraus</strong>。</blockquote>
+<blockquote class="callout intuition">💭 <strong>直觉：</strong> Kraus 表示 $\sum_k E_k\rho E_k^\dagger$ 像"概率性地从一组分支算子里挑一个作用在态上，再把所有分支结果叠加"。每个 $E_k$ 是一种可能发生的噪声操作，本征值 $\lambda_k$ 决定它的权重。$\mathrm{mat}(\cdot)$ 这步就是 <code>reshape(vec,(d,d))</code>，把打包的大矩阵拆回一组算子——8.1 是序列化，8.2 是反序列化。</blockquote>
+<p>关于本征值还有几个要点：</p>
+<ul><li><strong>非零本征值的个数 = Kraus 秩</strong>：即最少需要几个 Kraus 算符。$\lambda_k=0$ 的方向不贡献算子。</li><li><strong>Kraus 表示不唯一</strong>：另一组 $\{F_j\}$ 等价于 $\{E_k\}$，当且仅当差一个幺正混合 $F_j=\sum_k u_{jk}E_k$。谱分解只给出其中一组（正交规范那组）。</li></ul>
+<blockquote class="callout mistake">⚠️ <strong>常见错误：</strong> ① 别以为 Kraus 算符唯一——同一信道有无穷多组等价 Kraus，彼此差一个幺正变换 $u$，物理上完全一样。② $\mathrm{mat}$ 时行/列约定搞反，会得到转置的 Kraus，结果就错了。</blockquote>
+<hr></section>
+<section id="s5"><h2>5.（8.3）几种典型信道：Kraus 算符 + Bloch 球上的仿射变换</h2>
+<p>单 qubit 信道有个直观的几何描述：任何单 qubit 态都对应 Bloch 球里的一个向量 $\vec r$，信道的作用就是对这个向量做<strong>仿射变换</strong> $\vec r\mapsto M\vec r+\vec c$。</p>
+<blockquote class="callout purpose">🎯 <strong>用来干嘛：</strong> 这几种典型信道是把现实噪声"建模成标准零件"——<strong>比特翻转</strong>模拟"比特被随机翻"（经典也有的错），<strong>振幅阻尼</strong>模拟"激发态自发掉到基态、放出光子"的能量耗散（真实超导/光子硬件的主要错误）。知道硬件主要是哪种噪声，才能对症设计纠错码。</blockquote>
+<blockquote class="callout review">📖 <strong>补基础：Bloch 向量与仿射变换。</strong> 任何单 qubit 密度矩阵都能写成 $\rho=\tfrac12(I+r_x X+r_y Y+r_z Z)$，其中 $\vec r=(r_x,r_y,r_z)$ 是一个 $3$ 维实向量，叫 <strong>Bloch 向量</strong>：纯态在单位球面上（$\lvert\vec r\rvert=1$），混合态在球内部，球心 $\vec r=\vec 0$ 就是最大混合态 $I/2$。<strong>仿射变换</strong> $\vec r\mapsto M\vec r+\vec c$＝先用矩阵 $M$ 做线性变换（缩放/旋转），再加一个平移 $\vec c$——就是 3D 图形里那种"先转再挪"。</blockquote>
+<p>$$\vec r \;\mapsto\; M\vec r + \vec c$$</p>
+<blockquote class="callout intuition">💭 <strong>直觉：</strong> 可逆的纯门只会<strong>旋转</strong>球（$M$ 是旋转、不缩小），而带噪声的信道会把球<strong>压扁</strong>（信息丢失），有时还整体挪位（$\vec c\ne0$）。</blockquote>
+<blockquote class="callout calc">🧮 <strong>一步步算：对角 $M$ 是逐坐标缩放。</strong> 表里 $M$ 都是对角阵 $\mathrm{diag}(m_x,m_y,m_z)$，所以 $\vec r=(r_x,r_y,r_z)$ 的每个分量各乘一个因子：$r_x\to m_x r_x$ 等。某个 $m\approx0$ 表示那根轴被压扁（对应方向的相干/信息几乎全丢），$m=1$ 表示该轴不受影响。$\vec c\ne0$ 意味着球心被搬离原点，只有"有能量定向流失"的信道（振幅阻尼）才会发生。</blockquote>
+<p>下面是几种典型信道的两种描述（$p$ 是出错概率，$\gamma$ 是阻尼率）：</p>
+<table><thead><tr><th>信道</th><th>Kraus 算符</th><th>$M=\mathrm{diag}(\cdot)$</th><th>$\vec c$</th></tr></thead><tbody><tr><td>比特翻转</td><td>$\sqrt{1-p}\,I,\ \sqrt{p}\,X$</td><td>$(1,\ 1-2p,\ 1-2p)$</td><td>$0$</td></tr><tr><td>相位翻转</td><td>$\sqrt{1-p}\,I,\ \sqrt{p}\,Z$</td><td>$(1-2p,\ 1-2p,\ 1)$</td><td>$0$</td></tr><tr><td>比特-相位翻转</td><td>$\sqrt{1-p}\,I,\ \sqrt{p}\,Y$</td><td>—</td><td>$0$</td></tr><tr><td>去极化</td><td>$\sqrt{1-3p/4}\,I,\ \sqrt{p/4}\,X,\ \sqrt{p/4}\,Y,\ \sqrt{p/4}\,Z$</td><td>$(1-p,\ 1-p,\ 1-p)$</td><td>$0$</td></tr><tr><td>振幅阻尼</td><td>$\begin{pmatrix}1&amp;0\\0&amp;\sqrt{1-\gamma}\end{pmatrix},\ \begin{pmatrix}0&amp;\sqrt{\gamma}\\0&amp;0\end{pmatrix}$</td><td>$(\sqrt{1-\gamma},\ \sqrt{1-\gamma},\ 1-\gamma)$</td><td>$(0,0,\gamma)$</td></tr></tbody></table>
+<p>逐条说这些信道在干嘛：</p>
+<ul><li><strong>比特翻转</strong>：以概率 $p$ 翻转 $\ket0\leftrightarrow\ket1$（施加 $X$），沿 $y,z$ 轴压缩。</li><li><strong>相位翻转 / 相位阻尼</strong>：只破坏相位（施加 $Z$），衰减相干项（密度矩阵的非对角元），沿 $x,y$ 轴压缩、$z$ 不变。</li><li><strong>去极化</strong>：以概率 $p$ 把态彻底打乱成最大混合态，Bloch 球<strong>各向同性</strong>地朝球心缩。</li><li><strong>振幅阻尼</strong>：描述能量耗散 $\ket1\to\ket0$（如自发辐射），球收缩<strong>并向北极 $\ket0$ 平移</strong>。</li></ul>
+<blockquote class="callout calc">🧮 <strong>一步步算：比特翻转 $p=\tfrac14$ 作用到 $\rho=\ketbra00=\begin{pmatrix}1&amp;0\\0&amp;0\end{pmatrix}$。</strong> 用 $\mathcal{E}(\rho)=(1-p)\rho+pX\rho X$，其中 $X\rho X=\ketbra11=\begin{pmatrix}0&amp;0\\0&amp;1\end{pmatrix}$： $$\mathcal{E}(\rho)=\tfrac34\begin{pmatrix}1&amp;0\\0&amp;0\end{pmatrix}+\tfrac14\begin{pmatrix}0&amp;0\\0&amp;1\end{pmatrix}=\begin{pmatrix}3/4&amp;0\\0&amp;1/4\end{pmatrix}.$$ 即有 $\tfrac14$ 的概率被翻到 $\ket1$。再用 Bloch 描述对照：$\ket0$ 的 $\vec r=(0,0,1)$，比特翻转 $M=\mathrm{diag}(1,1-2p,1-2p)$，代 $p=\tfrac14$ 得 $M=\mathrm{diag}(1,\tfrac12,\tfrac12)$，$\vec c=0$： $$\vec r\,'=M\vec r+\vec c=(0,\ 0,\ \tfrac12).$$ 换回密度矩阵，对角元 $=\tfrac{1\pm r_z'}{2}=\tfrac{1\pm 1/2}{2}=\{\tfrac34,\tfrac14\}$。✓ 与直接算 $\mathcal{E}(\rho)$ 一致。</blockquote>
+<p>振幅阻尼的两个 Kraus 算符值得单独看：</p>
+<p>$$E_0^{\text{amp}}=\begin{pmatrix}1&amp;0\\0&amp;\sqrt{1-\gamma}\end{pmatrix}, \qquad E_1^{\text{amp}}=\begin{pmatrix}0&amp;\sqrt{\gamma}\\0&amp;0\end{pmatrix}$$</p>
+<blockquote class="callout calc">🧮 <strong>一步步算：逐元素读这两个算符。</strong> 把它们当成作用在列向量 $\begin{pmatrix}c_0\\c_1\end{pmatrix}$（$c_0$ 是 $\ket0$ 振幅、$c_1$ 是 $\ket1$ 振幅）上的矩阵： - $E_0$ 的 $(0,0)=1$：$\ket0$ 分量原封不动（基态不会自发往上跳）；$(1,1)=\sqrt{1-\gamma}$：$\ket1$ 分量打了个 $\sqrt{1-\gamma}$ 折扣（有概率衰减掉）。两个对角元、非对角全 0，说明这分支只做幅度缩放、不混合 $\ket0\ket1$。 - $E_1$ 只有 $(0,1)=\sqrt{\gamma}$ 一个非零元：把输入的 $\ket1$ 分量（第 2 列）搬到输出的 $\ket0$ 分量（第 1 行），振幅 $\sqrt{\gamma}$——这就是"激发态掉到基态、放出一个光子"的跃迁。第 1 列全 0 表示 $\ket0$ 不会触发这个分支。</blockquote>
+<blockquote class="callout calc">🧮 <strong>一步步算：振幅阻尼 $\gamma=\tfrac12$ 作用到激发态 $\rho=\ketbra11=\begin{pmatrix}0&amp;0\\0&amp;1\end{pmatrix}$。</strong> 算 $\sum_k E_k\rho E_k^\dagger$： $$E_0\rho E_0^\dagger=\begin{pmatrix}1&amp;0\\0&amp;\sqrt{1-\gamma}\end{pmatrix}\begin{pmatrix}0&amp;0\\0&amp;1\end{pmatrix}\begin{pmatrix}1&amp;0\\0&amp;\sqrt{1-\gamma}\end{pmatrix}=\begin{pmatrix}0&amp;0\\0&amp;1-\gamma\end{pmatrix},$$ $$E_1\rho E_1^\dagger=\begin{pmatrix}0&amp;\sqrt{\gamma}\\0&amp;0\end{pmatrix}\begin{pmatrix}0&amp;0\\0&amp;1\end{pmatrix}\begin{pmatrix}0&amp;0\\\sqrt{\gamma}&amp;0\end{pmatrix}=\begin{pmatrix}\gamma&amp;0\\0&amp;0\end{pmatrix}.$$ 相加得 $\mathcal{E}(\rho)=\begin{pmatrix}\gamma&amp;0\\0&amp;1-\gamma\end{pmatrix}$。代 $\gamma=\tfrac12$ 得 $\begin{pmatrix}1/2&amp;0\\0&amp;1/2\end{pmatrix}=I/2$——一半布居衰减到 $\ket0$，纯 $\ket1$ 变成了最大混合态。用 Bloch 对照也一致：$\ket1$ 的 $\vec r=(0,0,-1)$，代 $M=\mathrm{diag}(\sqrt{1-\gamma},\sqrt{1-\gamma},1-\gamma)$、$\vec c=(0,0,\gamma)$ 得 $\vec r\,'=(0,0,(1-\gamma)(-1)+\gamma)=(0,0,2\gamma-1)$，$\gamma=\tfrac12$ 时为 $(0,0,0)$＝球心＝$I/2$。✓ 再验证保迹 $\sum_k E_k^\dagger E_k=I$：$E_0^\dagger E_0=\begin{pmatrix}1&amp;0\\0&amp;1-\gamma\end{pmatrix}$，$E_1^\dagger E_1=\begin{pmatrix}0&amp;0\\0&amp;\gamma\end{pmatrix}$，相加 $=I$。✓ 对任意 $\gamma$ 都成立。</blockquote>
+<blockquote class="callout mistake">⚠️ <strong>常见错误：</strong> 别把相位阻尼和振幅阻尼搞混。<strong>相位阻尼</strong> $\vec c=0$，只退相干、不丢能量（它和相位翻转效果一样，都只衰减相干项、不改变对角布居）；<strong>振幅阻尼</strong> $\vec c\ne0$，会耗能并把球往 $\ket0$ 拽——它是表里唯一带非零平移的信道。</blockquote>
+<blockquote class="callout summary">✅ <strong>小结：</strong> 去极化＝各向同性缩球（$\vec c=0$）；振幅阻尼＝缩球＋朝 $\ket0$ 平移（$\vec c\ne0$）。看到 $\vec c\ne0$ 基本就是有能量流失的过程。</blockquote>
+<hr></section>
+<section id="s6"><h2>6.（8.4）算例与验证：把流程跑一遍并核对结果</h2>
+<p>这一节把前面的转换流程套到具体信道上，做了几类练习和一个数值验证：</p>
+<ul><li><strong>算例 1–3</strong>：给定若干单 qubit 信道（或它们的蔡氏矩阵），按 8.2 流程谱分解，求出各自的 Kraus 算符组，并核验保迹 $\sum_k E_k^\dagger E_k=I$。</li><li><strong>算例 4：换基底展开 Kraus</strong>。和算例 1 是<strong>同一个信道</strong>，但把 Kraus 写在另一组算符基下，验证 Kraus 表示的非唯一性。</li><li><strong>检验式（transfer matrix / 展平）</strong>：核验把信道"展平"成矩阵的向量化变换式，结果和直接计算一致。</li></ul>
+<p>$$F_j = \sum_k u_{jk}\,E_k \quad(u\ \text{幺正}) \;\Longrightarrow\; \{F_j\}\ \text{与}\ \{E_k\}\ \text{描述同一信道}$$</p>
+<blockquote class="callout intuition">💭 <strong>直觉：</strong> 换基底展开 Kraus 就像把同一份数据从一种编码转成另一种——字节变了，内容没变。不同的幺正 $u$ 给出不同"编码"，但解码出来的信道完全一样。</blockquote>
+<p><strong>扰动量子纠错（Perturbative QEC）验证。</strong> 用上面这套信道 / Kraus 工具，数值检验某篇扰动量子纠错工作里公式 (18) 与公式 (20) 是否等价。笔记记录的结论是：<strong>数值验证通过</strong>——两式在所测参数下给出一致结果。</p>
+<blockquote class="callout summary">✅ <strong>小结：</strong> 这章的工具不只是理论摆设——它能把"两个看起来不一样的纠错公式是否相等"这种问题，变成"算出两个矩阵/数值比一比"的可执行检验。</blockquote>
+<hr></section>
+<section id="s7"><h2>一句话总览</h2>
+<blockquote class="callout summary">✅ <strong>小结：</strong> 量子信道＝作用在密度矩阵上的有损变换 $\mathcal{E}(\rho)$；它有三种可互转的写法（信道 / Kraus / 蔡氏矩阵），主线转换是 <strong>信道 →(喂最大纠缠态)→ 蔡氏矩阵 →(谱分解)→ Kraus</strong>；单 qubit 时还能看成 Bloch 球上的仿射变换 $\vec r\mapsto M\vec r+\vec c$，球缩水就是信息在丢。</blockquote>
+<blockquote class="callout mistake">⚠️ <strong>范围说明：</strong> 本文忠实于第八章补充笔记的范围与结论。具体的矩阵数值、谱分解结果、QEC 公式 (18)/(20) 的完整表达式与验证代码未在文本层完整保留，精确细节请参阅原书第 8 章与原笔记。</blockquote></section>
+</main>
+</div>
+<script>
+const toggle=document.getElementById('themeToggle');
+const saved=localStorage.getItem('qcqi-theme');
+if(saved)document.documentElement.setAttribute('data-theme',saved);
+toggle&&toggle.addEventListener('click',()=>{
+ const cur=document.documentElement.getAttribute('data-theme')==='light'?'':'light';
+ document.documentElement.setAttribute('data-theme',cur);
+ localStorage.setItem('qcqi-theme',cur);
+});
+const links=[...document.querySelectorAll('.nav a')];
+const secs=[...document.querySelectorAll('section[id]')];
+const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){
+ links.forEach(l=>l.classList.toggle('active',l.getAttribute('href')==='#'+e.target.id));}})},
+ {rootMargin:'-10% 0px -80% 0px'});
+secs.forEach(s=>obs.observe(s));
+const box=document.getElementById('search');
+box&&box.addEventListener('input',()=>{const q=box.value.trim().toLowerCase();
+ links.forEach(l=>l.classList.toggle('hidden',q&&!l.textContent.toLowerCase().includes(q)));});
+</script>
+</body>
+</html>

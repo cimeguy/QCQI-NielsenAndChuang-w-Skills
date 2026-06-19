@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>第六章 · 量子搜索 (Grover) · 大学生版 · QCQI</title>
+<style>
+:root{--bg:#f4f7fb;--panel:#fff;--panel2:#eaf0f8;--fg:#1c2733;--muted:#64748b;
+--accent:#2563eb;--accent2:#0891b2;--border:#d7e1ee;--code:#eef3f9;--th:#e6eef8;
+--purpose:#ea580c;--purposebg:#fff5ec;
+--review:#7c3aed;--reviewbg:#f5f1ff;--calc:#0891b2;--calcbg:#ecfbfd;
+--intuition:#2563eb;--intuitionbg:#eef4ff;--mistake:#dc2626;--mistakebg:#fef2f2;
+--summary:#15803d;--summarybg:#ecfdf3;}
+[data-theme=dark]{--bg:#0d1320;--panel:#161f30;--panel2:#121a29;--fg:#e3eaf3;--muted:#8595a8;
+--accent:#60a5fa;--accent2:#22d3ee;--border:#27344a;--code:#16203200;--th:#1a2538;
+--purposebg:#2a1709;
+--reviewbg:#1f1633;--calcbg:#0a2730;--intuitionbg:#10203b;--mistakebg:#2a1414;--summarybg:#0f2417;}
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,"PingFang SC","Microsoft YaHei",Segoe UI,system-ui,sans-serif;
+background:var(--bg);color:var(--fg);line-height:1.9;font-size:16px}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+.layout{display:flex;min-height:100vh}
+.sidebar{width:300px;flex:0 0 300px;background:var(--panel2);border-right:1px solid var(--border);
+position:sticky;top:0;height:100vh;overflow-y:auto;padding:20px 0}
+.sidebar h2{font-size:14px;margin:0 18px 6px;color:var(--muted);font-weight:600}
+.brand{padding:0 18px 14px;border-bottom:1px solid var(--border);margin-bottom:12px}
+.brand .t{font-size:18px;font-weight:800}
+.brand .s{font-size:12.5px;color:var(--muted);margin-top:3px}
+.search{margin:0 14px 12px;width:calc(100% - 28px);padding:9px 11px;border-radius:9px;
+border:1px solid var(--border);background:var(--panel);color:var(--fg);font-size:13px}
+.nav a{display:block;padding:6px 18px;color:var(--fg);font-size:13.5px;border-left:3px solid transparent}
+.nav a:hover{background:var(--panel);text-decoration:none}
+.nav a.active{border-left-color:var(--accent);background:var(--panel);color:var(--accent)}
+.nav a.hidden{display:none}
+.main{flex:1;min-width:0;padding:34px 52px 90px;max-width:920px}
+.topbar{display:flex;align-items:center;gap:14px;margin-bottom:8px;flex-wrap:wrap}
+.topbar .home{font-size:13px;color:var(--muted)}
+.toggle{margin-left:auto;cursor:pointer;border:1px solid var(--border);background:var(--panel);
+color:var(--fg);border-radius:8px;padding:6px 12px;font-size:13px}
+section{scroll-margin-top:20px;padding:16px 0;border-bottom:1px solid var(--border)}
+h1{font-size:28px;margin:.2em 0 .5em;line-height:1.3}
+h2{font-size:21px;margin:1.1em 0 .5em;color:var(--accent)}
+h3{font-size:17px;margin:1em 0 .4em;color:var(--accent2)}h4{font-size:15.5px;margin:.9em 0 .3em}
+code{background:var(--code);padding:1.5px 6px;border-radius:5px;font-size:.9em;
+font-family:"SF Mono",Menlo,Consolas,monospace}
+pre{background:var(--code);padding:14px 16px;border-radius:10px;overflow-x:auto;border:1px solid var(--border)}
+pre code{background:none;padding:0}
+table{border-collapse:collapse;width:100%;margin:12px 0;font-size:14px;border-radius:8px;overflow:hidden}
+th,td{border:1px solid var(--border);padding:7px 11px;text-align:left;vertical-align:top}
+th{background:var(--th);font-weight:600}
+ul,ol{padding-left:24px}li{margin:4px 0}
+hr{border:none;border-top:1px dashed var(--border);margin:16px 0}
+blockquote{border-left:4px solid var(--accent2);margin:12px 0;padding:8px 16px;color:var(--muted);
+background:var(--panel);border-radius:0 8px 8px 0}
+blockquote.callout{border-left-width:5px;border-radius:10px;padding:12px 18px;color:var(--fg);
+margin:14px 0;font-size:15px}
+blockquote.callout.review{border-left-color:var(--review);background:var(--reviewbg)}
+blockquote.callout.purpose{border-left-color:var(--purpose);background:var(--purposebg)}
+blockquote.callout.calc{border-left-color:var(--calc);background:var(--calcbg)}
+blockquote.callout.intuition{border-left-color:var(--intuition);background:var(--intuitionbg)}
+blockquote.callout.mistake{border-left-color:var(--mistake);background:var(--mistakebg)}
+blockquote.callout.summary{border-left-color:var(--summary);background:var(--summarybg);font-weight:600}
+.legend{display:flex;gap:10px;flex-wrap:wrap;margin:6px 0 18px;font-size:12.5px;color:var(--muted)}
+.legend span{background:var(--panel);border:1px solid var(--border);border-radius:20px;padding:3px 11px}
+.badge{display:inline-block;background:var(--accent);color:#fff;border-radius:6px;padding:2px 9px;font-size:12px;font-weight:700}
+@media(max-width:820px){.sidebar{display:none}.main{padding:24px 18px}}
+</style>
+<script>
+window.MathJax={
+ tex:{
+  inlineMath:[['$','$'],['\\(','\\)']],
+  displayMath:[['$$','$$'],['\\[','\\]']],
+  macros:{
+   ket:['{\\lvert #1\\rangle}',1],
+   bra:['{\\langle #1\\rvert}',1],
+   braket:['{\\langle #1\\vert #2\\rangle}',2],
+   ketbra:['{\\lvert #1\\rangle\\langle #2\\rvert}',2],
+   Tr:'{\\operatorname{Tr}}',
+   tr:'{\\operatorname{tr}}'
+  }
+ },
+ svg:{fontCache:'global'},
+ options:{skipHtmlTags:['script','style','textarea','pre','code'],ignoreHtmlClass:'viz'}
+};
+</script>
+<script src="../vendor/tex-svg.js" id="MathJax-script" async></script>
+</head>
+<body>
+<div class="layout">
+<aside class="sidebar">
+<div class="brand"><div class="t">QCQI · 大学生版</div><div class="s">第六章 · 量子搜索 (Grover)</div></div>
+<input class="search" id="search" placeholder="过滤小节…">
+<nav class="nav">
+<a href="../student.html" style="color:var(--muted)">← 返回大学生版门户</a>
+<a href="explained.html" style="color:var(--muted)">🗣️ 看人话版</a>
+<a href="index.html" style="color:var(--muted)">≡ 看公式精简版</a>
+<a href="#s0">导读</a>
+<a href="#s1">6.1 搜索问题与预言机</a>
+<a href="#s2">6.2 Grover 算法流程</a>
+<a href="#s3">6.3 几何意义：其实是平面里转圈</a>
+<a href="#s4">6.4 成功概率与最优迭代次数</a>
+<a href="#s5">6.5 启发式推导：Grover 迭代从哪冒出来的</a>
+<a href="#s6">一句话总结</a>
+</nav></aside>
+<main class="main">
+<div class="topbar"><span class="badge">大学生版</span><span class="home">第六章 · 量子搜索 (Grover)</span><button class="toggle" id="themeToggle">🌓 深/浅色</button></div>
+<div class="legend"><span>🎯 用来干嘛</span><span>📖 补基础</span><span>🧮 一步步算</span><span>💭 直觉</span><span>⚠️ 常见错误</span><span>✅ 小结</span></div>
+<section id="s0"><h1>第六章 量子搜索算法（Grover）· 大学生版</h1>
+<h2>导读</h2>
+<p>这一章讲一个最朴素的问题：<strong>在一堆没有排序、没有索引的东西里，找出符合条件的那一个</strong>。经典做法只能挨个试，平均看一半、最坏看完全部，复杂度 $O(N)$。Grover 算法用量子叠加把它降到了 $O(\sqrt{N})$——$100$ 万个元素，经典约要试 $50$ 万次，Grover 只要约 $1000$ 次。</p>
+<p>整章其实只用到几块你应该学过、但可能没学牢的数学：<strong>振幅与概率的关系（概率＝振幅的模平方）</strong>、<strong>求一组数的平均值</strong>、<strong>二维平面里的向量</strong>、<strong>旋转矩阵</strong>、<strong>镜像反射</strong>、<strong>正弦余弦与角度</strong>。我们每用到一处就当场补清楚，再代具体小数字把每一步算给你看。最反直觉的一点放在最后：<strong>Grover 转过头反而更差</strong>，所以迭代次数必须卡准。</p>
+<blockquote class="callout intuition">💭 <strong>直觉：</strong> 把所有候选答案"全摊开"成等权重的叠加，然后反复做一个动作——给命中项打负号、再把所有振幅关于平均值翻一下。命中项每翻一次就被抬高一点，非命中被压低一点。转够次数后测量，大概率读到答案。</blockquote>
+<hr></section>
+<section id="s1"><h2>6.1 搜索问题与预言机</h2>
+<p>大白话：你有一个长度 $N=2^n$ 的"数组"，里面有 $M$ 个元素满足某条件。你手里有个判定函数 $f(x)$，命中返回 $1$、否则返回 $0$。任务是找出任意一个命中项。数组没排序、没索引，经典只能一个个调 $f$，最坏 $O(N)$ 次。量子里把这个判定黑盒叫做<strong>预言机（oracle）</strong>。</p>
+<blockquote class="callout purpose">🎯 <strong>用来干嘛：</strong> 这是 Grover 要解决的实际问题——在一堆没建索引、没排序的数据里，找出满足某条件的那一个（比如"哪个口令能解开这把锁""哪组取值让方程成立"）。经典只能挨个试、平均看一半，Grover 把它压到约 $\sqrt N$ 次。<strong>预言机就是那个"只会回答 yes/no"的判定黑盒</strong>，是搜索唯一能用的接口。</blockquote>
+<blockquote class="callout review">📖 <strong>补基础：振幅与概率是什么关系。</strong> 一个 $n$ 比特量子态可以写成 $N=2^n$ 个基态的加权和 $\ket{\psi}=\sum_x a_x\ket{x}$，每个系数 $a_x$ 叫<strong>振幅</strong>（可以是负数甚至复数）。测量时读到结果 $x$ 的<strong>概率等于振幅的模平方</strong> $\lvert a_x\rvert^2$。例如 $N=4$、振幅为 $(\tfrac12,\tfrac12,\tfrac12,\tfrac12)$ 时，每个结果概率 $(\tfrac12)^2=\tfrac14$，四个加起来 $4\times\tfrac14=1$（概率必须和为 1，这叫归一化）。<strong>关键点：把某个振幅从 $+\tfrac12$ 变成 $-\tfrac12$，模平方还是 $\tfrac14$，概率没变——负号"藏"在振幅里，光测量看不出来。</strong> Grover 正是利用这个看不见的负号。</blockquote>
+<p>预言机有两种封装方式。</p>
+<p><strong>① 布尔预言机</strong>：用一个辅助比特 $q$ 把判定结果"异或"进去：</p>
+<p>$$U_f\ket{x}\ket{q} = \ket{x}\ket{q\oplus f(x)}$$</p>
+<ul><li>$\ket{x}$：输入寄存器，$n$ 个比特，编码要查的 $x$。</li><li>$\ket{q}$：辅助比特，初始置 $0$，运算后变成 $q\oplus f(x)$，相当于把"命中/不命中"记在这一位。</li><li>$\oplus$：异或；$q=0$ 时结果就是 $f(x)$。</li></ul>
+<p><strong>② 相位翻转预言机</strong>：不写辅助位，直接给命中项的量子态"打个负号":</p>
+<p>$$O\ket{x} = (-1)^{f(x)}\ket{x}$$</p>
+<ul><li>命中（$f(x)=1$）：振幅乘 $-1$；未命中（$f(x)=0$）：乘 $+1$（不变）。</li></ul>
+<blockquote class="callout review">📖 <strong>补基础：$\ketbra{x_0}{x_0}$ 和对角矩阵。</strong> 记号 $\ketbra{x_0}{x_0}$ 表示"列向量 $\ket{x_0}$ 乘行向量 $\bra{x_0}$"，结果是一个矩阵：它在第 $x_0$ 个对角位置是 $1$、其余全 $0$（一个<strong>投影矩阵</strong>，把任意向量投到 $\ket{x_0}$ 方向）。<strong>对角矩阵</strong> $\mathrm{diag}(d_0,\dots,d_{N-1})$ 是只有对角线非零的矩阵，它乘一个向量时只是把第 $i$ 个分量缩放 $d_i$ 倍，分量之间不混合。</blockquote>
+<blockquote class="callout calc">🧮 <strong>一步步算：把 $O$ 写成矩阵。</strong> 设唯一解 $x_0$，则 $O = I - 2\ketbra{x_0}{x_0}$。$I$ 是单位阵（对角全 $1$），$2\ketbra{x_0}{x_0}$ 只在第 $x_0$ 个对角位是 $2$。两者相减：第 $x_0$ 位是 $1-2=-1$，其余对角位是 $1-0=1$。所以 $O=\mathrm{diag}(1,\dots,1,\underbrace{-1}_{x_0},1,\dots,1)$——<strong>只把目标那一格变号，其余原样放行</strong>，正是"只给命中项打负号"。</blockquote>
+<blockquote class="callout calc">🧮 <strong>一步步算：$N=4$、$x_0=\ket{10}$（下标 2）。</strong> 此时 $O=\mathrm{diag}(1,1,-1,1)$。作用在均匀叠加 $\tfrac12(\ket{00}+\ket{01}+\ket{10}+\ket{11})$，即振幅向量 $(\tfrac12,\tfrac12,\tfrac12,\tfrac12)$ 上：只有下标 2 翻号 → $(\tfrac12,\tfrac12,-\tfrac12,\tfrac12)$。注意每个振幅模长仍是 $\tfrac12$，此刻直接测量四个结果概率仍各 $\tfrac14$，负号藏在相位里。</blockquote>
+<p><strong>怎么从布尔变成相位翻转</strong>：把辅助比特置成 $\ket{-}=\tfrac{1}{\sqrt2}(\ket{0}-\ket{1})$，再作用 $U_f$，会发生"相位回踢"：</p>
+<p>$$\ket{x}\ket{-} \xrightarrow{U_f} (-1)^{f(x)}\ket{x}\ket{-}$$</p>
+<p>负号从辅助比特"踢"回了 $\ket{x}$ 上，辅助比特自己没变（解耦了），于是 $U_f$ 等效成相位翻转 $O$。</p>
+<blockquote class="callout summary">✅ <strong>小结：</strong> 布尔预言机用辅助位记结果；相位翻转预言机给命中项打 $-1$。靠"辅助位置 $\ket{-}$＋相位回踢"互相转换。Grover 真正用的是相位翻转版 $O=I-2\ketbra{x_0}{x_0}$。</blockquote>
+<hr></section>
+<section id="s2"><h2>6.2 Grover 算法流程</h2>
+<p>大白话：从"所有可能性各占一份"的均匀叠加出发，反复施加一个叫 Grover 迭代 $G$ 的操作，每作用一次，命中项的振幅就被放大一点。约 $(\pi/4)\sqrt{N/M}$ 次后测量，大概率读到一个解。</p>
+<blockquote class="callout purpose">🎯 <strong>用来干嘛：</strong> Grover 迭代是整个算法的"引擎"——它一次次把命中项的振幅抬高、把非命中压低，让原本人人 $1/N$ 的概率逐渐集中到答案身上，最后测量就能大概率读到解。它靠的就是 6.2 里那对动作：<strong>先给命中项打负号，再对均值翻转</strong>。</blockquote>
+<p>完整流程三步：</p>
+<ol><li><strong>初始化</strong>：$n$ 个比特置 $\ket{0}$，每个过一个 Hadamard 门 $H$，得到均匀叠加：</li></ol>
+<p>$$\ket{\psi} = H^{\otimes n}\ket{0} = \frac{1}{\sqrt{N}}\sum_{x}\ket{x}$$</p>
+<ol><li><strong>重复 Grover 迭代 $G$</strong> 约 $(\pi/4)\sqrt{N/M}$ 次。</li><li><strong>测量</strong> 输入寄存器，高概率得到一个解。</li></ol>
+<p>这里每个基态振幅都是 $\tfrac{1}{\sqrt N}$（共 $N$ 个，模平方加起来 $N\cdot\tfrac1N=1$，归一化正确）。</p>
+<p><strong>核心操作 Grover 迭代</strong>：</p>
+<p>$$G = (2\ketbra{\psi}{\psi} - I)\, O$$</p>
+<ul><li>$O$：相位翻转预言机，把解的振幅变负。</li><li>$2\ketbra{\psi}{\psi}-I$：关于均匀叠加态 $\ket{\psi}$ 的反射，俗称<strong>对均值翻转（inversion about the mean）</strong>。</li></ul>
+<blockquote class="callout review">📖 <strong>补基础：怎么求一组数的平均值。</strong> $n$ 个数 $a_0,\dots,a_{n-1}$ 的平均值是 $\bar a=\tfrac1n\sum_i a_i$（全加起来除以个数）。比如 $\tfrac12,\tfrac12,-\tfrac12,\tfrac12$ 这四个数：和是 $\tfrac12+\tfrac12-\tfrac12+\tfrac12=1$，平均 $\bar a=\tfrac14$。<strong>注意是除以 4 不是除以别的</strong>——下面的算例最容易在这里算错。</blockquote>
+<blockquote class="callout calc">🧮 <strong>一步步算：为什么 $2\ketbra{\psi}{\psi}-I$ 叫"对均值翻转"。</strong> 均匀叠加 $\ket\psi$ 每个分量是 $\tfrac{1}{\sqrt N}$，所以 $\ketbra{\psi}{\psi}$ 是一个<strong>所有元素都等于 $\tfrac1N$</strong> 的 $N\times N$ 矩阵。于是 $2\ketbra{\psi}{\psi}-I$ 的对角元为 $\tfrac2N-1$、非对角元为 $\tfrac2N$。把它作用到振幅向量 $(a_0,\dots,a_{N-1})$，第 $i$ 个分量变成 $$\sum_j \tfrac2N a_j - a_i = 2\bar a - a_i,$$ 其中 $\bar a$ 是平均值。也就是说<strong>每个振幅 $a_i$ 都被映成 $2\bar a-a_i$</strong>——这正是"关于均值 $\bar a$ 做镜像"：离均值多远，翻到对面就多远。</blockquote>
+<blockquote class="callout calc">🧮 <strong>一步步算：$N=4$ 一步命中（务必算对）。</strong> 唯一解 $x_0=\ket{10}$。 1. 初态均匀叠加振幅 $(\tfrac12,\tfrac12,\tfrac12,\tfrac12)$。 2. 预言机 $O$ 把解变号 → $(\tfrac12,\tfrac12,-\tfrac12,\tfrac12)$。 3. 对均值翻转：先求均值 $\bar a=\tfrac14(\tfrac12+\tfrac12-\tfrac12+\tfrac12)=\tfrac14$（<strong>是 $\tfrac14$，不是 $\tfrac18$</strong>）。每个分量映成 $2\bar a-a_i=\tfrac12-a_i$：三个非解 $\tfrac12-\tfrac12=0$，解 $\tfrac12-(-\tfrac12)=1$。 4. 结果 $(0,0,1,0)$——解的概率 $1^2=100\%$，仅一次迭代就确定命中。</blockquote>
+<blockquote class="callout mistake">⚠️ <strong>常见错误：</strong> 求均值时分母写错（$N=4$ 要除以 4，得 $\bar a=\tfrac14$，绝不是 $\tfrac18$）；以及忘了翻转公式是 $2\bar a-a_i$ 而不是 $\bar a-a_i$。这两处错了，整个算例就崩了。</blockquote>
+<blockquote class="callout summary">✅ <strong>小结：</strong> 一次 Grover 迭代＝两步：① $O$ 给命中项打负号；② 对均值翻转 $a_i\mapsto 2\bar a-a_i$。打了负号的命中项远低于均值，翻转后被抬高；非命中略低于均值，翻转后略降。每迭代只调用一次预言机，总查询 $O(\sqrt N)$，相比经典 $O(N)$ 是<strong>平方加速</strong>（不是指数加速，别夸大）。</blockquote>
+<hr></section>
+<section id="s3"><h2>6.3 几何意义：其实是平面里转圈</h2>
+<p>大白话：别看 Grover 在 $2^n$ 维的巨大空间里跑，整个过程其实只发生在一个<strong>二维平面</strong>内。画出来后，每次迭代就是朝目标方向转一个固定角度。</p>
+<blockquote class="callout purpose">🎯 <strong>用来干嘛：</strong> 这个几何视角是用来"看懂并掌控" Grover 的——把高维操作画成平面上的转圈后，一眼就明白为什么有最优迭代次数、为什么会"转过头"。算迭代次数 $R\approx(\pi/4)\sqrt{N/M}$ 正是从这个旋转角 $\theta$ 推出来的。</blockquote>
+<blockquote class="callout review">📖 <strong>补基础：二维平面里的向量、模长、单位向量、正交。</strong> 平面上的向量 $(x,y)$ 可以画成从原点出发的箭头。它的<strong>模长</strong>（长度）是 $\sqrt{x^2+y^2}$；模长为 $1$ 的叫<strong>单位向量</strong>。两个向量<strong>正交</strong>＝互相垂直＝点积 $x_1x_2+y_1y_2=0$（比如 $X$ 轴 $(1,0)$ 与 $Y$ 轴 $(0,1)$）。量子态正是一个单位向量（模长 1 对应"概率和为 1"），我们要找的就是用两根正交轴把它表示出来。</blockquote>
+<p>先定义平面的两根轴（两个正交的量子态）：</p>
+<ul><li>$\ket{\beta}$：所有 $M$ 个解的均匀叠加（<strong>解空间</strong>方向，当 $Y$ 轴）。</li><li>$\ket{\alpha}$：所有 $N-M$ 个非解的均匀叠加（<strong>非解空间</strong>方向，当 $X$ 轴）。</li></ul>
+<p>初态在这个平面里写成：</p>
+<p>$$\ket{\psi} = \sqrt{\frac{N-M}{N}}\,\ket{\alpha} + \sqrt{\frac{M}{N}}\,\ket{\beta}$$</p>
+<blockquote class="callout review">📖 <strong>补基础：正弦、余弦与夹角。</strong> 单位向量与 $X$ 轴夹角为 $\phi$ 时，它的坐标恰好是 $(\cos\phi,\sin\phi)$。$\cos$ 量"贴着 $X$ 轴的程度"、$\sin$ 量"翘向 $Y$ 轴的程度"。几个常用值：$\sin 0°=0,\ \sin30°=\tfrac12,\ \sin45°=\tfrac{\sqrt2}{2},\ \sin60°=\tfrac{\sqrt3}{2},\ \sin90°=1$；$\cos$ 反过来（$\cos0°=1,\ \cos90°=0$）。所以把初态写成 $\ket\psi=\cos\tfrac\theta2\ket\alpha+\sin\tfrac\theta2\ket\beta$，等价于说它与非解轴 $\ket\alpha$ 的夹角是 $\tfrac\theta2$，且 $\sin\tfrac\theta2=\sqrt{M/N}$。</blockquote>
+<blockquote class="callout intuition">💭 <strong>直觉：</strong> 想象一个几乎贴着 $X$ 轴的箭头，只翘起一丁点指向 $Y$ 轴——因为非解多、解少（$M\ll N$），初态几乎全在非解方向，离答案很远。我们的目标是把这个箭头一步步转到 $Y$ 轴（解轴 $\ket\beta$）上去。</blockquote>
+<blockquote class="callout review">📖 <strong>补基础：旋转矩阵和镜像反射。</strong> 二维平面里把向量逆时针转角度 $\theta$，就是乘旋转矩阵 $$R(\theta)=\begin{pmatrix}\cos\theta&amp;-\sin\theta\\\sin\theta&amp;\cos\theta\end{pmatrix}.$$ <strong>镜像反射</strong>则是关于某条过原点的直线把向量翻到对面（像照镜子），它会把"垂直于镜面"的分量取负、"平行于镜面"的分量保留。一个初中就有的几何事实：<strong>关于两条夹角为 $\phi$ 的镜子各反射一次，合起来等于旋转 $2\phi$。</strong> Grover 的两次反射正是这样合成出一次旋转。</blockquote>
+<p><strong>两次反射 = 一次旋转</strong>：</p>
+<ul><li>预言机 $O$ 是关于 $\ket{\alpha}$ 轴的反射（把 $\ket{\beta}$ 分量取负——回忆 6.1 它给解打负号）。</li><li>$2\ketbra{\psi}{\psi}-I$ 是关于 $\ket{\psi}$ 的反射。</li><li>两次反射复合，结果恰好是一次<strong>旋转</strong>，旋转角 $\theta$ 满足 $\sin\dfrac{\theta}{2}=\sqrt{\dfrac{M}{N}}$。</li></ul>
+<blockquote class="callout calc">🧮 <strong>一步步算：$N=4,\ M=1$。</strong> $\sin\tfrac\theta2=\sqrt{M/N}=\sqrt{\tfrac14}=\tfrac12$，由 $\sin30°=\tfrac12$ 得 $\tfrac\theta2=30°$，故 $\theta=60°$。初态与 $\ket\alpha$ 夹角 $30°$；作用一次 $G$ 转 $60°$，到 $30°+60°=90°$——正好落在解轴 $\ket\beta$ 上，一次迭代 $100\%$ 命中（和 6.2 的振幅算例完全一致）。代次数公式 $R\approx\tfrac\pi4\sqrt{N/M}=\tfrac\pi4\cdot2\approx1.57$，取整后最优正是 $1$ 次。</blockquote>
+<blockquote class="callout summary">✅ <strong>小结：</strong> 搜索只发生在 $\ket{\alpha}$（非解）和 $\ket{\beta}$（解）张成的二维平面里；$O$ 与"对均值翻转"各是一次反射；两者复合＝固定角 $\theta$ 的旋转，$\sin(\theta/2)=\sqrt{M/N}$。整个算法＝把那个几乎贴 $X$ 轴的箭头，以固定步长 $\theta$ 转向 $Y$ 轴。</blockquote>
+<hr></section>
+<section id="s4"><h2>6.4 成功概率与最优迭代次数</h2>
+<p>大白话：既然每次迭代固定转 $\theta$，那转多少次能正好转到解轴 $\ket{\beta}$？答案约 $(\pi/4)\sqrt{N/M}$ 次。这里有个和经典循环<strong>完全相反</strong>的坑：转过头了，箭头越过 $\ket{\beta}$ 继续转，成功概率反而下降。</p>
+<p>初态离 $\ket{\beta}$ 还差 $(\pi-\theta)/2\approx\pi/2$ 的角度（即 $90°$），每次转 $\theta$，所以需要的次数：</p>
+<p>$$R \approx \frac{\pi/2}{\theta} \approx \frac{\pi}{4}\sqrt{\frac{N}{M}}$$</p>
+<blockquote class="callout review">📖 <strong>补基础：弧度与角度，以及小角度近似。</strong> 角度也可用<strong>弧度</strong>度量：$180°=\pi$ 弧度，所以 $90°=\tfrac\pi2$、$60°=\tfrac\pi3$。当角 $\theta$ 很小时（弧度制），$\sin\theta\approx\theta$，于是由 $\sin\tfrac\theta2=\sqrt{M/N}$ 可得 $\tfrac\theta2\approx\sqrt{M/N}$，即 $\theta\approx2\sqrt{M/N}$。代入 $R\approx\dfrac{\pi/2}{\theta}$ 就得到 $R\approx\tfrac\pi4\sqrt{N/M}$。$M=1$（唯一解）时 $R\approx\tfrac\pi4\sqrt N$。$R$ 必须取整（迭代次数当然是整数）。</blockquote>
+<blockquote class="callout mistake">⚠️ <strong>常见错误：转过头反而更差。</strong> 这是 Grover 最反直觉的地方。经典循环里"多跑几次只会更稳"；但 Grover 的成功概率是迭代次数的<strong>正弦振荡函数</strong> $\sin^2\big((2R+1)\tfrac\theta2\big)$——转到 $\ket\beta$ 时概率最高，继续转就越过去、概率掉下来，再转又升上来……所以<strong>多迭代 ≠ 更好</strong>，次数必须卡准、要取整。</blockquote>
+<blockquote class="callout calc">🧮 <strong>一步步算：$N=2^6=64$、唯一解 <code>111111</code>（$M=1$）。</strong> $R\approx\tfrac\pi4\sqrt{64}=\tfrac\pi4\cdot8\approx6.3$，所以约第 $6$ 次迭代时成功概率最高。如果头铁继续迭代到 $20$ 次，会看到成功概率"先升到顶、再降、再升"的振荡曲线。不管用布尔预言机（辅助位置 $\ket0$ 还是 $\ket1$）还是相位翻转实现，画出来的成功概率曲线完全一样——实现方式只影响线路怎么搭，不影响结果。</blockquote>
+<blockquote class="callout summary">✅ <strong>小结：</strong> 最优迭代次数 $R\approx(\pi/4)\sqrt{N/M}$，要取整。$M$ 未知时先用量子计数估 $M$，或用"指数递增猜测"策略。多解时测出来是随机的某一个解。</blockquote>
+<hr></section>
+<section id="s5"><h2>6.5 启发式推导：Grover 迭代从哪冒出来的</h2>
+<p>大白话：$G$ 看着像凭空变出来的魔法。其实它能从"量子模拟"的角度自然推导出来——先猜一个哈密顿量（描述系统怎么随时间演化的算符），再用 Trotter 分解去近似模拟它，结果恰好就是 Grover 迭代。这一节是"理解来历/设计变体"的视角，不是更快的实现，初读可跳过。</p>
+<p><strong>第一步，猜哈密顿量</strong>：设目标解为 $\ket{x}$，初态为 $\ket{\psi}$，猜</p>
+<p>$$H = \ketbra{\psi}{\psi} + \ketbra{x}{x}$$</p>
+<ul><li>$\ketbra{\psi}{\psi}$：投影到 $\ket{\psi}$ 方向，像一股"吸引向初态"的力。</li><li>$\ketbra{x}{x}$：投影到解 $\ket{x}$ 方向，像一股"吸引向答案"的力。</li><li>两股力叠加，让系统在 $\ket{\psi}$ 和 $\ket{x}$ 之间来回摆动。</li></ul>
+<p><strong>第二步，Trotter 分解模拟演化</strong>：连续演化 $e^{-iHt}$ 拆成两个因子轮流作用：</p>
+<p>$$e^{-iHt} \approx \exp\!\big(-i\ketbra{\psi}{\psi}\,t\big)\cdot \exp\!\big(-i\ketbra{x}{x}\,t\big)$$</p>
+<p>每个因子是"绕某个态的相位旋转"，在二维平面上对应一次部分旋转/反射。</p>
+<p><strong>第三步，取 $t=\pi$ 让每步转角最大</strong>：</p>
+<p>$$\exp\!\big(-i\ketbra{x}{x}\pi\big) = I - 2\ketbra{x}{x}, \qquad \exp\!\big(-i\ketbra{\psi}{\psi}\pi\big) = I - 2\ketbra{\psi}{\psi}$$</p>
+<ul><li>$I-2\ketbra{x}{x}$：正是关于 $\ket{x}$ 的反射（差一个全局相位就等于相位翻转预言机 $O$）。</li><li>$I-2\ketbra{\psi}{\psi}$：关于 $\ket{\psi}$ 的反射。</li><li>两者复合＝Grover 迭代 $G$。</li></ul>
+<blockquote class="callout intuition">💭 <strong>直觉：</strong> 这就像逆向工程一个算法——你不是先有循环体再分析它，而是先写下"我希望系统朝答案演化"的物理目标（哈密顿量），再用标准模拟工具（Trotter）把它离散成一步步的门操作；离散出来的那一步，恰好就是 Grover 迭代。第四章里用来"模拟物理"的 Trotter 工具，这里被反过来用来"设计算法"。</blockquote>
+<blockquote class="callout summary">✅ <strong>小结：</strong> 猜 $H=\ketbra{\psi}{\psi}+\ketbra{x}{x}$，Trotter 化、取 $t=\pi$ 让两个相位旋转各变成一次反射，复合即得 Grover 迭代。</blockquote>
+<hr></section>
+<section id="s6"><h2>一句话总结</h2>
+<blockquote class="callout summary">✅ <strong>小结：</strong> Grover ＝ 在没索引的数组里找命中项：把候选全摊成均匀叠加后，反复执行"给命中项打负号＋对均值翻转 $a_i\mapsto2\bar a-a_i$"这一对反射（几何上等于朝答案轴转固定角 $\theta$，$\sin\tfrac\theta2=\sqrt{M/N}$），转约 $(\pi/4)\sqrt{N/M}$ 次到达答案轴时测量——<strong>千万别转过头</strong>——从而用 $O(\sqrt N)$ 次查询实现对经典 $O(N)$ 的平方加速。</blockquote></section>
+</main>
+</div>
+<script>
+const toggle=document.getElementById('themeToggle');
+const saved=localStorage.getItem('qcqi-theme');
+if(saved)document.documentElement.setAttribute('data-theme',saved);
+toggle&&toggle.addEventListener('click',()=>{
+ const cur=document.documentElement.getAttribute('data-theme')==='light'?'':'light';
+ document.documentElement.setAttribute('data-theme',cur);
+ localStorage.setItem('qcqi-theme',cur);
+});
+const links=[...document.querySelectorAll('.nav a')];
+const secs=[...document.querySelectorAll('section[id]')];
+const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){
+ links.forEach(l=>l.classList.toggle('active',l.getAttribute('href')==='#'+e.target.id));}})},
+ {rootMargin:'-10% 0px -80% 0px'});
+secs.forEach(s=>obs.observe(s));
+const box=document.getElementById('search');
+box&&box.addEventListener('input',()=>{const q=box.value.trim().toLowerCase();
+ links.forEach(l=>l.classList.toggle('hidden',q&&!l.textContent.toLowerCase().includes(q)));});
+</script>
+</body>
+</html>

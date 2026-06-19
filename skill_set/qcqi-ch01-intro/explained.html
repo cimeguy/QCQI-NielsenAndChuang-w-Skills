@@ -8,10 +8,12 @@
 :root{--bg:#fbf7f0;--panel:#fff;--panel2:#f3ede2;--fg:#2a2620;--muted:#7a7163;
 --accent:#c2410c;--accent2:#7c3aed;--border:#e6ddcd;--code:#f1ebde;--th:#efe7d6;
 --tip:#15803d;--tipbg:#ecfdf3;--analogy:#7c3aed;--analogybg:#f5f0ff;
---pitfall:#b45309;--pitfallbg:#fff7ed;--key:#0369a1;--keybg:#eff8ff;}
+--pitfall:#b45309;--pitfallbg:#fff7ed;--key:#0369a1;--keybg:#eff8ff;
+--matrix:#0d9488;--matrixbg:#effcfa;--example:#9333ea;--examplebg:#faf5ff;}
 [data-theme=dark]{--bg:#15110c;--panel:#1f1a13;--panel2:#1a1610;--fg:#ece3d4;--muted:#9a8f7d;
 --accent:#fb923c;--accent2:#c4b5fd;--border:#332b20;--code:#241e16;--th:#241e16;
---tipbg:#0f2417;--analogybg:#1c1430;--pitfallbg:#2a1d0c;--keybg:#0b1f2e;}
+--tipbg:#0f2417;--analogybg:#1c1430;--pitfallbg:#2a1d0c;--keybg:#0b1f2e;
+--matrixbg:#0c2422;--examplebg:#1e1230;}
 *{box-sizing:border-box}
 body{margin:0;font-family:-apple-system,"PingFang SC","Microsoft YaHei",Segoe UI,system-ui,sans-serif;
 background:var(--bg);color:var(--fg);line-height:1.85;font-size:16px}
@@ -55,6 +57,8 @@ blockquote.callout.tip{border-left-color:var(--tip);background:var(--tipbg)}
 blockquote.callout.analogy{border-left-color:var(--analogy);background:var(--analogybg)}
 blockquote.callout.pitfall{border-left-color:var(--pitfall);background:var(--pitfallbg)}
 blockquote.callout.key{border-left-color:var(--key);background:var(--keybg);font-weight:600}
+blockquote.callout.matrix{border-left-color:var(--matrix);background:var(--matrixbg)}
+blockquote.callout.example{border-left-color:var(--example);background:var(--examplebg)}
 .legend{display:flex;gap:10px;flex-wrap:wrap;margin:6px 0 18px;font-size:12.5px;color:var(--muted)}
 .legend span{background:var(--panel);border:1px solid var(--border);border-radius:20px;padding:3px 11px}
 .badge{display:inline-block;background:var(--accent);color:#fff;border-radius:6px;padding:2px 9px;font-size:12px;font-weight:700}
@@ -87,6 +91,7 @@ window.MathJax={
 <input class="search" id="search" placeholder="过滤小节…">
 <nav class="nav">
 <a href="../explained.html" style="color:var(--muted)">← 返回人话版门户</a>
+<a href="student.html" style="color:var(--muted)">🎓 看大学生版</a>
 <a href="index.html" style="color:var(--muted)">≡ 看公式精简版</a>
 <a href="#s0">导读</a>
 <a href="#s1">1.1 量子计算和量子信息简介</a>
@@ -98,7 +103,7 @@ window.MathJax={
 </nav></aside>
 <main class="main">
 <div class="topbar"><span class="badge">人话版</span><span class="home">第一章 · 量子计算简介</span><button class="toggle" id="themeToggle">🌓 深/浅色</button></div>
-<div class="legend"><span>💡 人话</span><span>🧠 类比</span><span>⚠️ 坑</span><span>🔑 记住</span></div>
+<div class="legend"><span>💡 人话</span><span>🧠 类比</span><span>📐 矩阵怎么看</span><span>🔢 算例</span><span>⚠️ 坑</span><span>🔑 记住</span></div>
 <section id="s0"><h1>第一章 量子计算简介 · 人话版</h1>
 <h2>导读</h2>
 <p>这一章是整本书的"项目 README"：先告诉你量子计算到底想干什么，再把核心数据类型（qubit）和操作（量子门、测量、线路）摆出来，最后用隐形传态和 Deutsch 算法两个"Hello World"演示量子凭什么可能比经典快。作为程序员，你该关心的是：这里的"叠加""纠缠""测量"不是玄学，而是一套可以用<strong>复向量、矩阵乘法、概率采样</strong>精确描述的计算模型——它扩展了你对"什么是一次计算"的认知边界。读完你会有一套把量子术语翻译成线性代数 + 概率的速查心智模型。</p>
@@ -118,15 +123,21 @@ window.MathJax={
 <p>qubit 是量子信息的"基本数据类型"。它不是 0 或 1，而是 $\ket{0}$ 和 $\ket{1}$ 这两个基向量的<strong>复数线性组合</strong>，并且要求总概率归一。</p>
 <p>$$\ket{\psi} = \alpha\ket{0} + \beta\ket{1}, \qquad \lvert\alpha\rvert^2 + \lvert\beta\rvert^2 = 1$$</p>
 <p>逐项翻译：$\ket{\psi}$ 是这个 qubit 的状态（一个二维复向量）；$\ket{0}$、$\ket{1}$ 是计算基（就是标准基 $(1,0)$ 和 $(0,1)$）；$\alpha,\beta \in \mathbb{C}$ 是<strong>概率幅</strong>（复数权重）；约束 $\lvert\alpha\rvert^2 + \lvert\beta\rvert^2 = 1$ 表示"读出 0 或 1 的概率加起来是 1"。</p>
+<blockquote class="callout matrix">📐 <strong>怎么看：</strong> 把 qubit 态写成一个<strong>两行的列向量</strong> $\ket{\psi} = \begin{pmatrix}\alpha\\\beta\end{pmatrix}$：第一行是基态 $\ket{0}$ 的振幅，第二行是 $\ket{1}$ 的振幅。计算基本身就是两个"独热"列向量 $\ket{0} = \begin{pmatrix}1\\0\end{pmatrix}$、$\ket{1} = \begin{pmatrix}0\\1\end{pmatrix}$。所以 $\alpha\ket{0}+\beta\ket{1} = \alpha\begin{pmatrix}1\\0\end{pmatrix}+\beta\begin{pmatrix}0\\1\end{pmatrix} = \begin{pmatrix}\alpha\\\beta\end{pmatrix}$，跟你按分量拼一个二维数组完全一样。</blockquote>
+<blockquote class="callout example">🔢 <strong>算例：</strong> 取 $\alpha=\tfrac{1}{\sqrt2},\ \beta=\tfrac{i}{\sqrt2}$，即 $\ket{\psi}=\begin{pmatrix}1/\sqrt2\\i/\sqrt2\end{pmatrix}$。先验归一：$\lvert\alpha\rvert^2+\lvert\beta\rvert^2 = \tfrac12+\lvert i/\sqrt2\rvert^2 = \tfrac12+\tfrac12 = 1$ ✓。测量概率：得 $\ket{0}$ 的概率 $\lvert\alpha\rvert^2=\tfrac12$，得 $\ket{1}$ 的概率 $\lvert\beta\rvert^2=\tfrac12$。注意 $\beta$ 带的那个 $i$（相位）在概率里被模方吃掉了，但它把这个态推到了 Bloch 球赤道的另一处——干涉时才显形。</blockquote>
 <blockquote class="callout analogy">🧠 <strong>类比：</strong> 一个 qubit 态 = <strong>一个长度为 1 的二维复数数组</strong> <code>[α, β]</code>，满足 <code>|α|² + |β|² == 1</code>。计算基 $\{\ket{0},\ket{1}\}$ 就是这个二维复向量空间的标准正交基（ONB），跟你写 <code>Vector2(x, y)</code> 里的 x/y 轴一个意思。</blockquote>
 <blockquote class="callout pitfall">⚠️ <strong>坑：</strong> $\alpha,\beta$ 是<strong>复数</strong>不是实数概率；真正的概率是它们的<strong>模方</strong> $\lvert\alpha\rvert^2$、$\lvert\beta\rvert^2$。复数里那部分"相位"信息在测量概率上看不见，但在干涉时至关重要——这是量子算法的命根子。</blockquote>
 <p>如果想统一描述纯态和混合态，用<strong>密度矩阵</strong> $\rho$：</p>
 <p>$$\rho = \ketbra{\psi}{\psi}, \qquad \Tr(\rho) = \lvert\alpha\rvert^2 + \lvert\beta\rvert^2 = 1$$</p>
 <p>这里 $\ketbra{\psi}{\psi}$ 是态向量和它的共轭转置的外积（一个 $2\times2$ 矩阵）；$\Tr$ 是求迹（对角线元素求和），迹为 1 就是概率归一的另一种写法。</p>
+<blockquote class="callout matrix">📐 <strong>怎么看：</strong> $\rho=\ketbra{\psi}{\psi}$ 是列向量乘行向量（外积），结果是个 $2\times2$ 矩阵：$\rho = \begin{pmatrix}\alpha\\\beta\end{pmatrix}\begin{pmatrix}\alpha^* &amp; \beta^*\end{pmatrix} = \begin{pmatrix}\lvert\alpha\rvert^2 &amp; \alpha\beta^*\\ \alpha^*\beta &amp; \lvert\beta\rvert^2\end{pmatrix}$。<strong>对角线</strong>两项 $\lvert\alpha\rvert^2,\lvert\beta\rvert^2$ 正是测得 $\ket{0}$、$\ket{1}$ 的概率（叫"布居"）；<strong>非对角线</strong>两项 $\alpha\beta^*,\alpha^*\beta$ 叫"相干项"，编码了叠加的相位关系——混合度越高它们越衰减。</blockquote>
+<blockquote class="callout example">🔢 <strong>算例：</strong> 取等权叠加 $\ket{+}=\tfrac{1}{\sqrt2}(\ket{0}+\ket{1})$，即 $\alpha=\beta=\tfrac{1}{\sqrt2}$。代入得 $\rho = \begin{pmatrix}1/2 &amp; 1/2\\ 1/2 &amp; 1/2\end{pmatrix} = \tfrac12\begin{pmatrix}1&amp;1\\1&amp;1\end{pmatrix}$。检验 $\Tr(\rho)=\tfrac12+\tfrac12=1$ ✓。对比"最大混合态" $\rho=\tfrac12\begin{pmatrix}1&amp;0\\0&amp;1\end{pmatrix}$——两者对角线一样（测量都是 50/50），但纯叠加态的<strong>非对角项不为零</strong>，这正是"量子叠加"和"经典掷硬币"在数学上的分水岭。</blockquote>
 <blockquote class="callout analogy">🧠 <strong>类比：</strong> 密度矩阵 $\rho$ = <strong>纯态上的一个概率分布（加权集合）</strong>。如果你确定系统就是某个 $\ket{\psi}$，那是"纯态"；如果你只知道"50% 是这个态、50% 是那个态"（经典不确定性叠加在量子不确定性之上），那是"混合态"。$\rho$ 把这两层不确定性统一打包，就像用一个 <code>WeightedSet&lt;State&gt;</code> 同时表达确定值和概率分布。</blockquote>
 <p><strong>Bloch 球</strong>：把单 qubit 纯态画成单位球面上的一个点。</p>
 <p>$$\ket{\psi} = \cos(\theta/2)\ket{0} + e^{i\phi}\sin(\theta/2)\ket{1} \;\longleftrightarrow\; r = (\sin\theta\cos\phi,\ \sin\theta\sin\phi,\ \cos\theta)$$</p>
 <p>$\theta$ 是纬度角（从北极 $\ket{0}$ 往下量），$\phi$ 是经度角（绕赤道转），$e^{i\phi}$ 是相位因子。Bloch 分量也能从密度矩阵算：$r_i = \Tr(\rho\,\sigma_i)$，其中 $\sigma_i$ 是 Pauli 矩阵。</p>
+<blockquote class="callout matrix">📐 <strong>怎么看：</strong> 这条公式是"态向量 ↔ 球面坐标"的字典。给定 $(\theta,\phi)$：$\theta$ 决定 $\ket{0}/\ket{1}$ 的权重（$\cos\tfrac\theta2$ 配 $\ket{0}$、$\sin\tfrac\theta2$ 配 $\ket{1}$），$\phi$ 只动 $\ket{1}$ 前面的相位 $e^{i\phi}$。右边 $r=(\sin\theta\cos\phi,\ \sin\theta\sin\phi,\ \cos\theta)$ 就是把这个态投影到 $x/y/z$ 三根轴上的期望值（即 $\langle\sigma_x\rangle,\langle\sigma_y\rangle,\langle\sigma_z\rangle$）。</blockquote>
+<blockquote class="callout example">🔢 <strong>算例：</strong> ① $\ket{0}$：取 $\theta=0$，则 $\cos0=1,\ \sin0=0$，态就是 $\ket{0}$，坐标 $r=(0,0,\cos0)=(0,0,1)$——正北极。② $\ket{+}=\tfrac{1}{\sqrt2}(\ket{0}+\ket{1})$：取 $\theta=\tfrac\pi2,\ \phi=0$，则 $\cos\tfrac\pi4=\sin\tfrac\pi4=\tfrac{1}{\sqrt2}$ ✓，坐标 $r=(\sin\tfrac\pi2,0,\cos\tfrac\pi2)=(1,0,0)$——赤道上 $+x$ 方向。③ $\ket{1}$：取 $\theta=\pi$，坐标 $r=(0,0,\cos\pi)=(0,0,-1)$——正南极。</blockquote>
 <blockquote class="callout tip">💡 <strong>人话：</strong> 一个单 qubit 纯态恰好对应球面上一个点。北极是 $\ket{0}$、南极是 $\ket{1}$、赤道上是各种等权叠加。两个参数 $(\theta,\phi)$ 就能定位它，跟用经纬度定位地球上一点完全一样。</blockquote>
 <blockquote class="callout analogy">🧠 <strong>类比：</strong> 纯态 = 球<strong>面</strong>上的点（$\lVert r\rVert = 1$）；混合态 = 球<strong>内部</strong>的点（$\lVert r\rVert &lt; 1$）；最大混合态 $\rho = I/2$ = 正球心（完全不知道任何信息）。半径越小，信息越"糊"。</blockquote>
 <p>制备任意态 = 旋转：任意 qubit 态 $\ket{\psi}$ 都能找到某个幺正变换 $U \in U(2)$ 使 $\ket{\psi} = U\ket{0}$，几何上就是把北极的 $\ket{0}$ 绕某根轴转到目标点。</p>
@@ -136,6 +147,8 @@ window.MathJax={
 <blockquote class="callout pitfall">⚠️ <strong>坑：</strong> 测量是<strong>破坏性</strong>的、<strong>不可逆</strong>的。它不像读一个普通变量那样"无副作用"。叠加里那些丰富的复数幅信息，一测就塌缩没了，只剩一个经典比特。所以算法要在测量<strong>之前</strong>用干涉把有用信息攒到对的地方。</blockquote>
 <p><strong>多比特与 Bell 基</strong>：$n$ 个比特张成 $2^n$ 维空间，基矢从 $\ket{00\dots0}$ 到 $\ket{11\dots1}$。其中四个最大纠缠的两比特态叫 Bell 基：</p>
 <p>$$\ket{\Phi^\pm} = \frac{\ket{00} \pm \ket{11}}{\sqrt{2}}, \qquad \ket{\Psi^\pm} = \frac{\ket{01} \pm \ket{10}}{\sqrt{2}}$$</p>
+<blockquote class="callout matrix">📐 <strong>怎么看：</strong> 两比特态是 $2^2=4$ 维列向量，分量顺序约定为 $\ket{00},\ket{01},\ket{10},\ket{11}$。所以 $\ket{\Phi^+}=\tfrac{1}{\sqrt2}(\ket{00}+\ket{11}) = \tfrac{1}{\sqrt2}\begin{pmatrix}1\\0\\0\\1\end{pmatrix}$：只有"两个都 0"和"两个都 1"两项非零、且等权。而 $\ket{\Psi^-}=\tfrac{1}{\sqrt2}(\ket{01}-\ket{10}) = \tfrac{1}{\sqrt2}\begin{pmatrix}0\\1\\-1\\0\end{pmatrix}$ 则把权重压在"两个不同"的分量上。</blockquote>
+<blockquote class="callout example">🔢 <strong>算例：</strong> 对 $\ket{\Phi^+}=\tfrac{1}{\sqrt2}(\ket{00}+\ket{11})$ 在计算基测量两比特：得 $00$ 的概率 $\lvert\tfrac{1}{\sqrt2}\rvert^2=\tfrac12$，得 $11$ 的概率 $\tfrac12$，而得 $01$ 或 $10$ 的概率都是 $0$（这两个分量振幅为零）。所以两比特<strong>测出来必然相同</strong>。再看局部：只盯第一个比特，它得 $0$ 或 $1$ 各占 $\tfrac12$（像随机硬币），可一旦读了它，第二个比特的结果就被瞬间锁定——这就是纠缠的"关联藏在全局、单看局部却是随机"。</blockquote>
 <blockquote class="callout analogy">🧠 <strong>类比：</strong> $n$ 比特的状态空间是 $2^n$ 维——这就是经典模拟量子为什么贵：50 个 qubit 就要 $2^{50}$ 个复数才能存下完整态向量。多比特基矢的构造是各比特基的<strong>笛卡尔积 / 张量积（Kronecker 积）</strong>，跟嵌套循环枚举所有组合一个道理。</blockquote>
 <blockquote class="callout tip">💡 <strong>人话：</strong> 拿 $\ket{\Phi^+} = (\ket{00}+\ket{11})/\sqrt{2}$ 来说：在计算基下测量这两个比特，<strong>总是得到相同结果</strong>（要么都 0、要么都 1），而且各占一半概率。两个比特的命运被锁死在一起了——这就是纠缠。</blockquote>
 <blockquote class="callout pitfall">⚠️ <strong>坑：</strong> 纠缠态<strong>写不成两个单比特态的张量积</strong>（$\ket{\Phi^+} \ne \ket{a}\otimes\ket{b}$）。这正是纠缠的数学定义。别以为"强关联"就是经典相关，纠缠的关联强度超出任何经典模型能解释的范围（Bell 不等式）。</blockquote>
@@ -146,10 +159,15 @@ window.MathJax={
 <p><strong>单比特门 ∈ U(2)</strong>：每个单比特门都是一个保持向量长度（归一）的幺正变换，也就是一个 $2\times2$ 幺正矩阵。绕任意轴 $n = (x,y,z)$ 旋转角度 $\theta$：</p>
 <p>$$R_n(\theta) = \cos(\theta/2)\,I - i\sin(\theta/2)\,(n\cdot\sigma)$$</p>
 <p>$I$ 是单位矩阵，$\sigma = (\sigma_x,\sigma_y,\sigma_z)$ 是 Pauli 矩阵三件套，$n\cdot\sigma = n_x\sigma_x + n_y\sigma_y + n_z\sigma_z$。$R_x,R_y,R_z$ 就是取轴为 $x/y/z$ 的特例。</p>
+<blockquote class="callout matrix">📐 <strong>怎么看：</strong> $R_n(\theta)=\cos\tfrac\theta2\,I-i\sin\tfrac\theta2\,(n\cdot\sigma)$ 把"绕轴 $n$ 转 $\theta$"拆成两块之和：$\cos\tfrac\theta2\,I$ 是"原地不动"的成分，$-i\sin\tfrac\theta2\,(n\cdot\sigma)$ 是"沿轴翻转"的成分。注意转角是 $\theta/2$ 而不是 $\theta$——这是 qubit（旋量）的招牌特征：态要转满 $4\pi$ 才回到原样。</blockquote>
+<blockquote class="callout example">🔢 <strong>算例：</strong> 取轴 $n=z$，则 $n\cdot\sigma=\sigma_z=\begin{pmatrix}1&amp;0\\0&amp;-1\end{pmatrix}$。代入：$R_z(\theta) = \cos\tfrac\theta2\begin{pmatrix}1&amp;0\\0&amp;1\end{pmatrix}-i\sin\tfrac\theta2\begin{pmatrix}1&amp;0\\0&amp;-1\end{pmatrix} = \begin{pmatrix}\cos\tfrac\theta2-i\sin\tfrac\theta2 &amp; 0\\ 0 &amp; \cos\tfrac\theta2+i\sin\tfrac\theta2\end{pmatrix} = \begin{pmatrix}e^{-i\theta/2}&amp;0\\0&amp;e^{i\theta/2}\end{pmatrix}$。可见 $R_z$ 只给 $\ket{0},\ket{1}$ 各挂一个相反的相位——在 Bloch 球上就是绕 $z$ 轴自转，难怪改不了测量概率（模方不变）。</blockquote>
 <blockquote class="callout analogy">🧠 <strong>类比：</strong> 幺正变换 = <strong>可逆无损变换</strong>（保范数、保内积）。在编程里就像一个一定能 <code>undo</code> 的纯变换：$U^\dagger U = I$，逆就是它的共轭转置，没有信息丢失。这跟有损的 <code>hash()</code> 或会塌缩的测量正好相反。</blockquote>
 <blockquote class="callout tip">💡 <strong>人话：</strong> 单比特门就是"在 Bloch 球上把状态点转一下"。$R_x(\theta)$ 绕 x 轴转 $\theta$，以此类推。门不改变球的半径（纯态还是纯态），只改朝向。</blockquote>
 <p>几个常用门：</p>
 <ul><li><strong>Hadamard ($H$)</strong>——叠加制造机：$H\ket{0} = (\ket{0}+\ket{1})/\sqrt{2}$，$H\ket{1} = (\ket{0}-\ket{1})/\sqrt{2}$。</li><li><strong>相位门 $S = \operatorname{diag}(1, i)$</strong>、<strong>$T$ 门 $= \operatorname{diag}(1, e^{i\pi/4})$</strong>（又叫 $\pi/8$ 门）：只给 $\ket{1}$ 分量加一个相位。</li></ul>
+<blockquote class="callout matrix">📐 <strong>怎么看：</strong> Hadamard 矩阵 $H=\tfrac{1}{\sqrt2}\begin{pmatrix}1&amp;1\\1&amp;-1\end{pmatrix}$ 的<strong>列</strong>就是"基态被映到哪里"：第 1 列 $\tfrac{1}{\sqrt2}\begin{pmatrix}1\\1\end{pmatrix}$ 是 $\ket{0}$ 的去向（等权正叠加 $\ket{+}$），第 2 列 $\tfrac{1}{\sqrt2}\begin{pmatrix}1\\-1\end{pmatrix}$ 是 $\ket{1}$ 的去向（带负号的叠加 $\ket{-}$）。一般地，矩阵元 $M_{ij}$ 读作"输入基态 $\ket{j}$、输出落到 $\ket{i}$ 的振幅"——这条规则对所有量子门通用。相位门 $S=\begin{pmatrix}1&amp;0\\0&amp;i\end{pmatrix}$、$T=\begin{pmatrix}1&amp;0\\0&amp;e^{i\pi/4}\end{pmatrix}$ 是对角阵，只在 $\ket{1}$ 的去向（右下角）盖一个相位章，$\ket{0}$ 原封不动。</blockquote>
+<blockquote class="callout example">🔢 <strong>算例（H 作用在基态上）：</strong> $H\ket{0} = \tfrac{1}{\sqrt2}\begin{pmatrix}1&amp;1\\1&amp;-1\end{pmatrix}\begin{pmatrix}1\\0\end{pmatrix} = \tfrac{1}{\sqrt2}\begin{pmatrix}1\cdot1+1\cdot0\\1\cdot1+(-1)\cdot0\end{pmatrix} = \tfrac{1}{\sqrt2}\begin{pmatrix}1\\1\end{pmatrix} = \tfrac{\ket{0}+\ket{1}}{\sqrt2}$。同理 $H\ket{1} = \tfrac{1}{\sqrt2}\begin{pmatrix}1&amp;1\\1&amp;-1\end{pmatrix}\begin{pmatrix}0\\1\end{pmatrix} = \tfrac{1}{\sqrt2}\begin{pmatrix}1\\-1\end{pmatrix} = \tfrac{\ket{0}-\ket{1}}{\sqrt2}$。矩阵乘法就是"用矩阵的每一行去点乘那个列向量"。</blockquote>
+<blockquote class="callout example">🔢 <strong>算例（H 自逆 / 相位门）：</strong> 再来一发 $H$ 能复原：$H\ket{+} = \tfrac12\begin{pmatrix}1&amp;1\\1&amp;-1\end{pmatrix}\begin{pmatrix}1\\1\end{pmatrix} = \tfrac12\begin{pmatrix}2\\0\end{pmatrix} = \begin{pmatrix}1\\0\end{pmatrix} = \ket{0}$，印证 $H^2=I$。相位门 $S\ket{1} = \begin{pmatrix}1&amp;0\\0&amp;i\end{pmatrix}\begin{pmatrix}0\\1\end{pmatrix} = \begin{pmatrix}0\\i\end{pmatrix} = i\ket{1}$，只把 $\ket{1}$ 乘上 $i$；而 $S\ket{0}=\ket{0}$ 不变。</blockquote>
 <blockquote class="callout analogy">🧠 <strong>类比：</strong> $H$ 是几乎所有量子算法的"第一行代码"：把确定的 $\ket{0}$ 砸成 50/50 的等权叠加，开启量子并行的入口。把它想成"初始化一个均匀概率分布"。</blockquote>
 <p>任意单比特门可以做 <strong>z-y-z 分解</strong>：</p>
 <p>$$U = e^{i\alpha}\, R_z(\beta)\, R_y(\gamma)\, R_z(\delta)$$</p>
@@ -157,6 +175,8 @@ window.MathJax={
 <blockquote class="callout analogy">🧠 <strong>类比：</strong> 这就像 3D 图形里"任意旋转 = 三个欧拉角（绕 z-y-z）"，量子版只是把实旋转换成 $SU(2)$ 上的旋转。编译器把高级 <code>U</code> 拆成硬件能执行的三条旋转指令，就靠这个分解。</blockquote>
 <p><strong>多比特门</strong>（作用在 $U(2^n)$ 上）：</p>
 <ul><li><strong>CNOT（受控非）</strong>：控制位是 1 时翻转目标位。<strong>它是纠缠的生成器</strong>。</li><li><strong>SWAP</strong>：交换两比特，且 <strong>SWAP = 三个 CNOT 级联</strong>。</li><li><strong>Toffoli (CCNOT)</strong>：双控制非门，是经典可逆计算的通用门。</li></ul>
+<blockquote class="callout matrix">📐 <strong>怎么看：</strong> 两比特门是 $4\times4$ 矩阵，行列都按 $\ket{00},\ket{01},\ket{10},\ket{11}$ 排。CNOT（控制位在前、目标位在后）写作 $\mathrm{CNOT}=\begin{pmatrix}1&amp;0&amp;0&amp;0\\0&amp;1&amp;0&amp;0\\0&amp;0&amp;0&amp;1\\0&amp;0&amp;1&amp;0\end{pmatrix}$：上半的 $\ket{00},\ket{01}$（控制位=0）是单位块、原样不动；下半 $\ket{10},\ket{11}$（控制位=1）那个 $\begin{pmatrix}0&amp;1\\1&amp;0\end{pmatrix}$ 子块，正是在目标位上做 $X$（翻转）。所以它就是"控制位为 1 才翻目标位"的置换矩阵。</blockquote>
+<blockquote class="callout example">🔢 <strong>算例（CNOT 与造 Bell 态）：</strong> $\mathrm{CNOT}\ket{10}$：$\ket{10}=\begin{pmatrix}0\\0\\1\\0\end{pmatrix}$，乘出来取到矩阵第 3 列 $\begin{pmatrix}0\\0\\0\\1\end{pmatrix}=\ket{11}$——控制位 1、目标位被翻成 1。而 $\mathrm{CNOT}\ket{00}=\ket{00}$（控制位 0，不动）。把 $H$ 加在前面就造出纠缠：先 $H$ 作用在第一比特，$\ket{00}\to\tfrac{1}{\sqrt2}(\ket{00}+\ket{10})$，再 $\mathrm{CNOT}$ 把 $\ket{10}\to\ket{11}$，得到 $\tfrac{1}{\sqrt2}(\ket{00}+\ket{11})=\ket{\Phi^+}$——一个 Bell 态。</blockquote>
 <blockquote class="callout analogy">🧠 <strong>类比：</strong> CNOT 就像 <code>if control: target ^= 1</code>，但因为它作用在叠加态上，能把两个比特<strong>纠缠</strong>起来（$H$ + CNOT 就造出 Bell 态）。Toffoli <code>if (a and b): c ^= 1</code> 是可逆版的 AND，用它能把任意经典布尔电路塞进量子线路。</blockquote>
 <p><strong>通用门集合</strong>：一组能以<strong>任意精度</strong>模拟任何幺正变换的门，比如 $\{H, T, \mathrm{CNOT}\}$。精度要求越高，需要的门越多（Solovay-Kitaev 定理给出量级）。</p>
 <blockquote class="callout analogy">🧠 <strong>类比：</strong> 通用门集 = 量子世界的<strong>图灵完备指令集</strong>。就像 NAND 门能搭出任何经典电路、几条 RISC 指令能跑任何程序，$\{H,T,\mathrm{CNOT}\}$ 能逼近任何量子计算。"任意精度"对应浮点逼近：位数越多越准，但代价是更多指令。</blockquote>
@@ -178,11 +198,14 @@ window.MathJax={
 <p><strong>量子并行</strong>：量子机能在<strong>同一个幺正变换</strong>里同时算出函数 $f(x)$ 在许多不同 $x$ 上的值——它们以叠加态的形式共存。</p>
 <p>$$U_f:\ \ket{x}\ket{y} \;\longrightarrow\; \ket{x}\ket{y \oplus f(x)}$$</p>
 <p>$\ket{x}$ 是输入寄存器，$\ket{y}$ 是输出寄存器，$\oplus$ 是异或（模 2 加）。如果输入是叠加态 $\sum_x \ket{x}$，那一次 $U_f$ 就把所有 $f(x)$ 一起算了。</p>
+<blockquote class="callout matrix">📐 <strong>怎么看：</strong> $U_f$ 是个<strong>置换门</strong>（不改振幅大小、只重排基态）。它把输入寄存器 $\ket{x}$ 当索引读、把输出寄存器 $\ket{y}$ 改成 $\ket{y\oplus f(x)}$。用异或而不是直接覆盖，是为了<strong>可逆</strong>：再作用一次 $U_f$ 就还原（$y\oplus f(x)\oplus f(x)=y$），满足幺正性。注意 $\ket{x}$ 那一路自始至终没被动过——这样才不破坏叠加。</blockquote>
+<blockquote class="callout example">🔢 <strong>算例：</strong> 设输出寄存器初始为 $\ket{0}$，输入喂等权叠加 $\tfrac{1}{\sqrt2}(\ket{0}+\ket{1})$，总态 $\tfrac{1}{\sqrt2}(\ket{0}+\ket{1})\ket{0}$。一次 $U_f$：$\ket{0}\ket{0}\to\ket{0}\ket{0\oplus f(0)}=\ket{0}\ket{f(0)}$，$\ket{1}\ket{0}\to\ket{1}\ket{f(1)}$，于是得到 $\tfrac{1}{\sqrt2}(\ket{0}\ket{f(0)}+\ket{1}\ket{f(1)})$——<strong>一次操作就把 $f(0)$ 和 $f(1)$ 同时算进了同一个态</strong>。但直接测量只能随机塌缩到其中一支，所以还需要干涉，见下面 Deutsch。</blockquote>
 <blockquote class="callout pitfall">⚠️ <strong>坑：</strong> 量子并行<strong>不是免费午餐</strong>！所有 $f(x)$ 确实叠在一个态里，但你<strong>直接测量只能随机拿到其中一个</strong>——还塌缩掉其余全部。所以"同时算 $2^n$ 个值"本身没用，必须靠后续<strong>干涉</strong>把"全局性质"提炼到能测出来的地方。这就是为什么"量子 = 大规模并行"是个误导性说法。</blockquote>
 <blockquote class="callout analogy">🧠 <strong>类比：</strong> 想象你 <code>map(f, all_inputs)</code> 得到一个超大结果数组，但 API 只允许你 <code>sample()</code> 一次就销毁整个数组。光并行 map 没意义，你得设计一种"归约 + 相消"（干涉）让你想要的那个全局答案脱颖而出。</blockquote>
 <h3>Worked Example：Deutsch 算法</h3>
 <p>问题：给定 $f:\{0,1\}\to\{0,1\}$，判断它是<strong>常数型</strong>（$f(0)=f(1)$）还是<strong>平衡型</strong>（$f(0)\ne f(1)$）。经典做法要求两次值（算 $f(0)$ 和 $f(1)$ 再比），量子只要<strong>一次</strong>。</p>
 <ol><li>制备 $\ket{0}\ket{1}$，两个比特各过一个 $H$，得到 $(\ket{0}+\ket{1})(\ket{0}-\ket{1})/2$。</li><li>作用一次 $U_f$。由于第二比特处在 $\ket{-} = (\ket{0}-\ket{1})/\sqrt{2}$，发生<strong>相位回踢</strong>，给第一比特挂上 $(-1)^{f(x)}$ 的相位因子。</li><li>对第一比特再过一个 $H$ 然后测量：测得 $\ket{0}$ ⇒ 常数型，测得 $\ket{1}$ ⇒ 平衡型。</li></ol>
+<blockquote class="callout example">🔢 <strong>算例（常数型 $f\equiv0$）：</strong> 第 1 步后两比特处于 $\tfrac{1}{\sqrt2}(\ket{0}+\ket{1})\otimes\ket{-}$，其中 $\ket{-}=\tfrac{1}{\sqrt2}(\ket{0}-\ket{1})$。第 2 步 $U_f$ 触发相位回踢，第一比特挂上 $(-1)^{f(x)}$：因 $f(0)=f(1)=0$，两支都乘 $(-1)^0=+1$，第一比特仍是 $\tfrac{1}{\sqrt2}(\ket{0}+\ket{1})=\ket{+}$。第 3 步对它再做 $H$：$H\ket{+}=\ket{0}$（见上面 H 自逆算例），测得 $\ket{0}$ ⟹ 判定<strong>常数型</strong> ✓。若换成平衡型 $f(x)=x$，两支相位变成 $+1,-1$，第一比特成 $\tfrac{1}{\sqrt2}(\ket{0}-\ket{1})=\ket{-}$，而 $H\ket{-}=\ket{1}$，测得 $\ket{1}$ ⟹ <strong>平衡型</strong>。</blockquote>
 <blockquote class="callout tip">💡 <strong>人话：</strong> Deutsch 问的根本不是 $f(0)$ 或 $f(1)$ 各自是多少，而是 $f(0)\oplus f(1)$ 这<strong>一个全局比特</strong>（相等还是不等）。量子线路通过相位回踢把这个全局信息编码进相位，再用 $H$ 做干涉读出来，所以一次 $U_f$ 就够。</blockquote>
 <blockquote class="callout analogy">🧠 <strong>类比：</strong> 相位回踢就像把答案藏进"符号位"而不是"数值位"。经典你得分别求两个值再对比（两次调用）；量子直接问"它俩的异或"，一次调用搞定——因为你不需要知道每个值，只需要它们的关系。</blockquote>
 <blockquote class="callout key">🔑 <strong>记住：</strong> 量子加速的本质直觉——<strong>当经典为得到答案被迫获取了超过答案所需的信息量（存在"计算冗余"）时，量子有加速潜力</strong>。Deutsch 只想要 1 比特全局信息，经典却被迫算了 2 个局部值。推广到 $n$ 位函数就是 <strong>Deutsch-Jozsa 算法</strong>。</blockquote>

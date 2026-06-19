@@ -28,6 +28,8 @@
 
 $$\langle A\rangle=\Tr(\rho A),\qquad (\Delta A)^2=\langle A^2\rangle-\langle A\rangle^2$$
 
+> 📐 **怎么看：** 单比特 $\rho=\begin{pmatrix}\rho_{00}&\rho_{01}\\\rho_{10}&\rho_{11}\end{pmatrix}$ 的对角元 $\rho_{00},\rho_{11}$ 是测到 $\ket0,\ket1$ 的概率（布居数，相加为 1，即 $\Tr\rho=1$）；非对角元 $\rho_{01}=\rho_{10}^{*}$ 是"相干"，衡量 $\ket0$ 与 $\ket1$ 之间的相位关联——纯叠加态非对角元非零，完全退相干（经典混合）则非对角元为 0。期望值 $\Tr(\rho A)$ 就是把 $\rho$ 和可观测量 $A$ 逐元素配对再求和。
+
 > 💡 **人话：** $\rho$ 就是"系统当前的完整状态对象"。知道它，你就能回答关于任何可观测量的任何统计问题——相当于一个能算出所有查询结果的只读数据库。
 
 **命题与投影**：正交投影算符就是一个"是非命题"，$\bra{\psi}P\ket{\psi}$ 是这个命题为真的概率。
@@ -47,6 +49,8 @@ $$\langle A\rangle=\Tr(\rho A),\qquad (\Delta A)^2=\langle A^2\rangle-\langle A\
 **纠缠 + Bell test**：纠缠态会违反 Bell 不等式 ⇒ 否定局域实在论，确认量子力学是对的。
 
 > ⚠️ **坑：** 纯态 vs 混态的四个等价判据别记混：$\Tr(\rho^2)=1$ / 秩为 1 / 不可凸分解 / Bloch 矢量 $\lvert r\rvert=1$。另外，**纠缠态的单个子系统取偏迹后会变成混态**——这正是纠缠的指纹。偏迹有两种记号惯例，自己用时要统一。
+
+> 🔢 **算例（必背关系，矩阵直接验）：** $XY=\begin{pmatrix}0&1\\1&0\end{pmatrix}\begin{pmatrix}0&-i\\i&0\end{pmatrix}=\begin{pmatrix}i&0\\0&-i\end{pmatrix}=iZ$（循环地有 $YZ=iX,\ ZX=iY$）；$X^2=Y^2=Z^2=I$，$H^2=\tfrac12\begin{pmatrix}1&1\\1&-1\end{pmatrix}^2=I$。Bell 态 $\tfrac{1}{\sqrt2}(\ket{00}+\ket{11})$ 对 B 取偏迹得 $\rho_A=\tfrac12(\ketbra{0}{0}+\ketbra{1}{1})=\tfrac12 I$——最大纠缠态的单边是**最大混态**，纯度 $\Tr(\rho_A^2)=\tfrac12<1$，这就是上面说的"纠缠指纹"。
 
 > 🔑 **记住：** 态是 $\rho$（迹1正定），物理量是 Hermite 算符，演化是幺正，合体是张量积，纠缠看 Schmidt。
 

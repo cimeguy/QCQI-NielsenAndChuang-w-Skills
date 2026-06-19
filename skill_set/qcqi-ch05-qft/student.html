@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>第五章 · QFT 与 Shor · 大学生版 · QCQI</title>
+<style>
+:root{--bg:#f4f7fb;--panel:#fff;--panel2:#eaf0f8;--fg:#1c2733;--muted:#64748b;
+--accent:#2563eb;--accent2:#0891b2;--border:#d7e1ee;--code:#eef3f9;--th:#e6eef8;
+--purpose:#ea580c;--purposebg:#fff5ec;
+--review:#7c3aed;--reviewbg:#f5f1ff;--calc:#0891b2;--calcbg:#ecfbfd;
+--intuition:#2563eb;--intuitionbg:#eef4ff;--mistake:#dc2626;--mistakebg:#fef2f2;
+--summary:#15803d;--summarybg:#ecfdf3;}
+[data-theme=dark]{--bg:#0d1320;--panel:#161f30;--panel2:#121a29;--fg:#e3eaf3;--muted:#8595a8;
+--accent:#60a5fa;--accent2:#22d3ee;--border:#27344a;--code:#16203200;--th:#1a2538;
+--purposebg:#2a1709;
+--reviewbg:#1f1633;--calcbg:#0a2730;--intuitionbg:#10203b;--mistakebg:#2a1414;--summarybg:#0f2417;}
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,"PingFang SC","Microsoft YaHei",Segoe UI,system-ui,sans-serif;
+background:var(--bg);color:var(--fg);line-height:1.9;font-size:16px}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+.layout{display:flex;min-height:100vh}
+.sidebar{width:300px;flex:0 0 300px;background:var(--panel2);border-right:1px solid var(--border);
+position:sticky;top:0;height:100vh;overflow-y:auto;padding:20px 0}
+.sidebar h2{font-size:14px;margin:0 18px 6px;color:var(--muted);font-weight:600}
+.brand{padding:0 18px 14px;border-bottom:1px solid var(--border);margin-bottom:12px}
+.brand .t{font-size:18px;font-weight:800}
+.brand .s{font-size:12.5px;color:var(--muted);margin-top:3px}
+.search{margin:0 14px 12px;width:calc(100% - 28px);padding:9px 11px;border-radius:9px;
+border:1px solid var(--border);background:var(--panel);color:var(--fg);font-size:13px}
+.nav a{display:block;padding:6px 18px;color:var(--fg);font-size:13.5px;border-left:3px solid transparent}
+.nav a:hover{background:var(--panel);text-decoration:none}
+.nav a.active{border-left-color:var(--accent);background:var(--panel);color:var(--accent)}
+.nav a.hidden{display:none}
+.main{flex:1;min-width:0;padding:34px 52px 90px;max-width:920px}
+.topbar{display:flex;align-items:center;gap:14px;margin-bottom:8px;flex-wrap:wrap}
+.topbar .home{font-size:13px;color:var(--muted)}
+.toggle{margin-left:auto;cursor:pointer;border:1px solid var(--border);background:var(--panel);
+color:var(--fg);border-radius:8px;padding:6px 12px;font-size:13px}
+section{scroll-margin-top:20px;padding:16px 0;border-bottom:1px solid var(--border)}
+h1{font-size:28px;margin:.2em 0 .5em;line-height:1.3}
+h2{font-size:21px;margin:1.1em 0 .5em;color:var(--accent)}
+h3{font-size:17px;margin:1em 0 .4em;color:var(--accent2)}h4{font-size:15.5px;margin:.9em 0 .3em}
+code{background:var(--code);padding:1.5px 6px;border-radius:5px;font-size:.9em;
+font-family:"SF Mono",Menlo,Consolas,monospace}
+pre{background:var(--code);padding:14px 16px;border-radius:10px;overflow-x:auto;border:1px solid var(--border)}
+pre code{background:none;padding:0}
+table{border-collapse:collapse;width:100%;margin:12px 0;font-size:14px;border-radius:8px;overflow:hidden}
+th,td{border:1px solid var(--border);padding:7px 11px;text-align:left;vertical-align:top}
+th{background:var(--th);font-weight:600}
+ul,ol{padding-left:24px}li{margin:4px 0}
+hr{border:none;border-top:1px dashed var(--border);margin:16px 0}
+blockquote{border-left:4px solid var(--accent2);margin:12px 0;padding:8px 16px;color:var(--muted);
+background:var(--panel);border-radius:0 8px 8px 0}
+blockquote.callout{border-left-width:5px;border-radius:10px;padding:12px 18px;color:var(--fg);
+margin:14px 0;font-size:15px}
+blockquote.callout.review{border-left-color:var(--review);background:var(--reviewbg)}
+blockquote.callout.purpose{border-left-color:var(--purpose);background:var(--purposebg)}
+blockquote.callout.calc{border-left-color:var(--calc);background:var(--calcbg)}
+blockquote.callout.intuition{border-left-color:var(--intuition);background:var(--intuitionbg)}
+blockquote.callout.mistake{border-left-color:var(--mistake);background:var(--mistakebg)}
+blockquote.callout.summary{border-left-color:var(--summary);background:var(--summarybg);font-weight:600}
+.legend{display:flex;gap:10px;flex-wrap:wrap;margin:6px 0 18px;font-size:12.5px;color:var(--muted)}
+.legend span{background:var(--panel);border:1px solid var(--border);border-radius:20px;padding:3px 11px}
+.badge{display:inline-block;background:var(--accent);color:#fff;border-radius:6px;padding:2px 9px;font-size:12px;font-weight:700}
+@media(max-width:820px){.sidebar{display:none}.main{padding:24px 18px}}
+</style>
+<script>
+window.MathJax={
+ tex:{
+  inlineMath:[['$','$'],['\\(','\\)']],
+  displayMath:[['$$','$$'],['\\[','\\]']],
+  macros:{
+   ket:['{\\lvert #1\\rangle}',1],
+   bra:['{\\langle #1\\rvert}',1],
+   braket:['{\\langle #1\\vert #2\\rangle}',2],
+   ketbra:['{\\lvert #1\\rangle\\langle #2\\rvert}',2],
+   Tr:'{\\operatorname{Tr}}',
+   tr:'{\\operatorname{tr}}'
+  }
+ },
+ svg:{fontCache:'global'},
+ options:{skipHtmlTags:['script','style','textarea','pre','code'],ignoreHtmlClass:'viz'}
+};
+</script>
+<script src="../vendor/tex-svg.js" id="MathJax-script" async></script>
+</head>
+<body>
+<div class="layout">
+<aside class="sidebar">
+<div class="brand"><div class="t">QCQI · 大学生版</div><div class="s">第五章 · QFT 与 Shor</div></div>
+<input class="search" id="search" placeholder="过滤小节…">
+<nav class="nav">
+<a href="../student.html" style="color:var(--muted)">← 返回大学生版门户</a>
+<a href="explained.html" style="color:var(--muted)">🗣️ 看人话版</a>
+<a href="index.html" style="color:var(--muted)">≡ 看公式精简版</a>
+<a href="#s0">导读</a>
+<a href="#s1">5.1 量子算法预备：为什么量子可能更快</a>
+<a href="#s2">5.2 Deutsch 与 Deutsch-Jozsa：量子并行的范例</a>
+<a href="#s3">5.3 量子傅里叶变换 (QFT)</a>
+<a href="#s4">5.4 相位估计</a>
+<a href="#s5">5.5 Shor 算法（大数分解）</a>
+<a href="#s6">5.6 隐藏子群问题 (HSP)</a>
+</nav></aside>
+<main class="main">
+<div class="topbar"><span class="badge">大学生版</span><span class="home">第五章 · QFT 与 Shor</span><button class="toggle" id="themeToggle">🌓 深/浅色</button></div>
+<div class="legend"><span>🎯 用来干嘛</span><span>📖 补基础</span><span>🧮 一步步算</span><span>💭 直觉</span><span>⚠️ 常见错误</span><span>✅ 小结</span></div>
+<section id="s0"><h1>第五章 量子傅里叶变换与 Shor 算法 · 大学生版</h1>
+<h2>导读</h2>
+<p>这一章是量子算法里「最赚钱」的一支：先讲清楚量子并行快在哪，再造出量子版的傅里叶变换（QFT），然后用它搭出相位估计这把「万能扳手」，最后用相位估计把 RSA 赖以生存的大数分解给端了（Shor 算法）。</p>
+<p>整章的调用链是：<strong>QFT 是底层工具 → 相位估计是用它写的通用子程序 → Shor 是相位估计的杀手级应用 → HSP 是把这一切统一起来的抽象框架。</strong> 全程记住一句话：量子能「同时算所有输入」，但你每次只能测出一个结果，所以真正的艺术是「怎么把想要的答案逼到你能读出的那个基态上」。</p>
+<p>本章数学密度比第四章高一点，但每个新工具（复指数与欧拉公式、单位根、DFT 矩阵、二进制小数、模运算与 gcd、本征值相位）都会在第一次用到时用 <code>📖 补基础</code> 补清楚，并配小数字例子。</p>
+<blockquote class="callout review">📖 <strong>补基础（复指数与欧拉公式）：</strong> 本章满屏的 $e^{i\theta}$ 都来自欧拉公式 $$e^{i\theta}=\cos\theta+i\sin\theta.$$ 它是复平面单位圆上、与正实轴夹角为 $\theta$ 的点，模长恒为 1（$\lvert e^{i\theta}\rvert=1$）。几个要记的值：$e^{i\cdot0}=1$、$e^{i\pi/2}=i$、$e^{i\pi}=-1$、$e^{i\cdot2\pi}=1$（转一整圈回到原点）。乘 $e^{i\theta}$ 的几何意义就是「逆时针转 $\theta$ 角」，不改变长度——这就是「相位」的本质。</blockquote>
+<hr></section>
+<section id="s1"><h2>5.1 量子算法预备：为什么量子可能更快</h2>
+<p>大白话：研究量子算法是想找那些量子机器<strong>真的</strong>比经典机器快的问题。但要算「端到端」的总账——从数据装进去、算、读出来、到经典后处理全部加起来，而不是只盯着中间那段量子线路跑得多快。</p>
+<p>本章重点是两大算法家族：QFT 家族（相位估计、Shor，靠傅里叶变换提取「周期/全局」信息）和量子搜索家族（第六章 Grover，靠振幅放大在无结构数据里捞针）。</p>
+<p>理论上最核心的未决问题是 $\mathrm{BQP}\overset{?}{\supsetneq}\mathrm{BPP}$：是否存在「量子能高效解、经典随机算法不能高效解」的问题？大家强烈怀疑分解就属于这一类，但至今没人证明。</p>
+<blockquote class="callout summary">✅ <strong>小结：</strong> 衡量量子优势要看端到端成本（装载 + 计算 + 读出 + 后处理）；核心悬案是 BQP 是否严格大于 BPP。</blockquote>
+<hr></section>
+<section id="s2"><h2>5.2 Deutsch 与 Deutsch-Jozsa：量子并行的范例</h2>
+<p>大白话：量子并行就是——一个幺正变换能在输入的<strong>叠加态</strong>上同时算出函数在所有输入处的值。Deutsch 算法是最小的玩具例子：判断一位函数 $f:\{0,1\}\to\{0,1\}$ 是「常数型」（$f(0)=f(1)$）还是「平衡型」（$f(0)\neq f(1)$）。经典要查两次（$f(0)$ 和 $f(1)$ 都算），量子只查<strong>一次</strong>就够。</p>
+<blockquote class="callout purpose">🎯 <strong>用来干嘛：</strong> 这是「量子为什么可能更快」的最干净证据。它告诉你量子加速的正确打开方式：<strong>不是</strong>想一次读出所有 $f(x)$（做不到），而是当你只关心一个<strong>全局性质</strong>（如 $f(0)\oplus f(1)$、函数是否平衡）时，用一次查询 + 干涉就能抖出答案。后面 Shor 找周期走的就是同一条路。</blockquote>
+<p>机制叫「相位回踢」：把辅助比特预置成 $\ket-=(\ket0-\ket1)/\sqrt2$，作用 $U_f$ 后，函数值不写进辅助比特，而是变成查询比特前面的一个 $\pm$ 符号：</p>
+<p>$$\ket{x}\ket{-} \xrightarrow{\,U_f\,} (-1)^{f(x)}\ket{x}\ket{-}.$$</p>
+<p>接着对查询比特做一次 $H$ 让两个分支干涉，测量就直接读出全局量 $f(0)\oplus f(1)$（$\oplus$ 是异或）：读到 0 表示常数型，读到 1 表示平衡型。</p>
+<p><strong>Deutsch-Jozsa</strong> 是 $n$ 位推广：承诺 $f$ 要么常数、要么平衡（恰好一半输入给 0、一半给 1）。经典最坏要查 $2^{n-1}+1$ 次，量子依旧<strong>一次</strong>确定性搞定。</p>
+<blockquote class="callout mistake">⚠️ <strong>常见错误：</strong> 量子并行不等于「一次读出所有 $f(x)$」。所有值确实都算出来了，但都压在概率幅里，测量只塌缩出一个。它能加速的前提是你要的是<strong>全局性质</strong>（如 XOR、是否平衡），而不是某个具体的 $f(x)$。</blockquote>
+<blockquote class="callout summary">✅ <strong>小结：</strong> 当经典获取的信息量超过答案所需（有计算冗余）时量子才有加速空间；Deutsch-Jozsa 用一次查询 + 干涉读出全局性质，是量子并行的范典。</blockquote>
+<hr></section>
+<section id="s3"><h2>5.3 量子傅里叶变换 (QFT)</h2>
+<p>大白话：QFT 就是离散傅里叶变换（DFT）的量子版。经典 DFT 把一串数 $u_k$ 变成另一串数 $y_j$；QFT 干的是同一件数学，只不过把这串数当作量子态的概率幅来处理。它定义在基态上：</p>
+<blockquote class="callout purpose">🎯 <strong>用来干嘛：</strong> 用来把「藏在数据里的周期 / 频率」转换成「相位结构」，好让后续操作能高概率把它测出来。它是相位估计和 Shor 算法的引擎——Shor 破解 RSA 的关键一步就是用 QFT 找出周期。注意：QFT 本身只是个内部零件，傅里叶系数全在概率幅里、<strong>不能直接读出来</strong>当 FFT 用，必须配相位估计这类技巧才有意义。</blockquote>
+<p>$$\ket{j} \;\longrightarrow\; \frac{1}{\sqrt{N}}\sum_{k=0}^{N-1} e^{2\pi i\, jk/N}\,\ket{k},\qquad N=2^n.$$</p>
+<blockquote class="callout review">📖 <strong>补基础（单位根 $\omega$）：</strong> 记 $\omega=e^{2\pi i/N}$，叫「$N$ 次单位根」。它是单位圆上把整圈 $2\pi$ 均分成 $N$ 份的第一个点；它的幂 $\omega^0,\omega^1,\dots,\omega^{N-1}$ 是圆上均匀分布的 $N$ 个点，且 $\omega^N=1$（转满一圈回到 1）。例如 $N=4$ 时 $\omega=e^{2\pi i/4}=e^{i\pi/2}=i$，四个幂是 $1,i,-1,-i$。</blockquote>
+<blockquote class="callout review">📖 <strong>补基础（DFT 矩阵长什么样）：</strong> 把 QFT 写成 $N\times N$ 矩阵 $F$，第 $j$ 行第 $k$ 列就是 $F_{jk}=\frac{1}{\sqrt N}\omega^{jk}$（行列下标都从 0 数起）。它和经典 DFT 矩阵一模一样：每一列对应一个频率，是一串复指数的采样，$\frac{1}{\sqrt N}$ 负责归一化让它幺正。关键点：<strong>每个矩阵元都是单位圆上的一点</strong>，相位随乘积 $jk$ 线性增长。</blockquote>
+<blockquote class="callout calc">🧮 <strong>一步步算（$N=2$ 时 QFT $=H$）：</strong> $N=2$ 时 $\omega=e^{2\pi i/2}=e^{i\pi}=-1$。矩阵元 $F_{jk}=\frac{1}{\sqrt2}\omega^{jk}$： $$F=\frac{1}{\sqrt2}\begin{pmatrix}\omega^{0}&amp;\omega^{0}\\\omega^{0}&amp;\omega^{1}\end{pmatrix}=\frac{1}{\sqrt2}\begin{pmatrix}1&amp;1\\1&amp;-1\end{pmatrix}=H.$$ 单比特 QFT 就是 Hadamard 门！</blockquote>
+<blockquote class="callout calc">🧮 <strong>一步步算（$N=4$ 的 QFT 矩阵）：</strong> $N=4$ 时 $\omega=i$，$F_{jk}=\frac12 i^{\,jk}$（指数 $jk$ 可对 4 取余，因为 $i^4=1$）。例如 $j=k=1$ 处是 $\frac12 i^1=\frac{i}{2}$；$j=k=2$ 处 $i^4=1$，是 $\frac12$；$j=2,k=3$ 处 $i^6=i^2=-1$。逐格填好得： $$F=\frac12\begin{pmatrix}1&amp;1&amp;1&amp;1\\1&amp;i&amp;-1&amp;-i\\1&amp;-1&amp;1&amp;-1\\1&amp;-i&amp;-1&amp;i\end{pmatrix}.$$ 作用到 $\ket1=(0,1,0,0)^{T}$ 就是「取出第 1 列」（从 0 数起）：$\frac12(1,\,i,\,-1,\,-i)^{T}=\frac12(\ket0+i\ket1-\ket2-i\ket3)$。四个分量模长都是 $1/2$，区别全在相位——这正是「频率 1」的离散波。</blockquote>
+<p>为什么 QFT 只要 $O(n^2)$ 个门、比经典 FFT 的 $O(N\log N)$ 还指数级地省？关键在输出态可以「按比特拆开」成张量积：</p>
+<p>$$\ket{j} \;\longrightarrow\; \bigotimes_{l=1}^{n}\frac{\ket{0}+e^{2\pi i\cdot 0.j_l j_{l+1}\dots j_n}\,\ket{1}}{\sqrt{2}}.$$</p>
+<blockquote class="callout review">📖 <strong>补基础（二进制小数）：</strong> 二进制小数定义为 $0.a_1a_2\dots a_m:=\sum_l a_l\,2^{-l}$，即第 1 位权重 $\frac12$、第 2 位 $\frac14$、第 3 位 $\frac18$……例如 $$0.101_2=1\cdot\tfrac12+0\cdot\tfrac14+1\cdot\tfrac18=0.5+0+0.125=0.625.$$ 上式中每个比特上的相位 $e^{2\pi i\cdot 0.j_lj_{l+1}\dots}$ 就由原输入的这些低位比特决定。</blockquote>
+<p>构造线路的办法：对每个比特先做一个 $H$，再补一串受控相位门 $R_k$（给目标加相位 $2\pi/2^k$），最后用 SWAP 把比特高低位次序翻回来。$H$ 加受控相位门一共约 $n(n+1)/2$ 个，即</p>
+<p>$$\#\text{gates}=O(n^2)=O(\log^2 N).$$</p>
+<blockquote class="callout mistake">⚠️ <strong>常见错误：</strong> 别想着把 QFT 的输出「读出来」当 FFT 用。傅里叶系数全藏在概率幅里，测一次只塌缩出一个 $\ket k$；测很多次也只能估出幅的模长、丢掉相位。QFT 单独没用，必须配合相位估计 / Shor 这种「把答案逼到可读基」的技巧。</blockquote>
+<blockquote class="callout summary">✅ <strong>小结：</strong> QFT = DFT 的量子版，矩阵元 $\frac{1}{\sqrt N}\omega^{jk}$（$\omega=e^{2\pi i/N}$）；$N=2$ 时就是 $H$；靠张量积分解用 $H$ + 受控相位门做到 $O(n^2)$ 门；结果藏在概率幅里不能直接读。</blockquote>
+<hr></section>
+<section id="s4"><h2>5.4 相位估计</h2>
+<p>大白话：相位估计是 QFT 最重要的应用，可以当成一个<strong>通用子程序</strong>：给你一个幺正算符 $U$ 和它的一个本征态 $\ket u$，它把对应本征值的相位 $\varphi$ 用二进制「读数」到一个计数寄存器里。</p>
+<blockquote class="callout purpose">🎯 <strong>用来干嘛：</strong> 它是一台<strong>通用读数器</strong>——给个幺正算符 $U$，把它本征值的相位用二进制读到寄存器里。很多量子算法（Shor 求阶、量子化学里估计分子能量、各种 HSP 类算法）最后都归结为「调用一次相位估计」。把它当成 <code>read_phase(U, u, 精度=t)</code> 这个被反复复用的标准函数就对了。</blockquote>
+<p>$$U\ket{u}=e^{2\pi i\varphi}\ket{u}.$$</p>
+<blockquote class="callout review">📖 <strong>补基础（本征值的相位）：</strong> 幺正算符的本征值模长都是 1，所以一定能写成 $e^{2\pi i\varphi}$ 的形式，全部信息就在相位 $\varphi\in[0,1)$ 里。把 $U$ 想成一个「返回值永远落在单位圆上」的操作，$\ket u$ 是它的不动方向，唯一发生的事就是转了个角度 $2\pi\varphi$。相位估计就是个「测这个角度」的子程序，把 $\varphi$ 二进制采样到 $t$ 个比特上。</blockquote>
+<p>算法三步走（计数寄存器 $t$ 比特决定精度，另有寄存器装 $\ket u$）：</p>
+<ol><li>计数比特全置 $\ket+$（即 $H^{\otimes t}\ket0$）。</li><li>施一串<strong>受控-$U^{2^k}$</strong>：第 $k$ 个计数比特控制 $U^{2^k}$（把 $U$ 重复作用 $2^k$ 次，相位被放大 $2^k$ 倍，正好对应二进制第 $k$ 位）。靠相位回踢，把 $\varphi$ 编码进计数比特，得到</li></ol>
+<p>$$\frac{1}{\sqrt{2^t}}\sum_{j=0}^{2^t-1} e^{2\pi i\varphi j}\,\ket{j}\,\ket{u}.$$ 注意这个态和 5.3 里 QFT 的输出<strong>长得一模一样</strong>——它就是 $\varphi$ 的「傅里叶编码」。</p>
+<ol><li>对计数比特做<strong>逆 QFT</strong>（$\mathrm{QFT}^\dagger$），把藏在相位里的 $\varphi$ 解码成一个二进制整数，测量读出。</li></ol>
+<blockquote class="callout intuition">💭 <strong>直觉：</strong> 第 2 步用受控-$U$ 把相位「写成傅里叶形式」，第 3 步用逆 QFT 把它「反解」回普通整数。QFT 编码、逆 QFT 解码，正好是一对互逆操作。</blockquote>
+<blockquote class="callout calc">🧮 <strong>一步步算（$\varphi=0.101_2$ 的确定性读出）：</strong> 设真实相位 $\varphi=0.101_2=\frac12+\frac{0}{4}+\frac18=0.625$，用 $t=3$ 个计数比特。第 2 步后计数寄存器变成 $$\frac{1}{\sqrt8}\sum_{j=0}^{7}e^{2\pi i(0.625)\,j}\,\ket j,$$ 这恰好就是基态 $\ket{101}=\ket5$ 在做 QFT 后的样子。于是第 3 步做逆 QFT 把它「解回」$\ket{101}$，测量确定地读到二进制 $101$，再当成小数 $0.101_2=0.625$ 还原出 $\varphi$。因为 $\varphi$ 恰好是 3 位二进制小数，结果精确无误；若 $\varphi$ 不是整 3 位（如 $0.6$），就会以高概率读到最接近的 $\ket{101}$ 或 $\ket{100}$，想更准就加大 $t$。</blockquote>
+<blockquote class="callout mistake">⚠️ <strong>常见错误：</strong> 相位估计要求你能<strong>制备本征态 $\ket u$</strong>——很多时候这本身很难。下一节 Shor 的精妙之处恰恰是绕过了这一点。</blockquote>
+<blockquote class="callout summary">✅ <strong>小结：</strong> 相位估计 = 受控-$U^{2^k}$（相位回踢编码）+ 逆 QFT（解码读出）；前提是能造出 $U$ 的本征态；精度随计数比特数 $t$ 增长，$\varphi$ 恰好是 $t$ 位二进制小数时确定读出。</blockquote>
+<hr></section>
+<section id="s5"><h2>5.5 Shor 算法（大数分解）</h2>
+<p>大白话：Shor 的核心套路是<strong>规约</strong>——把「分解大数 $N$」转换成「求阶（order finding）」，再把求阶交给上一节的相位估计去做。所谓求阶：取一个与 $N$ 互质的 $y$，找最小的正整数 $r$（叫 $y$ 的「阶」）使得</p>
+<blockquote class="callout purpose">🎯 <strong>用来干嘛：</strong> 这是量子计算最有名的「杀手级应用」——高效分解大整数。RSA 加密的安全性全押在「分解大数很难」上，而 Shor 把分解规约成求周期、再用相位估计高效求出周期，等于直接威胁了今天大半互联网的公钥加密。这也是各国砸钱造量子计算机、推「后量子密码」的直接动因。</blockquote>
+<p>$$y^r \equiv 1 \pmod{N}.$$</p>
+<blockquote class="callout review">📖 <strong>补基础（模运算、gcd 与辗转相除）：</strong> $a\equiv b\pmod N$ 读作「$a$ 和 $b$ 模 $N$ 同余」，意思是 $a-b$ 能被 $N$ 整除，即两者除以 $N$ 余数相同。例如 $49\equiv4\pmod{15}$（因为 $49=3\times15+4$）。$\gcd(a,b)$ 是最大公约数，用<strong>辗转相除法</strong>飞快算出：反复用「大数除以小数取余」替换，直到余数为 0。例如 $\gcd(48,15)$：$48=3\times15+3$，再 $\gcd(15,3)$：$15=5\times3+0$，余 0，于是 $\gcd(48,15)=3$。</blockquote>
+<p>拿到 $r$ 后，经典数论给出因子：若 $r$ 是偶数且 $y^{r/2}\not\equiv-1\pmod N$，则</p>
+<p>$$\gcd\!\left(y^{r/2}-1,\ N\right)\ \text{和}\ \gcd\!\left(y^{r/2}+1,\ N\right)$$</p>
+<p>至少有一个是 $N$ 的非平凡因子。</p>
+<p><strong>量子部分怎么求阶？</strong> 定义模乘算符 $U\ket{x}\equiv\ket{yx \bmod N}$（把 $\ket x$ 映到「乘一次 $y$」）。连续作用 $r$ 次会回到原点（因为 $y^r\equiv1$），所以 $U$ 的本征值都是 $e^{2\pi i s/r}$ 形式——相位里直接带着我们要的 $r$！它的一族本征态 $\ket{u_s}$ 满足 $U\ket{u_s}=e^{2\pi i s/r}\ket{u_s}$（$s=0,1,\dots,r-1$）。</p>
+<p>问题是：你根本不知道 $r$，怎么制备 $\ket{u_s}$？<strong>最妙的技巧</strong>是这些本征态的均匀叠加恰好等于一个随手就能造的态：</p>
+<p>$$\frac{1}{\sqrt{r}}\sum_{s=0}^{r-1}\ket{u_s} = \ket{1}.$$</p>
+<blockquote class="callout intuition">💭 <strong>直觉：</strong> 你不用费劲去造某个特定本征态。直接拿计算基里的 $\ket1$（数字 1 的编码，几乎零成本）当输入，它本身就是全体本征态的「大杂烩」。做一次相位估计，叠加会让你<strong>等概率</strong>地塌缩到某个 $s/r$ 上——相当于免费随机抽一个本征态来量。</blockquote>
+<blockquote class="callout calc">🧮 <strong>一步步算（$N=15,\ y=7$ 求阶并分解）：</strong> 逐次算模幂（每步乘 7 再对 15 取余）： $$7^1=7,\quad 7^2=49\equiv4,\quad 7^3\equiv7\cdot4=28\equiv13,\quad 7^4\equiv7\cdot13=91\equiv1\pmod{15}.$$ 最小使 $y^r\equiv1$ 的是 $r=4$。$r$ 是偶数，且 $7^{r/2}=7^2=49\equiv4\not\equiv-1\pmod{15}$，满足导出因子的条件。于是 $$\gcd(7^2-1,\,15)=\gcd(48,15)=3,\qquad \gcd(7^2+1,\,15)=\gcd(50,15)=5,$$ 直接得到 $15=3\times5$。（$\gcd(50,15)$：$50=3\times15+5$，再 $\gcd(15,5)=5$。）量子部分的全部价值，就是对大 $N$ 也能高效地找出这个周期 $r$。</blockquote>
+<p>量子线路吐出一个测量值 $s/r$（分母带着我们要的 $r$，但 $s$ 是随机的、还可能约分了），接下来全是经典后处理：<strong>连分数展开</strong>把测得的近似分数逼成最简分数恢复 $r$，再用 $\gcd(y^{r/2}\pm1,N)$ 拿到因子。</p>
+<blockquote class="callout mistake">⚠️ <strong>常见错误：</strong> Shor 不是一锤定音。可能抽到的 $r$ 是奇数，或者 $y^{r/2}\equiv-1$，这两种情况无法导出因子——换个 $y$ 重试即可（每次成功概率都不低）。</blockquote>
+<blockquote class="callout summary">✅ <strong>小结：</strong> 分解 → 求阶 → 对模乘 $U$ 做相位估计；输入 $\ket1$ 免去制备本征态；量子出 $s/r$，连分数 + gcd 经典还原因子。例子 $N=15,y=7,r=4$，$\gcd(48,15)=3$、$\gcd(50,15)=5$。这套组合拳直接威胁 RSA。</blockquote>
+<hr></section>
+<section id="s6"><h2>5.6 隐藏子群问题 (HSP)</h2>
+<p>大白话：HSP 是把本章（乃至更多）量子算法<strong>统一</strong>起来的抽象框架——Deutsch-Jozsa、Simon、求阶（Shor）、离散对数都是它的具体特例。</p>
+<blockquote class="callout purpose">🎯 <strong>用来干嘛：</strong> 它把一堆看似无关的量子算法装进<strong>同一个模板</strong>：只要你的问题能写成「找隐藏子群」，就照「制备叠加 → 查询 → 群上做傅里叶 → 测量」这套流程套。理解它的价值在于：想发明新量子算法时，先问「能不能化成 HSP」；同时它也圈出了量子加速的边界——阿贝尔群已解决，非阿贝尔群（关联格密码、图同构）仍是开放前沿。</blockquote>
+<p>问题定义：已知函数 $f:G\to X$ <strong>隐藏</strong>了群 $G$ 的某个子群 $H$，意思是 $f$ 在 $H$ 的每个陪集上取同一个值、不同陪集取不同值。目标：找出 $H$ 的生成元。求阶就是 $G=\mathbb{Z}$（整数加法群）、隐藏周期为 $r$ 的特例。</p>
+<p>量子统一套路：① 在群寄存器上制备均匀叠加；② 查询 $f$ 把陪集信息编码进态；③ 对 $G$ 做（群上的）量子傅里叶变换；④ 测量，得到关于 $H$ 的「对偶」信息，多采几次拼出 $H$ 的生成元。经典朴素做法要遍历，复杂度 $O(\lvert G\rvert)$。</p>
+<blockquote class="callout intuition">💭 <strong>直觉：</strong> 注意第 ③ 步——所有这些算法的「魔法核心」都是同一个：在合适的群上做傅里叶变换。换群、换 $f$，框架不变。这就是为什么 QFT 是本章的底层基石。</blockquote>
+<blockquote class="callout mistake">⚠️ <strong>常见错误：</strong> 别以为「套进 HSP 就一定有量子加速」。只有<strong>阿贝尔群</strong>（交换群）$G$ 才有现成的高效算法；非阿贝尔情形（如二面体群关联格问题、对称群关联图同构）目前仍是开放问题，没有通用高效解法。</blockquote>
+<blockquote class="callout summary">✅ <strong>小结：</strong> HSP = 「给定隐藏子群的 oracle $f$，求子群生成元」，是 QFT 类算法的统一接口；阿贝尔 HSP 已解决，非阿贝尔 HSP 仍开放。整章调用链：QFT（底层工具）→ 相位估计（通用子程序）→ Shor（杀手级应用）→ HSP（统一框架）。</blockquote></section>
+</main>
+</div>
+<script>
+const toggle=document.getElementById('themeToggle');
+const saved=localStorage.getItem('qcqi-theme');
+if(saved)document.documentElement.setAttribute('data-theme',saved);
+toggle&&toggle.addEventListener('click',()=>{
+ const cur=document.documentElement.getAttribute('data-theme')==='light'?'':'light';
+ document.documentElement.setAttribute('data-theme',cur);
+ localStorage.setItem('qcqi-theme',cur);
+});
+const links=[...document.querySelectorAll('.nav a')];
+const secs=[...document.querySelectorAll('section[id]')];
+const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){
+ links.forEach(l=>l.classList.toggle('active',l.getAttribute('href')==='#'+e.target.id));}})},
+ {rootMargin:'-10% 0px -80% 0px'});
+secs.forEach(s=>obs.observe(s));
+const box=document.getElementById('search');
+box&&box.addEventListener('input',()=>{const q=box.value.trim().toLowerCase();
+ links.forEach(l=>l.classList.toggle('hidden',q&&!l.textContent.toLowerCase().includes(q)));});
+</script>
+</body>
+</html>

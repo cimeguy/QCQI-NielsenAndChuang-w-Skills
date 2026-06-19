@@ -8,10 +8,12 @@
 :root{--bg:#fbf7f0;--panel:#fff;--panel2:#f3ede2;--fg:#2a2620;--muted:#7a7163;
 --accent:#c2410c;--accent2:#7c3aed;--border:#e6ddcd;--code:#f1ebde;--th:#efe7d6;
 --tip:#15803d;--tipbg:#ecfdf3;--analogy:#7c3aed;--analogybg:#f5f0ff;
---pitfall:#b45309;--pitfallbg:#fff7ed;--key:#0369a1;--keybg:#eff8ff;}
+--pitfall:#b45309;--pitfallbg:#fff7ed;--key:#0369a1;--keybg:#eff8ff;
+--matrix:#0d9488;--matrixbg:#effcfa;--example:#9333ea;--examplebg:#faf5ff;}
 [data-theme=dark]{--bg:#15110c;--panel:#1f1a13;--panel2:#1a1610;--fg:#ece3d4;--muted:#9a8f7d;
 --accent:#fb923c;--accent2:#c4b5fd;--border:#332b20;--code:#241e16;--th:#241e16;
---tipbg:#0f2417;--analogybg:#1c1430;--pitfallbg:#2a1d0c;--keybg:#0b1f2e;}
+--tipbg:#0f2417;--analogybg:#1c1430;--pitfallbg:#2a1d0c;--keybg:#0b1f2e;
+--matrixbg:#0c2422;--examplebg:#1e1230;}
 *{box-sizing:border-box}
 body{margin:0;font-family:-apple-system,"PingFang SC","Microsoft YaHei",Segoe UI,system-ui,sans-serif;
 background:var(--bg);color:var(--fg);line-height:1.85;font-size:16px}
@@ -55,6 +57,8 @@ blockquote.callout.tip{border-left-color:var(--tip);background:var(--tipbg)}
 blockquote.callout.analogy{border-left-color:var(--analogy);background:var(--analogybg)}
 blockquote.callout.pitfall{border-left-color:var(--pitfall);background:var(--pitfallbg)}
 blockquote.callout.key{border-left-color:var(--key);background:var(--keybg);font-weight:600}
+blockquote.callout.matrix{border-left-color:var(--matrix);background:var(--matrixbg)}
+blockquote.callout.example{border-left-color:var(--example);background:var(--examplebg)}
 .legend{display:flex;gap:10px;flex-wrap:wrap;margin:6px 0 18px;font-size:12.5px;color:var(--muted)}
 .legend span{background:var(--panel);border:1px solid var(--border);border-radius:20px;padding:3px 11px}
 .badge{display:inline-block;background:var(--accent);color:#fff;border-radius:6px;padding:2px 9px;font-size:12px;font-weight:700}
@@ -87,6 +91,7 @@ window.MathJax={
 <input class="search" id="search" placeholder="过滤小节…">
 <nav class="nav">
 <a href="../explained.html" style="color:var(--muted)">← 返回人话版门户</a>
+<a href="student.html" style="color:var(--muted)">🎓 看大学生版</a>
 <a href="index.html" style="color:var(--muted)">≡ 看公式精简版</a>
 <a href="#s0">导读</a>
 <a href="#s1">6.1 搜索问题与预言机</a>
@@ -98,7 +103,7 @@ window.MathJax={
 </nav></aside>
 <main class="main">
 <div class="topbar"><span class="badge">人话版</span><span class="home">第六章 · 量子搜索 (Grover)</span><button class="toggle" id="themeToggle">🌓 深/浅色</button></div>
-<div class="legend"><span>💡 人话</span><span>🧠 类比</span><span>⚠️ 坑</span><span>🔑 记住</span></div>
+<div class="legend"><span>💡 人话</span><span>🧠 类比</span><span>📐 矩阵怎么看</span><span>🔢 算例</span><span>⚠️ 坑</span><span>🔑 记住</span></div>
 <section id="s0"><h1>第六章 量子搜索算法（Grover）· 人话版</h1>
 <h2>导读</h2>
 <p>这一章讲的是程序员最熟悉的问题：<strong>在一堆东西里找符合条件的那个</strong>。经典做法没有索引就只能一个一个试，平均要看一半、最坏看完全部，复杂度 $O(N)$。Grover 算法用量子叠加做到了 $O(\sqrt{N})$ —— 100 万个元素，经典要试约 50 万次，Grover 只需约 1000 次。本章会讲清楚：搜索问题怎么定义、预言机（那个判定黑盒）怎么用、Grover 迭代每一步在干什么、为什么它本质上是平面里的"旋转"、以及最反直觉的一点——<strong>转过头反而更差</strong>，所以迭代次数必须卡准。</p>
@@ -115,6 +120,8 @@ window.MathJax={
 <p>$$O\ket{x} = (-1)^{f(x)}\ket{x}$$</p>
 <ul><li>命中（$f(x)=1$）：前面乘 $-1$；未命中（$f(x)=0$）：乘 $+1$（不变）。</li></ul>
 <blockquote class="callout analogy">🧠 <strong>类比：</strong> 相位翻转就像给命中的元素打一个隐形的负号标签 <code>tag[x] = -1</code>。神奇之处在于这个负号不改变测量到 $x$ 的概率（概率只看模长），所以你"光看"是看不出来谁被标记了——但后面的 Grover 迭代能利用这个负号把它捞出来。</blockquote>
+<blockquote class="callout matrix">📐 <strong>怎么看：</strong> 把 $O$ 写成矩阵就一清二楚。唯一解 $x_0$ 时 $O = I - 2\ketbra{x_0}{x_0}$，逐元素是 $\bra{y}O\ket{z} = \delta_{yz} - 2\braket{y}{x_0}\braket{x_0}{z}$。$\braket{x_0}{z}$ 只有 $z=x_0$ 时为 1、其余为 0，所以这是一个<strong>对角矩阵</strong>：对角线上只有 $x_0$ 那一格是 $1-2=-1$，其它格全是 $1$。换句话说 $O=\mathrm{diag}(1,\dots,1,\underbrace{-1}_{x_0},1,\dots,1)$——它只把目标项那一个坐标变号，对其余坐标原样放行，这正是"只给命中项打负号"的矩阵写法。</blockquote>
+<blockquote class="callout example">🔢 <strong>算例：</strong> 取 $N=4$、唯一解 $x_0=\ket{10}$（即下标 2）。那么 $O=\mathrm{diag}(1,1,-1,1)$。作用在均匀叠加 $\tfrac12(\ket{00}+\ket{01}+\ket{10}+\ket{11})$ 上，振幅向量 $(\tfrac12,\tfrac12,\tfrac12,\tfrac12)$ 变成 $(\tfrac12,\tfrac12,-\tfrac12,\tfrac12)$——只有下标 2 的振幅翻了号，其余三个纹丝不动。注意每个振幅的模长仍是 $\tfrac12$，所以此刻直接测量四个结果概率仍各 $1/4$，负号"藏"在相位里。</blockquote>
 <p><strong>怎么从布尔变成相位翻转</strong>：把辅助比特置成 $\ket{-}=(\ket{0}-\ket{1})/\sqrt{2}$，再作用布尔预言机 $U_f$，会发生"相位回踢"：</p>
 <p>$$\ket{x}\ket{-} \xrightarrow{U_f} (-1)^{f(x)}\ket{x}\ket{-}$$</p>
 <p>负号从辅助比特"踢"回了 $\ket{x}$ 上，辅助比特自己没变（解耦了），于是 $U_f$ 就等效成了相位翻转 $O$。</p>
@@ -130,6 +137,8 @@ window.MathJax={
 <p><strong>核心操作 Grover 迭代</strong>：</p>
 <p>$$G = -H O = (2\ketbra{\psi}{\psi} - I)\, O$$</p>
 <ul><li>$O$：相位翻转预言机，把解的幅变负。</li><li>$2\ketbra{\psi}{\psi}-I$：关于均匀叠加态 $\ket{\psi}$ 的反射，俗称<strong>对均值翻转（inversion about the mean）</strong>。</li><li>$I$：单位算符（什么都不做）。</li></ul>
+<blockquote class="callout matrix">📐 <strong>怎么看：</strong> 均匀叠加 $\ket\psi$ 的每个分量都是 $1/\sqrt N$，所以 $\ketbra{\psi}{\psi}$ 是一个<strong>所有元素都等于 $1/N$</strong> 的 $N\times N$ 矩阵。于是 $2\ketbra{\psi}{\psi}-I$ 的矩阵元为：对角元 $\tfrac2N-1$、非对角元 $\tfrac2N$。它作用到振幅向量 $(a_0,\dots,a_{N-1})$ 上，第 $i$ 个分量变成 $\sum_j\tfrac2N a_j-a_i=2\bar a-a_i$，其中 $\bar a$ 是所有振幅的平均值。这就是"对均值翻转"名字的由来：每个振幅都被映成 $2\bar a-a_i$（关于均值 $\bar a$ 做镜像）。</blockquote>
+<blockquote class="callout example">🔢 <strong>算例（$N=4$ 一步命中）：</strong> 唯一解 $x_0=\ket{10}$。初态均匀叠加振幅 $(\tfrac12,\tfrac12,\tfrac12,\tfrac12)$。第一步预言机 $O$ 把解变号 → $(\tfrac12,\tfrac12,-\tfrac12,\tfrac12)$。第二步对均值翻转：均值 $\bar a=\tfrac14(\tfrac12+\tfrac12-\tfrac12+\tfrac12)=\tfrac14$，每个分量映成 $2\bar a-a_i=\tfrac12-a_i$：三个非解 $\tfrac12-\tfrac12=0$，解 $\tfrac12-(-\tfrac12)=1$。结果 $(0,0,1,0)$——解的概率变成 $1^2=100\%$，仅一次迭代就确定命中。</blockquote>
 <blockquote class="callout tip">💡 <strong>人话：</strong> 一次 Grover 迭代 = 两步。第一步 <code>O</code>：给命中项的幅打负号。第二步"对均值翻转"：把每个幅都关于"所有幅的平均值"做镜像翻转。打了负号的命中项远低于均值，翻转后被抬得很高；其他项略低于均值，翻转后略降。净效果就是命中项的幅被放大、非命中被压低。</blockquote>
 <blockquote class="callout key">🔑 <strong>记住：</strong> 每迭代一次只调用一次预言机，总查询数 $O(\sqrt{N})$（$M=1$ 时约 $(\pi/4)\sqrt{N}$），相比经典 $O(N)$ 是<strong>平方加速</strong>。注意是平方加速，不是指数加速——别夸大。</blockquote>
 <hr></section>
@@ -147,6 +156,8 @@ window.MathJax={
 <p>旋转角 $\theta$ 满足：</p>
 <p>$$\sin\frac{\theta}{2} = \sqrt{\frac{M}{N}}$$</p>
 <ul><li>$\theta/2$：初态 $\ket{\psi}$ 与非解轴 $\ket{\alpha}$ 的夹角。</li><li>每作用一次 $G$，向量就朝 $\ket{\beta}$（解轴）多转一个固定的 $\theta$。</li></ul>
+<blockquote class="callout matrix">📐 <strong>怎么看：</strong> 在 $\{\ket\alpha,\ket\beta\}$ 这个二维基下，Grover 迭代 $G$ 就是一个旋转矩阵 $\begin{pmatrix}\cos\theta&amp;-\sin\theta\\\sin\theta&amp;\cos\theta\end{pmatrix}$。把初态写成 $\ket\psi=\cos\tfrac\theta2\ket\alpha+\sin\tfrac\theta2\ket\beta$，即向量与非解轴 $\ket\alpha$ 的夹角是 $\theta/2$。每乘一次 $G$，夹角增加 $\theta$；要让向量落到解轴 $\ket\beta$（夹角 $90°$），就需要 $(2R+1)\tfrac\theta2=\tfrac\pi2$。</blockquote>
+<blockquote class="callout example">🔢 <strong>算例（$N=4,\ M=1$）：</strong> $\sin\tfrac\theta2=\sqrt{M/N}=\tfrac12$，故 $\tfrac\theta2=30°$、$\theta=60°$。初态与 $\ket\alpha$ 夹角 $30°$，转一次到 $30°+60°=90°$——正好落在解轴 $\ket\beta$ 上，一次迭代 $100\%$ 命中（与 6.2 的振幅算例完全一致）。代入次数公式 $R\approx\tfrac\pi4\sqrt{N/M}=\tfrac\pi4\cdot2\approx1.57$，取整后实际最优就是 $1$ 次。</blockquote>
 <blockquote class="callout tip">💡 <strong>人话：</strong> "两次镜像反射等于一次旋转"是初中几何就有的结论（关于两条夹角为 $\phi$ 的镜面各反射一次，等于转 $2\phi$）。Grover 的两次反射正是这样合成出一个固定转角 $\theta$。所以整个算法 = 把那个几乎贴着 X 轴的向量，一步步以固定步长转向 Y 轴。</blockquote>
 <blockquote class="callout key">🔑 <strong>记住：</strong> 搜索发生在 $\ket{\alpha}$（非解）和 $\ket{\beta}$（解）张成的二维平面里；预言机和"对均值翻转"各是一次反射；两者复合 = 固定角 $\theta$ 的旋转，$\sin(\theta/2)=\sqrt{M/N}$。</blockquote>
 <hr></section>

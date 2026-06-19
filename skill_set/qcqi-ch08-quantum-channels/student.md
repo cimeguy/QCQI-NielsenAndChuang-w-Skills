@@ -1,0 +1,204 @@
+# 第八章补充 量子信道 · 大学生版
+
+## 导读
+
+这一章讲"量子比特在现实里会被噪声搞坏"这件事，以及怎么用数学描述这个变坏的过程。核心对象叫**量子信道**——可以把它当成一个作用在量子态上的"带噪声的变换"。本章告诉你：这个变换有三种等价写法（信道映射、Kraus 算符、蔡氏矩阵），它们怎么互相转换，常见噪声长什么样，怎么用这套工具做数值验证。
+
+用到的数学不多，但都得补牢：**密度矩阵 $\rho$ 是什么**、**矩阵的谱分解（本征值分解）**、**向量化 / reshape（把向量折成矩阵）**、**矩阵分块**、以及一个保概率条件 $\sum_k E_k^\dagger E_k=I$ 到底在说什么。每处都当场补清楚，再代具体小数字算给你看。
+
+> 💭 **直觉：** 理想量子门是**可逆**的（像无损的纯函数），但现实里 qubit 会和环境纠缠、漏信息，这个过程不可逆。量子信道就是描述这种"有损变换"的数学对象：输入一个干净的态，输出一个被污染、信息可能丢了的态。
+
+---
+
+## 1. 量子信道是什么：带噪声的不可逆变换
+
+量子信道 $\mathcal{E}$ 作用在**密度矩阵** $\rho$ 上：$\rho\to\mathcal{E}(\rho)$。
+
+> 🎯 **用来干嘛：** 量子信道是用来**描述真实硬件里量子态怎么被噪声、环境弄脏**的数学工具——比特随机翻转、相位丢失、能量耗散都能用它刻画。它是量子纠错的基础：你得先能写下"错误长什么样"，才能设计电路去纠正它。
+
+> 📖 **补基础：密度矩阵 $\rho$ 回顾。** 之前我们用列向量 $\ket\psi$ 表示量子态，但那只能描述"纯态"。一旦有噪声、有概率混合，就要升级成**密度矩阵** $\rho$——一个 $d\times d$ 的方阵，满足三条：① **厄米** $\rho=\rho^\dagger$（共轭转置等于自己）；② **半正定** $\rho\ge0$（所有本征值 $\ge0$，保证概率非负）；③ **迹为 1** $\Tr(\rho)=1$（对角元之和为 1，即总概率）。例：纯态 $\ket0$ 写成 $\rho=\ketbra{0}{0}=\begin{pmatrix}1&0\\0&0\end{pmatrix}$；"一半 $\ket0$ 一半 $\ket1$"的混合态写成 $\tfrac12 I=\begin{pmatrix}1/2&0\\0&1/2\end{pmatrix}$（叫**最大混合态**，信息完全丢失）。对角元是"测到各结果的概率"，非对角元叫**相干项**，反映量子叠加。
+
+一个合法的量子信道必须是 **CPTP 映射**（完全正定＋保迹）：
+
+$$\mathcal{E}\otimes I \ge 0 \quad(\text{CP}), \qquad \Tr(\mathcal{E}(\rho)) = \Tr(\rho) \quad(\text{TP})$$
+
+- **CP（完全正定）**：哪怕把这个 qubit 和任意大的旁观系统纠缠在一起，一起变换后结果仍是合法量子态（概率非负）。
+- **TP（保迹）**：变换前后总概率守恒，都等于 1。
+
+> 💭 **直觉：** "完全正定"是说这个变换不能算出"负概率"这种非法结果，哪怕和别的系统挂钩也不行；"保迹"是说概率加起来始终是 1，没凭空多出来或漏掉。两条合起来＝"物理上说得通的有损变换"。
+
+> ⚠️ **常见错误：** 只检查 CP 不够，TP 也得查；缺一个这个映射就不是合法信道。
+
+---
+
+## 2. 三种等价描述：同一个对象的三种写法
+
+同一个信道 $\mathcal{E}$ 有三种写法，彼此一一对应、可互转：
+
+| 描述 | 形式 | 合法性条件 |
+|---|---|---|
+| 信道映射 $\mathcal{E}$ | $\rho \to \mathcal{E}(\rho)$ | CPTP |
+| Kraus 算符 $\{E_k\}$ | $\mathcal{E}(\rho)=\sum_k E_k \rho E_k^\dagger$ | $\sum_k E_k^\dagger E_k = I$ |
+| 蔡氏矩阵 $J$ | $(\mathcal{E}\otimes I)\ketbra{\Omega}{\Omega}$ | $J\ge 0$ 且部分迹 $=I$ |
+
+> 💭 **直觉：** 这三种是同一个变换的三种"写法"：信道映射是"行为描述"，Kraus 是"一组矩阵"，蔡氏矩阵是"打包成的一个大矩阵"。研究哪种方便就转成哪种。
+
+> ✅ **小结：** 转换主线是 **信道 → 蔡氏矩阵 → 谱分解 → Kraus**。蔡氏矩阵是中转站，因为它把"映射"变成了"普通矩阵"，可以直接做线性代数。
+
+---
+
+## 3.（8.1）从信道到蔡氏矩阵：把"变换"打包成"矩阵"
+
+要研究一个变换，一个聪明办法是喂它一个特殊输入，用输出反推整个变换。蔡氏矩阵就是这么干的：把信道作用在**最大纠缠态**的一半上，得到的矩阵就完整编码了整个信道。
+
+> 🎯 **用来干嘛：** Choi（蔡氏）矩阵是把"信道"这个抽象映射**打包成一个普通矩阵**，好处有二：① 判断信道合不合法（是否 CP）只要看它本征值有没有负的；② 它是"信道 → Kraus"转换的中转站，能直接上线性代数工具。
+
+$$J(\mathcal{E}) = (\mathcal{E}\otimes I)(\ketbra{\Omega}{\Omega}), \qquad \ket{\Omega}=\sum_i \ket{ii}$$
+
+- $J(\mathcal{E})$：信道对应的蔡氏矩阵（Choi matrix），$d^2\times d^2$。
+- $\ket{\Omega}=\sum_i\ket{ii}$：未归一的最大纠缠态（单 qubit 时 $\ket{00}+\ket{11}$）。
+- $\mathcal{E}\otimes I$：只对纠缠态的"一半"施加信道，另一半放着不动。
+
+> 📖 **补基础：矩阵分块。** 一个 $4\times4$ 矩阵可以切成 $2\times2$ 个"小块"，每块是 $2\times2$ 矩阵：
+> $$\begin{pmatrix}A&B\\C&D\end{pmatrix},\quad A,B,C,D\text{ 都是 }2\times2.$$
+> 蔡氏矩阵正好这样按块组织——这让"算一个大矩阵"变成"算四个小块再拼起来"。
+
+> 🧮 **一步步算：逐块配方。** 对单 qubit，有等价公式 $J=\sum_{i,j}\mathcal{E}(\ketbra{i}{j})\otimes\ketbra{i}{j}$。意思是：把 $J$ 切成 $2\times2$ 个小块（按 $\ketbra{i}{j}$ 编号），**第 $(i,j)$ 块就等于把信道作用到 $\ketbra{i}{j}$ 上的结果** $\mathcal{E}(\ketbra{i}{j})$。所以只要算四个 $2\times2$ 小块 $\mathcal{E}(\ketbra00),\mathcal{E}(\ketbra01),\mathcal{E}(\ketbra10),\mathcal{E}(\ketbra11)$，按 $\begin{pmatrix}\mathcal{E}(\ketbra00)&\mathcal{E}(\ketbra01)\\\mathcal{E}(\ketbra10)&\mathcal{E}(\ketbra11)\end{pmatrix}$ 拼起来就是整个 $J$。
+
+这个对应关系叫 **Choi–Jamiołkowski 同构**：信道 $\mathcal{E}$ 和矩阵 $J(\mathcal{E})$ 一一对应，而且合法性条件也变简单了——
+
+$$\mathcal{E}\ \text{是 CP} \iff J(\mathcal{E}) \ge 0$$
+
+> ✅ **小结：** "映射是否物理（CP）"这个抽象问题，被翻译成了"矩阵是否半正定（$J\ge0$）"这个能直接算的问题。判 CP 就去查 $J$ 的本征值有没有负的。
+
+**例子：比特翻转信道。** 它以概率 $p$ 对 qubit 施加一次 Pauli-X：
+
+$$\mathcal{E}(\rho)=(1-p)\,\rho + p\,X\rho X,\qquad X=\begin{pmatrix}0&1\\1&0\end{pmatrix}$$
+
+> 🧮 **一步步算：算比特翻转的 $J$（取 $p=\tfrac14$）。** 用逐块配方。注意 $X\ketbra00 X=\ketbra11$、$X\ketbra11 X=\ketbra00$、$X\ketbra01 X=\ketbra10$。四个块：
+> $$\mathcal{E}(\ketbra00)=(1-p)\ketbra00+p\ketbra11=\begin{pmatrix}1-p&0\\0&p\end{pmatrix},\quad \mathcal{E}(\ketbra11)=\begin{pmatrix}p&0\\0&1-p\end{pmatrix},$$
+> $$\mathcal{E}(\ketbra01)=\begin{pmatrix}0&1-p\\p&0\end{pmatrix},\quad \mathcal{E}(\ketbra10)=\begin{pmatrix}0&p\\1-p&0\end{pmatrix}.$$
+> 拼成 $4\times4$：
+> $$J=\begin{pmatrix}1-p&0&0&1-p\\0&p&p&0\\0&p&p&0\\1-p&0&0&1-p\end{pmatrix}.$$
+> 代 $p=\tfrac14$：$J=\begin{pmatrix}3/4&0&0&3/4\\0&1/4&1/4&0\\0&1/4&1/4&0\\3/4&0&0&3/4\end{pmatrix}$。它的本征值是 $\{\tfrac32,\tfrac12,0,0\}$——全 $\ge0$，所以信道是 CP（合法）；**两个非零本征值**预示比特翻转只需 2 个 Kraus 算符。这个 $J$ 正是下一节谱分解的输入。
+
+---
+
+## 4.（8.2）从蔡氏矩阵到 Kraus：对矩阵做"分解"还原出算子
+
+蔡氏矩阵 $J$ 是半正定的，所以能做**谱分解**，每个本征对都能还原出一个 Kraus 算符。
+
+> 🎯 **用来干嘛：** Kraus 算符是信道**最好用的一种写法**——一组矩阵 $\{E_k\}$，把噪声拆成"可能发生的几种操作"（如"什么都没坏"分支、"翻转了"分支）。算噪声后的态、上数值模拟、推纠错条件，都直接用 $\mathcal{E}(\rho)=\sum_k E_k\rho E_k^\dagger$ 这个式子。
+
+> 📖 **补基础：谱分解（本征值分解）。** 对一个厄米矩阵 $J$，总能找到一组**正交的单位本征向量** $\ket{v_k}$ 和对应的实**本征值** $\lambda_k$（满足 $J\ket{v_k}=\lambda_k\ket{v_k}$），并把 $J$ 写成
+> $$J=\sum_k \lambda_k\,\ketbra{v_k}{v_k}.$$
+> 这叫谱分解。若 $J$ 还半正定，则所有 $\lambda_k\ge0$，可以开方 $\sqrt{\lambda_k}$。直觉上：谱分解把一个复杂矩阵拆成几个"纯方向"$\ketbra{v_k}{v_k}$ 的加权叠加，权重就是本征值。
+
+> 📖 **补基础：向量化与 reshape（$\mathrm{mat}$）。** 一个 $d\times d$ 矩阵有 $d^2$ 个元素，把它们排成一列就是长度 $d^2$ 的**向量化**；反过来，把长度 $d^2$ 的向量按行优先折回 $d\times d$ 矩阵，就是 $\mathrm{mat}(\cdot)$（reshape 的逆操作）。单 qubit（$d=2$）时：
+> $$(a,b,c,d)^\top \;\xrightarrow{\ \mathrm{mat}\ }\; \begin{pmatrix}a&b\\c&d\end{pmatrix}.$$
+
+谱分解 → Kraus 的公式：
+
+$$J = \sum_k \lambda_k \ketbra{v_k}{v_k}, \qquad E_k = \sqrt{\lambda_k}\,\cdot\,\mathrm{mat}(\ket{v_k})$$
+
+最终重建出 Kraus 表示：
+
+$$\mathcal{E}(\rho)=\sum_k E_k \rho E_k^\dagger, \qquad \sum_k E_k^\dagger E_k = I$$
+
+> 📖 **补基础：$\sum_k E_k^\dagger E_k=I$ 是什么意思（保概率）。** $E_k^\dagger$ 是 $E_k$ 的共轭转置。这个条件是"保迹（TP）"在 Kraus 写法下的样子，作用是**保证总概率守恒**：变换后 $\Tr(\mathcal{E}(\rho))=\Tr\big(\sum_k E_k\rho E_k^\dagger\big)=\Tr\big(\rho\sum_k E_k^\dagger E_k\big)=\Tr(\rho I)=\Tr(\rho)=1$（用到迹的循环性 $\Tr(AB)=\Tr(BA)$）。换句话说，各噪声分支的"概率"加起来必须正好是 1，不多不少。
+
+> 🧮 **一步步算：接上节 $p=\tfrac14$ 的比特翻转 $J$。** 它的两个非零本征对是 $\lambda_0=\tfrac32,\ \ket{v_0}=\tfrac{1}{\sqrt2}(1,0,0,1)^\top$ 和 $\lambda_1=\tfrac12,\ \ket{v_1}=\tfrac{1}{\sqrt2}(0,1,1,0)^\top$。先 $\mathrm{mat}$ 折成矩阵、再乘 $\sqrt{\lambda_k}$：
+> $$E_0=\sqrt{\tfrac32}\cdot\tfrac{1}{\sqrt2}\begin{pmatrix}1&0\\0&1\end{pmatrix}=\tfrac{\sqrt3}{2}\,I,\qquad E_1=\sqrt{\tfrac12}\cdot\tfrac{1}{\sqrt2}\begin{pmatrix}0&1\\1&0\end{pmatrix}=\tfrac12\,X.$$
+> 正好是 $E_0=\sqrt{1-p}\,I=\sqrt{3/4}\,I$、$E_1=\sqrt{p}\,X=\sqrt{1/4}\,X$。验证保迹：$E_0^\dagger E_0+E_1^\dagger E_1=\tfrac34 I+\tfrac14 I=I$。✓ 一条龙跑通了 **信道 → 蔡氏矩阵 → 谱分解 → Kraus**。
+
+> 💭 **直觉：** Kraus 表示 $\sum_k E_k\rho E_k^\dagger$ 像"概率性地从一组分支算子里挑一个作用在态上，再把所有分支结果叠加"。每个 $E_k$ 是一种可能发生的噪声操作，本征值 $\lambda_k$ 决定它的权重。$\mathrm{mat}(\cdot)$ 这步就是 `reshape(vec,(d,d))`，把打包的大矩阵拆回一组算子——8.1 是序列化，8.2 是反序列化。
+
+关于本征值还有几个要点：
+
+- **非零本征值的个数 = Kraus 秩**：即最少需要几个 Kraus 算符。$\lambda_k=0$ 的方向不贡献算子。
+- **Kraus 表示不唯一**：另一组 $\{F_j\}$ 等价于 $\{E_k\}$，当且仅当差一个幺正混合 $F_j=\sum_k u_{jk}E_k$。谱分解只给出其中一组（正交规范那组）。
+
+> ⚠️ **常见错误：** ① 别以为 Kraus 算符唯一——同一信道有无穷多组等价 Kraus，彼此差一个幺正变换 $u$，物理上完全一样。② $\mathrm{mat}$ 时行/列约定搞反，会得到转置的 Kraus，结果就错了。
+
+---
+
+## 5.（8.3）几种典型信道：Kraus 算符 + Bloch 球上的仿射变换
+
+单 qubit 信道有个直观的几何描述：任何单 qubit 态都对应 Bloch 球里的一个向量 $\vec r$，信道的作用就是对这个向量做**仿射变换** $\vec r\mapsto M\vec r+\vec c$。
+
+> 🎯 **用来干嘛：** 这几种典型信道是把现实噪声"建模成标准零件"——**比特翻转**模拟"比特被随机翻"（经典也有的错），**振幅阻尼**模拟"激发态自发掉到基态、放出光子"的能量耗散（真实超导/光子硬件的主要错误）。知道硬件主要是哪种噪声，才能对症设计纠错码。
+
+> 📖 **补基础：Bloch 向量与仿射变换。** 任何单 qubit 密度矩阵都能写成 $\rho=\tfrac12(I+r_x X+r_y Y+r_z Z)$，其中 $\vec r=(r_x,r_y,r_z)$ 是一个 $3$ 维实向量，叫 **Bloch 向量**：纯态在单位球面上（$\lvert\vec r\rvert=1$），混合态在球内部，球心 $\vec r=\vec 0$ 就是最大混合态 $I/2$。**仿射变换** $\vec r\mapsto M\vec r+\vec c$＝先用矩阵 $M$ 做线性变换（缩放/旋转），再加一个平移 $\vec c$——就是 3D 图形里那种"先转再挪"。
+
+$$\vec r \;\mapsto\; M\vec r + \vec c$$
+
+> 💭 **直觉：** 可逆的纯门只会**旋转**球（$M$ 是旋转、不缩小），而带噪声的信道会把球**压扁**（信息丢失），有时还整体挪位（$\vec c\ne0$）。
+
+> 🧮 **一步步算：对角 $M$ 是逐坐标缩放。** 表里 $M$ 都是对角阵 $\mathrm{diag}(m_x,m_y,m_z)$，所以 $\vec r=(r_x,r_y,r_z)$ 的每个分量各乘一个因子：$r_x\to m_x r_x$ 等。某个 $m\approx0$ 表示那根轴被压扁（对应方向的相干/信息几乎全丢），$m=1$ 表示该轴不受影响。$\vec c\ne0$ 意味着球心被搬离原点，只有"有能量定向流失"的信道（振幅阻尼）才会发生。
+
+下面是几种典型信道的两种描述（$p$ 是出错概率，$\gamma$ 是阻尼率）：
+
+| 信道 | Kraus 算符 | $M=\mathrm{diag}(\cdot)$ | $\vec c$ |
+|---|---|---|---|
+| 比特翻转 | $\sqrt{1-p}\,I,\ \sqrt{p}\,X$ | $(1,\ 1-2p,\ 1-2p)$ | $0$ |
+| 相位翻转 | $\sqrt{1-p}\,I,\ \sqrt{p}\,Z$ | $(1-2p,\ 1-2p,\ 1)$ | $0$ |
+| 比特-相位翻转 | $\sqrt{1-p}\,I,\ \sqrt{p}\,Y$ | — | $0$ |
+| 去极化 | $\sqrt{1-3p/4}\,I,\ \sqrt{p/4}\,X,\ \sqrt{p/4}\,Y,\ \sqrt{p/4}\,Z$ | $(1-p,\ 1-p,\ 1-p)$ | $0$ |
+| 振幅阻尼 | $\begin{pmatrix}1&0\\0&\sqrt{1-\gamma}\end{pmatrix},\ \begin{pmatrix}0&\sqrt{\gamma}\\0&0\end{pmatrix}$ | $(\sqrt{1-\gamma},\ \sqrt{1-\gamma},\ 1-\gamma)$ | $(0,0,\gamma)$ |
+
+逐条说这些信道在干嘛：
+
+- **比特翻转**：以概率 $p$ 翻转 $\ket0\leftrightarrow\ket1$（施加 $X$），沿 $y,z$ 轴压缩。
+- **相位翻转 / 相位阻尼**：只破坏相位（施加 $Z$），衰减相干项（密度矩阵的非对角元），沿 $x,y$ 轴压缩、$z$ 不变。
+- **去极化**：以概率 $p$ 把态彻底打乱成最大混合态，Bloch 球**各向同性**地朝球心缩。
+- **振幅阻尼**：描述能量耗散 $\ket1\to\ket0$（如自发辐射），球收缩**并向北极 $\ket0$ 平移**。
+
+> 🧮 **一步步算：比特翻转 $p=\tfrac14$ 作用到 $\rho=\ketbra00=\begin{pmatrix}1&0\\0&0\end{pmatrix}$。** 用 $\mathcal{E}(\rho)=(1-p)\rho+pX\rho X$，其中 $X\rho X=\ketbra11=\begin{pmatrix}0&0\\0&1\end{pmatrix}$：
+> $$\mathcal{E}(\rho)=\tfrac34\begin{pmatrix}1&0\\0&0\end{pmatrix}+\tfrac14\begin{pmatrix}0&0\\0&1\end{pmatrix}=\begin{pmatrix}3/4&0\\0&1/4\end{pmatrix}.$$
+> 即有 $\tfrac14$ 的概率被翻到 $\ket1$。再用 Bloch 描述对照：$\ket0$ 的 $\vec r=(0,0,1)$，比特翻转 $M=\mathrm{diag}(1,1-2p,1-2p)$，代 $p=\tfrac14$ 得 $M=\mathrm{diag}(1,\tfrac12,\tfrac12)$，$\vec c=0$：
+> $$\vec r\,'=M\vec r+\vec c=(0,\ 0,\ \tfrac12).$$
+> 换回密度矩阵，对角元 $=\tfrac{1\pm r_z'}{2}=\tfrac{1\pm 1/2}{2}=\{\tfrac34,\tfrac14\}$。✓ 与直接算 $\mathcal{E}(\rho)$ 一致。
+
+振幅阻尼的两个 Kraus 算符值得单独看：
+
+$$E_0^{\text{amp}}=\begin{pmatrix}1&0\\0&\sqrt{1-\gamma}\end{pmatrix}, \qquad E_1^{\text{amp}}=\begin{pmatrix}0&\sqrt{\gamma}\\0&0\end{pmatrix}$$
+
+> 🧮 **一步步算：逐元素读这两个算符。** 把它们当成作用在列向量 $\begin{pmatrix}c_0\\c_1\end{pmatrix}$（$c_0$ 是 $\ket0$ 振幅、$c_1$ 是 $\ket1$ 振幅）上的矩阵：
+> - $E_0$ 的 $(0,0)=1$：$\ket0$ 分量原封不动（基态不会自发往上跳）；$(1,1)=\sqrt{1-\gamma}$：$\ket1$ 分量打了个 $\sqrt{1-\gamma}$ 折扣（有概率衰减掉）。两个对角元、非对角全 0，说明这分支只做幅度缩放、不混合 $\ket0\ket1$。
+> - $E_1$ 只有 $(0,1)=\sqrt{\gamma}$ 一个非零元：把输入的 $\ket1$ 分量（第 2 列）搬到输出的 $\ket0$ 分量（第 1 行），振幅 $\sqrt{\gamma}$——这就是"激发态掉到基态、放出一个光子"的跃迁。第 1 列全 0 表示 $\ket0$ 不会触发这个分支。
+
+> 🧮 **一步步算：振幅阻尼 $\gamma=\tfrac12$ 作用到激发态 $\rho=\ketbra11=\begin{pmatrix}0&0\\0&1\end{pmatrix}$。** 算 $\sum_k E_k\rho E_k^\dagger$：
+> $$E_0\rho E_0^\dagger=\begin{pmatrix}1&0\\0&\sqrt{1-\gamma}\end{pmatrix}\begin{pmatrix}0&0\\0&1\end{pmatrix}\begin{pmatrix}1&0\\0&\sqrt{1-\gamma}\end{pmatrix}=\begin{pmatrix}0&0\\0&1-\gamma\end{pmatrix},$$
+> $$E_1\rho E_1^\dagger=\begin{pmatrix}0&\sqrt{\gamma}\\0&0\end{pmatrix}\begin{pmatrix}0&0\\0&1\end{pmatrix}\begin{pmatrix}0&0\\\sqrt{\gamma}&0\end{pmatrix}=\begin{pmatrix}\gamma&0\\0&0\end{pmatrix}.$$
+> 相加得 $\mathcal{E}(\rho)=\begin{pmatrix}\gamma&0\\0&1-\gamma\end{pmatrix}$。代 $\gamma=\tfrac12$ 得 $\begin{pmatrix}1/2&0\\0&1/2\end{pmatrix}=I/2$——一半布居衰减到 $\ket0$，纯 $\ket1$ 变成了最大混合态。用 Bloch 对照也一致：$\ket1$ 的 $\vec r=(0,0,-1)$，代 $M=\mathrm{diag}(\sqrt{1-\gamma},\sqrt{1-\gamma},1-\gamma)$、$\vec c=(0,0,\gamma)$ 得 $\vec r\,'=(0,0,(1-\gamma)(-1)+\gamma)=(0,0,2\gamma-1)$，$\gamma=\tfrac12$ 时为 $(0,0,0)$＝球心＝$I/2$。✓
+> 再验证保迹 $\sum_k E_k^\dagger E_k=I$：$E_0^\dagger E_0=\begin{pmatrix}1&0\\0&1-\gamma\end{pmatrix}$，$E_1^\dagger E_1=\begin{pmatrix}0&0\\0&\gamma\end{pmatrix}$，相加 $=I$。✓ 对任意 $\gamma$ 都成立。
+
+> ⚠️ **常见错误：** 别把相位阻尼和振幅阻尼搞混。**相位阻尼** $\vec c=0$，只退相干、不丢能量（它和相位翻转效果一样，都只衰减相干项、不改变对角布居）；**振幅阻尼** $\vec c\ne0$，会耗能并把球往 $\ket0$ 拽——它是表里唯一带非零平移的信道。
+
+> ✅ **小结：** 去极化＝各向同性缩球（$\vec c=0$）；振幅阻尼＝缩球＋朝 $\ket0$ 平移（$\vec c\ne0$）。看到 $\vec c\ne0$ 基本就是有能量流失的过程。
+
+---
+
+## 6.（8.4）算例与验证：把流程跑一遍并核对结果
+
+这一节把前面的转换流程套到具体信道上，做了几类练习和一个数值验证：
+
+- **算例 1–3**：给定若干单 qubit 信道（或它们的蔡氏矩阵），按 8.2 流程谱分解，求出各自的 Kraus 算符组，并核验保迹 $\sum_k E_k^\dagger E_k=I$。
+- **算例 4：换基底展开 Kraus**。和算例 1 是**同一个信道**，但把 Kraus 写在另一组算符基下，验证 Kraus 表示的非唯一性。
+- **检验式（transfer matrix / 展平）**：核验把信道"展平"成矩阵的向量化变换式，结果和直接计算一致。
+
+$$F_j = \sum_k u_{jk}\,E_k \quad(u\ \text{幺正}) \;\Longrightarrow\; \{F_j\}\ \text{与}\ \{E_k\}\ \text{描述同一信道}$$
+
+> 💭 **直觉：** 换基底展开 Kraus 就像把同一份数据从一种编码转成另一种——字节变了，内容没变。不同的幺正 $u$ 给出不同"编码"，但解码出来的信道完全一样。
+
+**扰动量子纠错（Perturbative QEC）验证。** 用上面这套信道 / Kraus 工具，数值检验某篇扰动量子纠错工作里公式 (18) 与公式 (20) 是否等价。笔记记录的结论是：**数值验证通过**——两式在所测参数下给出一致结果。
+
+> ✅ **小结：** 这章的工具不只是理论摆设——它能把"两个看起来不一样的纠错公式是否相等"这种问题，变成"算出两个矩阵/数值比一比"的可执行检验。
+
+---
+
+## 一句话总览
+
+> ✅ **小结：** 量子信道＝作用在密度矩阵上的有损变换 $\mathcal{E}(\rho)$；它有三种可互转的写法（信道 / Kraus / 蔡氏矩阵），主线转换是 **信道 →(喂最大纠缠态)→ 蔡氏矩阵 →(谱分解)→ Kraus**；单 qubit 时还能看成 Bloch 球上的仿射变换 $\vec r\mapsto M\vec r+\vec c$，球缩水就是信息在丢。
+
+> ⚠️ **范围说明：** 本文忠实于第八章补充笔记的范围与结论。具体的矩阵数值、谱分解结果、QEC 公式 (18)/(20) 的完整表达式与验证代码未在文本层完整保留，精确细节请参阅原书第 8 章与原笔记。

@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>第二章 · 线性代数与量子力学 · 大学生版 · QCQI</title>
+<style>
+:root{--bg:#f4f7fb;--panel:#fff;--panel2:#eaf0f8;--fg:#1c2733;--muted:#64748b;
+--accent:#2563eb;--accent2:#0891b2;--border:#d7e1ee;--code:#eef3f9;--th:#e6eef8;
+--purpose:#ea580c;--purposebg:#fff5ec;
+--review:#7c3aed;--reviewbg:#f5f1ff;--calc:#0891b2;--calcbg:#ecfbfd;
+--intuition:#2563eb;--intuitionbg:#eef4ff;--mistake:#dc2626;--mistakebg:#fef2f2;
+--summary:#15803d;--summarybg:#ecfdf3;}
+[data-theme=dark]{--bg:#0d1320;--panel:#161f30;--panel2:#121a29;--fg:#e3eaf3;--muted:#8595a8;
+--accent:#60a5fa;--accent2:#22d3ee;--border:#27344a;--code:#16203200;--th:#1a2538;
+--purposebg:#2a1709;
+--reviewbg:#1f1633;--calcbg:#0a2730;--intuitionbg:#10203b;--mistakebg:#2a1414;--summarybg:#0f2417;}
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,"PingFang SC","Microsoft YaHei",Segoe UI,system-ui,sans-serif;
+background:var(--bg);color:var(--fg);line-height:1.9;font-size:16px}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+.layout{display:flex;min-height:100vh}
+.sidebar{width:300px;flex:0 0 300px;background:var(--panel2);border-right:1px solid var(--border);
+position:sticky;top:0;height:100vh;overflow-y:auto;padding:20px 0}
+.sidebar h2{font-size:14px;margin:0 18px 6px;color:var(--muted);font-weight:600}
+.brand{padding:0 18px 14px;border-bottom:1px solid var(--border);margin-bottom:12px}
+.brand .t{font-size:18px;font-weight:800}
+.brand .s{font-size:12.5px;color:var(--muted);margin-top:3px}
+.search{margin:0 14px 12px;width:calc(100% - 28px);padding:9px 11px;border-radius:9px;
+border:1px solid var(--border);background:var(--panel);color:var(--fg);font-size:13px}
+.nav a{display:block;padding:6px 18px;color:var(--fg);font-size:13.5px;border-left:3px solid transparent}
+.nav a:hover{background:var(--panel);text-decoration:none}
+.nav a.active{border-left-color:var(--accent);background:var(--panel);color:var(--accent)}
+.nav a.hidden{display:none}
+.main{flex:1;min-width:0;padding:34px 52px 90px;max-width:920px}
+.topbar{display:flex;align-items:center;gap:14px;margin-bottom:8px;flex-wrap:wrap}
+.topbar .home{font-size:13px;color:var(--muted)}
+.toggle{margin-left:auto;cursor:pointer;border:1px solid var(--border);background:var(--panel);
+color:var(--fg);border-radius:8px;padding:6px 12px;font-size:13px}
+section{scroll-margin-top:20px;padding:16px 0;border-bottom:1px solid var(--border)}
+h1{font-size:28px;margin:.2em 0 .5em;line-height:1.3}
+h2{font-size:21px;margin:1.1em 0 .5em;color:var(--accent)}
+h3{font-size:17px;margin:1em 0 .4em;color:var(--accent2)}h4{font-size:15.5px;margin:.9em 0 .3em}
+code{background:var(--code);padding:1.5px 6px;border-radius:5px;font-size:.9em;
+font-family:"SF Mono",Menlo,Consolas,monospace}
+pre{background:var(--code);padding:14px 16px;border-radius:10px;overflow-x:auto;border:1px solid var(--border)}
+pre code{background:none;padding:0}
+table{border-collapse:collapse;width:100%;margin:12px 0;font-size:14px;border-radius:8px;overflow:hidden}
+th,td{border:1px solid var(--border);padding:7px 11px;text-align:left;vertical-align:top}
+th{background:var(--th);font-weight:600}
+ul,ol{padding-left:24px}li{margin:4px 0}
+hr{border:none;border-top:1px dashed var(--border);margin:16px 0}
+blockquote{border-left:4px solid var(--accent2);margin:12px 0;padding:8px 16px;color:var(--muted);
+background:var(--panel);border-radius:0 8px 8px 0}
+blockquote.callout{border-left-width:5px;border-radius:10px;padding:12px 18px;color:var(--fg);
+margin:14px 0;font-size:15px}
+blockquote.callout.review{border-left-color:var(--review);background:var(--reviewbg)}
+blockquote.callout.purpose{border-left-color:var(--purpose);background:var(--purposebg)}
+blockquote.callout.calc{border-left-color:var(--calc);background:var(--calcbg)}
+blockquote.callout.intuition{border-left-color:var(--intuition);background:var(--intuitionbg)}
+blockquote.callout.mistake{border-left-color:var(--mistake);background:var(--mistakebg)}
+blockquote.callout.summary{border-left-color:var(--summary);background:var(--summarybg);font-weight:600}
+.legend{display:flex;gap:10px;flex-wrap:wrap;margin:6px 0 18px;font-size:12.5px;color:var(--muted)}
+.legend span{background:var(--panel);border:1px solid var(--border);border-radius:20px;padding:3px 11px}
+.badge{display:inline-block;background:var(--accent);color:#fff;border-radius:6px;padding:2px 9px;font-size:12px;font-weight:700}
+@media(max-width:820px){.sidebar{display:none}.main{padding:24px 18px}}
+</style>
+<script>
+window.MathJax={
+ tex:{
+  inlineMath:[['$','$'],['\\(','\\)']],
+  displayMath:[['$$','$$'],['\\[','\\]']],
+  macros:{
+   ket:['{\\lvert #1\\rangle}',1],
+   bra:['{\\langle #1\\rvert}',1],
+   braket:['{\\langle #1\\vert #2\\rangle}',2],
+   ketbra:['{\\lvert #1\\rangle\\langle #2\\rvert}',2],
+   Tr:'{\\operatorname{Tr}}',
+   tr:'{\\operatorname{tr}}'
+  }
+ },
+ svg:{fontCache:'global'},
+ options:{skipHtmlTags:['script','style','textarea','pre','code'],ignoreHtmlClass:'viz'}
+};
+</script>
+<script src="../vendor/tex-svg.js" id="MathJax-script" async></script>
+</head>
+<body>
+<div class="layout">
+<aside class="sidebar">
+<div class="brand"><div class="t">QCQI · 大学生版</div><div class="s">第二章 · 线性代数与量子力学</div></div>
+<input class="search" id="search" placeholder="过滤小节…">
+<nav class="nav">
+<a href="../student.html" style="color:var(--muted)">← 返回大学生版门户</a>
+<a href="explained.html" style="color:var(--muted)">🗣️ 看人话版</a>
+<a href="index.html" style="color:var(--muted)">≡ 看公式精简版</a>
+<a href="#s0">导读</a>
+<a href="#s1">2.1 量子力学四公理：整个理论的&quot;接口定义&quot;</a>
+<a href="#s2">2.2 线性代数基础：量子力学的&quot;工具箱&quot;</a>
+<a href="#s3">2.3 量子态：纯态、混态与密度矩阵 $\rho$</a>
+<a href="#s4">2.4 演化与测量：可逆的门 vs 不可逆的&quot;读数&quot;</a>
+<a href="#s5">2.5 复合系统：偏迹、施密特分解与纠缠</a>
+<a href="#s6">2.6 应用：EPR / Bell、态区分、超密编码</a>
+</nav></aside>
+<main class="main">
+<div class="topbar"><span class="badge">大学生版</span><span class="home">第二章 · 线性代数与量子力学</span><button class="toggle" id="themeToggle">🌓 深/浅色</button></div>
+<div class="legend"><span>🎯 用来干嘛</span><span>📖 补基础</span><span>🧮 一步步算</span><span>💭 直觉</span><span>⚠️ 常见错误</span><span>✅ 小结</span></div>
+<section id="s0"><h1>第二章 线性代数与量子力学 · 大学生版</h1>
+<h2>导读</h2>
+<p>这一章是<strong>全书最吃线性代数</strong>的一章。它要把量子力学的四条游戏规则（公理）写死，再用线性代数当工具去实现这四条规则。坏消息是：如果你的矩阵、内积、本征值学得不太扎实，这一章会处处卡壳。好消息是：这一章用到的线代其实就那么几样，而且都只在 <strong>2×2 / 4×4 的小矩阵</strong>上反复出现——一旦把这几个小例子算顺，后面就是同一套动作的重复。</p>
+<p>所以本篇的策略是：<strong>凡是用到的数学概念，当场从零补一遍</strong>，每个抽象定义都配一个具体的小数字例子，然后才回到量子。建议你准备纸笔，看到「🧮 一步步算」就自己跟着算一遍——这一章靠看是看不会的，必须动手。</p>
+<p>先把一个贯穿全章的记号说清楚：物理学家把列向量写成 $\ket{\psi}$（读作 "ket psi"），把行向量写成 $\bra{\psi}$（读作 "bra psi"）。这套叫<strong>狄拉克记号 / bra-ket 记号</strong>，本质上就是「列向量 / 行向量」换了身衣服，别被它吓到。</p>
+<blockquote class="callout review">📖 <strong>补基础：什么是列向量、行向量？</strong> 列向量就是竖着排的一列数，比如 $\ket{0}=\begin{pmatrix}1\\0\end{pmatrix}$、$\ket{1}=\begin{pmatrix}0\\1\end{pmatrix}$。行向量就是横着排的一行数，比如 $\bra{0}=\begin{pmatrix}1&amp;0\end{pmatrix}$。在量子里数可以是复数。<strong>向量加法</strong>＝对应位置相加：$\begin{pmatrix}1\\0\end{pmatrix}+\begin{pmatrix}0\\1\end{pmatrix}=\begin{pmatrix}1\\1\end{pmatrix}$。<strong>数乘</strong>＝每个分量都乘同一个数：$3\begin{pmatrix}1\\2\end{pmatrix}=\begin{pmatrix}3\\6\end{pmatrix}$。量子态 $\ket{\psi}$ 就是这样一个（复数的、归一化的）列向量。</blockquote>
+<blockquote class="callout purpose">🎯 <strong>用来干嘛：</strong> 向量就是量子计算里"装状态"的容器。一个 qubit 的所有可能状态（包括各种叠加）都对应空间里的一个单位向量，分量的大小决定了测到各结果的概率。没有向量，就没法描述"既是 0 又是 1"的叠加态。</blockquote>
+<hr></section>
+<section id="s1"><h2>2.1 量子力学四公理：整个理论的"接口定义"</h2>
+<p>量子力学其实只有四条规则，剩下全是推论。把它当成一份"使用说明书"的四个条目：状态长什么样、状态怎么变、怎么读出信息、多个系统怎么拼起来。</p>
+<ul><li><strong>公理 1（状态）</strong>：一个孤立系统的状态由希尔伯特空间里的<strong>单位向量</strong> $\ket{\psi}$ 描述；更一般地由<strong>密度算符</strong> $\rho$（迹为 1 的半正定矩阵）描述。</li><li><strong>公理 2（演化）</strong>：封闭系统按<strong>幺正变换</strong>演化 $\ket{\psi'}=U\ket{\psi}$；连续时间下服从薛定谔方程 $i\hbar\, d\ket{\psi}/dt = H\ket{\psi}$。</li><li><strong>公理 3（测量）</strong>：测量由一组<strong>测量算符</strong> $\{M_i\}$ 描述，给出每个结果的概率和测量后的新状态。</li><li><strong>公理 4（复合）</strong>：多个子系统拼成的大系统，其空间是各子系统空间的<strong>张量积</strong> $H_A \otimes H_B$。</li></ul>
+<p>这些名词现在看着都像天书，没关系——<strong>整个 2.2 节就是在补齐这四条公理用到的全部数学</strong>。这里先记住它们的"分工"。</p>
+<blockquote class="callout intuition">💭 <strong>直觉：</strong> 这四条 = 状态长啥样（公理 1）、状态怎么变（公理 2）、怎么"读数"（公理 3）、怎么把两个系统拼成一个（公理 4）。本章后面所有内容，都是在把这四条接口"实现"出来。</blockquote>
+<p>正交投影算符 $P$ 对应一个"是 / 否的判断"，而 $\bra{\psi}P\ket{\psi}$ 给出"判断为真"的概率。</p>
+<blockquote class="callout review">📖 <strong>补基础：什么是投影？</strong> 想象三维空间里一个向量，把它"压"到 $xy$ 平面上（把 $z$ 分量扔掉），这就是投影。投影算符 $P=\ketbra{\psi}{\psi}$ 是一个方阵，作用是把任意向量"压"到 $\ket{\psi}$ 这条轴上。$\ketbra{\psi}{\psi}$ 的意思是"列向量 $\ket{\psi}$ 乘行向量 $\bra{\psi}$"，结果是一个矩阵（这叫<strong>外积</strong>，2.2 节细讲）。</blockquote>
+<blockquote class="callout calc">🧮 <strong>一步步算（投影给概率）：</strong> 取 $\ket{+}=\tfrac{1}{\sqrt2}(\ket{0}+\ket{1})=\tfrac{1}{\sqrt2}\begin{pmatrix}1\\1\end{pmatrix}$，它的投影算符 $$P_+=\ketbra{+}{+}=\frac12\begin{pmatrix}1\\1\end{pmatrix}\begin{pmatrix}1&amp;1\end{pmatrix}=\frac12\begin{pmatrix}1&amp;1\\1&amp;1\end{pmatrix}.$$ 现在系统处于 $\ket{0}=\begin{pmatrix}1\\0\end{pmatrix}$，问"它是 $\ket{+}$ 吗"的概率： $$\bra{0}P_+\ket{0}=\frac12\begin{pmatrix}1&amp;0\end{pmatrix}\begin{pmatrix}1&amp;1\\1&amp;1\end{pmatrix}\begin{pmatrix}1\\0\end{pmatrix}=\frac12\begin{pmatrix}1&amp;0\end{pmatrix}\begin{pmatrix}1\\1\end{pmatrix}=\frac12.$$ 答案 50%——和"$\ket{0}$ 在 $\ket{+}$、$\ket{-}$ 上各占一半"完全吻合。</blockquote>
+<blockquote class="callout purpose">🎯 <strong>用来干嘛：</strong> 投影（外积 $\ketbra{\psi}{\psi}$）是量子里"提问"的工具。每个"是 / 否的问题"对应一个投影算符；把状态投影一下、量一下长度，就得到"答案为是"的概率。测量、概率计算全靠它。</blockquote>
+<blockquote class="callout summary">✅ <strong>小结：</strong> 纯态可以只用一个列向量 $\ket{\psi}$ 写；但更一般的状态（混态）必须用矩阵 $\rho$。$\rho$ 才是最通用的状态表示，这是本章的一条主线。</blockquote>
+<hr></section>
+<section id="s2"><h2>2.2 线性代数基础：量子力学的"工具箱"</h2>
+<p>这一节是全章的地基。我们按这个顺序补课：<strong>矩阵与矩阵乘法 → 转置 / 共轭 / 共轭转置 → 内积与外积 → 本征值本征向量 → 几类特殊矩阵 → 张量积</strong>。慢一点，每个都配小例子。</p>
+<h3>矩阵与矩阵乘法</h3>
+<blockquote class="callout review">📖 <strong>补基础：矩阵是什么、怎么乘？</strong> 矩阵就是一个数表，$m$ 行 $n$ 列。<strong>矩阵乘法</strong>的规则是"前一个的行 × 后一个的列"：结果第 $i$ 行第 $j$ 列的元素，等于左矩阵第 $i$ 行与右矩阵第 $j$ 列<strong>对应相乘再求和</strong>。要能乘，左边的列数必须等于右边的行数。</blockquote>
+<blockquote class="callout calc">🧮 <strong>一步步算（2×2 乘 2×1）：</strong> $$\begin{pmatrix}0&amp;1\\1&amp;0\end{pmatrix}\begin{pmatrix}1\\0\end{pmatrix}=\begin{pmatrix}0\cdot1+1\cdot0\\[2pt]1\cdot1+0\cdot0\end{pmatrix}=\begin{pmatrix}0\\1\end{pmatrix}.$$ 第 1 行 $(0,1)$ 点乘列 $(1,0)$ 得 $0$；第 2 行 $(1,0)$ 点乘列 $(1,0)$ 得 $1$。这个矩阵 $\begin{pmatrix}0&amp;1\\1&amp;0\end{pmatrix}$ 把 $\ket0$ 变成了 $\ket1$——它就是量子里的非门 $X$。</blockquote>
+<blockquote class="callout review">📖 <strong>补基础：单位矩阵 $I$。</strong> 对角线全是 1、其余全 0 的方阵，记作 $I$。它是矩阵世界的"1"：$IA=AI=A$，乘了等于没乘。$2\times2$ 的 $I=\begin{pmatrix}1&amp;0\\0&amp;1\end{pmatrix}$。</blockquote>
+<h3>转置、复共轭、共轭转置（†）</h3>
+<p>这是本章<strong>最容易出错</strong>的地方，务必分清三个动作：</p>
+<blockquote class="callout review">📖 <strong>补基础：三个动作。</strong> - <strong>转置 $A^T$</strong>：沿主对角线翻折，行变列。$\begin{pmatrix}a&amp;b\\c&amp;d\end{pmatrix}^T=\begin{pmatrix}a&amp;c\\b&amp;d\end{pmatrix}$。 - <strong>复共轭 $A^*$</strong>：每个元素的虚部变号（$a+bi \to a-bi$），位置不动。 - <strong>共轭转置 $A^\dagger$</strong>（读 "A dagger"，又叫 Hermite 伴随）：<strong>先转置再取复共轭</strong>（两步顺序无所谓）。这是量子里最常用的那个。</blockquote>
+<blockquote class="callout calc">🧮 <strong>一步步算：</strong> 设 $A=\begin{pmatrix}0&amp;-i\\i&amp;0\end{pmatrix}$（这是泡利矩阵 $\sigma_y$）。 转置：$A^T=\begin{pmatrix}0&amp;i\\-i&amp;0\end{pmatrix}$。再取复共轭（$i\to-i$，$-i\to i$）： $$A^\dagger=\begin{pmatrix}0&amp;-i\\i&amp;0\end{pmatrix}=A.$$ 它等于自己！这种 $A^\dagger=A$ 的矩阵叫 <strong>Hermite（厄米）矩阵</strong>，在量子里代表"可观测的物理量"。</blockquote>
+<blockquote class="callout mistake">⚠️ <strong>常见错误：</strong> 取 $\dagger$ 时<strong>只转置、忘了取复共轭</strong>，是头号大坑。只要矩阵 / 向量里出现了 $i$，转置后所有 $i$ 都要变号。对列向量也一样：$\ket{\psi}=\begin{pmatrix}1\\i\end{pmatrix}$ 的 bra 是 $\bra{\psi}=\ket{\psi}^\dagger=\begin{pmatrix}1&amp;-i\end{pmatrix}$，那个 $i$ 必须变成 $-i$。</blockquote>
+<h3>内积与外积：一对最容易搞混的兄弟</h3>
+<blockquote class="callout review">📖 <strong>补基础：内积 $\braket{\psi}{\phi}$。</strong> 内积是"行向量 × 列向量"，结果是<strong>一个数（标量）</strong>，衡量两个向量有多"重合"。算法：$\braket{\psi}{\phi}=\bra{\psi}\cdot\ket{\phi}$，把 $\ket{\psi}$ 取共轭转置成行向量，再点乘 $\ket{\phi}$。 $$\braket{0}{0}=\begin{pmatrix}1&amp;0\end{pmatrix}\begin{pmatrix}1\\0\end{pmatrix}=1,\qquad \braket{0}{1}=\begin{pmatrix}1&amp;0\end{pmatrix}\begin{pmatrix}0\\1\end{pmatrix}=0.$$ $\braket00=1$ 说 $\ket0$ 自己和自己重合（已<strong>归一</strong>）；$\braket01=0$ 说 $\ket0\perp\ket1$（<strong>正交</strong>）。</blockquote>
+<blockquote class="callout purpose">🎯 <strong>用来干嘛：</strong> 内积是量子里的"重叠度测量仪"。$\braket{\psi}{\phi}$ 告诉你两个态有多像；它的模平方 $\lvert\braket{\psi}{\phi}\rvert^2$ 直接就是"系统处于 $\ket\psi$ 时，测量发现它在 $\ket\phi$ 的概率"。所有概率和概率幅都从内积来。</blockquote>
+<blockquote class="callout review">📖 <strong>补基础：外积 $\ketbra{\psi}{\phi}$。</strong> 外积是"列向量 × 行向量"，结果是<strong>一个矩阵</strong>！这是和内积最大的区别。 $$\ketbra{0}{1}=\begin{pmatrix}1\\0\end{pmatrix}\begin{pmatrix}0&amp;1\end{pmatrix}=\begin{pmatrix}0&amp;1\\0&amp;0\end{pmatrix}.$$</blockquote>
+<blockquote class="callout mistake">⚠️ <strong>常见错误：内积和外积别搞反！</strong> 顺手的记法：bra-ket 顺序 $\braket{\cdot}{\cdot}$（bra 在左、ket 在右，"行 × 列"）出来是<strong>数</strong>；ket-bra 顺序 $\ketbra{\cdot}{\cdot}$（ket 在左、bra 在右，"列 × 行"）出来是<strong>矩阵</strong>。一个收缩成标量，一个膨胀成方阵，差别巨大。</blockquote>
+<blockquote class="callout review">📖 <strong>补基础：正交、归一、标准正交基（ONB）。</strong> <strong>归一</strong>＝向量长度为 1，即 $\braket{\psi}{\psi}=1$。<strong>正交</strong>＝两个向量内积为 0。一组两两正交、各自归一、且能张成整个空间的向量，叫<strong>标准正交基</strong>。$\{\ket0,\ket1\}$ 就是单 qubit 的标准正交基。</blockquote>
+<p><strong>完备性关系</strong>：标准正交基满足</p>
+<p>$$\sum_i \ketbra{i}{i} = I$$</p>
+<blockquote class="callout calc">🧮 <strong>一步步算（完备性，必会）：</strong> 单 qubit 基 $\ket0,\ket1$： $$\ketbra{0}{0}=\begin{pmatrix}1&amp;0\\0&amp;0\end{pmatrix},\qquad \ketbra{1}{1}=\begin{pmatrix}0&amp;0\\0&amp;1\end{pmatrix}.$$ 相加：$\ketbra00+\ketbra11=\begin{pmatrix}1&amp;0\\0&amp;1\end{pmatrix}=I$。✓ 每个外积只"点亮"对角线上的一个位置，全加起来正好拼出单位矩阵。</blockquote>
+<h3>本征值与本征向量</h3>
+<blockquote class="callout review">📖 <strong>补基础：$A\ket{v}=\lambda\ket{v}$ 到底什么意思？</strong> 一般来说矩阵 $A$ 作用在向量上会同时改变它的<strong>方向和长度</strong>。但对某些特殊向量 $\ket v$，$A$ 作用后<strong>方向不变，只是被拉伸 $\lambda$ 倍</strong>。这样的 $\ket v$ 叫<strong>本征向量</strong>，$\lambda$ 叫对应的<strong>本征值</strong>。 <strong>怎么解？</strong> 把式子移项成 $(A-\lambda I)\ket v=0$。要有非零解，必须 $\det(A-\lambda I)=0$（这叫特征方程），解出 $\lambda$，再代回去求 $\ket v$。</blockquote>
+<blockquote class="callout calc">🧮 <strong>一步步算（解 $\sigma_z$ 的本征值）：</strong> $\sigma_z=\begin{pmatrix}1&amp;0\\0&amp;-1\end{pmatrix}$。 $$\det(\sigma_z-\lambda I)=\det\begin{pmatrix}1-\lambda&amp;0\\0&amp;-1-\lambda\end{pmatrix}=(1-\lambda)(-1-\lambda)=0.$$ 解得 $\lambda=+1$ 或 $\lambda=-1$。代 $\lambda=1$：$(\sigma_z-I)\ket v=\begin{pmatrix}0&amp;0\\0&amp;-2\end{pmatrix}\ket v=0$，要求第二分量为 0，故 $\ket v=\begin{pmatrix}1\\0\end{pmatrix}=\ket0$。同理 $\lambda=-1$ 对应 $\ket1$。所以 $\sigma_z\ket0=\ket0$、$\sigma_z\ket1=-\ket1$——这就是"$\ket0,\ket1$ 是 $\sigma_z$ 的本征态"的含义。</blockquote>
+<blockquote class="callout intuition">💭 <strong>直觉：</strong> 本征值 / 本征向量是矩阵的"骨架"。一个 Hermite 矩阵的本征向量给出一组特殊的正交坐标轴，在这组轴下矩阵变成对角阵（只剩缩放）。量子里：可观测量的本征值＝你能测到的数值，本征向量＝测到该数值后系统所处的态。</blockquote>
+<blockquote class="callout purpose">🎯 <strong>用来干嘛：</strong> 它直接回答"测量会得到什么"。测某个物理量时，系统只会塌缩到该物理量算符的某个本征向量上，读到的数就是对应的本征值——所以本征向量 = 所有可能的测量结果、塌缩的落点，本征值 = 能读到的数。求本征值本征向量，就是在求"这个量能测出哪些值、测完态变成什么样"。</blockquote>
+<h3>几类特殊矩阵（按性质打标签）</h3>
+<p>每类矩阵在物理里扮演一个固定角色，记住"标签 → 角色"：</p>
+<ul><li><strong>Hermite（厄米）算符</strong>：$A^\dagger=A$，本征值全是<strong>实数</strong> → 代表<strong>可观测的物理量</strong>。</li><li><strong>幺正（酉）算符</strong>：$U^\dagger U=I$（即 $U^\dagger=U^{-1}$），<strong>保持向量长度不变</strong> → 代表量子门 / 演化。</li><li><strong>投影算符</strong>：$P^2=P$ 且 $P^\dagger=P$ → 代表"是 / 否判断"。</li><li><strong>正规算符</strong>：$AA^\dagger=A^\dagger A$，可以被幺正矩阵对角化（谱定理）。</li><li><strong>半正定算符</strong>：所有本征值 $\ge 0$ → 合法的状态 / 测量元。</li></ul>
+<blockquote class="callout review">📖 <strong>补基础：幺正"保长度"是什么意思？</strong> 若 $\ket{\psi'}=U\ket\psi$ 且 $U^\dagger U=I$，则 $\braket{\psi'}{\psi'}=\bra\psi U^\dagger U\ket\psi=\bra\psi I\ket\psi=\braket{\psi}{\psi}$。长度（范数）一点没变。这正是量子演化必须幺正的原因——<strong>概率总和必须永远是 1</strong>。</blockquote>
+<blockquote class="callout calc">🧮 <strong>一步步算（验证 $X$ 是幺正）：</strong> $X=\begin{pmatrix}0&amp;1\\1&amp;0\end{pmatrix}$，它是实对称矩阵，$X^\dagger=X$。 $$X^\dagger X=\begin{pmatrix}0&amp;1\\1&amp;0\end{pmatrix}\begin{pmatrix}0&amp;1\\1&amp;0\end{pmatrix}=\begin{pmatrix}1&amp;0\\0&amp;1\end{pmatrix}=I.\ \checkmark$$</blockquote>
+<blockquote class="callout review">📖 <strong>补基础：迹 $\Tr$。</strong> 迹就是<strong>对角线元素之和</strong>，记作 $\Tr(A)=\sum_i A_{ii}$。例如 $\Tr\begin{pmatrix}1&amp;5\\7&amp;3\end{pmatrix}=1+3=4$。一个关键性质：$\Tr(AB)=\Tr(BA)$（可以轮换），后面算期望值时天天用。</blockquote>
+<blockquote class="callout intuition">💭 <strong>直觉：</strong> 这几类矩阵就是"按代数性质贴标签"。看到 $A^\dagger=A$ 就知道是可观测量；看到 $U^\dagger U=I$ 就知道是可逆的门；看到 $P^2=P$ 就知道是布尔判定。贴对标签，物理意义就清楚了。</blockquote>
+<h3>奇异值分解（SVD）与极分解</h3>
+<p>任意矩阵都能写成 $A=UDV^\dagger$，其中 $U,V$ 幺正，$D$ 是非负对角阵（对角元叫<strong>奇异值</strong>）。非零奇异值的个数 = 矩阵的<strong>秩</strong>。</p>
+<blockquote class="callout intuition">💭 <strong>直觉：</strong> SVD 说的是"任何线性变换 = 旋转 → 沿坐标轴缩放 → 再旋转"。它在 2.5 节会换个名字"施密特分解"再出现一次。极分解 $A=UP$（幺正 × 正算符）则类比复数的"模 × 相位"。</blockquote>
+<h3>张量积：为什么 $n$ 个 qubit 给 $2^n$ 维</h3>
+<blockquote class="callout review">📖 <strong>补基础：张量积 $\otimes$ 怎么算？</strong> 两个向量的张量积，是把左向量的<strong>每个分量</strong>去乘右向量<strong>整块</strong>，再竖着拼起来： $$\begin{pmatrix}a\\b\end{pmatrix}\otimes\begin{pmatrix}c\\d\end{pmatrix}=\begin{pmatrix}a\begin{pmatrix}c\\d\end{pmatrix}\\[6pt]b\begin{pmatrix}c\\d\end{pmatrix}\end{pmatrix}=\begin{pmatrix}ac\\ad\\bc\\bd\end{pmatrix}.$$ 2 维 ⊗ 2 维 = <strong>4 维</strong>，不是 4 维相加。</blockquote>
+<blockquote class="callout calc">🧮 <strong>一步步算（两 qubit 基矢）：</strong> $$\ket{00}=\ket0\otimes\ket0=\begin{pmatrix}1\\0\end{pmatrix}\otimes\begin{pmatrix}1\\0\end{pmatrix}=\begin{pmatrix}1\\0\\0\\0\end{pmatrix},\quad \ket{01}=\begin{pmatrix}0\\1\\0\\0\end{pmatrix},\quad \ket{10}=\begin{pmatrix}0\\0\\1\\0\end{pmatrix},\quad \ket{11}=\begin{pmatrix}0\\0\\0\\1\end{pmatrix}.$$ 4 个基矢张成 4 维空间。$n$ 个 qubit 就是 $\underbrace{2\times2\times\cdots\times2}_{n}=2^n$ 维。</blockquote>
+<blockquote class="callout mistake">⚠️ <strong>常见错误：张量积维数是相乘，不是相加！</strong> 两个 qubit 合起来是 $2\times2=4$ 维，不是 $2+2=4$（巧合相等，换成 3 维 ⊗ 2 维 = 6 维就看出区别了）。这个"指数级增长"正是量子计算威力的来源：30 个 qubit 就是 $2^{30}\approx 10^9$ 维的状态空间。</blockquote>
+<blockquote class="callout summary">✅ <strong>小结：</strong> 矩阵乘法（行×列）、$\dagger$（转置+共轭）、内积（出数）vs 外积（出矩阵）、本征值（$\det(A-\lambda I)=0$）、张量积（维数相乘）——这五样吃透，本章的计算就全打通了。</blockquote>
+<blockquote class="callout purpose">🎯 <strong>用来干嘛（张量积）：</strong> 张量积是"把多个 qubit 拼成一个系统"的唯一正确方式。想描述 2 个、10 个、100 个 qubit 的联合状态，就用 $\otimes$ 把它们的空间拼起来。维数相乘带来的指数级状态空间，正是量子计算能并行处理海量可能性的根源。</blockquote>
+<hr></section>
+<section id="s3"><h2>2.3 量子态：纯态、混态与密度矩阵 $\rho$</h2>
+<p>量子态最一般的写法是一个矩阵 $\rho$（叫<strong>密度矩阵 / 密度算符</strong>），它必须满足三条：<strong>Hermite、迹为 1、半正定</strong>。纯态是它的极端情形，混态是若干纯态按概率混合。</p>
+<blockquote class="callout review">📖 <strong>补基础：纯态 vs 混态，先建立画面。</strong> - <strong>纯态</strong>：系统状态完全确定，能写成单个 $\ket\psi$。比如 $\ket+$ 是纯态——它是确定的叠加，不是"不知道"。 - <strong>混态</strong>：你对系统<strong>有经典的无知</strong>，它"以概率 $p_1$ 是 $\ket{\psi_1}$、以概率 $p_2$ 是 $\ket{\psi_2}$……"。这像一张带权重的抽奖表。 密度矩阵把这两种情况统一描述：$\rho=\sum_i p_i\ketbra{\psi_i}{\psi_i}$，$p_i\ge0$、$\sum_i p_i=1$。</blockquote>
+<blockquote class="callout purpose">🎯 <strong>用来干嘛：</strong> 密度矩阵 $\rho$ 是量子态最通用的"户口本"。只要系统不是孤立纯净的（比如和环境纠缠、或你对它有经典无知），就写不成单个 $\ket\psi$，必须用 $\rho$。它能同时装下"量子叠加"和"经典概率混合"，是讲噪声、退相干、纠缠子系统时绕不开的工具。</blockquote>
+<p><strong>期望值公式</strong>：物理量用 Hermite 算符 $A$ 表示，它在状态 $\rho$ 下的期望（平均测量值）是</p>
+<p>$$\langle A\rangle = \Tr(\rho A).$$</p>
+<blockquote class="callout purpose">🎯 <strong>用来干嘛（迹 Tr）：</strong> 迹是量子里"求总和 / 求平均"的收尾动作。$\Tr(\rho A)$ 一步算出物理量 $A$ 的平均测量值；$\Tr(\rho P_i)$ 算出测到结果 $i$ 的概率；$\Tr(\rho^2)$ 算出纯度。凡是"把一个矩阵压成一个有物理意义的数"，基本都靠迹。它还有个好用的性质 $\Tr(AB)=\Tr(BA)$，能轮换换位置简化计算。</blockquote>
+<blockquote class="callout calc">🧮 <strong>一步步算（构造纯态的 $\rho$）：</strong> 纯态 $\ket\psi$ 的密度矩阵就是它的外积 $\rho=\ketbra{\psi}{\psi}$。取 $\ket+$： $$\rho_+=\ketbra{+}{+}=\frac12\begin{pmatrix}1\\1\end{pmatrix}\begin{pmatrix}1&amp;1\end{pmatrix}=\frac12\begin{pmatrix}1&amp;1\\1&amp;1\end{pmatrix}.$$ 检查：$\Tr\rho_+=\tfrac12(1+1)=1$ ✓。</blockquote>
+<p><strong>密度矩阵每个元素的名字</strong>（单 qubit，$\rho=\begin{pmatrix}\rho_{00}&amp;\rho_{01}\\\rho_{10}&amp;\rho_{11}\end{pmatrix}$）：</p>
+<blockquote class="callout intuition">💭 <strong>直觉：</strong> 对角元 $\rho_{00},\rho_{11}$ 叫<strong>布居</strong>——在计算基下测到 $\ket0/\ket1$ 的概率，二者相加 $=\Tr\rho=1$。非对角元 $\rho_{01}$ 与 $\rho_{10}=\rho_{01}^*$ 叫<strong>相干</strong>——它编码叠加态的"内部相位关系"。纯叠加时相干非零，经典混合时相干为 0。这正是量子和经典的分水岭。</blockquote>
+<blockquote class="callout calc">🧮 <strong>一步步算（叠加 vs 经典混合，本节最重要的对比）：</strong> <strong>纯态 $\ket+$</strong>：$\rho_+=\frac12\begin{pmatrix}1&amp;1\\1&amp;1\end{pmatrix}$。对角各 0.5（50/50），<strong>非对角 0.5 ≠ 0 → 有相干</strong>。 <strong>经典混合"一半 $\ket0$、一半 $\ket1$"</strong>： $$\rho_{\text{mix}}=\frac12\ketbra00+\frac12\ketbra11=\frac12\begin{pmatrix}1&amp;0\\0&amp;0\end{pmatrix}+\frac12\begin{pmatrix}0&amp;0\\0&amp;1\end{pmatrix}=\frac12\begin{pmatrix}1&amp;0\\0&amp;1\end{pmatrix}=\frac12 I.$$ 对角同样 50/50，但<strong>非对角为 0 → 无相干</strong>。同样的对角线、不同的非对角线，这就是"量子叠加"和"经典随机"的本质区别。</blockquote>
+<p><strong>纯度 $\Tr(\rho^2)$</strong>：判断纯 / 混最方便的指标。</p>
+<blockquote class="callout review">📖 <strong>补基础：怎么算 $\Tr(\rho^2)$？</strong> 先算 $\rho^2=\rho\cdot\rho$（矩阵乘自己），再取迹。对 Hermite 的 $\rho$ 有个捷径：$\Tr(\rho^2)=\sum_{i,j}\lvert\rho_{ij}\rvert^2$（所有元素模平方之和）。</blockquote>
+<blockquote class="callout calc">🧮 <strong>一步步算（两个例子的纯度）：</strong> $\rho_+$：$\Tr(\rho_+^2)=\frac14(1^2+1^2+1^2+1^2)=\frac44=1$ → <strong>纯态</strong> ✓。 $\rho_{\text{mix}}=\frac12 I$：$\Tr(\rho_{\text{mix}}^2)=\left(\tfrac12\right)^2+\left(\tfrac12\right)^2=\frac14+\frac14=\frac12&lt;1$ → <strong>混态</strong>。</blockquote>
+<blockquote class="callout review">📖 <strong>补基础：Bloch 球。</strong> 单 qubit 的态正好能塞进一个 3D 球。任意单 qubit 态写成 $\ket{\psi}=\cos(\theta/2)\ket0+e^{i\phi}\sin(\theta/2)\ket1$，对应球面上一个点。三个泡利矩阵 $\sigma_x,\sigma_y,\sigma_z$ 是这个球的三把"尺子"，Bloch 坐标 $r_i=\Tr(\rho\sigma_i)$ 就是把 $\rho$ 往三把尺子上各投影一次。</blockquote>
+<blockquote class="callout intuition">💭 <strong>直觉：</strong> <strong>纯态在球面</strong>（$\lvert r\rvert=1$），<strong>混态在球内</strong>（$\lvert r\rvert&lt;1$），<strong>最大混合态 $\rho=I/2$ 在球心</strong>（$r=0$，相当于"啥都不知道"的 50/50）。</blockquote>
+<blockquote class="callout mistake">⚠️ <strong>常见错误：别只看一个指标判断纯 / 混。</strong> 纯态的四个等价判据（$\Tr(\rho^2)=1$、秩为 1、不能凸分解、$\lvert r\rvert=1$）数学上等价，但手算时各有翻车点。最稳的是算 $\Tr(\rho^2)$：等于 1 是纯态，小于 1 是混态。</blockquote>
+<blockquote class="callout summary">✅ <strong>小结：</strong> $\rho$ = Hermite + 迹 1 + 半正定。对角线是"测到各结果的概率"，非对角线是"相干"。纯度 $\Tr(\rho^2)=1$ ⟺ 纯态，$&lt;1$ ⟺ 混态，越小越"脏"。</blockquote>
+<blockquote class="callout purpose">🎯 <strong>用来干嘛（纯态 vs 混态）：</strong> 区分纯 / 混是在回答"这个系统的随机性是量子的还是经典的"。纯态的随机来自真叠加（有相干，可干涉）；混态的随机来自经典无知或与外界纠缠（相干丢失）。判断纯 / 混、算纯度，就是在量"系统有多干净、纠缠 / 退相干有多严重"——这是噪声分析和纠缠判定的起点。</blockquote>
+<hr></section>
+<section id="s4"><h2>2.4 演化与测量：可逆的门 vs 不可逆的"读数"</h2>
+<p>封闭系统按幺正变换演化（公理 2，可逆、保概率）；测量按 PVM / POVM 给出概率和测后态（公理 3，不可逆、会塌缩）。</p>
+<p><strong>幺正演化</strong>：薛定谔方程 $i\hbar\, d\ket{\psi}/dt = H\ket{\psi}$ 的解是</p>
+<p>$$\ket{\psi(t)}=U(t)\ket{\psi(0)},\quad U=e^{-iHt/\hbar}.$$</p>
+<p>密度矩阵的演化写成 $\rho\to U\rho U^\dagger$。这里 $H$ 是哈密顿量（能量算符，Hermite），$U$ 是它生成的幺正算符。</p>
+<blockquote class="callout intuition">💭 <strong>直觉：</strong> 幺正演化是"可逆、保长度"的变换——你随时能用 $U^\dagger$ 把它逆回去，且概率总和恒为 1。哈密顿量的本征态叫<strong>定态</strong>，演化只是给它乘一个相位 $e^{-iEt/\hbar}$，测出来的概率分布纹丝不动。</blockquote>
+<blockquote class="callout purpose">🎯 <strong>用来干嘛：</strong> 幺正矩阵就是量子计算里的"门"（gate）——所有量子线路都是一串幺正操作。要求幺正，是因为它<strong>保概率（总和恒为 1）且可逆</strong>：量子计算在测量前的每一步都不能丢信息、必须能逆回去。你设计量子算法，本质就是在拼一个大的幺正矩阵 $U$。</blockquote>
+<p><strong>测量：PVM（投影测量）</strong>。一组投影 $\{P_i\}$，两两正交、各自幂等（$P_i^2=P_i$）、求和为 $I$。</p>
+<p>$$P(i)=\Tr(\rho P_i),\qquad \rho \to \frac{P_i\rho P_i}{\Tr(\rho P_i)}.$$</p>
+<p>左式是测到结果 $i$ 的概率（纯态时 $=\bra{\psi}P_i\ket{\psi}$），右式是测量后归一化的新状态。</p>
+<blockquote class="callout intuition">💭 <strong>直觉：</strong> $P_i$ 像一个"掩码（mask）"，只保留状态落在第 $i$ 个子空间里的那部分，迹再把它加总成一个 $0\sim1$ 的概率。测后态 $\frac{P_i\rho P_i}{\Tr(\rho P_i)}$ 就是"掩码切出来的块 + 重新归一化"。</blockquote>
+<blockquote class="callout calc">🧮 <strong>一步步算（在计算基测 $\ket+$）：</strong> 状态 $\rho_+=\frac12\begin{pmatrix}1&amp;1\\1&amp;1\end{pmatrix}$，测量算符 $P_0=\ketbra00=\begin{pmatrix}1&amp;0\\0&amp;0\end{pmatrix}$、$P_1=\ketbra11$。 先算测到 0 的概率： $$P_0\rho_+=\begin{pmatrix}1&amp;0\\0&amp;0\end{pmatrix}\cdot\frac12\begin{pmatrix}1&amp;1\\1&amp;1\end{pmatrix}=\frac12\begin{pmatrix}1&amp;1\\0&amp;0\end{pmatrix},\quad \Tr(P_0\rho_+)=\frac12.$$ 同理测到 1 的概率也是 $\frac12$。测到 0 后状态塌缩成 $$\frac{P_0\rho_+ P_0}{1/2}=\ketbra00=\begin{pmatrix}1&amp;0\\0&amp;0\end{pmatrix}.$$ 注意：原来的非对角"相干"被这一次测量<strong>彻底抹掉</strong>了——这就是测量的不可逆。</blockquote>
+<blockquote class="callout mistake">⚠️ <strong>常见错误：测量后忘了归一化！</strong> 测后态必须除以 $\Tr(\rho P_i)$，否则范数不再是 1，后续全错。这是手算测量最常见的翻车点。</blockquote>
+<p><strong>POVM</strong>：一族半正定算符 $\{E_i\}$，只要求 $E_i\ge0$ 且 $\sum_i E_i=I$，<strong>不要求正交、不要求幂等</strong>。用在"不关心测后态、只想最优区分"的场景（见 2.6）。</p>
+<blockquote class="callout intuition">💭 <strong>直觉：</strong> PVM = 一组互斥又穷尽的"桶"（正交投影），读数时把状态扔进某个桶并塌缩。POVM 是更宽松的版本：只要"一堆非负权重加起来等于 $I$"就行，桶之间可以不正交，桶的数量甚至能多于维数。</blockquote>
+<p><strong>不确定性关系</strong>：</p>
+<p>$$(\Delta A)^2=\langle A^2\rangle-\langle A\rangle^2,\qquad \Delta A\cdot\Delta B \ge \tfrac{1}{2}\lvert\langle[A,B]\rangle\rvert.$$</p>
+<p>左式是方差（和经典统计同款）。右式是海森堡不确定性关系，$[A,B]=AB-BA$ 叫<strong>对易子</strong>。</p>
+<blockquote class="callout summary">✅ <strong>小结：</strong> 演化可逆（幺正 $U$），测量不可逆（塌缩 + 归一化）。两个<strong>不对易</strong>（$[A,B]\ne0$）的量没法同时测准——这是数学硬下界，不是仪器不行。</blockquote>
+<hr></section>
+<section id="s5"><h2>2.5 复合系统：偏迹、施密特分解与纠缠</h2>
+<p>这一节处理"多个子系统的联合状态"，给三件工具：<strong>偏迹</strong>（只看其中一个子系统）、<strong>施密特分解</strong>（联合纯态的标准型）、<strong>纯化</strong>（把混态升格成大系统的纯态）。</p>
+<p><strong>偏迹与约化密度矩阵</strong>：</p>
+<p>$$\rho_A = \Tr_B(\rho_{AB}).$$</p>
+<blockquote class="callout review">📖 <strong>补基础：偏迹是什么操作？</strong> 你有一个两体系统 $AB$ 的密度矩阵 $\rho_{AB}$（两 qubit 时是 $4\times4$），但你只想知道"单看 A 时它是什么状态"。<strong>偏迹</strong> $\Tr_B$ 就是"把 B 的自由度求和消掉"，得到只描述 A 的 $2\times2$ 矩阵 $\rho_A$。公式：$(\rho_A)_{ij}=\sum_{b}\bra{i\,b}\rho_{AB}\ket{j\,b}$，其中 $b$ 跑遍 B 的所有基态。</blockquote>
+<blockquote class="callout intuition">💭 <strong>直觉：</strong> 偏迹就是概率里的<strong>边缘化</strong>。你有联合分布 $P(A,B)$，对 B 求和得到 $P(A)$。$\Tr_B$ 在量子里干的就是这件事。</blockquote>
+<blockquote class="callout calc">🧮 <strong>一步步算（最经典的一道题：Bell 态求偏迹）：</strong> Bell 态 $\ket{\Phi^+}=\frac{1}{\sqrt2}(\ket{00}+\ket{11})$，它是纯态。其密度矩阵（行列序 $00,01,10,11$）： $$\rho_{AB}=\ketbra{\Phi^+}{\Phi^+}=\frac12\begin{pmatrix}1&amp;0&amp;0&amp;1\\0&amp;0&amp;0&amp;0\\0&amp;0&amp;0&amp;0\\1&amp;0&amp;0&amp;1\end{pmatrix}.$$ 迹掉 B：A 的 $(0,0)$ 元 = $\bra{00}\rho\ket{00}+\bra{01}\rho\ket{01}=\tfrac12+0=\tfrac12$；A 的 $(1,1)$ 元 = $\bra{10}\rho\ket{10}+\bra{11}\rho\ket{11}=0+\tfrac12=\tfrac12$；A 的非对角元 $\bra{00}\rho\ket{10}+\bra{01}\rho\ket{11}=0$。于是 $$\rho_A=\begin{pmatrix}\tfrac12&amp;0\\0&amp;\tfrac12\end{pmatrix}=\frac12 I.$$ 纯度 $\Tr(\rho_A^2)=\tfrac14+\tfrac14=\tfrac12$。</blockquote>
+<blockquote class="callout mistake">⚠️ <strong>常见错误：偏迹有两种指标约定，全程只能用一种。</strong> 混用会算出错误的约化矩阵。另外注意 $\Tr_B$ 是消掉 B、留下 A，别把要保留和要消掉的搞反。</blockquote>
+<blockquote class="callout summary">✅ <strong>小结（纠缠的指纹）：</strong> 整体 $\rho_{AB}$ 是<strong>纯态</strong>（$\Tr\rho_{AB}^2=1$），子系统 $\rho_A=\frac12 I$ 却是<strong>最大混合态</strong>（$\Tr\rho_A^2=\tfrac12&lt;1$）。整体完全确定、部分却"完全随机"——这正是<strong>纠缠</strong>的标志。</blockquote>
+<p><strong>施密特分解（Schmidt）</strong>：任意二分纯态都能写成</p>
+<p>$$\ket{\Psi}=\sum_i \lambda_i \ket{i}_A\otimes\ket{i}_B,\quad \lambda_i\ge 0,\ \sum_i \lambda_i^2=1.$$</p>
+<blockquote class="callout intuition">💭 <strong>直觉：</strong> 施密特分解本质就是对"系数矩阵"做 SVD（2.2 节那个），$\lambda_i$ 就是奇异值。<strong>非零 $\lambda_i$ 的个数</strong>叫<strong>施密特数</strong>，是纠缠的度量：施密特数 $=1$ ⟺ 态可拆成 $\ket a\otimes\ket b$（无纠缠）；$&gt;1$ ⟺ 有纠缠。</blockquote>
+<blockquote class="callout calc">🧮 <strong>一步步算（求施密特数）：</strong> 取 $\ket\Psi=\frac{1}{\sqrt2}\ket{00}+\frac12\ket{01}+\frac12\ket{10}$。把系数排成"A 行 × B 列"的矩阵： $$C=\begin{pmatrix}\tfrac{1}{\sqrt2}&amp;\tfrac12\\[3pt]\tfrac12&amp;0\end{pmatrix}\quad(\text{行}=\ket0_A,\ket1_A;\ \text{列}=\ket0_B,\ket1_B).$$ 对 $C$ 做 SVD，得两个奇异值 $\lambda_1\approx0.966,\ \lambda_2\approx0.259$（验证 $\lambda_1^2+\lambda_2^2\approx0.933+0.067=1$ ✓）。两个都非零 → 施密特数 $=2$ → <strong>有纠缠</strong>。 反例：$\ket{00}$ 的系数矩阵 $C=\begin{pmatrix}1&amp;0\\0&amp;0\end{pmatrix}$ 只有一个非零奇异值 → 施密特数 $=1$ → 可分、无纠缠。</blockquote>
+<blockquote class="callout intuition">💭 <strong>直觉（什么是纠缠）：</strong> 纠缠 = 两个变量的联合分布<strong>无法写成各自分布之积</strong> $P(A,B)\ne P(A)P(B)$。在量子里就是态写不成 $\ket a\otimes\ket b$。施密特数 $&gt;1$ 就是这种"拆不开"的量化指标。</blockquote>
+<blockquote class="callout purpose">🎯 <strong>用来干嘛：</strong> 施密特分解是"判断两体纯态有没有纠缠、纠缠多深"的标准工具。把系数排成矩阵做一次 SVD，数一数非零奇异值（施密特数）：等于 1 就是可分（无纠缠），大于 1 就是纠缠，奇异值的分布还告诉你纠缠的强弱。量子通信、纠缠资源评估都靠它一锤定音。</blockquote>
+<p><strong>纯化（Purification）</strong>：任何混态 $\rho_A$ 都能看成某个更大系统纯态 $\ket\Psi_{AB}$ 的约化：$\rho_A=\Tr_B(\ketbra{\Psi}{\Psi})$。</p>
+<blockquote class="callout intuition">💭 <strong>直觉：</strong> 纯化是"补一个隐藏维度，把随机性变确定"。A 单看是带随机的混态，但只要把被你忽略的环境 B 也算进来，整体 $\ket\Psi_{AB}$ 是完全确定的纯态。随机性只是因为你没看全。纯化不唯一（差一个辅助系统上的幺正）。</blockquote>
+<hr></section>
+<section id="s6"><h2>2.6 应用：EPR / Bell、态区分、超密编码</h2>
+<p>用前面的工具解决三个具体问题：纠缠能不能用"局域隐变量"解释（Bell）？非正交态能区分到什么程度（POVM）？纠缠怎么提升通信容量（超密编码）？</p>
+<p><strong>EPR 与 Bell 不等式</strong>：EPR 质疑量子力学不完备，设想背后藏着"局域隐变量"。Bell 证明：任何局域实在论模型都必须满足某个不等式，而量子纠缠态（Bell 态）的关联会<strong>违反</strong>它。实验确认违反 ⇒ 否定局域隐变量。</p>
+<blockquote class="callout intuition">💭 <strong>直觉：</strong> Bell 不等式像一个判决性单元测试。假设"世界是局域 + 有隐藏的确定变量"，就能推出一个数值上界。实验测出来超过了这个上界 ⇒ 假设被证伪，纠缠是真·非经典关联，不是"早就定好只是你不知道"。</blockquote>
+<p><strong>态区分</strong>：相互<strong>正交</strong>的态可用一组投影测量<strong>完美区分</strong>；<strong>非正交态做不到</strong>。对非正交态可用 POVM 做"无错但允许失败"的区分。</p>
+<blockquote class="callout calc">🧮 <strong>一步步算（POVM 无错区分非正交态）：</strong> 要区分 $\ket{\psi_1}=\ket0$ 与 $\ket{\psi_2}=\ket+$（注意 $\braket{0}{+}=\tfrac{1}{\sqrt2}\ne0$，不正交）。构造 $$E_1=(2-\sqrt2)\,\ketbra{-}{-},\quad E_2=(2-\sqrt2)\,\ketbra{1}{1},\quad E_?=I-E_1-E_2,$$ 其中 $\ket-=\tfrac{1}{\sqrt2}(\ket0-\ket1)$。关键：$E_1$ 对它要排除的态 $\ket{\psi_2}=\ket+$ 恰好给 0： $$\Tr(E_1\ketbra{+}{+})=(2-\sqrt2)\,\lvert\braket{-}{+}\rvert^2=(2-\sqrt2)\cdot 0=0,$$ （因为 $\braket{-}{+}=0$）。所以一旦测到 $E_1$，<strong>绝不可能</strong>是 $\ket+$，必是 $\ket0$。代价：正确识别 $\ket0$ 的概率只有 $\Tr(E_1\ketbra00)=(2-\sqrt2)\cdot\tfrac12=1-\tfrac{1}{\sqrt2}\approx0.293$，其余落入"弃权"分支 $E_?$。</blockquote>
+<blockquote class="callout intuition">💭 <strong>直觉：</strong> 这就是"宁可返回'不知道'也绝不返回错答案"。$E_?$ 是弃权分支：只要给出判定就 100% 对，代价是有时给不出判定。</blockquote>
+<blockquote class="callout mistake">⚠️ <strong>常见错误：别以为非正交态能完美区分。</strong> 只有<strong>正交</strong>态才能完美区分。非正交态在数学上就分不干净，最多做到"无错 + 弃权"。</blockquote>
+<p><strong>超密编码</strong>：Alice 和 Bob 预先共享一对 Bell 态，Alice 只对<strong>自己手里那 1 个 qubit</strong> 施加 $\{I,X,Z,XZ\}$ 之一，再把这个 qubit 发给 Bob，Bob 做 Bell 测量就能读出 <strong>2 个经典比特</strong>。</p>
+<blockquote class="callout review">📖 <strong>补基础：四个 Bell 态是 4 维空间的一组正交基。</strong> $$\ket{\Phi^\pm}=\tfrac{1}{\sqrt2}(\ket{00}\pm\ket{11}),\qquad \ket{\Psi^\pm}=\tfrac{1}{\sqrt2}(\ket{01}\pm\ket{10}).$$ 它们两两正交，所以 Bob 一次测量就能完美区分是哪一个。</blockquote>
+<blockquote class="callout calc">🧮 <strong>一步步算（四种本地操作 → 四个正交态）：</strong> 共享 $\ket{\Phi^+}=\frac{1}{\sqrt2}(\ket{00}+\ket{11})$，Alice 在第 1 个 qubit 上操作： - 作 $I$：仍是 $\ket{\Phi^+}$ —— 编码 <code>00</code>。 - 作 $Z$（翻 $\ket1$ 的符号）：$\frac{1}{\sqrt2}(\ket{00}-\ket{11})=\ket{\Phi^-}$ —— 编码 <code>01</code>。 - 作 $X$（翻转 $\ket0\leftrightarrow\ket1$）：$\frac{1}{\sqrt2}(\ket{10}+\ket{01})=\ket{\Psi^+}$ —— 编码 <code>10</code>。 - 作 $XZ$：$\frac{1}{\sqrt2}(\ket{10}-\ket{01})=-\ket{\Psi^-}$（差一个全局相位，不影响测量）—— 编码 <code>11</code>。 四种本地操作把同一个起点送到四个互相正交的终点，Bob 一测便知。</blockquote>
+<blockquote class="callout summary">✅ <strong>小结：</strong> 超密编码 = 1 qubit + 预共享纠缠 ⇒ 传 2 经典比特。注意纠缠是<strong>预先</strong>就要建立好的资源。</blockquote>
+<p><strong>不可克隆定理</strong>：不存在能复制任意未知量子态的幺正操作。</p>
+<blockquote class="callout intuition">💭 <strong>直觉：</strong> 量子态没有"复制"按钮。你不能克隆一个未知态——这既是限制（量子线路不能随便复制信号），也是特性（窃听者无法偷偷复制密钥，保障量子密码安全）。</blockquote>
+<blockquote class="callout summary">✅ <strong>小结（本章三条红线）：</strong> ① 只有正交态能完美区分；② 任意未知态不可克隆；③ Bell 违反否定局域实在论。纠缠（施密特数 $&gt;1$）是超密编码等协议的核心资源。</blockquote></section>
+</main>
+</div>
+<script>
+const toggle=document.getElementById('themeToggle');
+const saved=localStorage.getItem('qcqi-theme');
+if(saved)document.documentElement.setAttribute('data-theme',saved);
+toggle&&toggle.addEventListener('click',()=>{
+ const cur=document.documentElement.getAttribute('data-theme')==='light'?'':'light';
+ document.documentElement.setAttribute('data-theme',cur);
+ localStorage.setItem('qcqi-theme',cur);
+});
+const links=[...document.querySelectorAll('.nav a')];
+const secs=[...document.querySelectorAll('section[id]')];
+const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){
+ links.forEach(l=>l.classList.toggle('active',l.getAttribute('href')==='#'+e.target.id));}})},
+ {rootMargin:'-10% 0px -80% 0px'});
+secs.forEach(s=>obs.observe(s));
+const box=document.getElementById('search');
+box&&box.addEventListener('input',()=>{const q=box.value.trim().toLowerCase();
+ links.forEach(l=>l.classList.toggle('hidden',q&&!l.textContent.toLowerCase().includes(q)));});
+</script>
+</body>
+</html>

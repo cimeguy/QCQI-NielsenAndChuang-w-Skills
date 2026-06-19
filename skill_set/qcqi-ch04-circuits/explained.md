@@ -25,6 +25,12 @@ $$H=\tfrac{1}{\sqrt 2}\begin{pmatrix}1&1\\1&-1\end{pmatrix},\quad S=\begin{pmatr
 - $S$：相位门 $\mathrm{diag}(1,i)$，给 $\ket{1}$ 分量加 $90°$ 相位。
 - $T$：又叫 $\pi/8$ 门，给 $\ket{1}$ 加 $45°$ 相位。
 
+> 📐 **怎么看：** $H=\tfrac{1}{\sqrt2}\begin{pmatrix}1&1\\1&-1\end{pmatrix}$ 的两列就是它把基态送到哪里：第 1 列 $\tfrac{1}{\sqrt2}\binom{1}{1}$ 是 $H\ket0$，第 2 列 $\tfrac{1}{\sqrt2}\binom{1}{-1}$ 是 $H\ket1$。一般地矩阵元 $\bra{i}H\ket{j}$ 读作"输入 $\ket j$、输出落到 $\ket i$ 上的振幅"。而 $S=\mathrm{diag}(1,i)$、$T=\mathrm{diag}(1,e^{i\pi/4})$ 是**对角阵**——对角阵不混振幅、只改相位，第 1 个对角元作用在 $\ket0$、第 2 个作用在 $\ket1$。
+
+> 🔢 **算例：** 把 $H$ 作用到 $\ket0$ 就是矩阵乘列向量：
+> $$H\ket0=\tfrac{1}{\sqrt2}\begin{pmatrix}1&1\\1&-1\end{pmatrix}\begin{pmatrix}1\\0\end{pmatrix}=\tfrac{1}{\sqrt2}\begin{pmatrix}1\\1\end{pmatrix}=\tfrac{\ket0+\ket1}{\sqrt2}$$
+> 同理 $H\ket1=\tfrac{1}{\sqrt2}\binom{1}{-1}=\tfrac{\ket0-\ket1}{\sqrt2}$。再作用一次应回到原点：$H^2=\tfrac12\begin{pmatrix}1&1\\1&-1\end{pmatrix}\begin{pmatrix}1&1\\1&-1\end{pmatrix}=\tfrac12\begin{pmatrix}2&0\\0&2\end{pmatrix}=I$，可见 $H$ 自逆（$H=H^\dagger=H^{-1}$）。
+
 > 💡 **人话：** 单比特门 = 作用在 2 维状态向量上的可逆矩阵。没有副作用、永远可逆、模长不变——就是一个能 undo 的纯函数变换。
 
 > 🧠 **类比：** Bloch 球转 $\theta$ 度，向量公式里却写 $\theta/2$，这就像复数旋转里「角度减半」的味道——记成「球转一圈，态只转半圈」。
@@ -37,6 +43,10 @@ $$U=e^{i\alpha}\,R_z(\beta)\,R_y(\gamma)\,R_z(\delta)$$
 
 - 含义：一次任意旋转 = 「绕 z 转 $\delta$ → 绕 y 转 $\gamma$ → 绕 z 转 $\beta$」再配个全局相位 $\alpha$，就是经典的欧拉角。
 - $R_y$ 配合 $R_z$ 和相位即可生成**所有**单比特门——硬件只给你这几种旋转也够用。
+
+> 📐 **怎么看：** $R_z(\theta)=\begin{pmatrix}e^{-i\theta/2}&0\\0&e^{i\theta/2}\end{pmatrix}$ 是对角阵——它不混 $\ket0,\ket1$，只给两者各加一个**相反的相位**，所以叫"绕 z 轴转"。$R_y(\theta)=\begin{pmatrix}\cos\tfrac\theta2&-\sin\tfrac\theta2\\\sin\tfrac\theta2&\cos\tfrac\theta2\end{pmatrix}$ 就是你熟悉的平面旋转矩阵，它会真把 $\ket0,\ket1$ 的振幅搅在一起。注意指数和角都带半角 $\theta/2$（球转 $\theta$，态转 $\theta/2$）。
+
+> 🔢 **算例：** 取 $\theta=\tfrac\pi2$：$R_y(\tfrac\pi2)=\begin{pmatrix}\cos\tfrac\pi4&-\sin\tfrac\pi4\\\sin\tfrac\pi4&\cos\tfrac\pi4\end{pmatrix}=\tfrac{1}{\sqrt2}\begin{pmatrix}1&-1\\1&1\end{pmatrix}$，作用到 $\ket0=\binom10$ 得 $\tfrac{1}{\sqrt2}\binom11=\tfrac{\ket0+\ket1}{\sqrt2}$——和 $H$ 一样造出等权叠加（仅差相位约定）。
 
 > 🧠 **类比：** z-y-z 分解就是把一个高级 API 调用「编译」成三条底层指令的序列。硬件只认 $R_z/R_y$？没关系，编译器（分解）负责翻译。
 
@@ -81,6 +91,10 @@ $$U=e^{i\alpha}\,A\,X\,B\,X\,C,\qquad ABC=I$$
 - **禁止扇出**：复制一根线 = 量子克隆，违反**不可克隆定理**。
 
 > ⚠️ **坑：** 量子线路里**不能复制比特**（不能扇出）、**不能合并**（不能扇入）、**不能成环**。经典电路里随手画的「一根线接三个门」在量子里是非法的。
+
+> 📐 **怎么看：** 在基序 $\ket{00},\ket{01},\ket{10},\ket{11}$ 下 $\mathrm{CNOT}=\begin{pmatrix}1&0&0&0\\0&1&0&0\\0&0&0&1\\0&0&1&0\end{pmatrix}$。它是个**置换矩阵**（每行每列恰好一个 1）。左上 $2\times2$ 块是单位阵——控制位为 0（前两个基态）时目标不动；右下 $2\times2$ 块是 $X=\begin{pmatrix}0&1\\1&0\end{pmatrix}$——控制位为 1（后两个基态）时目标翻转，所以 $\ket{10}\leftrightarrow\ket{11}$ 互换。整体就是分块对角 $\begin{pmatrix}I&0\\0&X\end{pmatrix}$，正是"if ctrl then X"。
+
+> 🔢 **算例（造 Bell 态）：** 先把 $H$ 作用到控制位：$\ket{00}\xrightarrow{H\otimes I}\tfrac{1}{\sqrt2}(\ket{00}+\ket{10})$。再过 CNOT：$\ket{00}\mapsto\ket{00}$、$\ket{10}\mapsto\ket{11}$，于是得到 $\tfrac{1}{\sqrt2}(\ket{00}+\ket{11})$，这就是 Bell 态。用振幅向量看：$(\tfrac{1}{\sqrt2},0,\tfrac{1}{\sqrt2},0)^{T}\xrightarrow{\mathrm{CNOT}}(\tfrac{1}{\sqrt2},0,0,\tfrac{1}{\sqrt2})^{T}$——第 3、4 个分量被对调。
 
 > 🔑 **记住：** CNOT 生纠缠；CZ 与 CNOT 只差目标侧两个 H；SWAP = 3 CNOT；Toffoli 通用于经典可逆计算；任意受控-U 用单比特门 + CNOT 的 ABC 法搭。
 
@@ -195,6 +209,8 @@ $$e^{-i(A+B)t}\approx\left(e^{-iAt/n}\,e^{-iBt/n}\right)^{n},\qquad n\to\infty\ 
 $$\log\!\left(e^{X}e^{Y}\right)=X+Y+\tfrac{1}{2}[X,Y]+\cdots$$
 
 - $[X,Y]=XY-YX$ 是对易子。若 $A,B$ 对易（$[A,B]=0$），拆分就**没有误差**；正是 $[A,B]\ne 0$ 这一项制造了 Trotter 误差。
+
+> 🔢 **算例（对易子非零 ⇒ 有误差）：** 取 $A=X,B=Z$。逐个算矩阵乘法：$XZ=\begin{pmatrix}0&1\\1&0\end{pmatrix}\begin{pmatrix}1&0\\0&-1\end{pmatrix}=\begin{pmatrix}0&-1\\1&0\end{pmatrix}$，$ZX=\begin{pmatrix}1&0\\0&-1\end{pmatrix}\begin{pmatrix}0&1\\1&0\end{pmatrix}=\begin{pmatrix}0&1\\-1&0\end{pmatrix}$，于是 $[X,Z]=XZ-ZX=\begin{pmatrix}0&-2\\2&0\end{pmatrix}=-2iY$（因为 $Y=\begin{pmatrix}0&-i\\i&0\end{pmatrix}$）。它非零，所以 $e^{-i(X+Z)t}\neq e^{-iXt}e^{-iZt}$；BCH 展开的首个误差项 $\tfrac12[X,Z]t^2=-iY\,t^2$ 就是 Trotter 误差的来源，必须靠把时间切小（$t\to t/n$）来压。
 
 伴随恒等式（分析误差时的工具）：
 

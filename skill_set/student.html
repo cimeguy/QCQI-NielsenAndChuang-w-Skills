@@ -1,0 +1,28 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>QCQI 大学生版 · 门户</title><style>
+body{margin:0;min-height:100vh;background:radial-gradient(1200px 600px at 70% -10%,#93c5fd,#f4f7fb);
+color:#1c2733;font-family:-apple-system,"PingFang SC","Microsoft YaHei",system-ui,sans-serif}
+.wrap{max-width:980px;margin:0 auto;padding:70px 24px}
+h1{font-size:34px;margin:0 0 6px}.sub{color:#64748b;margin-bottom:14px;font-size:15px;line-height:1.7}
+.legend{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:30px;font-size:13px;color:#64748b}
+.legend span{background:#fff;border:1px solid #d7e1ee;border-radius:20px;padding:4px 13px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:18px}
+.card{display:block;background:#fff;border:1px solid #d7e1ee;border-radius:16px;padding:22px;
+color:#1c2733;text-decoration:none;transition:.18s}
+.card:hover{transform:translateY(-3px);border-color:#2563eb;box-shadow:0 10px 30px rgba(37,99,235,.18)}
+.ct{font-size:18px;font-weight:800;margin-bottom:8px}.cs{color:#64748b;font-size:13px}
+.foot{margin-top:40px;color:#64748b;font-size:13px;line-height:1.8}
+.foot a{color:#2563eb}
+</style></head>
+<body><div class="wrap">
+<h1>QCQI 知识库 · 大学生版 🎓</h1>
+<div class="sub">写给刚学过矩阵、概率、线性代数但基础还不太牢的同学：每个量子概念都先把用到的数学基础<b>从头讲一遍</b>，
+再一步步代数字演算，标出最容易踩的坑。<br>
+已经能看懂公式？试试 <a href="index.html">公式精简版</a>；有编程背景想要类比？看 <a href="explained.html">🗣️ 人话版</a>。</div>
+<div class="legend"><span>🎯 用来干嘛＝先搞懂它解决什么问题</span><span>📖 补基础＝先复习这块线代/概率</span><span>🧮 一步步算＝每一步都不跳</span>
+<span>💭 直觉＝它到底在干什么</span><span>⚠️ 常见错误＝同学最常栽的地方</span><span>✅ 小结＝一句话记住</span></div>
+<div class="grid"><a class="card" href="qcqi-ch01-intro/student.html"><div class="ct">第一章 · 量子计算简介</div><div class="cs">7 节 · 从零补基础</div></a><a class="card" href="qcqi-ch02-linalg-qm/student.html"><div class="ct">第二章 · 线性代数与量子力学</div><div class="cs">7 节 · 从零补基础</div></a><a class="card" href="qcqi-ch04-circuits/student.html"><div class="ct">第四章 · 量子线路与模拟</div><div class="cs">7 节 · 从零补基础</div></a><a class="card" href="qcqi-ch05-qft/student.html"><div class="ct">第五章 · QFT 与 Shor</div><div class="cs">7 节 · 从零补基础</div></a><a class="card" href="qcqi-ch06-search/student.html"><div class="ct">第六章 · 量子搜索 (Grover)</div><div class="cs">7 节 · 从零补基础</div></a><a class="card" href="qcqi-ch08-quantum-channels/student.html"><div class="ct">第八章补充 · 量子信道</div><div class="cs">8 节 · 从零补基础</div></a><a class="card" href="qcqi-key-points/student.html"><div class="ct">各章关键知识点汇总</div><div class="cs">7 节 · 从零补基础</div></a></div>
+<div class="foot">面向数学基础薄弱的本科生，不假设你学好了线代/概率。源自 <code>skill_set/&lt;skill&gt;/student.md</code>，
+由 <code>build_student.py</code> 静态生成（纯标准库 + 内置 MathJax，离线可用）。</div>
+</div></body></html>

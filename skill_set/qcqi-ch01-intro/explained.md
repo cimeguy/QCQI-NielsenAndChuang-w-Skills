@@ -36,6 +36,10 @@ $$\ket{\psi} = \alpha\ket{0} + \beta\ket{1}, \qquad \lvert\alpha\rvert^2 + \lver
 
 逐项翻译：$\ket{\psi}$ 是这个 qubit 的状态（一个二维复向量）；$\ket{0}$、$\ket{1}$ 是计算基（就是标准基 $(1,0)$ 和 $(0,1)$）；$\alpha,\beta \in \mathbb{C}$ 是**概率幅**（复数权重）；约束 $\lvert\alpha\rvert^2 + \lvert\beta\rvert^2 = 1$ 表示"读出 0 或 1 的概率加起来是 1"。
 
+> 📐 **怎么看：** 把 qubit 态写成一个**两行的列向量** $\ket{\psi} = \begin{pmatrix}\alpha\\\beta\end{pmatrix}$：第一行是基态 $\ket{0}$ 的振幅，第二行是 $\ket{1}$ 的振幅。计算基本身就是两个"独热"列向量 $\ket{0} = \begin{pmatrix}1\\0\end{pmatrix}$、$\ket{1} = \begin{pmatrix}0\\1\end{pmatrix}$。所以 $\alpha\ket{0}+\beta\ket{1} = \alpha\begin{pmatrix}1\\0\end{pmatrix}+\beta\begin{pmatrix}0\\1\end{pmatrix} = \begin{pmatrix}\alpha\\\beta\end{pmatrix}$，跟你按分量拼一个二维数组完全一样。
+
+> 🔢 **算例：** 取 $\alpha=\tfrac{1}{\sqrt2},\ \beta=\tfrac{i}{\sqrt2}$，即 $\ket{\psi}=\begin{pmatrix}1/\sqrt2\\i/\sqrt2\end{pmatrix}$。先验归一：$\lvert\alpha\rvert^2+\lvert\beta\rvert^2 = \tfrac12+\lvert i/\sqrt2\rvert^2 = \tfrac12+\tfrac12 = 1$ ✓。测量概率：得 $\ket{0}$ 的概率 $\lvert\alpha\rvert^2=\tfrac12$，得 $\ket{1}$ 的概率 $\lvert\beta\rvert^2=\tfrac12$。注意 $\beta$ 带的那个 $i$（相位）在概率里被模方吃掉了，但它把这个态推到了 Bloch 球赤道的另一处——干涉时才显形。
+
 > 🧠 **类比：** 一个 qubit 态 = **一个长度为 1 的二维复数数组** `[α, β]`，满足 `|α|² + |β|² == 1`。计算基 $\{\ket{0},\ket{1}\}$ 就是这个二维复向量空间的标准正交基（ONB），跟你写 `Vector2(x, y)` 里的 x/y 轴一个意思。
 
 > ⚠️ **坑：** $\alpha,\beta$ 是**复数**不是实数概率；真正的概率是它们的**模方** $\lvert\alpha\rvert^2$、$\lvert\beta\rvert^2$。复数里那部分"相位"信息在测量概率上看不见，但在干涉时至关重要——这是量子算法的命根子。
@@ -46,6 +50,10 @@ $$\rho = \ketbra{\psi}{\psi}, \qquad \Tr(\rho) = \lvert\alpha\rvert^2 + \lvert\b
 
 这里 $\ketbra{\psi}{\psi}$ 是态向量和它的共轭转置的外积（一个 $2\times2$ 矩阵）；$\Tr$ 是求迹（对角线元素求和），迹为 1 就是概率归一的另一种写法。
 
+> 📐 **怎么看：** $\rho=\ketbra{\psi}{\psi}$ 是列向量乘行向量（外积），结果是个 $2\times2$ 矩阵：$\rho = \begin{pmatrix}\alpha\\\beta\end{pmatrix}\begin{pmatrix}\alpha^* & \beta^*\end{pmatrix} = \begin{pmatrix}\lvert\alpha\rvert^2 & \alpha\beta^*\\ \alpha^*\beta & \lvert\beta\rvert^2\end{pmatrix}$。**对角线**两项 $\lvert\alpha\rvert^2,\lvert\beta\rvert^2$ 正是测得 $\ket{0}$、$\ket{1}$ 的概率（叫"布居"）；**非对角线**两项 $\alpha\beta^*,\alpha^*\beta$ 叫"相干项"，编码了叠加的相位关系——混合度越高它们越衰减。
+
+> 🔢 **算例：** 取等权叠加 $\ket{+}=\tfrac{1}{\sqrt2}(\ket{0}+\ket{1})$，即 $\alpha=\beta=\tfrac{1}{\sqrt2}$。代入得 $\rho = \begin{pmatrix}1/2 & 1/2\\ 1/2 & 1/2\end{pmatrix} = \tfrac12\begin{pmatrix}1&1\\1&1\end{pmatrix}$。检验 $\Tr(\rho)=\tfrac12+\tfrac12=1$ ✓。对比"最大混合态" $\rho=\tfrac12\begin{pmatrix}1&0\\0&1\end{pmatrix}$——两者对角线一样（测量都是 50/50），但纯叠加态的**非对角项不为零**，这正是"量子叠加"和"经典掷硬币"在数学上的分水岭。
+
 > 🧠 **类比：** 密度矩阵 $\rho$ = **纯态上的一个概率分布（加权集合）**。如果你确定系统就是某个 $\ket{\psi}$，那是"纯态"；如果你只知道"50% 是这个态、50% 是那个态"（经典不确定性叠加在量子不确定性之上），那是"混合态"。$\rho$ 把这两层不确定性统一打包，就像用一个 `WeightedSet<State>` 同时表达确定值和概率分布。
 
 **Bloch 球**：把单 qubit 纯态画成单位球面上的一个点。
@@ -53,6 +61,10 @@ $$\rho = \ketbra{\psi}{\psi}, \qquad \Tr(\rho) = \lvert\alpha\rvert^2 + \lvert\b
 $$\ket{\psi} = \cos(\theta/2)\ket{0} + e^{i\phi}\sin(\theta/2)\ket{1} \;\longleftrightarrow\; r = (\sin\theta\cos\phi,\ \sin\theta\sin\phi,\ \cos\theta)$$
 
 $\theta$ 是纬度角（从北极 $\ket{0}$ 往下量），$\phi$ 是经度角（绕赤道转），$e^{i\phi}$ 是相位因子。Bloch 分量也能从密度矩阵算：$r_i = \Tr(\rho\,\sigma_i)$，其中 $\sigma_i$ 是 Pauli 矩阵。
+
+> 📐 **怎么看：** 这条公式是"态向量 ↔ 球面坐标"的字典。给定 $(\theta,\phi)$：$\theta$ 决定 $\ket{0}/\ket{1}$ 的权重（$\cos\tfrac\theta2$ 配 $\ket{0}$、$\sin\tfrac\theta2$ 配 $\ket{1}$），$\phi$ 只动 $\ket{1}$ 前面的相位 $e^{i\phi}$。右边 $r=(\sin\theta\cos\phi,\ \sin\theta\sin\phi,\ \cos\theta)$ 就是把这个态投影到 $x/y/z$ 三根轴上的期望值（即 $\langle\sigma_x\rangle,\langle\sigma_y\rangle,\langle\sigma_z\rangle$）。
+
+> 🔢 **算例：** ① $\ket{0}$：取 $\theta=0$，则 $\cos0=1,\ \sin0=0$，态就是 $\ket{0}$，坐标 $r=(0,0,\cos0)=(0,0,1)$——正北极。② $\ket{+}=\tfrac{1}{\sqrt2}(\ket{0}+\ket{1})$：取 $\theta=\tfrac\pi2,\ \phi=0$，则 $\cos\tfrac\pi4=\sin\tfrac\pi4=\tfrac{1}{\sqrt2}$ ✓，坐标 $r=(\sin\tfrac\pi2,0,\cos\tfrac\pi2)=(1,0,0)$——赤道上 $+x$ 方向。③ $\ket{1}$：取 $\theta=\pi$，坐标 $r=(0,0,\cos\pi)=(0,0,-1)$——正南极。
 
 > 💡 **人话：** 一个单 qubit 纯态恰好对应球面上一个点。北极是 $\ket{0}$、南极是 $\ket{1}$、赤道上是各种等权叠加。两个参数 $(\theta,\phi)$ 就能定位它，跟用经纬度定位地球上一点完全一样。
 
@@ -71,6 +83,10 @@ $\theta$ 是纬度角（从北极 $\ket{0}$ 往下量），$\phi$ 是经度角�
 **多比特与 Bell 基**：$n$ 个比特张成 $2^n$ 维空间，基矢从 $\ket{00\dots0}$ 到 $\ket{11\dots1}$。其中四个最大纠缠的两比特态叫 Bell 基：
 
 $$\ket{\Phi^\pm} = \frac{\ket{00} \pm \ket{11}}{\sqrt{2}}, \qquad \ket{\Psi^\pm} = \frac{\ket{01} \pm \ket{10}}{\sqrt{2}}$$
+
+> 📐 **怎么看：** 两比特态是 $2^2=4$ 维列向量，分量顺序约定为 $\ket{00},\ket{01},\ket{10},\ket{11}$。所以 $\ket{\Phi^+}=\tfrac{1}{\sqrt2}(\ket{00}+\ket{11}) = \tfrac{1}{\sqrt2}\begin{pmatrix}1\\0\\0\\1\end{pmatrix}$：只有"两个都 0"和"两个都 1"两项非零、且等权。而 $\ket{\Psi^-}=\tfrac{1}{\sqrt2}(\ket{01}-\ket{10}) = \tfrac{1}{\sqrt2}\begin{pmatrix}0\\1\\-1\\0\end{pmatrix}$ 则把权重压在"两个不同"的分量上。
+
+> 🔢 **算例：** 对 $\ket{\Phi^+}=\tfrac{1}{\sqrt2}(\ket{00}+\ket{11})$ 在计算基测量两比特：得 $00$ 的概率 $\lvert\tfrac{1}{\sqrt2}\rvert^2=\tfrac12$，得 $11$ 的概率 $\tfrac12$，而得 $01$ 或 $10$ 的概率都是 $0$（这两个分量振幅为零）。所以两比特**测出来必然相同**。再看局部：只盯第一个比特，它得 $0$ 或 $1$ 各占 $\tfrac12$（像随机硬币），可一旦读了它，第二个比特的结果就被瞬间锁定——这就是纠缠的"关联藏在全局、单看局部却是随机"。
 
 > 🧠 **类比：** $n$ 比特的状态空间是 $2^n$ 维——这就是经典模拟量子为什么贵：50 个 qubit 就要 $2^{50}$ 个复数才能存下完整态向量。多比特基矢的构造是各比特基的**笛卡尔积 / 张量积（Kronecker 积）**，跟嵌套循环枚举所有组合一个道理。
 
@@ -92,6 +108,10 @@ $$R_n(\theta) = \cos(\theta/2)\,I - i\sin(\theta/2)\,(n\cdot\sigma)$$
 
 $I$ 是单位矩阵，$\sigma = (\sigma_x,\sigma_y,\sigma_z)$ 是 Pauli 矩阵三件套，$n\cdot\sigma = n_x\sigma_x + n_y\sigma_y + n_z\sigma_z$。$R_x,R_y,R_z$ 就是取轴为 $x/y/z$ 的特例。
 
+> 📐 **怎么看：** $R_n(\theta)=\cos\tfrac\theta2\,I-i\sin\tfrac\theta2\,(n\cdot\sigma)$ 把"绕轴 $n$ 转 $\theta$"拆成两块之和：$\cos\tfrac\theta2\,I$ 是"原地不动"的成分，$-i\sin\tfrac\theta2\,(n\cdot\sigma)$ 是"沿轴翻转"的成分。注意转角是 $\theta/2$ 而不是 $\theta$——这是 qubit（旋量）的招牌特征：态要转满 $4\pi$ 才回到原样。
+
+> 🔢 **算例：** 取轴 $n=z$，则 $n\cdot\sigma=\sigma_z=\begin{pmatrix}1&0\\0&-1\end{pmatrix}$。代入：$R_z(\theta) = \cos\tfrac\theta2\begin{pmatrix}1&0\\0&1\end{pmatrix}-i\sin\tfrac\theta2\begin{pmatrix}1&0\\0&-1\end{pmatrix} = \begin{pmatrix}\cos\tfrac\theta2-i\sin\tfrac\theta2 & 0\\ 0 & \cos\tfrac\theta2+i\sin\tfrac\theta2\end{pmatrix} = \begin{pmatrix}e^{-i\theta/2}&0\\0&e^{i\theta/2}\end{pmatrix}$。可见 $R_z$ 只给 $\ket{0},\ket{1}$ 各挂一个相反的相位——在 Bloch 球上就是绕 $z$ 轴自转，难怪改不了测量概率（模方不变）。
+
 > 🧠 **类比：** 幺正变换 = **可逆无损变换**（保范数、保内积）。在编程里就像一个一定能 `undo` 的纯变换：$U^\dagger U = I$，逆就是它的共轭转置，没有信息丢失。这跟有损的 `hash()` 或会塌缩的测量正好相反。
 
 > 💡 **人话：** 单比特门就是"在 Bloch 球上把状态点转一下"。$R_x(\theta)$ 绕 x 轴转 $\theta$，以此类推。门不改变球的半径（纯态还是纯态），只改朝向。
@@ -100,6 +120,12 @@ $I$ 是单位矩阵，$\sigma = (\sigma_x,\sigma_y,\sigma_z)$ 是 Pauli 矩阵�
 
 - **Hadamard ($H$)**——叠加制造机：$H\ket{0} = (\ket{0}+\ket{1})/\sqrt{2}$，$H\ket{1} = (\ket{0}-\ket{1})/\sqrt{2}$。
 - **相位门 $S = \operatorname{diag}(1, i)$**、**$T$ 门 $= \operatorname{diag}(1, e^{i\pi/4})$**（又叫 $\pi/8$ 门）：只给 $\ket{1}$ 分量加一个相位。
+
+> 📐 **怎么看：** Hadamard 矩阵 $H=\tfrac{1}{\sqrt2}\begin{pmatrix}1&1\\1&-1\end{pmatrix}$ 的**列**就是"基态被映到哪里"：第 1 列 $\tfrac{1}{\sqrt2}\begin{pmatrix}1\\1\end{pmatrix}$ 是 $\ket{0}$ 的去向（等权正叠加 $\ket{+}$），第 2 列 $\tfrac{1}{\sqrt2}\begin{pmatrix}1\\-1\end{pmatrix}$ 是 $\ket{1}$ 的去向（带负号的叠加 $\ket{-}$）。一般地，矩阵元 $M_{ij}$ 读作"输入基态 $\ket{j}$、输出落到 $\ket{i}$ 的振幅"——这条规则对所有量子门通用。相位门 $S=\begin{pmatrix}1&0\\0&i\end{pmatrix}$、$T=\begin{pmatrix}1&0\\0&e^{i\pi/4}\end{pmatrix}$ 是对角阵，只在 $\ket{1}$ 的去向（右下角）盖一个相位章，$\ket{0}$ 原封不动。
+
+> 🔢 **算例（H 作用在基态上）：** $H\ket{0} = \tfrac{1}{\sqrt2}\begin{pmatrix}1&1\\1&-1\end{pmatrix}\begin{pmatrix}1\\0\end{pmatrix} = \tfrac{1}{\sqrt2}\begin{pmatrix}1\cdot1+1\cdot0\\1\cdot1+(-1)\cdot0\end{pmatrix} = \tfrac{1}{\sqrt2}\begin{pmatrix}1\\1\end{pmatrix} = \tfrac{\ket{0}+\ket{1}}{\sqrt2}$。同理 $H\ket{1} = \tfrac{1}{\sqrt2}\begin{pmatrix}1&1\\1&-1\end{pmatrix}\begin{pmatrix}0\\1\end{pmatrix} = \tfrac{1}{\sqrt2}\begin{pmatrix}1\\-1\end{pmatrix} = \tfrac{\ket{0}-\ket{1}}{\sqrt2}$。矩阵乘法就是"用矩阵的每一行去点乘那个列向量"。
+
+> 🔢 **算例（H 自逆 / 相位门）：** 再来一发 $H$ 能复原：$H\ket{+} = \tfrac12\begin{pmatrix}1&1\\1&-1\end{pmatrix}\begin{pmatrix}1\\1\end{pmatrix} = \tfrac12\begin{pmatrix}2\\0\end{pmatrix} = \begin{pmatrix}1\\0\end{pmatrix} = \ket{0}$，印证 $H^2=I$。相位门 $S\ket{1} = \begin{pmatrix}1&0\\0&i\end{pmatrix}\begin{pmatrix}0\\1\end{pmatrix} = \begin{pmatrix}0\\i\end{pmatrix} = i\ket{1}$，只把 $\ket{1}$ 乘上 $i$；而 $S\ket{0}=\ket{0}$ 不变。
 
 > 🧠 **类比：** $H$ 是几乎所有量子算法的"第一行代码"：把确定的 $\ket{0}$ 砸成 50/50 的等权叠加，开启量子并行的入口。把它想成"初始化一个均匀概率分布"。
 
@@ -116,6 +142,10 @@ $$U = e^{i\alpha}\, R_z(\beta)\, R_y(\gamma)\, R_z(\delta)$$
 - **CNOT（受控非）**：控制位是 1 时翻转目标位。**它是纠缠的生成器**。
 - **SWAP**：交换两比特，且 **SWAP = 三个 CNOT 级联**。
 - **Toffoli (CCNOT)**：双控制非门，是经典可逆计算的通用门。
+
+> 📐 **怎么看：** 两比特门是 $4\times4$ 矩阵，行列都按 $\ket{00},\ket{01},\ket{10},\ket{11}$ 排。CNOT（控制位在前、目标位在后）写作 $\mathrm{CNOT}=\begin{pmatrix}1&0&0&0\\0&1&0&0\\0&0&0&1\\0&0&1&0\end{pmatrix}$：上半的 $\ket{00},\ket{01}$（控制位=0）是单位块、原样不动；下半 $\ket{10},\ket{11}$（控制位=1）那个 $\begin{pmatrix}0&1\\1&0\end{pmatrix}$ 子块，正是在目标位上做 $X$（翻转）。所以它就是"控制位为 1 才翻目标位"的置换矩阵。
+
+> 🔢 **算例（CNOT 与造 Bell 态）：** $\mathrm{CNOT}\ket{10}$：$\ket{10}=\begin{pmatrix}0\\0\\1\\0\end{pmatrix}$，乘出来取到矩阵第 3 列 $\begin{pmatrix}0\\0\\0\\1\end{pmatrix}=\ket{11}$——控制位 1、目标位被翻成 1。而 $\mathrm{CNOT}\ket{00}=\ket{00}$（控制位 0，不动）。把 $H$ 加在前面就造出纠缠：先 $H$ 作用在第一比特，$\ket{00}\to\tfrac{1}{\sqrt2}(\ket{00}+\ket{10})$，再 $\mathrm{CNOT}$ 把 $\ket{10}\to\ket{11}$，得到 $\tfrac{1}{\sqrt2}(\ket{00}+\ket{11})=\ket{\Phi^+}$——一个 Bell 态。
 
 > 🧠 **类比：** CNOT 就像 `if control: target ^= 1`，但因为它作用在叠加态上，能把两个比特**纠缠**起来（$H$ + CNOT 就造出 Bell 态）。Toffoli `if (a and b): c ^= 1` 是可逆版的 AND，用它能把任意经典布尔电路塞进量子线路。
 
@@ -169,6 +199,10 @@ $$U_f:\ \ket{x}\ket{y} \;\longrightarrow\; \ket{x}\ket{y \oplus f(x)}$$
 
 $\ket{x}$ 是输入寄存器，$\ket{y}$ 是输出寄存器，$\oplus$ 是异或（模 2 加）。如果输入是叠加态 $\sum_x \ket{x}$，那一次 $U_f$ 就把所有 $f(x)$ 一起算了。
 
+> 📐 **怎么看：** $U_f$ 是个**置换门**（不改振幅大小、只重排基态）。它把输入寄存器 $\ket{x}$ 当索引读、把输出寄存器 $\ket{y}$ 改成 $\ket{y\oplus f(x)}$。用异或而不是直接覆盖，是为了**可逆**：再作用一次 $U_f$ 就还原（$y\oplus f(x)\oplus f(x)=y$），满足幺正性。注意 $\ket{x}$ 那一路自始至终没被动过——这样才不破坏叠加。
+
+> 🔢 **算例：** 设输出寄存器初始为 $\ket{0}$，输入喂等权叠加 $\tfrac{1}{\sqrt2}(\ket{0}+\ket{1})$，总态 $\tfrac{1}{\sqrt2}(\ket{0}+\ket{1})\ket{0}$。一次 $U_f$：$\ket{0}\ket{0}\to\ket{0}\ket{0\oplus f(0)}=\ket{0}\ket{f(0)}$，$\ket{1}\ket{0}\to\ket{1}\ket{f(1)}$，于是得到 $\tfrac{1}{\sqrt2}(\ket{0}\ket{f(0)}+\ket{1}\ket{f(1)})$——**一次操作就把 $f(0)$ 和 $f(1)$ 同时算进了同一个态**。但直接测量只能随机塌缩到其中一支，所以还需要干涉，见下面 Deutsch。
+
 > ⚠️ **坑：** 量子并行**不是免费午餐**！所有 $f(x)$ 确实叠在一个态里，但你**直接测量只能随机拿到其中一个**——还塌缩掉其余全部。所以"同时算 $2^n$ 个值"本身没用，必须靠后续**干涉**把"全局性质"提炼到能测出来的地方。这就是为什么"量子 = 大规模并行"是个误导性说法。
 
 > 🧠 **类比：** 想象你 `map(f, all_inputs)` 得到一个超大结果数组，但 API 只允许你 `sample()` 一次就销毁整个数组。光并行 map 没意义，你得设计一种"归约 + 相消"（干涉）让你想要的那个全局答案脱颖而出。
@@ -180,6 +214,8 @@ $\ket{x}$ 是输入寄存器，$\ket{y}$ 是输出寄存器，$\oplus$ 是异或
 1. 制备 $\ket{0}\ket{1}$，两个比特各过一个 $H$，得到 $(\ket{0}+\ket{1})(\ket{0}-\ket{1})/2$。
 2. 作用一次 $U_f$。由于第二比特处在 $\ket{-} = (\ket{0}-\ket{1})/\sqrt{2}$，发生**相位回踢**，给第一比特挂上 $(-1)^{f(x)}$ 的相位因子。
 3. 对第一比特再过一个 $H$ 然后测量：测得 $\ket{0}$ ⇒ 常数型，测得 $\ket{1}$ ⇒ 平衡型。
+
+> 🔢 **算例（常数型 $f\equiv0$）：** 第 1 步后两比特处于 $\tfrac{1}{\sqrt2}(\ket{0}+\ket{1})\otimes\ket{-}$，其中 $\ket{-}=\tfrac{1}{\sqrt2}(\ket{0}-\ket{1})$。第 2 步 $U_f$ 触发相位回踢，第一比特挂上 $(-1)^{f(x)}$：因 $f(0)=f(1)=0$，两支都乘 $(-1)^0=+1$，第一比特仍是 $\tfrac{1}{\sqrt2}(\ket{0}+\ket{1})=\ket{+}$。第 3 步对它再做 $H$：$H\ket{+}=\ket{0}$（见上面 H 自逆算例），测得 $\ket{0}$ ⟹ 判定**常数型** ✓。若换成平衡型 $f(x)=x$，两支相位变成 $+1,-1$，第一比特成 $\tfrac{1}{\sqrt2}(\ket{0}-\ket{1})=\ket{-}$，而 $H\ket{-}=\ket{1}$，测得 $\ket{1}$ ⟹ **平衡型**。
 
 > 💡 **人话：** Deutsch 问的根本不是 $f(0)$ 或 $f(1)$ 各自是多少，而是 $f(0)\oplus f(1)$ 这**一个全局比特**（相等还是不等）。量子线路通过相位回踢把这个全局信息编码进相位，再用 $H$ 做干涉读出来，所以一次 $U_f$ 就够。
 

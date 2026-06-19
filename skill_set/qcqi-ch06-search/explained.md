@@ -32,6 +32,10 @@ $$O\ket{x} = (-1)^{f(x)}\ket{x}$$
 
 > 🧠 **类比：** 相位翻转就像给命中的元素打一个隐形的负号标签 `tag[x] = -1`。神奇之处在于这个负号不改变测量到 $x$ 的概率（概率只看模长），所以你"光看"是看不出来谁被标记了——但后面的 Grover 迭代能利用这个负号把它捞出来。
 
+> 📐 **怎么看：** 把 $O$ 写成矩阵就一清二楚。唯一解 $x_0$ 时 $O = I - 2\ketbra{x_0}{x_0}$，逐元素是 $\bra{y}O\ket{z} = \delta_{yz} - 2\braket{y}{x_0}\braket{x_0}{z}$。$\braket{x_0}{z}$ 只有 $z=x_0$ 时为 1、其余为 0，所以这是一个**对角矩阵**：对角线上只有 $x_0$ 那一格是 $1-2=-1$，其它格全是 $1$。换句话说 $O=\mathrm{diag}(1,\dots,1,\underbrace{-1}_{x_0},1,\dots,1)$——它只把目标项那一个坐标变号，对其余坐标原样放行，这正是"只给命中项打负号"的矩阵写法。
+
+> 🔢 **算例：** 取 $N=4$、唯一解 $x_0=\ket{10}$（即下标 2）。那么 $O=\mathrm{diag}(1,1,-1,1)$。作用在均匀叠加 $\tfrac12(\ket{00}+\ket{01}+\ket{10}+\ket{11})$ 上，振幅向量 $(\tfrac12,\tfrac12,\tfrac12,\tfrac12)$ 变成 $(\tfrac12,\tfrac12,-\tfrac12,\tfrac12)$——只有下标 2 的振幅翻了号，其余三个纹丝不动。注意每个振幅的模长仍是 $\tfrac12$，所以此刻直接测量四个结果概率仍各 $1/4$，负号"藏"在相位里。
+
 **怎么从布尔变成相位翻转**：把辅助比特置成 $\ket{-}=(\ket{0}-\ket{1})/\sqrt{2}$，再作用布尔预言机 $U_f$，会发生"相位回踢"：
 
 $$\ket{x}\ket{-} \xrightarrow{U_f} (-1)^{f(x)}\ket{x}\ket{-}$$
@@ -67,6 +71,10 @@ $$G = -H O = (2\ketbra{\psi}{\psi} - I)\, O$$
 - $O$：相位翻转预言机，把解的幅变负。
 - $2\ketbra{\psi}{\psi}-I$：关于均匀叠加态 $\ket{\psi}$ 的反射，俗称**对均值翻转（inversion about the mean）**。
 - $I$：单位算符（什么都不做）。
+
+> 📐 **怎么看：** 均匀叠加 $\ket\psi$ 的每个分量都是 $1/\sqrt N$，所以 $\ketbra{\psi}{\psi}$ 是一个**所有元素都等于 $1/N$** 的 $N\times N$ 矩阵。于是 $2\ketbra{\psi}{\psi}-I$ 的矩阵元为：对角元 $\tfrac2N-1$、非对角元 $\tfrac2N$。它作用到振幅向量 $(a_0,\dots,a_{N-1})$ 上，第 $i$ 个分量变成 $\sum_j\tfrac2N a_j-a_i=2\bar a-a_i$，其中 $\bar a$ 是所有振幅的平均值。这就是"对均值翻转"名字的由来：每个振幅都被映成 $2\bar a-a_i$（关于均值 $\bar a$ 做镜像）。
+
+> 🔢 **算例（$N=4$ 一步命中）：** 唯一解 $x_0=\ket{10}$。初态均匀叠加振幅 $(\tfrac12,\tfrac12,\tfrac12,\tfrac12)$。第一步预言机 $O$ 把解变号 → $(\tfrac12,\tfrac12,-\tfrac12,\tfrac12)$。第二步对均值翻转：均值 $\bar a=\tfrac14(\tfrac12+\tfrac12-\tfrac12+\tfrac12)=\tfrac14$，每个分量映成 $2\bar a-a_i=\tfrac12-a_i$：三个非解 $\tfrac12-\tfrac12=0$，解 $\tfrac12-(-\tfrac12)=1$。结果 $(0,0,1,0)$——解的概率变成 $1^2=100\%$，仅一次迭代就确定命中。
 
 > 💡 **人话：** 一次 Grover 迭代 = 两步。第一步 `O`：给命中项的幅打负号。第二步"对均值翻转"：把每个幅都关于"所有幅的平均值"做镜像翻转。打了负号的命中项远低于均值，翻转后被抬得很高；其他项略低于均值，翻转后略降。净效果就是命中项的幅被放大、非命中被压低。
 
@@ -106,6 +114,10 @@ $$\sin\frac{\theta}{2} = \sqrt{\frac{M}{N}}$$
 
 - $\theta/2$：初态 $\ket{\psi}$ 与非解轴 $\ket{\alpha}$ 的夹角。
 - 每作用一次 $G$，向量就朝 $\ket{\beta}$（解轴）多转一个固定的 $\theta$。
+
+> 📐 **怎么看：** 在 $\{\ket\alpha,\ket\beta\}$ 这个二维基下，Grover 迭代 $G$ 就是一个旋转矩阵 $\begin{pmatrix}\cos\theta&-\sin\theta\\\sin\theta&\cos\theta\end{pmatrix}$。把初态写成 $\ket\psi=\cos\tfrac\theta2\ket\alpha+\sin\tfrac\theta2\ket\beta$，即向量与非解轴 $\ket\alpha$ 的夹角是 $\theta/2$。每乘一次 $G$，夹角增加 $\theta$；要让向量落到解轴 $\ket\beta$（夹角 $90°$），就需要 $(2R+1)\tfrac\theta2=\tfrac\pi2$。
+
+> 🔢 **算例（$N=4,\ M=1$）：** $\sin\tfrac\theta2=\sqrt{M/N}=\tfrac12$，故 $\tfrac\theta2=30°$、$\theta=60°$。初态与 $\ket\alpha$ 夹角 $30°$，转一次到 $30°+60°=90°$——正好落在解轴 $\ket\beta$ 上，一次迭代 $100\%$ 命中（与 6.2 的振幅算例完全一致）。代入次数公式 $R\approx\tfrac\pi4\sqrt{N/M}=\tfrac\pi4\cdot2\approx1.57$，取整后实际最优就是 $1$ 次。
 
 > 💡 **人话：** "两次镜像反射等于一次旋转"是初中几何就有的结论（关于两条夹角为 $\phi$ 的镜面各反射一次，等于转 $2\phi$）。Grover 的两次反射正是这样合成出一个固定转角 $\theta$。所以整个算法 = 把那个几乎贴着 X 轴的向量，一步步以固定步长转向 Y 轴。
 

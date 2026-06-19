@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>第四章 · 量子线路与模拟 · 大学生版 · QCQI</title>
+<style>
+:root{--bg:#f4f7fb;--panel:#fff;--panel2:#eaf0f8;--fg:#1c2733;--muted:#64748b;
+--accent:#2563eb;--accent2:#0891b2;--border:#d7e1ee;--code:#eef3f9;--th:#e6eef8;
+--purpose:#ea580c;--purposebg:#fff5ec;
+--review:#7c3aed;--reviewbg:#f5f1ff;--calc:#0891b2;--calcbg:#ecfbfd;
+--intuition:#2563eb;--intuitionbg:#eef4ff;--mistake:#dc2626;--mistakebg:#fef2f2;
+--summary:#15803d;--summarybg:#ecfdf3;}
+[data-theme=dark]{--bg:#0d1320;--panel:#161f30;--panel2:#121a29;--fg:#e3eaf3;--muted:#8595a8;
+--accent:#60a5fa;--accent2:#22d3ee;--border:#27344a;--code:#16203200;--th:#1a2538;
+--purposebg:#2a1709;
+--reviewbg:#1f1633;--calcbg:#0a2730;--intuitionbg:#10203b;--mistakebg:#2a1414;--summarybg:#0f2417;}
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,"PingFang SC","Microsoft YaHei",Segoe UI,system-ui,sans-serif;
+background:var(--bg);color:var(--fg);line-height:1.9;font-size:16px}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+.layout{display:flex;min-height:100vh}
+.sidebar{width:300px;flex:0 0 300px;background:var(--panel2);border-right:1px solid var(--border);
+position:sticky;top:0;height:100vh;overflow-y:auto;padding:20px 0}
+.sidebar h2{font-size:14px;margin:0 18px 6px;color:var(--muted);font-weight:600}
+.brand{padding:0 18px 14px;border-bottom:1px solid var(--border);margin-bottom:12px}
+.brand .t{font-size:18px;font-weight:800}
+.brand .s{font-size:12.5px;color:var(--muted);margin-top:3px}
+.search{margin:0 14px 12px;width:calc(100% - 28px);padding:9px 11px;border-radius:9px;
+border:1px solid var(--border);background:var(--panel);color:var(--fg);font-size:13px}
+.nav a{display:block;padding:6px 18px;color:var(--fg);font-size:13.5px;border-left:3px solid transparent}
+.nav a:hover{background:var(--panel);text-decoration:none}
+.nav a.active{border-left-color:var(--accent);background:var(--panel);color:var(--accent)}
+.nav a.hidden{display:none}
+.main{flex:1;min-width:0;padding:34px 52px 90px;max-width:920px}
+.topbar{display:flex;align-items:center;gap:14px;margin-bottom:8px;flex-wrap:wrap}
+.topbar .home{font-size:13px;color:var(--muted)}
+.toggle{margin-left:auto;cursor:pointer;border:1px solid var(--border);background:var(--panel);
+color:var(--fg);border-radius:8px;padding:6px 12px;font-size:13px}
+section{scroll-margin-top:20px;padding:16px 0;border-bottom:1px solid var(--border)}
+h1{font-size:28px;margin:.2em 0 .5em;line-height:1.3}
+h2{font-size:21px;margin:1.1em 0 .5em;color:var(--accent)}
+h3{font-size:17px;margin:1em 0 .4em;color:var(--accent2)}h4{font-size:15.5px;margin:.9em 0 .3em}
+code{background:var(--code);padding:1.5px 6px;border-radius:5px;font-size:.9em;
+font-family:"SF Mono",Menlo,Consolas,monospace}
+pre{background:var(--code);padding:14px 16px;border-radius:10px;overflow-x:auto;border:1px solid var(--border)}
+pre code{background:none;padding:0}
+table{border-collapse:collapse;width:100%;margin:12px 0;font-size:14px;border-radius:8px;overflow:hidden}
+th,td{border:1px solid var(--border);padding:7px 11px;text-align:left;vertical-align:top}
+th{background:var(--th);font-weight:600}
+ul,ol{padding-left:24px}li{margin:4px 0}
+hr{border:none;border-top:1px dashed var(--border);margin:16px 0}
+blockquote{border-left:4px solid var(--accent2);margin:12px 0;padding:8px 16px;color:var(--muted);
+background:var(--panel);border-radius:0 8px 8px 0}
+blockquote.callout{border-left-width:5px;border-radius:10px;padding:12px 18px;color:var(--fg);
+margin:14px 0;font-size:15px}
+blockquote.callout.review{border-left-color:var(--review);background:var(--reviewbg)}
+blockquote.callout.purpose{border-left-color:var(--purpose);background:var(--purposebg)}
+blockquote.callout.calc{border-left-color:var(--calc);background:var(--calcbg)}
+blockquote.callout.intuition{border-left-color:var(--intuition);background:var(--intuitionbg)}
+blockquote.callout.mistake{border-left-color:var(--mistake);background:var(--mistakebg)}
+blockquote.callout.summary{border-left-color:var(--summary);background:var(--summarybg);font-weight:600}
+.legend{display:flex;gap:10px;flex-wrap:wrap;margin:6px 0 18px;font-size:12.5px;color:var(--muted)}
+.legend span{background:var(--panel);border:1px solid var(--border);border-radius:20px;padding:3px 11px}
+.badge{display:inline-block;background:var(--accent);color:#fff;border-radius:6px;padding:2px 9px;font-size:12px;font-weight:700}
+@media(max-width:820px){.sidebar{display:none}.main{padding:24px 18px}}
+</style>
+<script>
+window.MathJax={
+ tex:{
+  inlineMath:[['$','$'],['\\(','\\)']],
+  displayMath:[['$$','$$'],['\\[','\\]']],
+  macros:{
+   ket:['{\\lvert #1\\rangle}',1],
+   bra:['{\\langle #1\\rvert}',1],
+   braket:['{\\langle #1\\vert #2\\rangle}',2],
+   ketbra:['{\\lvert #1\\rangle\\langle #2\\rvert}',2],
+   Tr:'{\\operatorname{Tr}}',
+   tr:'{\\operatorname{tr}}'
+  }
+ },
+ svg:{fontCache:'global'},
+ options:{skipHtmlTags:['script','style','textarea','pre','code'],ignoreHtmlClass:'viz'}
+};
+</script>
+<script src="../vendor/tex-svg.js" id="MathJax-script" async></script>
+</head>
+<body>
+<div class="layout">
+<aside class="sidebar">
+<div class="brand"><div class="t">QCQI · 大学生版</div><div class="s">第四章 · 量子线路与模拟</div></div>
+<input class="search" id="search" placeholder="过滤小节…">
+<nav class="nav">
+<a href="../student.html" style="color:var(--muted)">← 返回大学生版门户</a>
+<a href="explained.html" style="color:var(--muted)">🗣️ 看人话版</a>
+<a href="index.html" style="color:var(--muted)">≡ 看公式精简版</a>
+<a href="#s0">导读</a>
+<a href="#s1">4.1 单比特门 = 给 2 维向量乘一个 2×2 矩阵</a>
+<a href="#s2">4.2 受控门 = 量子版的 if-then</a>
+<a href="#s3">4.3 测量 = 把量子结果读回经典世界</a>
+<a href="#s4">4.4 通用量子门 = 量子世界的「基本指令集」</a>
+<a href="#s5">4.5 量子计算机的要素与其他计算模型</a>
+<a href="#s6">4.6 量子模拟 = 用算子分裂把 $e^{-iHt}$ 编译成门序列</a>
+</nav></aside>
+<main class="main">
+<div class="topbar"><span class="badge">大学生版</span><span class="home">第四章 · 量子线路与模拟</span><button class="toggle" id="themeToggle">🌓 深/浅色</button></div>
+<div class="legend"><span>🎯 用来干嘛</span><span>📖 补基础</span><span>🧮 一步步算</span><span>💭 直觉</span><span>⚠️ 常见错误</span><span>✅ 小结</span></div>
+<section id="s0"><h1>第四章 量子线路与量子模拟 · 大学生版</h1>
+<h2>导读</h2>
+<p>这一章是量子计算的「操作手册」：把抽象的量子操作画成一张<strong>电路图</strong>，再告诉你这张图能用哪几个「基本积木」拼出来。核心就三件事——单比特门是给一个 2 维列向量乘上一个 $2\times2$ 矩阵；多比特受控门负责把比特纠缠起来；而 $\{H,T,\mathrm{CNOT}\}$ 这三个门就能（近似）拼出一切量子操作。</p>
+<p>不用担心数学基础——本章用到的每个工具（矩阵乘列向量、Pauli 矩阵、旋转矩阵、张量积、对易子）都会在第一次出现时用 <code>📖 补基础</code> 当场补清楚，并配一个能动手算的小数字例子。读完你应该能自己算出 $H\ket0$、用 CNOT 造出 Bell 态、并理解为什么 $[X,Z]=-2iY$。</p>
+<blockquote class="callout review">📖 <strong>补基础：</strong> 先把贯穿全章的「记号」摆平。一个 qubit 的状态是一个 <strong>2 维复列向量</strong>，两个特殊的基向量是 $$\ket0=\begin{pmatrix}1\\0\end{pmatrix},\qquad \ket1=\begin{pmatrix}0\\1\end{pmatrix}.$$ 一般态写成 $\ket\psi=\alpha\ket0+\beta\ket1=\begin{pmatrix}\alpha\\\beta\end{pmatrix}$，其中 $\alpha,\beta$ 是复数且 $\lvert\alpha\rvert^2+\lvert\beta\rvert^2=1$（归一化）。$\ket{\cdot}$ 读作「ket」，就是「一个列向量」的意思，别被符号吓到。对应的行向量 $\bra\psi=\begin{pmatrix}\alpha^*&amp;\beta^*\end{pmatrix}$（取共轭再转置）。内积写成 $\braket{\phi}{\psi}$。</blockquote>
+<hr></section>
+<section id="s1"><h2>4.1 单比特门 = 给 2 维向量乘一个 2×2 矩阵</h2>
+<p>大白话：一个 qubit 的状态就是一个 2 维复向量。单比特门就是一个 $2\times2$ 的<strong>幺正矩阵</strong>（unitary），把它左乘到状态向量上，就得到新状态。幺正的意思是「可逆，而且不改变向量的长度」——所以量子门永远能撤销，永远不丢信息。</p>
+<blockquote class="callout purpose">🎯 <strong>用来干嘛：</strong> 单比特门是量子程序的「最小操作指令」。比如用 $H$ 把一个确定的 0/1 比特变成「既是 0 又是 1」的叠加态，整个量子并行就是从这一步起步的；旋转门 $R_y,R_z$ 则让你把比特精确调到任意你想要的方向，是给量子算法「设参数」的旋钮。</blockquote>
+<blockquote class="callout review">📖 <strong>补基础（矩阵乘列向量）：</strong> $2\times2$ 矩阵作用在 2 维列向量上的规则是「行点乘列」： $$\begin{pmatrix}a&amp;b\\c&amp;d\end{pmatrix}\begin{pmatrix}x\\y\end{pmatrix}=\begin{pmatrix}ax+by\\cx+dy\end{pmatrix}.$$ 第一个分量 = 第一行 $(a,b)$ 与 $(x,y)$ 的点积；第二个分量 = 第二行。就这么简单。看矩阵还有个小技巧：<strong>第一列是矩阵作用在 $\ket0=\binom10$ 上的结果，第二列是作用在 $\ket1=\binom01$ 上的结果</strong>——因为乘 $\binom10$ 就是把第一列抄出来。</blockquote>
+<blockquote class="callout review">📖 <strong>补基础（什么叫幺正）：</strong> 矩阵 $U$ 是幺正的，指 $U^\dagger U=I$，其中 $U^\dagger$ 是「共轭转置」（转置后每个元素取复共轭），$I=\begin{pmatrix}1&amp;0\\0&amp;1\end{pmatrix}$ 是单位矩阵。$U^\dagger U=I$ 等价于「$U$ 的逆就是 $U^\dagger$」，也等价于「$U$ 把单位长度的向量还是变成单位长度」。所以态过完门以后仍然归一化，概率还是加起来等于 1。</blockquote>
+<p>几个最常用的门：</p>
+<p>$$H=\frac{1}{\sqrt 2}\begin{pmatrix}1&amp;1\\1&amp;-1\end{pmatrix},\quad S=\begin{pmatrix}1&amp;0\\0&amp;i\end{pmatrix},\quad T=\begin{pmatrix}1&amp;0\\0&amp;e^{i\pi/4}\end{pmatrix}.$$</p>
+<ul><li>$H$（Hadamard）：把基态打成「五五开叠加」，是产生叠加态的标准入口。</li><li>$S$：相位门，给 $\ket1$ 分量加 $90°$ 相位。</li><li>$T$：又叫 $\pi/8$ 门，给 $\ket1$ 加 $45°$ 相位。</li></ul>
+<blockquote class="callout review">📖 <strong>补基础（Pauli 矩阵 X/Y/Z）：</strong> 三个最重要的 $2\times2$ 矩阵，背下来会很省事： $$X=\begin{pmatrix}0&amp;1\\1&amp;0\end{pmatrix},\quad Y=\begin{pmatrix}0&amp;-i\\i&amp;0\end{pmatrix},\quad Z=\begin{pmatrix}1&amp;0\\0&amp;-1\end{pmatrix}.$$ 直觉：$X$ 是「量子版的非门」（交换 $\ket0,\ket1$，因为 $X\binom10=\binom01$）；$Z$ 给 $\ket1$ 翻个负号（相位翻转）；$Y$ 同时翻位置和相位。它们都满足 $X^2=Y^2=Z^2=I$（自己乘自己等于单位阵），且都既是幺正又是厄米（$X^\dagger=X$）。</blockquote>
+<blockquote class="callout calc">🧮 <strong>一步步算（$H\ket0$ 和 $H^2=I$）：</strong> 把 $H$ 作用到 $\ket0=\binom10$，就是矩阵乘列向量： $$H\ket0=\frac{1}{\sqrt2}\begin{pmatrix}1&amp;1\\1&amp;-1\end{pmatrix}\begin{pmatrix}1\\0\end{pmatrix}=\frac{1}{\sqrt2}\begin{pmatrix}1\cdot1+1\cdot0\\1\cdot1+(-1)\cdot0\end{pmatrix}=\frac{1}{\sqrt2}\begin{pmatrix}1\\1\end{pmatrix}=\frac{\ket0+\ket1}{\sqrt2}.$$ 同理 $H\ket1=\frac{1}{\sqrt2}\binom{1}{-1}=\frac{\ket0-\ket1}{\sqrt2}$。再作用一次应回到原点，验证 $H^2=I$： $$H^2=\frac12\begin{pmatrix}1&amp;1\\1&amp;-1\end{pmatrix}\begin{pmatrix}1&amp;1\\1&amp;-1\end{pmatrix}=\frac12\begin{pmatrix}1+1&amp;1-1\\1-1&amp;1+1\end{pmatrix}=\frac12\begin{pmatrix}2&amp;0\\0&amp;2\end{pmatrix}=I.$$ 所以 $H$ 自己就是自己的逆（$H=H^{-1}$）。</blockquote>
+<blockquote class="callout intuition">💭 <strong>直觉：</strong> 单比特门 = 作用在 2 维向量上的可逆旋转。它不改长度、永远能撤销。几何上把 Bloch 球（一个用来画 qubit 的 3 维小球）转一个角度，态就从一个点转到另一个点。</blockquote>
+<p><strong>任意单比特门 = 绕某根轴的旋转。</strong> 任何单比特门都可以写成绕单位轴 $n=(n_x,n_y,n_z)$ 旋转角度 $\theta$（再配一个全局相位 $e^{i\alpha}$）：</p>
+<p>$$R_n(\theta) = \cos\frac{\theta}{2}\, I - i\sin\frac{\theta}{2}\,(n_x X + n_y Y + n_z Z).$$</p>
+<blockquote class="callout review">📖 <strong>补基础（旋转矩阵与半角）：</strong> 你在线代里学过平面旋转矩阵 $\begin{pmatrix}\cos\phi&amp;-\sin\phi\\\sin\phi&amp;\cos\phi\end{pmatrix}$。量子里两个最常用的旋转门是 $$R_z(\theta)=\begin{pmatrix}e^{-i\theta/2}&amp;0\\0&amp;e^{i\theta/2}\end{pmatrix},\qquad R_y(\theta)=\begin{pmatrix}\cos\frac\theta2&amp;-\sin\frac\theta2\\[2pt]\sin\frac\theta2&amp;\cos\frac\theta2\end{pmatrix}.$$ $R_z$ 是<strong>对角阵</strong>：它不混 $\ket0,\ket1$，只给两者各加一个相反的相位（这就叫「绕 z 轴转」）。$R_y$ 就是你熟悉的平面旋转，会真的把 $\ket0,\ket1$ 的振幅搅在一起。<strong>注意都是半角 $\theta/2$</strong>：Bloch 球转 $\theta$，向量公式里只出现 $\theta/2$——记成「球转一圈，态只转半圈」。</blockquote>
+<blockquote class="callout calc">🧮 <strong>一步步算（$R_y(\pi/2)$ 也能造叠加）：</strong> 取 $\theta=\frac\pi2$，则 $\frac\theta2=\frac\pi4$，$\cos\frac\pi4=\sin\frac\pi4=\frac{1}{\sqrt2}$： $$R_y\!\left(\tfrac\pi2\right)=\begin{pmatrix}\frac{1}{\sqrt2}&amp;-\frac{1}{\sqrt2}\\[2pt]\frac{1}{\sqrt2}&amp;\frac{1}{\sqrt2}\end{pmatrix}=\frac{1}{\sqrt2}\begin{pmatrix}1&amp;-1\\1&amp;1\end{pmatrix}.$$ 作用到 $\ket0=\binom10$ 得 $\frac{1}{\sqrt2}\binom11=\frac{\ket0+\ket1}{\sqrt2}$——和 $H$ 一样造出等权叠加（仅差一点相位约定）。</blockquote>
+<p><strong>z-y-z 分解：</strong> 任意单比特门都能拆成三次旋转，$U=e^{i\alpha}\,R_z(\beta)\,R_y(\gamma)\,R_z(\delta)$。也就是「绕 z 转 $\delta$ → 绕 y 转 $\gamma$ → 绕 z 转 $\beta$」再配个全局相位。硬件只要能做 $R_z,R_y$，就能做出任意单比特门。</p>
+<blockquote class="callout mistake">⚠️ <strong>常见错误：</strong> 别幻想有个「万能取反门」能把<strong>任意</strong>态 $\ket\psi$ 都翻到与它正交的方向 $\ket{\psi^\perp}$。经典 NOT 能翻 0/1，但量子态是连续的，这种「普适取反」不是幺正变换，物理上做不出来。</blockquote>
+<blockquote class="callout summary">✅ <strong>小结：</strong> 单比特门 = $2\times2$ 幺正矩阵，作用就是矩阵乘列向量；看矩阵的两列就知道它把 $\ket0,\ket1$ 送到哪。$H$ 造叠加且 $H^2=I$；$R_z$ 是对角（只改相位），$R_y$ 是真旋转（混振幅），都用半角 $\theta/2$；任意门可 z-y-z 三步拆开。</blockquote>
+<hr></section>
+<section id="s2"><h2>4.2 受控门 = 量子版的 if-then</h2>
+<p>大白话：多比特门靠「受控操作」搭出来——一个<strong>控制位</strong>决定要不要对<strong>目标位</strong>施加某个门。最像编程里的 <code>if (控制位==1) 对目标做U</code>，只不过它必须整体可逆。要看懂多比特门，先得会把单比特态拼成多比特态，这就要用张量积。</p>
+<blockquote class="callout purpose">🎯 <strong>用来干嘛：</strong> 受控门是制造<strong>纠缠</strong>的唯一手段——光靠单比特门各转各的，比特之间永远没关联。一个 $H$ + 一个 CNOT 就能造出 Bell 态，让两个比特的命运绑死。几乎所有量子协议（隐形传态、纠错码、Shor/Grover 的核心线路）都靠受控门把比特连起来。</blockquote>
+<blockquote class="callout review">📖 <strong>补基础（张量积 ⊗）：</strong> 两个 qubit 的联合状态是把各自的列向量做<strong>张量积（Kronecker 积）</strong>。规则：把左边向量的每个分量乘上整个右边向量，再竖着摞起来： $$\binom{a}{b}\otimes\binom{c}{d}=\begin{pmatrix}a\binom{c}{d}\\[4pt]b\binom{c}{d}\end{pmatrix}=\begin{pmatrix}ac\\ad\\bc\\bd\end{pmatrix}.$$ 所以两个 qubit 的状态是 $2\times2=4$ 维向量，基底为 $\ket{00},\ket{01},\ket{10},\ket{11}$。例如 $\ket{10}=\ket1\otimes\ket0=\binom01\otimes\binom10=(0,0,1,0)^{T}$（第 3 个分量是 1）。同理两个门 $A,B$ 分别作用在两个比特上，整体矩阵是 $A\otimes B$（$4\times4$）。</blockquote>
+<blockquote class="callout review">📖 <strong>补基础（受控门的分块矩阵）：</strong> 一个 $4\times4$ 矩阵可以切成四个 $2\times2$ 小块。受控门长这样： $$\begin{pmatrix}I&amp;0\\0&amp;U\end{pmatrix}=\begin{pmatrix}1&amp;0&amp;\cdot&amp;\cdot\\0&amp;1&amp;\cdot&amp;\cdot\\\cdot&amp;\cdot&amp;&amp;\\\cdot&amp;\cdot&amp;&amp;\end{pmatrix},$$ 含义：当控制位是 0（对应前两个基态 $\ket{00},\ket{01}$）时，左上角的 $I$ 让目标不动；当控制位是 1（后两个基态 $\ket{10},\ket{11}$）时，右下角的 $U$ 作用到目标上。这正是「if 控制位 then U」的矩阵写法。</blockquote>
+<p>几个基本受控门：</p>
+<ul><li><strong>CNOT</strong>：控制位为 1 时翻转目标位（对目标做 $X$）。它是<strong>纠缠的发动机</strong>——$H$ 制叠加 + CNOT 就能造出 Bell 纠缠态。</li><li><strong>CZ</strong>：控制位为 1 时对目标施 $Z$；它对控制位和目标位是对称的。</li><li><strong>SWAP</strong>：交换两个比特的状态，恰好等于三个 CNOT 串起来。</li><li><strong>Toffoli (CCNOT)</strong>：两个控制位都为 1 才翻转目标，是经典可逆计算的通用门。</li></ul>
+<blockquote class="callout calc">🧮 <strong>一步步算（CNOT 的矩阵就是分块的 $\binom{I\ 0}{0\ X}$）：</strong> 在基底 $\ket{00},\ket{01},\ket{10},\ket{11}$ 下， $$\mathrm{CNOT}=\begin{pmatrix}1&amp;0&amp;0&amp;0\\0&amp;1&amp;0&amp;0\\0&amp;0&amp;0&amp;1\\0&amp;0&amp;1&amp;0\end{pmatrix}.$$ 左上 $2\times2$ 块是单位阵 $I$（控制位为 0，目标不动）；右下 $2\times2$ 块是 $X=\begin{pmatrix}0&amp;1\\1&amp;0\end{pmatrix}$（控制位为 1，目标翻转），所以 $\ket{10}\leftrightarrow\ket{11}$ 互换。整体就是 $\begin{pmatrix}I&amp;0\\0&amp;X\end{pmatrix}$。它每行每列恰好一个 1，是个置换矩阵。</blockquote>
+<blockquote class="callout calc">🧮 <strong>一步步算（造 Bell 态）：</strong> 从 $\ket{00}$ 出发，先对控制位（左边那位）做 $H$。$H\ket0=\frac{1}{\sqrt2}(\ket0+\ket1)$，所以 $$\ket{00}\;\xrightarrow{\,H\otimes I\,}\;\frac{1}{\sqrt2}(\ket{00}+\ket{10}).$$ 用 4 维向量看这是 $(\tfrac{1}{\sqrt2},0,\tfrac{1}{\sqrt2},0)^{T}$。再过 CNOT：它把 $\ket{00}$ 留着、把 $\ket{10}$ 换成 $\ket{11}$（即对调向量的第 3、4 个分量）： $$\frac{1}{\sqrt2}(\ket{00}+\ket{10})\;\xrightarrow{\,\mathrm{CNOT}\,}\;\frac{1}{\sqrt2}(\ket{00}+\ket{11}).$$ 这就是 Bell 态——两个比特的测量结果永远相同，无法写成单比特态的张量积，这正是「纠缠」。</blockquote>
+<blockquote class="callout mistake">⚠️ <strong>常见错误：</strong> 量子线路里<strong>不能复制比特</strong>（不能从一根线扇出两根，否则违反不可克隆定理）、<strong>不能把多根线合并成一根</strong>（不可逆，违反幺正性）、<strong>不能成环</strong>。经典电路里随手画的「一根线接三个门」在量子里是非法的。</blockquote>
+<blockquote class="callout summary">✅ <strong>小结：</strong> 多比特态用张量积拼（$\otimes$ 让维数相乘）；受控门是分块矩阵 $\begin{pmatrix}I&amp;0\\0&amp;U\end{pmatrix}$；CNOT 是 $\begin{pmatrix}I&amp;0\\0&amp;X\end{pmatrix}$，配合 $H$ 造 Bell 态、是纠缠发动机；SWAP = 3 个 CNOT，Toffoli 通用于经典可逆计算。</blockquote>
+<hr></section>
+<section id="s3"><h2>4.3 测量 = 把量子结果读回经典世界</h2>
+<p>大白话：计算分三步——把信息装进去、处理、读出来。<strong>读出就要测量</strong>。测量会让叠加态「塌缩」到某个基态上，是量子世界唯一的「读返回值」方式。本节给三条分析线路时极好用的原理。</p>
+<blockquote class="callout review">📖 <strong>补基础（测量到底算什么）：</strong> 对 $\ket\psi=\alpha\ket0+\beta\ket1$ 在计算基下测量：以概率 $\lvert\alpha\rvert^2$ 读到「0」并使态塌缩成 $\ket0$，以概率 $\lvert\beta\rvert^2$ 读到「1」塌缩成 $\ket1$。两个概率加起来 $\lvert\alpha\rvert^2+\lvert\beta\rvert^2=1$（这正是归一化的意义）。例如对 $H\ket0=\frac{\ket0+\ket1}{\sqrt2}$ 测量，得 0 和得 1 各占 $\lvert\tfrac{1}{\sqrt2}\rvert^2=\tfrac12$。</blockquote>
+<p><strong>延迟测量原理：</strong> 线路中间的测量总能推迟到最末端。「先测一下、拿经典结果去控制后面的门」完全等价于「直接用量子受控门、最后再测」，两种写法的统计结果完全一样。一个著名应用是<strong>量子隐形传态</strong>：Alice 和 Bob 共享一个 Bell 态，Alice 在本地做门+测量，把经典结果发给 Bob，Bob 据此施门，手里就得到了原汁原味的 $\ket\psi$。</p>
+<p><strong>隐含测量原理：</strong> 线路末端那些<strong>没被测的</strong> qubit，分析时可以当作「其实已经测过了」——这不影响其余比特的统计结果，能少算一大堆。</p>
+<p><strong>对算符 $U$ 做测量（习题 4.34）：</strong> 若 $U$ 既幺正（$U=U^{-1}$）又厄米（$U=U^\dagger$），则</p>
+<p>$$U=U^\dagger=U^{-1}\ \Rightarrow\ U^2=I,\quad \text{本征值只能是}\ \pm 1.$$</p>
+<p>Pauli 算符 $X,Y,Z$ 就是这类。做法：加一个<strong>辅助比特</strong>，做 $H$ → 受控-$U$ → $H$ → 测辅助比特。读到的 $\pm1$ 就告诉你主系统塌缩到了哪个本征子空间。</p>
+<blockquote class="callout review">📖 <strong>补基础（本征值 / 本征态）：</strong> 若 $U\ket u=\lambda\ket u$，则 $\ket u$ 是 $U$ 的本征态，$\lambda$ 是本征值——意思是「$U$ 作用在 $\ket u$ 上只是乘一个数，方向不变」。幺正矩阵的本征值模长都为 1（形如 $e^{i\theta}$）。若同时还厄米，本征值是实数，于是只能是 $+1$ 或 $-1$。这条性质第五章相位估计还会用到。</blockquote>
+<blockquote class="callout summary">✅ <strong>小结：</strong> 测量按 $\lvert$振幅$\rvert^2$ 给概率并使态塌缩；延迟测量（中途测+经典控制 ⇔ 量子受控门+末端测）、隐含测量（末端未测=已测）都能简化分析；对满足 $U^2=I$ 的算符，用「辅助比特 H–受控U–H–测」就能同时拿到概率和测后态。</blockquote>
+<hr></section>
+<section id="s4"><h2>4.4 通用量子门 = 量子世界的「基本指令集」</h2>
+<p>大白话：通用门集合就是一小组门，能以任意精度逼近<strong>任何</strong>幺正变换。这就像经典数字电路里「光靠 NAND 门就能搭出一切逻辑」。证明分三步，把「任意 $2^n\times2^n$ 幺正矩阵」一路归约到离散的 $\{H,T,\mathrm{CNOT}\}$。</p>
+<blockquote class="callout purpose">🎯 <strong>用来干嘛：</strong> 它告诉硬件厂商「只要把这三个门做好做准，就能跑任何量子算法」，不用为每种操作单独造硬件；也让编译器有了统一的「目标指令集」，把高层算法翻译成这几个门的序列。这是量子计算能工程化、能容错纠错的根基。</blockquote>
+<p><strong>三步归约：</strong></p>
+<ul><li><strong>STEP 1：二级幺正门是通用的。</strong> 任意幺正矩阵都能拆成一串「二级幺正门」之积——每个只动两个基态张成的 2 维子空间，其它分量不变。这跟线代里用 Givens 旋转一个一个把矩阵元消成零是同一招。</li><li><strong>STEP 2：单比特门 + CNOT 是通用的。</strong> 每个二级门都能用单比特门和 CNOT 实现。</li><li><strong>STEP 3：$\{H,T,\mathrm{CNOT}\}$ 是通用的。</strong> 单比特门有连续无穷多个，但 $\{H,T\}$ 反复组合能在所有单比特门里「稠密」分布，从而任意逼近其中任何一个；再加 CNOT 就得到一个<strong>离散</strong>的通用集。</li></ul>
+<blockquote class="callout intuition">💭 <strong>直觉：</strong> 离散的几个门居然能逼近连续无穷多的门，靠的是「稠密 + 逼近」——就像有理数稠密地铺满实数轴，你总能用有理数无限逼近任意实数（比如用 $3,3.1,3.14,3.141,\dots$ 逼近 $\pi$）。</blockquote>
+<p><strong>复杂度（Solovay–Kitaev 定理）：</strong> 把目标门逼近到精度 $\varepsilon$，只需</p>
+<p>$$O\!\left(\log^{c}(1/\varepsilon)\right)\ \text{个门}\quad(c\ \text{是常数}).$$</p>
+<p>含义：精度每提升一档，所需门数只按 $\log(1/\varepsilon)$ 的多项式增长——非常便宜，不会爆炸。</p>
+<blockquote class="callout summary">✅ <strong>小结：</strong> 通用性三步走（二级门 → 单比特门 + CNOT → $\{H,T,\mathrm{CNOT}\}$）；标准离散通用集是 $\{H,T,\mathrm{CNOT}\}$，逼近精度 $\varepsilon$ 只需 $O(\log^c(1/\varepsilon))$ 个门。</blockquote>
+<hr></section>
+<section id="s5"><h2>4.5 量子计算机的要素与其他计算模型</h2>
+<p>大白话：量子线路只是众多模型之一。计算的本质是「物理系统里跑的物理过程」，不同物理实现给出不同但等价的模型。</p>
+<p><strong>核心三环节 + DiVincenzo 五要素：</strong> 任何量子计算都逃不开</p>
+<p>$$\text{初始化}\ \to\ \text{幺正变换（计算）}\ \to\ \text{测量（读出）}.$$</p>
+<p>工程上要落地，DiVincenzo 判据列了五条：① 可扩展且良定义的 qubit；② 能初始化到基准态；③ 足够长的相干时间；④ 一组通用门；⑤ 可靠的单比特测量。</p>
+<p><strong>计算的物理本质（Landauer 原理）：</strong> 计算都是物理行为，最终受物理定律支配；<strong>擦除一个比特的信息有最小能耗</strong>。信息和热力学是绑在一起的。历史上 Benioff（1980）给出量子力学计算模型，Feynman（1981）最早倡议造量子计算机——他指出用经典机器模拟量子系统似乎不可行。</p>
+<p><strong>量子线路以外的等价模型：</strong> 绝热量子计算（缓慢演化哈密顿量，让系统待在基态）、拓扑量子计算（用任意子编织，天然抗噪）、量子随机游走、one clean qubit (DQC1)、MBQC / 单向量子计算（先制备簇态，只靠自适应单比特测量驱动）、量子图灵机（理论基准）。它们与线路模型算力等价，只是不同「编程范式」。</p>
+<blockquote class="callout summary">✅ <strong>小结：</strong> 三环节 = 初始化 / 幺正变换 / 测量；DiVincenzo 五要素是硬件验收清单；计算是物理过程（Landauer：擦信息要耗能）；绝热、拓扑、量子游走、DQC1、MBQC、量子图灵机都与线路模型等价。</blockquote>
+<hr></section>
+<section id="s6"><h2>4.6 量子模拟 = 用算子分裂把 $e^{-iHt}$ 编译成门序列</h2>
+<p>大白话：Feynman 的设想是用一个可控量子系统去模拟另一个量子系统的演化，绕开经典模拟的「指数墙」。难点在于哈密顿量 $H$ 里各项一般<strong>不对易</strong>，没法简单地把 $e^{-iHt}$ 拆开成几个因子相乘。Trotter 公式就是那把「近似拆分」的钥匙。</p>
+<blockquote class="callout purpose">🎯 <strong>用来干嘛：</strong> 这是量子计算机眼下最被看好的实用方向——模拟分子、材料、化学反应。经典计算机模拟量子系统会随粒子数指数级变慢（算个中等分子就卡死），Trotter 把演化 $e^{-iHt}$ 编译成一串能在量子机上跑的小门，让「设计新药、新电池材料」这类问题有了高效算法。</blockquote>
+<blockquote class="callout review">📖 <strong>补基础（对易子 $[A,B]$）：</strong> 矩阵乘法一般不满足交换律：$AB\neq BA$。衡量「差多少」的量叫<strong>对易子</strong> $$[A,B]:=AB-BA.$$ 若 $[A,B]=0$（即 $AB=BA$）就说 $A,B$ <strong>对易</strong>。对易了，指数才能拆：$e^{A+B}=e^Ae^B$ 只在 $[A,B]=0$ 时成立。普通数总是对易的（$xy=yx$），所以你以前没注意过这条；但矩阵不是。</blockquote>
+<blockquote class="callout calc">🧮 <strong>一步步算（$[X,Z]=-2iY$）：</strong> 逐个算矩阵乘法。 $$XZ=\begin{pmatrix}0&amp;1\\1&amp;0\end{pmatrix}\begin{pmatrix}1&amp;0\\0&amp;-1\end{pmatrix}=\begin{pmatrix}0&amp;-1\\1&amp;0\end{pmatrix},\qquad ZX=\begin{pmatrix}1&amp;0\\0&amp;-1\end{pmatrix}\begin{pmatrix}0&amp;1\\1&amp;0\end{pmatrix}=\begin{pmatrix}0&amp;1\\-1&amp;0\end{pmatrix}.$$ 相减： $$[X,Z]=XZ-ZX=\begin{pmatrix}0&amp;-2\\2&amp;0\end{pmatrix}.$$ 又因为 $Y=\begin{pmatrix}0&amp;-i\\i&amp;0\end{pmatrix}$，所以 $-2iY=-2i\begin{pmatrix}0&amp;-i\\i&amp;0\end{pmatrix}=\begin{pmatrix}0&amp;-2\\2&amp;0\end{pmatrix}$，两者相等。结论：$[X,Z]=-2iY\neq0$，$X$ 和 $Z$ <strong>不对易</strong>。</blockquote>
+<p><strong>Trotter 公式（两项情形）：</strong> 既然 $A,B$ 一般不对易，就用「切小步、交替走」来逼近：</p>
+<p>$$e^{-i(A+B)t}\approx\left(e^{-iAt/n}\,e^{-iBt/n}\right)^{n},\qquad n\to\infty\ \text{时精确}.$$</p>
+<p>把演化时间切成 $n$ 小段，每小段先走一点 $A$、再走一点 $B$，反复交替。$n$ 越大，步子越细，近似越准。</p>
+<ul><li><strong>1 阶</strong>：每步误差 $O(\Delta t^2)$。</li><li><strong>2 阶（对称 Suzuki–Trotter）</strong>：$e^{-iA\Delta t/2}\,e^{-iB\Delta t}\,e^{-iA\Delta t/2}$，每步误差降到 $O(\Delta t^3)$。</li></ul>
+<blockquote class="callout intuition">💭 <strong>直觉：</strong> Trotter 就是数值积分里的「算子分裂」：没法一口气算 $A+B$ 一起的演化，就「先走一小步 A、再走一小步 B」反复交替，步子越小越贴近真实轨迹。误差从哪来？由 BCH 公式 $\log(e^Xe^Y)=X+Y+\tfrac12[X,Y]+\cdots$，首个误差项正是对易子 $\tfrac12[X,Y]$——若 $A,B$ 对易就完全没误差，正是 $[A,B]\neq0$ 制造了 Trotter 误差。</blockquote>
+<blockquote class="callout mistake">⚠️ <strong>常见错误：</strong> 别把 $e^{-i(A+B)t}$ 当成 $e^{-iAt}e^{-iBt}$ 随便拆——这只在 $[A,B]=0$ 时成立，否则就是误差来源。也别盲目堆步数 $n$：常常先选对阶数（用 2 阶对称分裂），比硬加步数更省门。</blockquote>
+<blockquote class="callout summary">✅ <strong>小结：</strong> 局域哈密顿量求和 $H=\sum_iA_i$ + 时间切片 + Trotter = 可高效模拟的门序列；误差来自不对易项 $[A,B]$（如 $[X,Z]=-2iY\neq0$），由 BCH 公式刻画；高阶 Suzuki–Trotter 用更少门达到给定精度。</blockquote></section>
+</main>
+</div>
+<script>
+const toggle=document.getElementById('themeToggle');
+const saved=localStorage.getItem('qcqi-theme');
+if(saved)document.documentElement.setAttribute('data-theme',saved);
+toggle&&toggle.addEventListener('click',()=>{
+ const cur=document.documentElement.getAttribute('data-theme')==='light'?'':'light';
+ document.documentElement.setAttribute('data-theme',cur);
+ localStorage.setItem('qcqi-theme',cur);
+});
+const links=[...document.querySelectorAll('.nav a')];
+const secs=[...document.querySelectorAll('section[id]')];
+const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){
+ links.forEach(l=>l.classList.toggle('active',l.getAttribute('href')==='#'+e.target.id));}})},
+ {rootMargin:'-10% 0px -80% 0px'});
+secs.forEach(s=>obs.observe(s));
+const box=document.getElementById('search');
+box&&box.addEventListener('input',()=>{const q=box.value.trim().toLowerCase();
+ links.forEach(l=>l.classList.toggle('hidden',q&&!l.textContent.toLowerCase().includes(q)));});
+</script>
+</body>
+</html>
