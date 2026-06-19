@@ -140,7 +140,7 @@ def page(title, sidebar, body):
 <title>{html.escape(title)}</title>
 <style>{CSS}</style>
 <script>{bh.MATHJAX_CONFIG}</script>
-<script src="../vendor/tex-svg.js" id="MathJax-script" async></script>
+<script>{bh.MATHJAX_LOADER}</script>
 </head>
 <body>
 <div class="layout">

@@ -348,7 +348,29 @@ window.MathJax={
 """
 
 
-def page_html(title, sidebar, body, mathjax_src="../vendor/tex-svg.js"):
+# Load MathJax from a China-fast CDN first; fall back to the bundled local copy
+# if every CDN fails (offline / blocked). The 2 MB local bundle is slow to fetch
+# from github.io in CN, so CDNs render far faster while staying offline-capable.
+MATHJAX_LOADER = """
+(function(){
+ var srcs=[
+  "https://registry.npmmirror.com/mathjax/3.2.2/files/es5/tex-svg.js",
+  "https://cdn.bootcdn.net/ajax/libs/mathjax/3.2.2/es5/tex-svg.js",
+  "../vendor/tex-svg.js"
+ ];
+ function load(i){
+  if(i>=srcs.length)return;
+  var s=document.createElement("script");
+  s.src=srcs[i];s.async=true;s.id="MathJax-script";
+  s.onerror=function(){if(s.parentNode)s.parentNode.removeChild(s);load(i+1);};
+  document.head.appendChild(s);
+ }
+ load(0);
+})();
+"""
+
+
+def page_html(title, sidebar, body):
     return f"""<!DOCTYPE html>
 <html lang="zh-CN" data-theme="">
 <head>
@@ -357,7 +379,7 @@ def page_html(title, sidebar, body, mathjax_src="../vendor/tex-svg.js"):
 <title>{html.escape(title)}</title>
 <style>{CSS}</style>
 <script>{MATHJAX_CONFIG}</script>
-<script src="{mathjax_src}" id="MathJax-script" async></script>
+<script>{MATHJAX_LOADER}</script>
 </head>
 <body>
 <div class="layout">
