@@ -38,12 +38,34 @@ qcqi-chNN-xxx/
 python3 skill_set/build_html.py      # 纯标准库，无需安装依赖
 ```
 
+### 依赖与环境
+
+| 用途 | 依赖 | 说明 |
+|---|---|---|
+| 生成 HTML | **Python ≥ 3.8** | 仅用标准库（`html`、`re`、`pathlib`），**无需 `pip install` 任何包**。 |
+| 公式渲染 | **MathJax（已内置）** | `tex-svg` 单文件包随仓库提交于 `skill_set/vendor/tex-svg.js`（约 2.1 MB），**离线可用，无需联网或 CDN**。 |
+| 浏览页面 | 任意现代浏览器 | 双击 `index.html`，`file://` 直接打开即可，无需本地服务器。 |
+
+> 不依赖 Node.js、npm、`markdown`/`jinja2` 等第三方库；Markdown→HTML 由 `build_html.py` 内置的精简转换器完成。升级公式引擎只需替换 `vendor/tex-svg.js`。
+
 生成物（已随仓库提交，可直接打开）：
 
 - `skill_set/index.html` — **门户页**，卡片式导航到各章。
 - `skill_set/<skill>/index.html` — 每个 skill 一页，含左侧小节导航、客户端搜索过滤、深/浅色切换、章节锚点、章首可视化面板。
 
 双击任一 `index.html` 即可在浏览器查阅（`file://` 直接可用，无 CDN/网络依赖）。修改 `.md` 笔记后重跑脚本即可重新生成；可视化片段存放在 `skill_set/_viz/<skill>.html`，会被脚本注入对应页面。
+
+### 公式渲染（LaTeX / MathJax，离线）
+
+各 `.md` 笔记中的公式以 LaTeX 书写（行内 `$...$`、行间 `$$...$$`），HTML 页面用**本地打包的 MathJax**（`tex-svg`，SVG 输出、自带字形、无需字体目录）渲染，存放于 `skill_set/vendor/tex-svg.js`，因此**离线也能正常显示公式**。
+
+约定与注意：
+
+- 预定义了量子记号宏：`\ket{}`、`\bra{}`、`\braket{}{}`、`\ketbra{}{}`、`\Tr`，在 `build_html.py` 的 MathJax 配置里注入。
+- 数学式中**不使用裸 `|`**（会与 Markdown 表格列分隔符冲突），一律用 `\ket{}` / `\lvert` / `\mid` 等宏——这样表格内也能安全写 ket。
+- 生成器会在 Markdown→HTML 前把 `$...$` / `$$...$$` 整体"保护"起来，避免被 `**`、表格、转义破坏，渲染后再还原（仅对 `<`、`>`、`&` 做安全转义，矩阵 `&` 对齐可正常工作）。
+- 章首的 SVG 可视化面板带 `viz` 类，MathJax 通过 `ignoreHtmlClass` 跳过，不会误渲染图示中的文字。
+- 升级/替换引擎：重新下载 `tex-svg.js` 到 `vendor/` 即可（页面以相对路径 `../vendor/tex-svg.js` 引用）。
 
 ## 如何使用
 

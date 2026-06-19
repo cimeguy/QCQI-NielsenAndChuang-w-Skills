@@ -60,7 +60,26 @@ def inline(md, link_map):
     return s
 
 
+def protect_math(text, store):
+    """Pull $$...$$ and $...$ spans out before markdown processing."""
+    def repl(m):
+        store.append(m.group(0))
+        return "%d" % (len(store) - 1)
+    text = re.sub(r"\$\$.+?\$\$", repl, text, flags=re.DOTALL)
+    text = re.sub(r"\$[^$\n]+?\$", repl, text)
+    return text
+
+
+def restore_math(text, store):
+    def repl(m):
+        raw = store[int(m.group(1))]
+        return raw.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+    return re.sub("(\\d+)", repl, text)
+
+
 def md_to_html(md, link_map):
+    math_store = []
+    md = protect_math(md, math_store)
     lines = md.split("\n")
     out = []
     i = 0
@@ -156,7 +175,7 @@ def md_to_html(md, link_map):
         i += 1
 
     flush_para(para)
-    return "\n".join(out)
+    return restore_math("\n".join(out), math_store)
 
 
 def parse_list(lines, i, n, link_map, _out):
@@ -309,7 +328,27 @@ box&&box.addEventListener('input',()=>{const q=box.value.trim().toLowerCase();
 """
 
 
-def page_html(title, sidebar, body):
+MATHJAX_CONFIG = r"""
+window.MathJax={
+ tex:{
+  inlineMath:[['$','$'],['\\(','\\)']],
+  displayMath:[['$$','$$'],['\\[','\\]']],
+  macros:{
+   ket:['{\\lvert #1\\rangle}',1],
+   bra:['{\\langle #1\\rvert}',1],
+   braket:['{\\langle #1\\vert #2\\rangle}',2],
+   ketbra:['{\\lvert #1\\rangle\\langle #2\\rvert}',2],
+   Tr:'{\\operatorname{Tr}}',
+   tr:'{\\operatorname{tr}}'
+  }
+ },
+ svg:{fontCache:'global'},
+ options:{skipHtmlTags:['script','style','textarea','pre','code'],ignoreHtmlClass:'viz'}
+};
+"""
+
+
+def page_html(title, sidebar, body, mathjax_src="../vendor/tex-svg.js"):
     return f"""<!DOCTYPE html>
 <html lang="zh-CN" data-theme="">
 <head>
@@ -317,6 +356,8 @@ def page_html(title, sidebar, body):
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{html.escape(title)}</title>
 <style>{CSS}</style>
+<script>{MATHJAX_CONFIG}</script>
+<script src="{mathjax_src}" id="MathJax-script" async></script>
 </head>
 <body>
 <div class="layout">

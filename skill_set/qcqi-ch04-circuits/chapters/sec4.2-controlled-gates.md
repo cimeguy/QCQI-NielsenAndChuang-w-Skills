@@ -6,11 +6,11 @@
 ## 基本受控门
 - **CNOT (controlled-NOT)**：控制位为 1 时翻转目标位。纠缠的生成器。
 - **CZ 门**：控制位为 1 时对目标施 Z（相位翻转）；对控制/目标对称。
-- **交换门 SWAP**：交换两比特状态。**SWAP = 三个 CNOT** 级联：CNOT(a→b)·CNOT(b→a)·CNOT(a→b)。
+- **交换门 SWAP**：交换两比特状态。**SWAP = 三个 CNOT** 级联：$\mathrm{CNOT}(a\to b)\cdot\mathrm{CNOT}(b\to a)\cdot\mathrm{CNOT}(a\to b)$。
 - **Toffoli 门 (CCNOT)**：双控制非门，两控制位都为 1 才翻转目标。经典可逆计算的通用门，配合测量可模拟经典逻辑。
 
 ## 一般受控-U 门（单比特控制单比特）
-- 把任意单比特 U 做成受控版本：用 U 的 z-y-z 分解 U=e^{iα}AXBXC（其中 ABC=I），插入 CNOT 实现条件作用。X 是 Pauli-X。
+- 把任意单比特 U 做成受控版本：用 U 的 z-y-z 分解 $U=e^{i\alpha}AXBXC$（其中 $ABC=I$），插入 CNOT 实现条件作用。X 是 Pauli-X。
 - 标准构造：控制位通过两个 CNOT 把 A、B、C 三段"夹"出条件相位与条件旋转。
 
 ## 量子线路的特性（反模式 / 规则）
@@ -20,7 +20,7 @@
 
 ## 关键要点
 1. CNOT 生成纠缠；CZ 与 CNOT 仅差目标侧的 H 基变换。
-2. SWAP = 3×CNOT；Toffoli 通用于经典可逆计算。
+2. $\mathrm{SWAP} = 3\times\mathrm{CNOT}$；Toffoli 通用于经典可逆计算。
 3. 任意受控-U 可由单比特门 + CNOT 用 z-y-z（ABC）法构造。
 4. 量子线路必须有向无环、不扇入不扇出。
 

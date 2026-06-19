@@ -52,6 +52,25 @@ hr{border:none;border-top:1px dashed var(--border);margin:16px 0}
 .badge{display:inline-block;background:var(--accent);color:#fff;border-radius:6px;padding:2px 9px;font-size:12px;font-weight:600}
 @media(max-width:820px){.sidebar{display:none}.main{padding:24px 18px}}
 </style>
+<script>
+window.MathJax={
+ tex:{
+  inlineMath:[['$','$'],['\\(','\\)']],
+  displayMath:[['$$','$$'],['\\[','\\]']],
+  macros:{
+   ket:['{\\lvert #1\\rangle}',1],
+   bra:['{\\langle #1\\rvert}',1],
+   braket:['{\\langle #1\\vert #2\\rangle}',2],
+   ketbra:['{\\lvert #1\\rangle\\langle #2\\rvert}',2],
+   Tr:'{\\operatorname{Tr}}',
+   tr:'{\\operatorname{tr}}'
+  }
+ },
+ svg:{fontCache:'global'},
+ options:{skipHtmlTags:['script','style','textarea','pre','code'],ignoreHtmlClass:'viz'}
+};
+</script>
+<script src="../vendor/tex-svg.js" id="MathJax-script" async></script>
 </head>
 <body>
 <div class="layout">
@@ -248,16 +267,16 @@ hr{border:none;border-top:1px dashed var(--border);margin:16px 0}
 <hr>
 <h2>核心概念框架</h2>
 <p><strong>量子算法的两大家族</strong>：① 基于量子傅里叶变换 (QFT) 的算法（本章：相位估计、Shor）；② 量子搜索算法（第六章 Grover）。"端到端"复杂度指解决用户整个问题的成本，而非仅运行某段量子线路的成本。核心开放问题：BQP 是否严格大于 BPP。</p>
-<p><strong>Deutsch / Deutsch-Jozsa（量子并行的范例）</strong>：用一次 Uf 调用判断 f 是常数型还是平衡型，经典需两次（n 位时经典最坏需 2^{n−1}+1 次）。启发：当经典计算获取的信息量超过问题答案所需信息量（存在计算冗余）时，量子有加速潜力。</p>
-<p><strong>量子傅里叶变换 (QFT)</strong>：把基态 |j⟩ 映到 (1/√N)Σ_k e^{2πijk/N}|k⟩。关键在于<strong>因式分解</strong>：QFT 输出态是各比特上单比特态的张量积 ⊗(|0⟩+e^{2πi·0.j_l…}|1⟩)，因而可用 H + 受控相位门高效实现（n 比特 O(n²) 门，对比经典 FFT 的 O(N log N)）。Fourier 结果存在概率幅中，无法直接读，需巧妙利用。</p>
-<p><strong>相位估计</strong>：若能制备 U 的本征态 |u⟩（U|u⟩=e^{2πiφ}|u⟩），用受控-U^{2^k} + 逆 QFT 把相位 φ 读进计数寄存器。φ 是完美二进制小数时估计精确，否则给出高概率的最佳近似。</p>
-<p><strong>Shor 算法（大数分解）</strong>：把分解 N 归约为<strong>求阶</strong>——找最小 r 使 y^r ≡ 1 (mod N)。用量子相位估计对模乘算符 U|x⟩=|yx mod N⟩ 求阶（输入态是各本征值本征态的均匀叠加 |1⟩）。经典后处理（连分数 + GCD）得到因子。威胁 RSA 加密。</p>
-<p><strong>隐藏子群问题 (HSP)</strong>：已知 f:G→X 隐藏了 G 的子群 H，求 H 的生成元。Deutsch-Jozsa、Simon、求阶、离散对数都是 HSP 的特例。阿贝尔群已有高效量子算法；非阿贝尔情况开放。</p>
+<p><strong>Deutsch / Deutsch-Jozsa（量子并行的范例）</strong>：用一次 $U_f$ 调用判断 $f$ 是常数型还是平衡型，经典需两次（$n$ 位时经典最坏需 $2^{n-1}+1$ 次）。启发：当经典计算获取的信息量超过问题答案所需信息量（存在计算冗余）时，量子有加速潜力。</p>
+<p><strong>量子傅里叶变换 (QFT)</strong>：把基态 $\ket{j}$ 映到 $\tfrac{1}{\sqrt{N}}\sum_k e^{2\pi i jk/N}\ket{k}$。关键在于<strong>因式分解</strong>：QFT 输出态是各比特上单比特态的张量积 $\otimes(\ket{0}+e^{2\pi i\cdot 0.j_l\dots}\ket{1})$，因而可用 $H$ + 受控相位门高效实现（$n$ 比特 $O(n^2)$ 门，对比经典 FFT 的 $O(N\log N)$）。Fourier 结果存在概率幅中，无法直接读，需巧妙利用。</p>
+<p><strong>相位估计</strong>：若能制备 $U$ 的本征态 $\ket{u}$（$U\ket{u}=e^{2\pi i\varphi}\ket{u}$），用受控-$U^{2^k}$ + 逆 QFT 把相位 $\varphi$ 读进计数寄存器。$\varphi$ 是完美二进制小数时估计精确，否则给出高概率的最佳近似。</p>
+<p><strong>Shor 算法（大数分解）</strong>：把分解 $N$ 归约为<strong>求阶</strong>——找最小 $r$ 使 $y^r\equiv 1\pmod N$。用量子相位估计对模乘算符 $U\ket{x}=\ket{yx \bmod N}$ 求阶（输入态是各本征值本征态的均匀叠加 $\ket{1}$）。经典后处理（连分数 + GCD）得到因子。威胁 RSA 加密。</p>
+<p><strong>隐藏子群问题 (HSP)</strong>：已知 $f:G\to X$ 隐藏了 $G$ 的子群 $H$，求 $H$ 的生成元。Deutsch-Jozsa、Simon、求阶、离散对数都是 HSP 的特例。阿贝尔群已有高效量子算法；非阿贝尔情况开放。</p>
 <hr>
 <h2>小节索引</h2>
-<table><thead><tr><th>小节</th><th>标题</th><th>关键概念</th></tr></thead><tbody><tr><td><a href="#sec-sec5-1-preliminaries">5.1</a></td><td>量子算法预备</td><td>端到端复杂度、两大家族、BQP vs BPP、算法概览</td></tr><tr><td><a href="#sec-sec5-2-deutsch">5.2</a></td><td>Deutsch 与 Deutsch-Jozsa</td><td>量子并行、一次 Uf 判常数/平衡、计算冗余</td></tr><tr><td><a href="#sec-sec5-3-qft">5.3</a></td><td>量子傅里叶变换</td><td>DFT、QFT 定义、因式分解、线路 O(n²)、幺正性</td></tr><tr><td><a href="#sec-sec5-4-phase-estimation">5.4</a></td><td>相位估计</td><td>受控-U^{2^k}、逆 QFT、完美/不完美二进制相位</td></tr><tr><td><a href="#sec-sec5-5-shor">5.5</a></td><td>Shor 算法</td><td>分解→求阶、模乘 U 的本征态、连分数、RSA</td></tr><tr><td><a href="#sec-sec5-6-hsp">5.6</a></td><td>隐藏子群问题</td><td>HSP 框架、阿贝尔 vs 非阿贝尔</td></tr></tbody></table>
+<table><thead><tr><th>小节</th><th>标题</th><th>关键概念</th></tr></thead><tbody><tr><td><a href="#sec-sec5-1-preliminaries">5.1</a></td><td>量子算法预备</td><td>端到端复杂度、两大家族、BQP vs BPP、算法概览</td></tr><tr><td><a href="#sec-sec5-2-deutsch">5.2</a></td><td>Deutsch 与 Deutsch-Jozsa</td><td>量子并行、一次 $U_f$ 判常数/平衡、计算冗余</td></tr><tr><td><a href="#sec-sec5-3-qft">5.3</a></td><td>量子傅里叶变换</td><td>DFT、QFT 定义、因式分解、线路 $O(n^2)$、幺正性</td></tr><tr><td><a href="#sec-sec5-4-phase-estimation">5.4</a></td><td>相位估计</td><td>受控-$U^{2^k}$、逆 QFT、完美/不完美二进制相位</td></tr><tr><td><a href="#sec-sec5-5-shor">5.5</a></td><td>Shor 算法</td><td>分解 $\to$ 求阶、模乘 $U$ 的本征态、连分数、RSA</td></tr><tr><td><a href="#sec-sec5-6-hsp">5.6</a></td><td>隐藏子群问题</td><td>HSP 框架、阿贝尔 vs 非阿贝尔</td></tr></tbody></table>
 <h2>主题索引</h2>
-<ul><li><strong>BQP / BPP</strong> → 5.1</li><li><strong>Deutsch / Deutsch-Jozsa / 量子并行</strong> → 5.2</li><li><strong>QFT / 因式分解 / 线路</strong> → 5.3</li><li><strong>RSA / 大数分解</strong> → 5.5</li><li><strong>Shor 算法 / 求阶</strong> → 5.5</li><li><strong>相位估计 / 受控-U^{2^k}</strong> → 5.4</li><li><strong>端到端复杂度</strong> → 5.1</li><li><strong>连分数 / GCD / 经典后处理</strong> → 5.5</li><li><strong>隐藏子群问题 (HSP)</strong> → 5.6</li><li><strong>逆 QFT vs 正 QFT</strong> → 5.4, 5.5</li></ul>
+<ul><li><strong>BQP / BPP</strong> → 5.1</li><li><strong>Deutsch / Deutsch-Jozsa / 量子并行</strong> → 5.2</li><li><strong>QFT / 因式分解 / 线路</strong> → 5.3</li><li><strong>RSA / 大数分解</strong> → 5.5</li><li><strong>Shor 算法 / 求阶</strong> → 5.5</li><li><strong>相位估计 / 受控-$U^{2^k}$</strong> → 5.4</li><li><strong>端到端复杂度</strong> → 5.1</li><li><strong>连分数 / GCD / 经典后处理</strong> → 5.5</li><li><strong>隐藏子群问题 (HSP)</strong> → 5.6</li><li><strong>逆 QFT vs 正 QFT</strong> → 5.4, 5.5</li></ul>
 <h2>辅助文件</h2>
 <ul><li><a href="#sec-glossary">glossary.md</a> — 关键术语表（中英对照）</li><li><a href="#sec-patterns">patterns.md</a> — QFT 类算法构件与技巧</li><li><a href="#sec-cheatsheet">cheatsheet.md</a> — 算法流程与复杂度速查</li></ul>
 <hr>
@@ -273,112 +292,112 @@ hr{border:none;border-top:1px dashed var(--border);margin:16px 0}
 <h2>量子计算的威力（核心开放问题）</h2>
 <ul><li><strong>BQP 是否严格大于 BPP？</strong> 是否存在某些问题，量子概率算法能高效解决而经典概率图灵机不能？</li><li>大规模的容错量子计算能否实现？</li></ul>
 <h2>关键要点</h2>
-<ol><li>衡量量子优势要看端到端成本，不只是量子线路本身。</li><li>两大算法家族：QFT 类（本章）与搜索类（第六章）。</li><li>BQP ⊋ BPP? 是量子计算理论的核心未决问题。</li></ol>
+<ol><li>衡量量子优势要看端到端成本，不只是量子线路本身。</li><li>两大算法家族：QFT 类（本章）与搜索类（第六章）。</li><li>$\mathrm{BQP} \supsetneq \mathrm{BPP}$? 是量子计算理论的核心未决问题。</li></ol>
 <h2>关联</h2>
 <ul><li><strong>5.2–5.5</strong>：QFT 家族的具体算法。</li><li><strong>第六章</strong>：搜索家族 (Grover)。</li></ul></section>
 <section id="sec-sec5-2-deutsch"><h1>5.2 Deutsch 与 Deutsch-Jozsa 算法</h1>
 <h2>核心思想</h2>
-<p>量子并行：量子计算机能在同一个幺正变换中同时计算 f(x) 在许多 x 处的值。Deutsch 算法是这一思想最简单的范例。</p>
+<p>量子并行：量子计算机能在同一个幺正变换中同时计算 $f(x)$ 在许多 $x$ 处的值。Deutsch 算法是这一思想最简单的范例。</p>
 <h2>Deutsch 算法</h2>
-<ul><li><strong>问题</strong>：f:{0,1}→{0,1}，判断 f 是<strong>常数型</strong>（f(0)=f(1)）还是<strong>平衡型</strong>（f(0)≠f(1)）。</li><li><strong>常数型例子</strong>：f(x)=0 或 f(x)=1；<strong>平衡型</strong>：f(x)=x 或 f(x)=1−x。</li><li><strong>关键</strong>：每个量子线路只用一次 Uf，即一次计算就完成经典需要两次计算才能完成的任务（判断 f(0)⊕f(1)）。</li><li><strong>机制</strong>：辅助比特置 |−⟩，相位回踢使 |x⟩→(−1)^{f(x)}|x⟩；对查询比特做 H 干涉，末端测量直接读出 f(0)⊕f(1)。</li></ul>
+<ul><li><strong>问题</strong>：$f:\{0,1\}\to\{0,1\}$，判断 $f$ 是<strong>常数型</strong>（$f(0)=f(1)$）还是<strong>平衡型</strong>（$f(0)\ne f(1)$）。</li><li><strong>常数型例子</strong>：$f(x)=0$ 或 $f(x)=1$；<strong>平衡型</strong>：$f(x)=x$ 或 $f(x)=1-x$。</li><li><strong>关键</strong>：每个量子线路只用一次 $U_f$，即一次计算就完成经典需要两次计算才能完成的任务（判断 $f(0)\oplus f(1)$）。</li><li><strong>机制</strong>：辅助比特置 $\ket{-}$，相位回踢使 $\ket{x}\to(-1)^{f(x)}\ket{x}$；对查询比特做 $H$ 干涉，末端测量直接读出 $f(0)\oplus f(1)$。</li></ul>
 <h2>启发</h2>
-<ul><li>对那些<strong>经典计算获得的信息量超过问题答案所需信息量</strong>的问题（即经典存在计算冗余），量子计算具有潜在加速可能。</li><li>判断"全局性质"（如 f(0)⊕f(1)）特别适合量子并行 + 干涉。</li></ul>
+<ul><li>对那些<strong>经典计算获得的信息量超过问题答案所需信息量</strong>的问题（即经典存在计算冗余），量子计算具有潜在加速可能。</li><li>判断"全局性质"（如 $f(0)\oplus f(1)$）特别适合量子并行 + 干涉。</li></ul>
 <h2>Deutsch-Jozsa 算法</h2>
-<ul><li><strong>推广</strong>：f 有 n 个输入位，承诺 f 要么常数要么平衡，判断属于哪种。</li><li><strong>经典</strong>：最坏需 2^{n−1}+1 次查询确定；<strong>量子</strong>：一次 Uf 即可（确定性）。</li><li>对应 Nielsen Sec.1.4.4。</li></ul>
+<ul><li><strong>推广</strong>：$f$ 有 $n$ 个输入位，承诺 $f$ 要么常数要么平衡，判断属于哪种。</li><li><strong>经典</strong>：最坏需 $2^{n-1}+1$ 次查询确定；<strong>量子</strong>：一次 $U_f$ 即可（确定性）。</li><li>对应 Nielsen Sec.1.4.4。</li></ul>
 <h2>关键要点</h2>
-<ol><li>量子并行 = 一个幺正变换同时算多个 f(x)；但读出受测量限制。</li><li>Deutsch：一次 Uf 判常数/平衡，经典需两次。</li><li>计算冗余 ⇒ 量子加速潜力；全局性质问题适合 QFT/干涉类算法。</li></ol>
+<ol><li>量子并行 = 一个幺正变换同时算多个 $f(x)$；但读出受测量限制。</li><li>Deutsch：一次 $U_f$ 判常数/平衡，经典需两次。</li><li>计算冗余 $\Rightarrow$ 量子加速潜力；全局性质问题适合 QFT/干涉类算法。</li></ol>
 <h2>关联</h2>
-<ul><li><strong>5.1</strong>：属于 QFT/oracle 家族的开端。</li><li><strong>5.3</strong>：Deutsch-Jozsa 的干涉是 QFT 的特例（在 Z₂ⁿ 上）。</li><li><strong>第一章 1.4</strong>：量子并行的直觉来源。</li></ul></section>
+<ul><li><strong>5.1</strong>：属于 QFT/oracle 家族的开端。</li><li><strong>5.3</strong>：Deutsch-Jozsa 的干涉是 QFT 的特例（在 $\mathbb{Z}_2^n$ 上）。</li><li><strong>第一章 1.4</strong>：量子并行的直觉来源。</li></ul></section>
 <section id="sec-sec5-3-qft"><h1>5.3 量子傅里叶变换 (QFT)</h1>
 <h2>核心思想</h2>
-<p>QFT 是经典离散傅里叶变换 (DFT) 的量子版本。它能在 O(n²) 个门内完成 N=2ⁿ 维的傅里叶变换（经典 FFT 需 O(N log N)），关键在于输出态的因式分解。</p>
+<p>QFT 是经典离散傅里叶变换 (DFT) 的量子版本。它能在 $O(n^2)$ 个门内完成 $N=2^n$ 维的傅里叶变换（经典 FFT 需 $O(N\log N)$），关键在于输出态的因式分解。</p>
 <h2>经典 DFT 与 QFT 定义</h2>
-<ul><li><strong>DFT/傅里叶分析</strong>：用基本波的叠加表示其他函数或信号。</li><li><strong>QFT</strong>：y_j=(1/√N)Σ_k e^{2πijk/N} u_k；作用在基态上 |j⟩ → (1/√N)Σ_k e^{2πijk/N}|k⟩，j=0,…,N−1。</li><li>可写成 bracket 算符形式与矩阵形式。</li></ul>
+<ul><li><strong>DFT/傅里叶分析</strong>：用基本波的叠加表示其他函数或信号。</li><li><strong>QFT</strong>：$y_j=\tfrac{1}{\sqrt{N}}\sum_k e^{2\pi i jk/N} u_k$；作用在基态上 $\ket{j} \to \tfrac{1}{\sqrt{N}}\sum_k e^{2\pi i jk/N}\ket{k}$，$j=0,\dots,N-1$。</li><li>可写成 bracket 算符形式与矩阵形式。</li></ul>
 <h2>因式分解（高效实现的关键）</h2>
-<ul><li>用二进制小数记号 0.a₁a₂…a_m := Σ_l a_l 2^{−l}。</li><li>QFT 的输出态可<strong>因式分解</strong>为各比特上单比特态的张量积：</li></ul>
-<p>|j⟩ → ⊗_{l=1}^n (|0⟩ + e^{2πi·0.j_l j_{l+1}…j_n}|1⟩)/√2。</p>
-<ul><li>每个因子是一个 qubit 上的相对相位态 ⇒ 用 H + 受控相位门逐位构造，无需展开 N 维矩阵。这就是量子版的"快速傅里叶变换"。</li></ul>
+<ul><li>用二进制小数记号 $0.a_1 a_2\dots a_m := \sum_l a_l 2^{-l}$。</li><li>QFT 的输出态可<strong>因式分解</strong>为各比特上单比特态的张量积：</li></ul>
+<p>$$\ket{j} \to \bigotimes_{l=1}^n \frac{\ket{0} + e^{2\pi i\cdot 0.j_l j_{l+1}\dots j_n}\ket{1}}{\sqrt{2}}.$$</p>
+<ul><li>每个因子是一个 qubit 上的相对相位态 $\Rightarrow$ 用 $H$ + 受控相位门逐位构造，无需展开 $N$ 维矩阵。这就是量子版的"快速傅里叶变换"。</li></ul>
 <h2>量子线路</h2>
-<ul><li><strong>构造</strong>：对每个比特施 H，再施一串受控相位门 R_k（相位 2π/2^k），最后用 SWAP 翻转比特高低位次序。</li><li>n 比特：H 与受控相位门共约 n(n+1)/2 个 ⇒ <strong>O(n²)</strong> 门。</li><li><strong>验证</strong>：可检验 QFT 的幺正性；线路除高低位相反外实现了傅里叶变换（末端 SWAP 修正位序）。</li></ul>
+<ul><li><strong>构造</strong>：对每个比特施 $H$，再施一串受控相位门 $R_k$（相位 $2\pi/2^k$），最后用 SWAP 翻转比特高低位次序。</li><li>$n$ 比特：$H$ 与受控相位门共约 $n(n+1)/2$ 个 $\Rightarrow$ <strong>$O(n^2)$</strong> 门。</li><li><strong>验证</strong>：可检验 QFT 的幺正性；线路除高低位相反外实现了傅里叶变换（末端 SWAP 修正位序）。</li></ul>
 <h2>关键限制</h2>
 <ul><li>Fourier 变换的结果储存在<strong>概率幅</strong>中，无法直接读取，只能用统计方法推断——需要更巧妙的方法加以利用（见相位估计、Shor）。</li></ul>
 <h2>关键要点</h2>
-<ol><li>QFT：|j⟩→(1/√N)Σ_k e^{2πijk/N}|k⟩。</li><li>输出态可因式分解为单比特态张量积 ⇒ H + 受控相位门，O(n²) 门。</li><li>结果藏在概率幅里，不能直接读，需配合相位估计等技巧。</li></ol>
+<ol><li>QFT：$\ket{j}\to\tfrac{1}{\sqrt{N}}\sum_k e^{2\pi i jk/N}\ket{k}$。</li><li>输出态可因式分解为单比特态张量积 $\Rightarrow$ $H$ + 受控相位门，$O(n^2)$ 门。</li><li>结果藏在概率幅里，不能直接读，需配合相位估计等技巧。</li></ol>
 <h2>关联</h2>
 <ul><li><strong>5.4</strong>：相位估计 = QFT 的核心应用（逆 QFT 读相位）。</li><li><strong>5.5</strong>：Shor 用 QFT 求阶。</li><li><strong>4.2</strong>：受控相位门是 QFT 线路构件。</li></ul></section>
 <section id="sec-sec5-4-phase-estimation"><h1>5.4 相位估计</h1>
 <h2>核心思想</h2>
-<p>相位估计是 QFT 最重要的应用：若能制备幺正算符 U 的本征态 |u⟩（U|u⟩=e^{2πiφ}|u⟩），就能用逆 QFT 把相位 φ 读进一个计数寄存器。</p>
+<p>相位估计是 QFT 最重要的应用：若能制备幺正算符 $U$ 的本征态 $\ket{u}$（$U\ket{u}=e^{2\pi i\varphi}\ket{u}$），就能用逆 QFT 把相位 $\varphi$ 读进一个计数寄存器。</p>
 <h2>算法结构</h2>
-<ul><li><strong>寄存器</strong>：t 个计数比特（决定精度）+ 存放本征态 |u⟩ 的比特。</li><li><strong>步骤</strong>：</li><ol><li>计数比特全置 |+⟩（即 H^{⊗t}|0⟩）。</li><li>施一串<strong>受控-U^{2^k}</strong>（第 k 个计数比特控制 U^{2^k}），相位回踢把 φ 编码进计数比特：得到 Σ_j e^{2πiφj}|j⟩。</li><li>对计数比特做<strong>逆 QFT</strong>，把相位读出为二进制整数。</li><li>测量计数比特，得到 φ 的估计。</li></ol></ul>
+<ul><li><strong>寄存器</strong>：$t$ 个计数比特（决定精度）+ 存放本征态 $\ket{u}$ 的比特。</li><li><strong>步骤</strong>：</li><ol><li>计数比特全置 $\ket{+}$（即 $H^{\otimes t}\ket{0}$）。</li><li>施一串<strong>受控-$U^{2^k}$</strong>（第 $k$ 个计数比特控制 $U^{2^k}$），相位回踢把 $\varphi$ 编码进计数比特：得到 $\sum_j e^{2\pi i\varphi j}\ket{j}$。</li><li>对计数比特做<strong>逆 QFT</strong>，把相位读出为二进制整数。</li><li>测量计数比特，得到 $\varphi$ 的估计。</li></ol></ul>
 <h2>完美 vs 不完美二进制相位</h2>
-<ul><li><strong>φ 是完美 t 位二进制小数</strong>：相位估计产生的估计值就是精确值（确定性读出）。</li><li><strong>φ 不完美</strong>：估计值不等于精确值，但以高概率给出最接近的 t 位近似；精度与成功率随 t 增大而提升。</li></ul>
+<ul><li><strong>$\varphi$ 是完美 $t$ 位二进制小数</strong>：相位估计产生的估计值就是精确值（确定性读出）。</li><li><strong>$\varphi$ 不完美</strong>：估计值不等于精确值，但以高概率给出最接近的 $t$ 位近似；精度与成功率随 $t$ 增大而提升。</li></ul>
 <h2>等价线路与对易性（笔记中的要点）</h2>
-<ul><li>相位估计中"作用顺序相反但等价"的线路：因为不同的受控-U^{2^k} 之间相互对易，且末端 SWAP 可被移到线路最左端被初态吸收，所以 Mathematica 线路与书上黑盒的作用顺序看似相反却完全等价（作为幺正算符相等）。</li><li>回顾正 Fourier 变换：|j⟩→⊗(|0⟩+e^{2πi·0.j_l…}|1⟩)/√2，与逆 QFT 读相位互为逆过程。</li></ul>
+<ul><li>相位估计中"作用顺序相反但等价"的线路：因为不同的受控-$U^{2^k}$ 之间相互对易，且末端 SWAP 可被移到线路最左端被初态吸收，所以 Mathematica 线路与书上黑盒的作用顺序看似相反却完全等价（作为幺正算符相等）。</li><li>回顾正 Fourier 变换：$\ket{j}\to\bigotimes(\ket{0}+e^{2\pi i\cdot 0.j_l\dots}\ket{1})/\sqrt{2}$，与逆 QFT 读相位互为逆过程。</li></ul>
 <h2>关键要点</h2>
-<ol><li>相位估计 = 受控-U^{2^k}（相位回踢） + 逆 QFT（读相位）。</li><li>需要能制备 U 的本征态 |u⟩。</li><li>相位为完美二进制小数时精确；否则高概率给最佳近似，精度随计数比特数 t 增长。</li></ol>
+<ol><li>相位估计 = 受控-$U^{2^k}$（相位回踢） + 逆 QFT（读相位）。</li><li>需要能制备 $U$ 的本征态 $\ket{u}$。</li><li>相位为完美二进制小数时精确；否则高概率给最佳近似，精度随计数比特数 $t$ 增长。</li></ol>
 <h2>关联</h2>
-<ul><li><strong>5.3</strong>：逆 QFT 是核心子程序。</li><li><strong>5.5</strong>：Shor 的求阶 = 对模乘 U 做相位估计。</li><li><strong>4.2/4.3</strong>：受控-U 与对算符的测量。</li></ul></section>
+<ul><li><strong>5.3</strong>：逆 QFT 是核心子程序。</li><li><strong>5.5</strong>：Shor 的求阶 = 对模乘 $U$ 做相位估计。</li><li><strong>4.2/4.3</strong>：受控-$U$ 与对算符的测量。</li></ul></section>
 <section id="sec-sec5-5-shor"><h1>5.5 Shor 算法（大数分解）</h1>
 <h2>核心思想</h2>
 <p>Shor 算法把大数分解高效归约为<strong>求阶</strong>，再用量子相位估计求阶。它能在多项式时间分解整数，威胁基于"分解困难"的 RSA 加密。</p>
 <h2>背景：分解与 RSA</h2>
-<ul><li><strong>问题</strong>：N 是奇数且至少有两个质因子，找到 N 的一个非平凡因子。</li><li><strong>经典最好算法（数域筛）</strong>：约 exp((64/9)^{1/3}(ln n)^{1/3}(ln ln n)^{2/3})，超多项式。</li><li><strong>RSA</strong>：安全性依赖大数分解困难；量子计算机实用化的标志性目标是分解 RSA 数（预期约 2045）。</li><li>工具：GCD（最大公约数）、同余基本性质。</li></ul>
+<ul><li><strong>问题</strong>：$N$ 是奇数且至少有两个质因子，找到 $N$ 的一个非平凡因子。</li><li><strong>经典最好算法（数域筛）</strong>：约 $\exp((64/9)^{1/3}(\ln n)^{1/3}(\ln\ln n)^{2/3})$，超多项式。</li><li><strong>RSA</strong>：安全性依赖大数分解困难；量子计算机实用化的标志性目标是分解 RSA 数（预期约 2045）。</li><li>工具：GCD（最大公约数）、同余基本性质。</li></ul>
 <h2>分解 → 求阶</h2>
-<ul><li>取与 N 互质的 y，求最小 <strong>r（阶）</strong> 使 y^r ≡ 1 (mod N)。</li><li>若 r 为偶数且 y^{r/2} ≢ −1 (mod N)，则 gcd(y^{r/2}±1, N) 给出 N 的非平凡因子（关于 y 的性质与作用，及该等价性步骤的说明）。</li><li>例：分解 21。</li></ul>
+<ul><li>取与 $N$ 互质的 $y$，求最小 <strong>$r$（阶）</strong> 使 $y^r\equiv 1\pmod N$。</li><li>若 $r$ 为偶数且 $y^{r/2}\not\equiv -1\pmod N$，则 $\gcd(y^{r/2}\pm 1, N)$ 给出 $N$ 的非平凡因子（关于 $y$ 的性质与作用，及该等价性步骤的说明）。</li><li>例：分解 21。</li></ul>
 <h2>用量子算法求阶</h2>
-<ul><li><strong>模乘算符</strong>：U|x⟩ ≡ |yx mod N⟩。通常以 x=1（计算基第二个）为出发点；U 一般只在某子空间上有定义，因此不唯一，只要能造出一个即可。</li><li><strong>本征态</strong>：取 y=3,x=1,N=35，作用 r 次回到原态。U 的本征态？通用方法是矩阵对角化——loop 中各态均匀叠加即得一个本征态，乘 e^{2πi/r} 得下一项。</li><li><strong>一族本征态</strong> |u_s⟩（s=0,1,…,r−1）：满足 U|u_s⟩=e^{2πis/r}|u_s⟩；这是 loop 张成子空间上全部 r 个本征态。</li><li><strong>关键技巧</strong>：求阶输入的态<strong>不是</strong> U 的本征态，而是若干不同本征值本征态的均匀叠加——恰好 (1/√r)Σ_s|u_s⟩=|1⟩。因此对 |1⟩ 做相位估计，等概率得到某个 s/r。</li><li><strong>经典后处理</strong>：对测得的 s/r 用<strong>连分数展开</strong>恢复 r，再用 GCD 得因子。</li></ul>
+<ul><li><strong>模乘算符</strong>：$U\ket{x} \equiv \ket{yx \bmod N}$。通常以 $x=1$（计算基第二个）为出发点；$U$ 一般只在某子空间上有定义，因此不唯一，只要能造出一个即可。</li><li><strong>本征态</strong>：取 $y=3, x=1, N=35$，作用 $r$ 次回到原态。$U$ 的本征态？通用方法是矩阵对角化——loop 中各态均匀叠加即得一个本征态，乘 $e^{2\pi i/r}$ 得下一项。</li><li><strong>一族本征态</strong> $\ket{u_s}$（$s=0,1,\dots,r-1$）：满足 $U\ket{u_s}=e^{2\pi i s/r}\ket{u_s}$；这是 loop 张成子空间上全部 $r$ 个本征态。</li><li><strong>关键技巧</strong>：求阶输入的态<strong>不是</strong> $U$ 的本征态，而是若干不同本征值本征态的均匀叠加——恰好 $\tfrac{1}{\sqrt{r}}\sum_s\ket{u_s}=\ket{1}$。因此对 $\ket{1}$ 做相位估计，等概率得到某个 $s/r$。</li><li><strong>经典后处理</strong>：对测得的 $s/r$ 用<strong>连分数展开</strong>恢复 $r$，再用 GCD 得因子。</li></ul>
 <h2>正/逆 QFT 的细节</h2>
-<ul><li>线路中的 QFT† 改为 QFT（逆变换改为正变换）能得到<strong>完全相同</strong>的概率分布 Pr(k)（两个概率分布分别给出，对称）。</li></ul>
+<ul><li>线路中的 $\text{QFT}^\dagger$ 改为 QFT（逆变换改为正变换）能得到<strong>完全相同</strong>的概率分布 $\Pr(k)$（两个概率分布分别给出，对称）。</li></ul>
 <h2>关键要点</h2>
-<ol><li>分解 ⟶ 求阶 ⟶ 对模乘 U 做相位估计。</li><li>输入 |1⟩ = 全部本征态 |u_s⟩ 的均匀叠加，免去制备单个本征态。</li><li>量子部分输出 s/r，经连分数 + GCD 经典恢复因子。</li><li>U 不唯一，只需能实现一个即可完成 Shor。</li></ol>
+<ol><li>分解 $\to$ 求阶 $\to$ 对模乘 $U$ 做相位估计。</li><li>输入 $\ket{1}$ = 全部本征态 $\ket{u_s}$ 的均匀叠加，免去制备单个本征态。</li><li>量子部分输出 $s/r$，经连分数 + GCD 经典恢复因子。</li><li>$U$ 不唯一，只需能实现一个即可完成 Shor。</li></ol>
 <h2>关联</h2>
-<ul><li><strong>5.4</strong>：求阶 = 相位估计的应用。</li><li><strong>5.3</strong>：QFT 是核心子程序。</li><li><strong>5.6</strong>：求阶是隐藏子群问题（阿贝尔群 Z）的特例。</li></ul></section>
+<ul><li><strong>5.4</strong>：求阶 = 相位估计的应用。</li><li><strong>5.3</strong>：QFT 是核心子程序。</li><li><strong>5.6</strong>：求阶是隐藏子群问题（阿贝尔群 $\mathbb{Z}$）的特例。</li></ul></section>
 <section id="sec-sec5-6-hsp"><h1>5.6 隐藏子群问题 (Hidden Subgroup Problem, HSP)</h1>
 <h2>核心思想</h2>
 <p>HSP 是 QFT 类量子算法的统一框架：Deutsch-Jozsa、Simon、求阶（Shor）、离散对数都是它的特例。</p>
 <h2>问题定义</h2>
-<ul><li>已知函数 f:G→X <strong>隐藏</strong>了群 G 的一个子群 H：f 在 H 的每个陪集上取常值，且不同陪集取值不同。</li><li><strong>目标</strong>：确定 H（的生成元）。</li><li><strong>经典复杂度</strong>：朴素地计算 f(G)，复杂度 O(|G|)。</li></ul>
+<ul><li>已知函数 $f:G\to X$ <strong>隐藏</strong>了群 $G$ 的一个子群 $H$：$f$ 在 $H$ 的每个陪集上取常值，且不同陪集取值不同。</li><li><strong>目标</strong>：确定 $H$（的生成元）。</li><li><strong>经典复杂度</strong>：朴素地计算 $f(G)$，复杂度 $O(\lvert G\rvert)$。</li></ul>
 <h2>用量子算法解决</h2>
-<ul><li>在群寄存器上制备均匀叠加，查询 f 把陪集信息编码进态，对 G 做（群上的）量子傅里叶变换，测量得到 H 的"对偶"信息。</li><li>重复采样，得到 H 的生成集 K 的一组生成元。</li><li>图 5-5 给出框架流程。</li></ul>
+<ul><li>在群寄存器上制备均匀叠加，查询 $f$ 把陪集信息编码进态，对 $G$ 做（群上的）量子傅里叶变换，测量得到 $H$ 的"对偶"信息。</li><li>重复采样，得到 $H$ 的生成集 $K$ 的一组生成元。</li><li>图 5-5 给出框架流程。</li></ul>
 <h2>阿贝尔 vs 非阿贝尔</h2>
 <ul><li><strong>阿贝尔群</strong>：已有高效（多项式）量子算法（QFT 在阿贝尔群上结构清晰）。</li><li><strong>非阿贝尔群</strong>：一般情况仍是<strong>开放问题</strong>（如二面体群 HSP 关联格问题、对称群 HSP 关联图同构）。</li></ul>
 <h2>关键要点</h2>
-<ol><li>HSP = "给定隐藏子群的 oracle f，求子群生成元"，统一了多个量子算法。</li><li>求阶/Shor、Deutsch-Jozsa、Simon、离散对数都是 HSP 特例。</li><li>阿贝尔 HSP 已解决；非阿贝尔 HSP 开放，是量子算法前沿。</li></ol>
+<ol><li>HSP = "给定隐藏子群的 oracle $f$，求子群生成元"，统一了多个量子算法。</li><li>求阶/Shor、Deutsch-Jozsa、Simon、离散对数都是 HSP 特例。</li><li>阿贝尔 HSP 已解决；非阿贝尔 HSP 开放，是量子算法前沿。</li></ol>
 <h2>关联</h2>
-<ul><li><strong>5.5</strong>：求阶 = G=ℤ 上的 HSP。</li><li><strong>5.2</strong>：Deutsch-Jozsa = G=ℤ₂ⁿ 上的 HSP。</li><li><strong>5.3</strong>：群上的 QFT 是 HSP 算法的核心。</li></ul></section>
+<ul><li><strong>5.5</strong>：求阶 = $G=\mathbb{Z}$ 上的 HSP。</li><li><strong>5.2</strong>：Deutsch-Jozsa = $G=\mathbb{Z}_2^n$ 上的 HSP。</li><li><strong>5.3</strong>：群上的 QFT 是 HSP 算法的核心。</li></ul></section>
 <section id="sec-glossary"><h1>术语表 · QCQI 第五章</h1>
-<p><strong>BPP</strong> — 经典有界误差概率多项式时间类 (5.1) <strong>BQP</strong> — 量子有界误差多项式时间类；分解 ∈ BQP (5.1) <strong>DFT（离散傅里叶变换）</strong> — 经典傅里叶变换，QFT 的经典对应 (5.3) <strong>Deutsch 算法</strong> — 一次 Uf 判 f 常数/平衡，经典需两次 (5.2) <strong>Deutsch-Jozsa 算法</strong> — Deutsch 推广到 n 位，确定性一次解决 (5.2) <strong>GCD</strong> — 最大公约数，Shor 经典后处理用 (5.5) <strong>HSP（隐藏子群问题）</strong> — 求隐藏子群 H 的生成元，统一框架 (5.6) <strong>QFT（量子傅里叶变换）</strong> — \|j⟩→(1/√N)Σ_k e^{2πijk/N}\|k⟩ (5.3) <strong>QKD</strong> — 量子密钥分发 (Bennett-Brassard 1984) (5.1) <strong>RSA</strong> — 基于大数分解困难的公钥加密 (5.5) <strong>Shor 算法</strong> — 多项式时间分解，归约为求阶 (5.5) <strong>VQE</strong> — 变分量子求解器 (5.1) <strong>二进制小数 0.a₁a₂…</strong> — Σ_l a_l 2^{−l}，QFT 因式分解记号 (5.3) <strong>受控-U^{2^k}</strong> — 相位估计中编码相位的门 (5.4) <strong>因式分解（QFT）</strong> — 输出态 = 单比特态张量积，高效实现关键 (5.3) <strong>奇偶/平衡型函数</strong> — f(0)≠f(1) 或各半，Deutsch 判定对象 (5.2) <strong>model 端到端复杂度</strong> — 解决整个问题的成本，非仅量子线路 (5.1) <strong>模乘算符 U</strong> — U\|x⟩=\|yx mod N⟩，Shor 求阶对象 (5.5) <strong>相位回踢</strong> — Uf/受控-U 把信息编码到控制位相位 (5.2,5.4) <strong>相位估计</strong> — 受控-U^{2^k}+逆 QFT 读 U 本征相位 (5.4) <strong>求阶 (order finding)</strong> — 找最小 r 使 y^r≡1 (mod N) (5.5) <strong>连分数展开</strong> — 从 s/r 恢复 r 的经典算法 (5.5) <strong>逆 QFT (QFT†)</strong> — 相位估计读出步骤 (5.4) <strong>量子并行</strong> — 一个幺正变换同时算多个 f(x) (5.2) <strong>隐藏子群（阿贝尔/非阿贝尔）</strong> — 阿贝尔已解，非阿贝尔开放 (5.6)</p></section>
+<p><strong>BPP</strong> — 经典有界误差概率多项式时间类 (5.1) <strong>BQP</strong> — 量子有界误差多项式时间类；分解 $\in$ BQP (5.1) <strong>DFT（离散傅里叶变换）</strong> — 经典傅里叶变换，QFT 的经典对应 (5.3) <strong>Deutsch 算法</strong> — 一次 $U_f$ 判 $f$ 常数/平衡，经典需两次 (5.2) <strong>Deutsch-Jozsa 算法</strong> — Deutsch 推广到 $n$ 位，确定性一次解决 (5.2) <strong>GCD</strong> — 最大公约数，Shor 经典后处理用 (5.5) <strong>HSP（隐藏子群问题）</strong> — 求隐藏子群 $H$ 的生成元，统一框架 (5.6) <strong>QFT（量子傅里叶变换）</strong> — $\ket{j}\to\tfrac{1}{\sqrt{N}}\sum_k e^{2\pi i jk/N}\ket{k}$ (5.3) <strong>QKD</strong> — 量子密钥分发 (Bennett-Brassard 1984) (5.1) <strong>RSA</strong> — 基于大数分解困难的公钥加密 (5.5) <strong>Shor 算法</strong> — 多项式时间分解，归约为求阶 (5.5) <strong>VQE</strong> — 变分量子求解器 (5.1) <strong>二进制小数 $0.a_1 a_2\dots$</strong> — $\sum_l a_l 2^{-l}$，QFT 因式分解记号 (5.3) <strong>受控-$U^{2^k}$</strong> — 相位估计中编码相位的门 (5.4) <strong>因式分解（QFT）</strong> — 输出态 = 单比特态张量积，高效实现关键 (5.3) <strong>奇偶/平衡型函数</strong> — $f(0)\ne f(1)$ 或各半，Deutsch 判定对象 (5.2) <strong>model 端到端复杂度</strong> — 解决整个问题的成本，非仅量子线路 (5.1) <strong>模乘算符 $U$</strong> — $U\ket{x}=\ket{yx \bmod N}$，Shor 求阶对象 (5.5) <strong>相位回踢</strong> — $U_f$/受控-$U$ 把信息编码到控制位相位 (5.2,5.4) <strong>相位估计</strong> — 受控-$U^{2^k}$+逆 QFT 读 $U$ 本征相位 (5.4) <strong>求阶 (order finding)</strong> — 找最小 $r$ 使 $y^r\equiv 1\pmod N$ (5.5) <strong>连分数展开</strong> — 从 $s/r$ 恢复 $r$ 的经典算法 (5.5) <strong>逆 QFT ($\text{QFT}^\dagger$)</strong> — 相位估计读出步骤 (5.4) <strong>量子并行</strong> — 一个幺正变换同时算多个 $f(x)$ (5.2) <strong>隐藏子群（阿贝尔/非阿贝尔）</strong> — 阿贝尔已解，非阿贝尔开放 (5.6)</p></section>
 <section id="sec-patterns"><h1>QFT 类算法构件与技巧 · QCQI 第五章</h1>
 <h2>相位回踢读全局性质（Deutsch 范式）</h2>
-<p><strong>何时用</strong>：问 f 的全局性质（如 f(0)⊕f(1)、是否平衡）。 <strong>怎么做</strong>：辅助比特置 |−⟩，作用 Uf 得 (−1)^{f(x)}|x⟩；查询比特过 H 干涉后测量。 <strong>权衡</strong>：只在"经典有计算冗余"的问题上有加速。</p>
+<p><strong>何时用</strong>：问 $f$ 的全局性质（如 $f(0)\oplus f(1)$、是否平衡）。 <strong>怎么做</strong>：辅助比特置 $\ket{-}$，作用 $U_f$ 得 $(-1)^{f(x)}\ket{x}$；查询比特过 $H$ 干涉后测量。 <strong>权衡</strong>：只在"经典有计算冗余"的问题上有加速。</p>
 <h2>用因式分解高效实现 QFT</h2>
-<p><strong>何时用</strong>：构造 QFT 线路。 <strong>怎么做</strong>：对每比特 H + 一串受控相位门 R_k（相位 2π/2^k），末端 SWAP 修正位序；共 O(n²) 门。 <strong>权衡</strong>：结果在概率幅里，不能直接读，需配相位估计。</p>
+<p><strong>何时用</strong>：构造 QFT 线路。 <strong>怎么做</strong>：对每比特 $H$ + 一串受控相位门 $R_k$（相位 $2\pi/2^k$），末端 SWAP 修正位序；共 $O(n^2)$ 门。 <strong>权衡</strong>：结果在概率幅里，不能直接读，需配相位估计。</p>
 <h2>相位估计读 U 的本征相位</h2>
-<p><strong>何时用</strong>：已知/能制备 U 的本征态 |u⟩，要其相位 φ。 <strong>怎么做</strong>：计数比特 |+⟩ → 受控-U^{2^k} → 逆 QFT → 测量。 <strong>权衡</strong>：φ 非完美二进制时只得高概率近似，精度随计数比特 t 增长。</p>
+<p><strong>何时用</strong>：已知/能制备 $U$ 的本征态 $\ket{u}$，要其相位 $\varphi$。 <strong>怎么做</strong>：计数比特 $\ket{+}$ → 受控-$U^{2^k}$ → 逆 QFT → 测量。 <strong>权衡</strong>：$\varphi$ 非完美二进制时只得高概率近似，精度随计数比特 $t$ 增长。</p>
 <h2>Shor：分解归约为求阶</h2>
-<p><strong>何时用</strong>：分解奇合数 N。 <strong>怎么做</strong>：取互质 y，量子求阶得 r；若 r 偶且 y^{r/2}≢−1，则 gcd(y^{r/2}±1,N) 是因子。 <strong>权衡</strong>：有概率 r 为奇或 y^{r/2}≡−1，需换 y 重试。</p>
+<p><strong>何时用</strong>：分解奇合数 $N$。 <strong>怎么做</strong>：取互质 $y$，量子求阶得 $r$；若 $r$ 偶且 $y^{r/2}\not\equiv -1$，则 $\gcd(y^{r/2}\pm 1,N)$ 是因子。 <strong>权衡</strong>：有概率 $r$ 为奇或 $y^{r/2}\equiv -1$，需换 $y$ 重试。</p>
 <h2>用本征态均匀叠加免去制备本征态</h2>
-<p><strong>何时用</strong>：求阶时无法单独制备 |u_s⟩。 <strong>怎么做</strong>：注意 (1/√r)Σ_s|u_s⟩=|1⟩，直接用 |1⟩ 输入相位估计，等概率得某 s/r。 <strong>权衡</strong>：得到的是随机 s/r，需连分数 + 多次重试恢复 r。</p>
+<p><strong>何时用</strong>：求阶时无法单独制备 $\ket{u_s}$。 <strong>怎么做</strong>：注意 $\tfrac{1}{\sqrt{r}}\sum_s\ket{u_s}=\ket{1}$，直接用 $\ket{1}$ 输入相位估计，等概率得某 $s/r$。 <strong>权衡</strong>：得到的是随机 $s/r$，需连分数 + 多次重试恢复 $r$。</p>
 <h2>把问题套进 HSP 框架</h2>
-<p><strong>何时用</strong>：判断一个新问题是否有 QFT 类加速。 <strong>怎么做</strong>：找群 G 与隐藏子群 H，使 f 在 H 陪集上取常值；阿贝尔 G 有高效算法。 <strong>权衡</strong>：非阿贝尔 HSP 一般无已知高效算法。</p>
+<p><strong>何时用</strong>：判断一个新问题是否有 QFT 类加速。 <strong>怎么做</strong>：找群 $G$ 与隐藏子群 $H$，使 $f$ 在 $H$ 陪集上取常值；阿贝尔 $G$ 有高效算法。 <strong>权衡</strong>：非阿贝尔 HSP 一般无已知高效算法。</p>
 <h2>反模式</h2>
-<ul><li><strong>试图直接读 QFT 输出幅</strong>：信息藏在幅里，必须靠干涉/相位估计提取。</li><li><strong>以为 U 唯一</strong>：Shor 的模乘 U 只需在子空间定义，造出一个即可。</li><li><strong>忘记经典后处理成本</strong>：端到端复杂度含连分数/GCD，不只量子线路。</li><li><strong>正逆 QFT 混淆</strong>：求阶里 QFT 与 QFT† 给相同 Pr(k)，但要清楚各自语义。</li></ul></section>
+<ul><li><strong>试图直接读 QFT 输出幅</strong>：信息藏在幅里，必须靠干涉/相位估计提取。</li><li><strong>以为 $U$ 唯一</strong>：Shor 的模乘 $U$ 只需在子空间定义，造出一个即可。</li><li><strong>忘记经典后处理成本</strong>：端到端复杂度含连分数/GCD，不只量子线路。</li><li><strong>正逆 QFT 混淆</strong>：求阶里 QFT 与 $\text{QFT}^\dagger$ 给相同 $\Pr(k)$，但要清楚各自语义。</li></ul></section>
 <section id="sec-cheatsheet"><h1>速查表 · QCQI 第五章</h1>
 <h2>QFT 核心公式</h2>
-<ul><li><strong>QFT</strong>：|j⟩ → (1/√N) Σ_k e^{2πijk/N} |k⟩，N=2ⁿ。</li><li><strong>因式分解</strong>：|j⟩ → ⊗_{l=1}^n (|0⟩ + e^{2πi·0.j_l…j_n}|1⟩)/√2。</li><li><strong>线路</strong>：每比特 H + 受控相位门 R_k + 末端 SWAP；门数 <strong>O(n²)</strong>。</li><li><strong>二进制小数</strong>：0.a₁a₂… = Σ a_l 2^{−l}。</li></ul>
+<ul><li><strong>QFT</strong>：$\ket{j} \to \tfrac{1}{\sqrt{N}} \sum_k e^{2\pi i jk/N} \ket{k}$，$N=2^n$。</li><li><strong>因式分解</strong>：$\ket{j} \to \bigotimes_{l=1}^n (\ket{0} + e^{2\pi i\cdot 0.j_l\dots j_n}\ket{1})/\sqrt{2}$。</li><li><strong>线路</strong>：每比特 $H$ + 受控相位门 $R_k$ + 末端 SWAP；门数 <strong>$O(n^2)$</strong>。</li><li><strong>二进制小数</strong>：$0.a_1 a_2\dots = \sum a_l 2^{-l}$。</li></ul>
 <h2>算法流程速记</h2>
-<table><thead><tr><th>算法</th><th>输入</th><th>量子核心</th><th>读出</th></tr></thead><tbody><tr><td>Deutsch(-Jozsa)</td><td></td><td>−⟩ 辅助</td><td>Uf 相位回踢 + H</td><td>常数/平衡</td></tr><tr><td>相位估计</td><td>U 本征态</td><td>u⟩</td><td>受控-U^{2^k} + 逆 QFT</td><td>相位 φ</td></tr><tr><td>Shor 求阶</td><td></td><td>1⟩(=Σ</td><td>u_s⟩)</td><td>受控模乘 + 逆 QFT</td><td>s/r → 连分数 → r</td></tr></tbody></table>
+<table><thead><tr><th>算法</th><th>输入</th><th>量子核心</th><th>读出</th></tr></thead><tbody><tr><td>Deutsch(-Jozsa)</td><td>$\ket{-}$ 辅助</td><td>$U_f$ 相位回踢 + $H$</td><td>常数/平衡</td></tr><tr><td>相位估计</td><td>$U$ 本征态 $\ket{u}$</td><td>受控-$U^{2^k}$ + 逆 QFT</td><td>相位 $\varphi$</td></tr><tr><td>Shor 求阶</td><td>$\ket{1}(=\sum\ket{u_s})$</td><td>受控模乘 + 逆 QFT</td><td>$s/r$ → 连分数 → $r$</td></tr></tbody></table>
 <h2>相位估计精度</h2>
-<ul><li>φ 是完美 t 位二进制小数 → 估计<strong>精确</strong>。</li><li>否则 → 高概率给最佳 t 位近似；t↑ ⇒ 精度↑、成功率↑。</li></ul>
+<ul><li>$\varphi$ 是完美 $t$ 位二进制小数 → 估计<strong>精确</strong>。</li><li>否则 → 高概率给最佳 $t$ 位近似；$t\uparrow \Rightarrow$ 精度↑、成功率↑。</li></ul>
 <h2>Shor 决策流程</h2>
-<ol><li>N 偶？→ 直接除 2。</li><li>N=a^b？→ 取根。</li><li>取随机 y，gcd(y,N)&gt;1？→ 直接得因子。</li><li>量子求阶得 r。</li><li>r 奇 或 y^{r/2}≡−1 (mod N)？→ 换 y 重试。</li><li>否则 gcd(y^{r/2}±1, N) = 非平凡因子。</li></ol>
+<ol><li>$N$ 偶？→ 直接除 2。</li><li>$N=a^b$？→ 取根。</li><li>取随机 $y$，$\gcd(y,N)&gt;1$？→ 直接得因子。</li><li>量子求阶得 $r$。</li><li>$r$ 奇 或 $y^{r/2}\equiv -1\pmod N$？→ 换 $y$ 重试。</li><li>否则 $\gcd(y^{r/2}\pm 1, N)$ = 非平凡因子。</li></ol>
 <h2>复杂度对比</h2>
-<table><thead><tr><th>任务</th><th>经典</th><th>量子</th></tr></thead><tbody><tr><td>傅里叶变换</td><td>FFT O(N log N)</td><td>QFT O(log²N)</td></tr><tr><td>大数分解</td><td>数域筛 超多项式</td><td>Shor 多项式</td></tr><tr><td>Deutsch-Jozsa</td><td>最坏 2^{n−1}+1</td><td>1 次</td></tr></tbody></table>
+<table><thead><tr><th>任务</th><th>经典</th><th>量子</th></tr></thead><tbody><tr><td>傅里叶变换</td><td>FFT $O(N\log N)$</td><td>QFT $O(\log^2 N)$</td></tr><tr><td>大数分解</td><td>数域筛 超多项式</td><td>Shor 多项式</td></tr><tr><td>Deutsch-Jozsa</td><td>最坏 $2^{n-1}+1$</td><td>1 次</td></tr></tbody></table>
 <h2>HSP 速记</h2>
-<ul><li>框架：f:G→X 隐藏子群 H，求 H 生成元。</li><li>特例：Deutsch-Jozsa(ℤ₂ⁿ)、Simon、求阶/Shor(ℤ)、离散对数。</li><li><strong>阿贝尔</strong>：高效解决；<strong>非阿贝尔</strong>：开放。</li></ul>
+<ul><li>框架：$f:G\to X$ 隐藏子群 $H$，求 $H$ 生成元。</li><li>特例：Deutsch-Jozsa($\mathbb{Z}_2^n$)、Simon、求阶/Shor($\mathbb{Z}$)、离散对数。</li><li><strong>阿贝尔</strong>：高效解决；<strong>非阿贝尔</strong>：开放。</li></ul>
 <h2>核心提醒</h2>
-<ul><li>Fourier 结果藏在概率幅，<strong>不可直接读</strong>。</li><li>求阶输入 |1⟩ = 所有本征态均匀叠加（免制备）。</li><li>端到端成本含经典后处理（连分数、GCD）。</li></ul></section>
+<ul><li>Fourier 结果藏在概率幅，<strong>不可直接读</strong>。</li><li>求阶输入 $\ket{1}$ = 所有本征态均匀叠加（免制备）。</li><li>端到端成本含经典后处理（连分数、GCD）。</li></ul></section>
 </main>
 </div>
 <script>

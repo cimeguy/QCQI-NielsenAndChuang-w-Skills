@@ -52,6 +52,25 @@ hr{border:none;border-top:1px dashed var(--border);margin:16px 0}
 .badge{display:inline-block;background:var(--accent);color:#fff;border-radius:6px;padding:2px 9px;font-size:12px;font-weight:600}
 @media(max-width:820px){.sidebar{display:none}.main{padding:24px 18px}}
 </style>
+<script>
+window.MathJax={
+ tex:{
+  inlineMath:[['$','$'],['\\(','\\)']],
+  displayMath:[['$$','$$'],['\\[','\\]']],
+  macros:{
+   ket:['{\\lvert #1\\rangle}',1],
+   bra:['{\\langle #1\\rvert}',1],
+   braket:['{\\langle #1\\vert #2\\rangle}',2],
+   ketbra:['{\\lvert #1\\rangle\\langle #2\\rvert}',2],
+   Tr:'{\\operatorname{Tr}}',
+   tr:'{\\operatorname{tr}}'
+  }
+ },
+ svg:{fontCache:'global'},
+ options:{skipHtmlTags:['script','style','textarea','pre','code'],ignoreHtmlClass:'viz'}
+};
+</script>
+<script src="../vendor/tex-svg.js" id="MathJax-script" async></script>
 </head>
 <body>
 <div class="layout">
@@ -238,19 +257,19 @@ hr{border:none;border-top:1px dashed var(--border);margin:16px 0}
 <hr>
 <h2>核心概念框架</h2>
 <p><strong>量子线路 = 量子计算的通用语言</strong>：用幺正门组成的有向无环图操纵 qubit。已知的两大基础算法（QFT、量子搜索）都由这些线路构造。</p>
-<p><strong>单比特门 = U(2) 旋转</strong>：任意单比特门可视为 qubit 所在希尔伯特空间（2 维）的一次旋转，对应 Bloch 球（3 维）的 SO(3) 旋转，通过 SU(2) 群表示联系。基本门：Rx/Ry/Rz/Rn(θ)、H、相位门 S、T 门。</p>
-<p><strong>z-y-z 分解（欧拉角）</strong>：任意单比特门 = e^{iα}Rz(β)Ry(γ)Rz(δ)。旋转既可一次实现，也可分三次（欧拉角）实现。Ry 可生成所有单比特门（配合相位）。</p>
-<p><strong>受控门 U(2ⁿ)</strong>：CNOT（纠缠生成器）、CZ、SWAP（=3 CNOT）、Toffoli（CCNOT，经典可逆计算通用门）。一般受控-U 门有标准构造法。</p>
+<p><strong>单比特门 = $U(2)$ 旋转</strong>：任意单比特门可视为 qubit 所在希尔伯特空间（2 维）的一次旋转，对应 Bloch 球（3 维）的 $SO(3)$ 旋转，通过 $SU(2)$ 群表示联系。基本门：$R_x/R_y/R_z/R_n(\theta)$、H、相位门 S、T 门。</p>
+<p><strong>z-y-z 分解（欧拉角）</strong>：任意单比特门 $= e^{i\alpha}R_z(\beta)R_y(\gamma)R_z(\delta)$。旋转既可一次实现，也可分三次（欧拉角）实现。$R_y$ 可生成所有单比特门（配合相位）。</p>
+<p><strong>受控门 $U(2^n)$</strong>：CNOT（纠缠生成器）、CZ、SWAP（=3 CNOT）、Toffoli（CCNOT，经典可逆计算通用门）。一般受控-U 门有标准构造法。</p>
 <p><strong>测量原理</strong>：延迟测量（测量可推迟到线路末端，对应经典 if-then）、隐含测量（线路末端未测的比特可视为已测，简化分析）、Bell 基测量、对算符 U 的测量（既要概率分布又要测后态）。</p>
-<p><strong>通用门集合（三步证明）</strong>：① 二级幺正门通用；② 单比特门 + CNOT 通用；③ {H, T, CNOT} 通用。复杂度：达到精度 ε 需 O(log^c(1/ε)) 个门（Solovay-Kitaev）。</p>
+<p><strong>通用门集合（三步证明）</strong>：① 二级幺正门通用；② 单比特门 + CNOT 通用；③ $\{H, T, \mathrm{CNOT}\}$ 通用。复杂度：达到精度 $\varepsilon$ 需 $O(\log^c(1/\varepsilon))$ 个门（Solovay-Kitaev）。</p>
 <p><strong>量子计算机五要素</strong>（DiVincenzo）：可扩展的 qubit、初始化、长相干、通用门集、可靠测量——核心是初始化、幺正变换、测量三环节。</p>
 <p><strong>量子线路以外的模型</strong>：绝热量子计算、拓扑量子计算、量子随机游走、one-clean-qubit、基于测量的量子计算 (MBQC)/单向/簇态、量子图灵机。计算本质是物理过程（Landauer 原理）。</p>
-<p><strong>量子模拟</strong>：把演化时间切片，用 Trotter 公式把每片 e^{−iHΔt} 拆成局域哈密顿量演化的乘积；阶数越高、步数越多，与精确 U(t) 的迹距离越小。配合 BCH 公式分析误差。</p>
+<p><strong>量子模拟</strong>：把演化时间切片，用 Trotter 公式把每片 $e^{-iH\Delta t}$ 拆成局域哈密顿量演化的乘积；阶数越高、步数越多，与精确 $U(t)$ 的迹距离越小。配合 BCH 公式分析误差。</p>
 <hr>
 <h2>小节索引</h2>
-<table><thead><tr><th>小节</th><th>标题</th><th>关键概念</th></tr></thead><tbody><tr><td><a href="#sec-sec4-1-single-qubit-gates">4.1</a></td><td>单比特门 U(2)</td><td>Rx/Ry/Rz/Rn、H、S、T、门=旋转、z-y-z 分解、无通用非门</td></tr><tr><td><a href="#sec-sec4-2-controlled-gates">4.2</a></td><td>受控门</td><td>CNOT、CZ、SWAP=3CNOT、Toffoli、一般受控-U、线路特性</td></tr><tr><td><a href="#sec-sec4-3-measurement">4.3</a></td><td>测量</td><td>延迟测量、隐含测量、Bell 基测量、对算符 U 测量</td></tr><tr><td><a href="#sec-sec4-4-universal-gates">4.4</a></td><td>通用量子门</td><td>三步通用性证明、{H,T,CNOT}、复杂度</td></tr><tr><td><a href="#sec-sec4-5-models">4.5</a></td><td>量子计算机要素与其他模型</td><td>五要素、绝热/拓扑/MBQC/量子游走、Landauer</td></tr><tr><td><a href="#sec-sec4-6-simulation">4.6</a></td><td>量子模拟</td><td>局域哈密顿量、Trotter 公式、BCH、Trotterization 误差</td></tr></tbody></table>
+<table><thead><tr><th>小节</th><th>标题</th><th>关键概念</th></tr></thead><tbody><tr><td><a href="#sec-sec4-1-single-qubit-gates">4.1</a></td><td>单比特门 $U(2)$</td><td>$R_x/R_y/R_z/R_n$、H、S、T、门=旋转、z-y-z 分解、无通用非门</td></tr><tr><td><a href="#sec-sec4-2-controlled-gates">4.2</a></td><td>受控门</td><td>CNOT、CZ、SWAP=3CNOT、Toffoli、一般受控-U、线路特性</td></tr><tr><td><a href="#sec-sec4-3-measurement">4.3</a></td><td>测量</td><td>延迟测量、隐含测量、Bell 基测量、对算符 U 测量</td></tr><tr><td><a href="#sec-sec4-4-universal-gates">4.4</a></td><td>通用量子门</td><td>三步通用性证明、$\{H,T,\mathrm{CNOT}\}$、复杂度</td></tr><tr><td><a href="#sec-sec4-5-models">4.5</a></td><td>量子计算机要素与其他模型</td><td>五要素、绝热/拓扑/MBQC/量子游走、Landauer</td></tr><tr><td><a href="#sec-sec4-6-simulation">4.6</a></td><td>量子模拟</td><td>局域哈密顿量、Trotter 公式、BCH、Trotterization 误差</td></tr></tbody></table>
 <h2>主题索引</h2>
-<ul><li><strong>BCH 公式 / 矩阵指数恒等式</strong> → 4.6</li><li><strong>CNOT / CZ / SWAP / Toffoli</strong> → 4.2</li><li><strong>Hadamard / S / T 门</strong> → 4.1</li><li><strong>Rn(θ) / 门=旋转 / SU(2)-SO(3)</strong> → 4.1</li><li><strong>Trotter 分解 / 量子模拟</strong> → 4.6</li><li><strong>z-y-z 分解 / 欧拉角</strong> → 4.1</li><li><strong>延迟测量 / 隐含测量</strong> → 4.3</li><li><strong>量子计算机五要素</strong> → 4.5</li><li><strong>通用门 / {H,T,CNOT}</strong> → 4.4</li><li><strong>其他计算模型（绝热/拓扑/MBQC）</strong> → 4.5</li></ul>
+<ul><li><strong>BCH 公式 / 矩阵指数恒等式</strong> $\to$ 4.6</li><li><strong>CNOT / CZ / SWAP / Toffoli</strong> $\to$ 4.2</li><li><strong>Hadamard / S / T 门</strong> $\to$ 4.1</li><li><strong>$R_n(\theta)$ / 门=旋转 / $SU(2)$-$SO(3)$</strong> $\to$ 4.1</li><li><strong>Trotter 分解 / 量子模拟</strong> $\to$ 4.6</li><li><strong>z-y-z 分解 / 欧拉角</strong> $\to$ 4.1</li><li><strong>延迟测量 / 隐含测量</strong> $\to$ 4.3</li><li><strong>量子计算机五要素</strong> $\to$ 4.5</li><li><strong>通用门 / $\{H,T,\mathrm{CNOT}\}$</strong> $\to$ 4.4</li><li><strong>其他计算模型（绝热/拓扑/MBQC）</strong> $\to$ 4.5</li></ul>
 <h2>辅助文件</h2>
 <ul><li><a href="#sec-glossary">glossary.md</a> — 关键术语表（中英对照）</li><li><a href="#sec-patterns">patterns.md</a> — 线路构造与模拟技巧</li><li><a href="#sec-cheatsheet">cheatsheet.md</a> — 门速查与模拟决策表</li></ul>
 <hr>
@@ -258,65 +277,65 @@ hr{border:none;border-top:1px dashed var(--border);margin:16px 0}
 <p>本 skill 仅覆盖 QCQI 第四章（量子线路与量子模拟）的概念框架，源自一份中文 Mathematica 笔记。公式以纯文本/Unicode 近似表示。笔记中的 Wolfram 量子框架代码、线路图、Trotter 误差曲线图未完整转录，精确实现请参阅原书与原笔记。</p></section>
 <section id="sec-sec4-1-single-qubit-gates"><h1>4.1 单比特门 U(2)</h1>
 <h2>核心思想</h2>
-<p>任意单比特门是 qubit 所在 2 维希尔伯特空间的一次幺正变换，几何上等价于 Bloch 球（3 维实空间）的一次旋转。SU(2)（作用在 2 维）与 SO(3)（作用在 3 维）通过群表示联系起来。</p>
+<p>任意单比特门是 qubit 所在 2 维希尔伯特空间的一次幺正变换，几何上等价于 Bloch 球（3 维实空间）的一次旋转。$SU(2)$（作用在 2 维）与 $SO(3)$（作用在 3 维）通过群表示联系起来。</p>
 <h2>基本门</h2>
-<ul><li><strong>Rx(θ)/Ry(θ)/Rz(θ)</strong>：绕 x/y/z 轴旋转 θ。</li><li><strong>Rn(θ)</strong>：绕任意单位轴 n=(x,y,z) 旋转 θ，= cos(θ/2)I − i sin(θ/2)(n·σ)。可乘一个全局相位 e^{iα}。</li><li><strong>Hadamard (H)</strong>：制备等权（等系数）叠加态；H|0⟩=(|0⟩+|1⟩)/√2。</li><li><strong>相位门 S</strong>：diag(1,i)；<strong>T 门</strong>：diag(1,e^{iπ/4})（π/8 门）。</li></ul>
+<ul><li><strong>$R_x(\theta)/R_y(\theta)/R_z(\theta)$</strong>：绕 x/y/z 轴旋转 $\theta$。</li><li><strong>$R_n(\theta)$</strong>：绕任意单位轴 $n=(x,y,z)$ 旋转 $\theta$，$= \cos(\theta/2)I - i\sin(\theta/2)(n\cdot\sigma)$。可乘一个全局相位 $e^{i\alpha}$。</li><li><strong>Hadamard (H)</strong>：制备等权（等系数）叠加态；$H\ket{0}=(\ket{0}+\ket{1})/\sqrt{2}$。</li><li><strong>相位门 S</strong>：$\mathrm{diag}(1,i)$；<strong>T 门</strong>：$\mathrm{diag}(1,e^{i\pi/4})$（$\pi/8$ 门）。</li></ul>
 <h2>门作为旋转（核心视角）</h2>
-<ul><li>把单比特门视为对 qubit 的一次旋转：U = e^{iα}Rn(θ)。</li><li><strong>3 维与 2 维旋转的联系</strong>：描述参考系空间旋转导致的态变换，需用 SO(3) 在单比特希尔伯特空间上的群表示，即 SU(2)。SO(3) 作用在 3 维实空间，SU(2) 作用在 2 维希尔伯特空间；群作用的概念把"旋转"从实空间迁移到 qubit 空间。</li><li>直觉例：粒子在 |0⟩，把新 x 轴转到原 z 轴，则新坐标下态变为 |+⟩。</li></ul>
+<ul><li>把单比特门视为对 qubit 的一次旋转：$U = e^{i\alpha}R_n(\theta)$。</li><li><strong>3 维与 2 维旋转的联系</strong>：描述参考系空间旋转导致的态变换，需用 $SO(3)$ 在单比特希尔伯特空间上的群表示，即 $SU(2)$。$SO(3)$ 作用在 3 维实空间，$SU(2)$ 作用在 2 维希尔伯特空间；群作用的概念把"旋转"从实空间迁移到 qubit 空间。</li><li>直觉例：粒子在 $\ket{0}$，把新 x 轴转到原 z 轴，则新坐标下态变为 $\ket{+}$。</li></ul>
 <h2>z-y-z 分解与欧拉角</h2>
-<ul><li>任意单比特门可分解为三次旋转：U=e^{iα}Rz(β)Ry(γ)Rz(δ)。旋转可一次实现，也可经欧拉角分三次实现。</li><li><strong>Ry(θ) 可生成所有单比特门</strong>（配合 Rz 与相位）。</li><li>例：把 H 分解成 Ry、Rz 与相位因子的积。</li></ul>
+<ul><li>任意单比特门可分解为三次旋转：$U=e^{i\alpha}R_z(\beta)R_y(\gamma)R_z(\delta)$。旋转可一次实现，也可经欧拉角分三次实现。</li><li><strong>$R_y(\theta)$ 可生成所有单比特门</strong>（配合 $R_z$ 与相位）。</li><li>例：把 H 分解成 $R_y$、$R_z$ 与相位因子的积。</li></ul>
 <h2>反模式：不存在通用非门</h2>
-<ul><li><strong>通用非门</strong>：把任意 |ψ⟩ 变为其正交补 |ψ⊥⟩ 的操作。</li><li><strong>结论</strong>：不存在这样的幺正门（对所有态成立的"普适取反"不可能），因为它不是 qubit 空间上的旋转/幺正变换。</li></ul>
+<ul><li><strong>通用非门</strong>：把任意 $\ket{\psi}$ 变为其正交补 $\ket{\psi^\perp}$ 的操作。</li><li><strong>结论</strong>：不存在这样的幺正门（对所有态成立的"普适取反"不可能），因为它不是 qubit 空间上的旋转/幺正变换。</li></ul>
 <h2>关键要点</h2>
-<ol><li>单比特门 ⟺ Bloch 球旋转 ⟺ SU(2) 群元（含一个全局相位 = U(2)）。</li><li>z-y-z 分解：任意门 = 三次旋转的复合（欧拉角）。</li><li>不存在对所有态都成立的通用非门。</li></ol>
+<ol><li>单比特门 $\Leftrightarrow$ Bloch 球旋转 $\Leftrightarrow$ $SU(2)$ 群元（含一个全局相位 $= U(2)$）。</li><li>z-y-z 分解：任意门 = 三次旋转的复合（欧拉角）。</li><li>不存在对所有态都成立的通用非门。</li></ol>
 <h2>关联</h2>
-<ul><li><strong>4.2</strong>：单比特门 + CNOT 构成受控门与通用集。</li><li><strong>4.4</strong>：z-y-z 分解是"单比特门+CNOT 通用"证明的基础。</li><li><strong>第一章 1.3</strong>：此处把"门=旋转"严格化为 SU(2)-SO(3) 对应。</li></ul></section>
+<ul><li><strong>4.2</strong>：单比特门 + CNOT 构成受控门与通用集。</li><li><strong>4.4</strong>：z-y-z 分解是"单比特门+CNOT 通用"证明的基础。</li><li><strong>第一章 1.3</strong>：此处把"门=旋转"严格化为 $SU(2)$-$SO(3)$ 对应。</li></ul></section>
 <section id="sec-sec4-2-controlled-gates"><h1>4.2 受控门 U(2ⁿ)</h1>
 <h2>核心思想</h2>
 <p>多比特门由受控操作构造：一个（或多个）控制位决定是否对目标位施加幺正 U。CNOT 是纠缠之源，Toffoli 是经典可逆计算的通用门。</p>
 <h2>基本受控门</h2>
-<ul><li><strong>CNOT (controlled-NOT)</strong>：控制位为 1 时翻转目标位。纠缠的生成器。</li><li><strong>CZ 门</strong>：控制位为 1 时对目标施 Z（相位翻转）；对控制/目标对称。</li><li><strong>交换门 SWAP</strong>：交换两比特状态。<strong>SWAP = 三个 CNOT</strong> 级联：CNOT(a→b)·CNOT(b→a)·CNOT(a→b)。</li><li><strong>Toffoli 门 (CCNOT)</strong>：双控制非门，两控制位都为 1 才翻转目标。经典可逆计算的通用门，配合测量可模拟经典逻辑。</li></ul>
+<ul><li><strong>CNOT (controlled-NOT)</strong>：控制位为 1 时翻转目标位。纠缠的生成器。</li><li><strong>CZ 门</strong>：控制位为 1 时对目标施 Z（相位翻转）；对控制/目标对称。</li><li><strong>交换门 SWAP</strong>：交换两比特状态。<strong>SWAP = 三个 CNOT</strong> 级联：$\mathrm{CNOT}(a\to b)\cdot\mathrm{CNOT}(b\to a)\cdot\mathrm{CNOT}(a\to b)$。</li><li><strong>Toffoli 门 (CCNOT)</strong>：双控制非门，两控制位都为 1 才翻转目标。经典可逆计算的通用门，配合测量可模拟经典逻辑。</li></ul>
 <h2>一般受控-U 门（单比特控制单比特）</h2>
-<ul><li>把任意单比特 U 做成受控版本：用 U 的 z-y-z 分解 U=e^{iα}AXBXC（其中 ABC=I），插入 CNOT 实现条件作用。X 是 Pauli-X。</li><li>标准构造：控制位通过两个 CNOT 把 A、B、C 三段"夹"出条件相位与条件旋转。</li></ul>
+<ul><li>把任意单比特 U 做成受控版本：用 U 的 z-y-z 分解 $U=e^{i\alpha}AXBXC$（其中 $ABC=I$），插入 CNOT 实现条件作用。X 是 Pauli-X。</li><li>标准构造：控制位通过两个 CNOT 把 A、B、C 三段"夹"出条件相位与条件旋转。</li></ul>
 <h2>量子线路的特性（反模式 / 规则）</h2>
 <ul><li><strong>无环</strong>：不出现回路。</li><li><strong>禁止扇入</strong>：扇入不可逆，违反幺正性。</li><li><strong>禁止扇出</strong>：扇出 = 量子克隆，违反不可克隆定理。</li></ul>
 <h2>关键要点</h2>
-<ol><li>CNOT 生成纠缠；CZ 与 CNOT 仅差目标侧的 H 基变换。</li><li>SWAP = 3×CNOT；Toffoli 通用于经典可逆计算。</li><li>任意受控-U 可由单比特门 + CNOT 用 z-y-z（ABC）法构造。</li><li>量子线路必须有向无环、不扇入不扇出。</li></ol>
+<ol><li>CNOT 生成纠缠；CZ 与 CNOT 仅差目标侧的 H 基变换。</li><li>$\mathrm{SWAP} = 3\times\mathrm{CNOT}$；Toffoli 通用于经典可逆计算。</li><li>任意受控-U 可由单比特门 + CNOT 用 z-y-z（ABC）法构造。</li><li>量子线路必须有向无环、不扇入不扇出。</li></ol>
 <h2>关联</h2>
 <ul><li><strong>4.1</strong>：受控-U 依赖单比特门的 z-y-z 分解。</li><li><strong>4.4</strong>：单比特门 + CNOT = 通用集（第二步）。</li><li><strong>第一章 1.3</strong>：CNOT 制 Bell 态、Toffoli 嵌经典逻辑。</li></ul></section>
 <section id="sec-sec4-3-measurement"><h1>4.3 测量</h1>
 <h2>核心思想</h2>
 <p>测量是从量子世界提取信息、控制量子系统的手段——信息的注入、处理、读出是计算的三个核心环节，读出就要测量。本节给出在分析线路时极有用的几条测量原理。</p>
 <h2>延迟测量原理 (Principle of Deferred Measurement)</h2>
-<ul><li><strong>内容</strong>：线路中途的测量总可以推迟到线路末端；中途测量结果用作经典控制 ⟺ 改用量子受控门。</li><li><strong>对应经典 if-then</strong>：左侧（先测后控）≡ 右侧（量子受控 + 末端测量）。</li><li><strong>应用：隐形传态</strong>：设比特 1、2 是 Alice 的、比特 3 是 Bob 的，双横线表示经典通信。</li><ul><li><strong>方法 1</strong>：Alice 第 1 比特 |ψ⟩ 要传给 Bob，2、3 比特预制 Bell 态；无论 Alice 测得什么，Bob 经修正后手中态都是 |ψ⟩。</li><li><strong>方法 2（LOCC）</strong>：Alice 本地执行门+测量，把结果告诉 Bob，Bob 据此施门得到正确 |ψ⟩。"信息的传递就是物质（态）的传递"。</li></ul></ul>
+<ul><li><strong>内容</strong>：线路中途的测量总可以推迟到线路末端；中途测量结果用作经典控制 $\Leftrightarrow$ 改用量子受控门。</li><li><strong>对应经典 if-then</strong>：左侧（先测后控）$\equiv$ 右侧（量子受控 + 末端测量）。</li><li><strong>应用：隐形传态</strong>：设比特 1、2 是 Alice 的、比特 3 是 Bob 的，双横线表示经典通信。</li><ul><li><strong>方法 1</strong>：Alice 第 1 比特 $\ket{\psi}$ 要传给 Bob，2、3 比特预制 Bell 态；无论 Alice 测得什么，Bob 经修正后手中态都是 $\ket{\psi}$。</li><li><strong>方法 2（LOCC）</strong>：Alice 本地执行门+测量，把结果告诉 Bob，Bob 据此施门得到正确 $\ket{\psi}$。"信息的传递就是物质（态）的传递"。</li></ul></ul>
 <h2>隐含测量原理 (Principle of Implicit Measurement)</h2>
 <ul><li><strong>内容</strong>：线路末端任何未被测量的 qubit 都可视为已被测量（不影响其余比特的统计）。</li><li><strong>用途</strong>：在分析量子算法时带来便利。</li></ul>
 <h2>Bell 基的测量</h2>
-<ul><li>从计算基的态获得 Bell 态（H + CNOT），反之用 CNOT + H 把 Bell 态转回计算基再测量。</li><li>两个矩阵（计算基 ↔ Bell 基）通过该变换关联。</li></ul>
+<ul><li>从计算基的态获得 Bell 态（H + CNOT），反之用 CNOT + H 把 Bell 态转回计算基再测量。</li><li>两个矩阵（计算基 $\leftrightarrow$ Bell 基）通过该变换关联。</li></ul>
 <h2>对算符 U 进行测量（习题 4.34）</h2>
-<ul><li><strong>目标</strong>：既要得到测量算符 U 的本征值概率分布，又要得到测后态。</li><li><strong>既幺正又厄米的算符有多特殊</strong>：U=U†=U⁻¹ ⇒ U²=I，本征值只能是 ±1（如 Pauli 算符）。</li><li><strong>设计方案</strong>：用一个辅助比特 + H + 受控-U + H + 测量辅助比特，读出 ±1 本征空间的投影；测后主系统塌缩到对应本征子空间。</li></ul>
+<ul><li><strong>目标</strong>：既要得到测量算符 U 的本征值概率分布，又要得到测后态。</li><li><strong>既幺正又厄米的算符有多特殊</strong>：$U=U^\dagger=U^{-1} \Rightarrow U^2=I$，本征值只能是 $\pm 1$（如 Pauli 算符）。</li><li><strong>设计方案</strong>：用一个辅助比特 + H + 受控-U + H + 测量辅助比特，读出 $\pm 1$ 本征空间的投影；测后主系统塌缩到对应本征子空间。</li></ul>
 <h2>关键要点</h2>
-<ol><li>延迟测量：中途测量+经典控制 ⟺ 量子受控门+末端测量。</li><li>隐含测量：末端未测比特视为已测，简化分析。</li><li>对幺正且厄米的 U（U²=I）可用辅助比特 + 受控-U 同时取概率与测后态。</li></ol>
+<ol><li>延迟测量：中途测量+经典控制 $\Leftrightarrow$ 量子受控门+末端测量。</li><li>隐含测量：末端未测比特视为已测，简化分析。</li><li>对幺正且厄米的 U（$U^2=I$）可用辅助比特 + 受控-U 同时取概率与测后态。</li></ol>
 <h2>关联</h2>
 <ul><li><strong>4.2</strong>：受控-U 是延迟测量与对算符测量的构件。</li><li><strong>第一章 1.3</strong>：隐形传态的线路实现。</li></ul></section>
 <section id="sec-sec4-4-universal-gates"><h1>4.4 通用量子门</h1>
 <h2>核心思想</h2>
-<p>通用门集合 = 一组能以任意精度模拟任何幺正变换的门。证明分三步，逐级把"任意 U(2ⁿ)"归约到一组离散门 {H, T, CNOT}。</p>
+<p>通用门集合 = 一组能以任意精度模拟任何幺正变换的门。证明分三步，逐级把"任意 $U(2^n)$"归约到一组离散门 $\{H, T, \mathrm{CNOT}\}$。</p>
 <h2>三步通用性证明</h2>
-<ul><li><strong>STEP 1：二级幺正门是通用的</strong>。任意 U(2ⁿ) 可分解为一系列只作用在两个计算基态张成的 2 维子空间上的"二级幺正门"之积（类似 Givens 旋转逐个消元）。</li><li><strong>STEP 2：单比特门 + CNOT 是通用的</strong>。每个二级幺正门可由单比特门和 CNOT（多控制可用 Toffoli 类构造分解）实现。</li><li><strong>STEP 3：{H, T, CNOT} 是通用的</strong>。单比特门虽连续无穷多，但 {H, T} 生成的单比特门在 SU(2) 中稠密，可任意逼近任何单比特门；加上 CNOT 即得离散通用集。</li></ul>
+<ul><li><strong>STEP 1：二级幺正门是通用的</strong>。任意 $U(2^n)$ 可分解为一系列只作用在两个计算基态张成的 2 维子空间上的"二级幺正门"之积（类似 Givens 旋转逐个消元）。</li><li><strong>STEP 2：单比特门 + CNOT 是通用的</strong>。每个二级幺正门可由单比特门和 CNOT（多控制可用 Toffoli 类构造分解）实现。</li><li><strong>STEP 3：$\{H, T, \mathrm{CNOT}\}$ 是通用的</strong>。单比特门虽连续无穷多，但 $\{H, T\}$ 生成的单比特门在 $SU(2)$ 中稠密，可任意逼近任何单比特门；加上 CNOT 即得离散通用集。</li></ul>
 <h2>复杂度（Solovay-Kitaev）</h2>
-<ul><li>用通用集 S 中的门逼近一个目标门到精度 ε，需 <strong>O(log^c(1/ε))</strong> 个门（c 为常数）。</li><li>精度越高，所需门越多——逼近代价随 log(1/ε) 多项式增长（高效）。</li></ul>
+<ul><li>用通用集 S 中的门逼近一个目标门到精度 $\varepsilon$，需 <strong>$O(\log^c(1/\varepsilon))$</strong> 个门（$c$ 为常数）。</li><li>精度越高，所需门越多——逼近代价随 $\log(1/\varepsilon)$ 多项式增长（高效）。</li></ul>
 <h2>关键概念</h2>
-<ul><li><strong>稠密生成</strong>：{H,T} 在单比特幺正群中稠密 ⇒ 离散门也能逼近连续门。</li><li><strong>离散 vs 连续</strong>：通用集是离散的，靠"稠密 + 逼近"覆盖连续的 U(2ⁿ)。</li></ul>
+<ul><li><strong>稠密生成</strong>：$\{H,T\}$ 在单比特幺正群中稠密 $\Rightarrow$ 离散门也能逼近连续门。</li><li><strong>离散 vs 连续</strong>：通用集是离散的，靠"稠密 + 逼近"覆盖连续的 $U(2^n)$。</li></ul>
 <h2>关键要点</h2>
-<ol><li>通用性三步走：二级门 → 单比特门+CNOT → {H,T,CNOT}。</li><li>{H, T, CNOT} 是标准离散通用门集。</li><li>Solovay-Kitaev：逼近精度 ε 只需 O(log^c(1/ε)) 个门，代价温和。</li></ol>
+<ol><li>通用性三步走：二级门 $\to$ 单比特门+CNOT $\to$ $\{H,T,\mathrm{CNOT}\}$。</li><li>$\{H, T, \mathrm{CNOT}\}$ 是标准离散通用门集。</li><li>Solovay-Kitaev：逼近精度 $\varepsilon$ 只需 $O(\log^c(1/\varepsilon))$ 个门，代价温和。</li></ol>
 <h2>关联</h2>
 <ul><li><strong>4.1</strong>：单比特门的 z-y-z 分解支撑 STEP 2。</li><li><strong>4.2</strong>：CNOT/Toffoli 是 STEP 2 的多比特构件。</li><li><strong>第一章 1.3</strong>：通用门 = 量子计算的"图灵完备"基础。</li></ul></section>
 <section id="sec-sec4-5-models"><h1>4.5 量子计算机要素与其他计算模型</h1>
 <h2>核心思想</h2>
 <p>量子线路只是众多量子计算模型之一。计算本质是物理系统中发生的物理过程（Landauer），不同的物理实现/抽象给出不同的等价计算模型。</p>
 <h2>量子计算机的核心要素</h2>
-<ul><li><strong>三大核心环节</strong>：初始化 → 幺正变换（计算）→ 测量（读出）。</li><li><strong>DiVincenzo 判据（实用化要素）</strong>：可扩展且良定义的 qubit、可初始化到基准态、足够长的相干时间、一组通用门、可靠的单比特测量。</li><li>参考：DiVincenzo 关于"什么是量子计算机"的定义性论文。</li></ul>
+<ul><li><strong>三大核心环节</strong>：初始化 $\to$ 幺正变换（计算）$\to$ 测量（读出）。</li><li><strong>DiVincenzo 判据（实用化要素）</strong>：可扩展且良定义的 qubit、可初始化到基准态、足够长的相干时间、一组通用门、可靠的单比特测量。</li><li>参考：DiVincenzo 关于"什么是量子计算机"的定义性论文。</li></ul>
 <h2>计算的物理本质</h2>
 <ul><li><strong>Landauer 原理</strong>：计算（无论人还是机器）都是物理行为，最终受物理定律支配。擦除信息有最小能耗；计算的数学理论的作用是把物理过程"浓缩"进数学公理，使使用者能专注抽象模型而不必逐步校验物理实现。</li><li><strong>历史</strong>：Benioff（1980）给出计算机的量子力学模型；Manin（1980《可计算和不可计算》）、Feynman（1981 MIT，指出经典模拟量子系统似乎不可行，提出量子计算机）是最早的倡议者。</li></ul>
 <h2>量子线路以外的模型</h2>
@@ -327,49 +346,49 @@ hr{border:none;border-top:1px dashed var(--border);margin:16px 0}
 <ul><li><strong>4.1–4.4</strong>：线路模型是这些模型中最常用的一种。</li><li><strong>4.6</strong>：量子模拟是量子计算最重要的应用之一。</li></ul></section>
 <section id="sec-sec4-6-simulation"><h1>4.6 量子模拟</h1>
 <h2>核心思想</h2>
-<p>Feynman 的设想：用可控量子系统模拟另一个量子系统的演化，规避经典模拟的"指数墙"。核心技术是把 e^{−iHt} 用 Trotter 公式拆成可高效实现的局域演化乘积。</p>
+<p>Feynman 的设想：用可控量子系统模拟另一个量子系统的演化，规避经典模拟的"指数墙"。核心技术是把 $e^{-iHt}$ 用 Trotter 公式拆成可高效实现的局域演化乘积。</p>
 <h2>模拟的基本思路</h2>
-<ul><li>总哈密顿量常是<strong>局域相互作用之和</strong> H=Σᵢ Aᵢ（凝聚态中的 Hubbard、Ising 等模型）。</li><li>把演化时间 t 切成多段，每段 Δt；总演化 = 各段演化相继作用。</li><li>用 Trotter 公式把每小段 e^{−iHΔt} 进一步拆成局域哈密顿量演化 e^{−iAᵢΔt} 的相继作用——每个因子都是局域幺正演化，可（或许）被高效模拟。</li></ul>
+<ul><li>总哈密顿量常是<strong>局域相互作用之和</strong> $H=\sum_i A_i$（凝聚态中的 Hubbard、Ising 等模型）。</li><li>把演化时间 $t$ 切成多段，每段 $\Delta t$；总演化 = 各段演化相继作用。</li><li>用 Trotter 公式把每小段 $e^{-iH\Delta t}$ 进一步拆成局域哈密顿量演化 $e^{-iA_i\Delta t}$ 的相继作用——每个因子都是局域幺正演化，可（或许）被高效模拟。</li></ul>
 <h2>Trotter 公式</h2>
-<ul><li>两项情形：e^{−i(A+B)t} ≈ (e^{−iAt/n} e^{−iBt/n})ⁿ，n→∞ 时精确。</li><li><strong>1 阶</strong>：每步误差 O(Δt²)；<strong>2 阶（对称 Suzuki-Trotter）</strong>：e^{−iAΔt/2}e^{−iBΔt}e^{−iAΔt/2}，每步误差 O(Δt³)。</li><li>含时哈密顿量需注意分段的时间区间选取。</li></ul>
+<ul><li>两项情形：$e^{-i(A+B)t} \approx (e^{-iAt/n} e^{-iBt/n})^n$，$n\to\infty$ 时精确。</li><li><strong>1 阶</strong>：每步误差 $O(\Delta t^2)$；<strong>2 阶（对称 Suzuki-Trotter）</strong>：$e^{-iA\Delta t/2}e^{-iB\Delta t}e^{-iA\Delta t/2}$，每步误差 $O(\Delta t^3)$。</li><li>含时哈密顿量需注意分段的时间区间选取。</li></ul>
 <h2>BCH 公式及矩阵指数恒等式</h2>
-<ul><li><strong>BCH</strong>：log(e^X e^Y) = X+Y+½[X,Y]+…，量化 Trotter 拆分的误差来源（来自 [A,B]≠0）。</li><li><strong>伴随恒等式</strong>：e^X Y e^{−X} = Σₙ [X^{(n)},Y]/n! = Ad_{e^X}(Y) = e^{ad_X}(Y)，其中 Ad_X(Y)=XYX⁻¹，ad_X(Y)=[X,Y]。</li></ul>
+<ul><li><strong>BCH</strong>：$\log(e^X e^Y) = X+Y+\tfrac{1}{2}[X,Y]+\cdots$，量化 Trotter 拆分的误差来源（来自 $[A,B]\ne 0$）。</li><li><strong>伴随恒等式</strong>：$e^X Y e^{-X} = \sum_n [X^{(n)},Y]/n! = \mathrm{Ad}_{e^X}(Y) = e^{\mathrm{ad}_X}(Y)$，其中 $\mathrm{Ad}_X(Y)=XYX^{-1}$，$\mathrm{ad}_X(Y)=[X,Y]$。</li></ul>
 <h2>Worked Example：Trotterization 误差随阶/步数下降</h2>
-<ul><li>取模型如 H = (XXX) + (ZZZ…) 用 Pauli 基分解，默认初态 |000⟩。</li><li>用 Suzuki-Trotter 构造逼近 e^{−iHt} 的量子线路：给定算符项 Aᵢ、近似阶数、步数、总时间，得到 1 阶/2 阶、1 步/2 步的线路。</li><li>在 t=1 计算精确 U(t) 与 Trotter 化算符之间的<strong>迹距离</strong>（或 2-范数距离 ε=‖U(t)−Trotter‖）。</li><li><strong>结论（log-log 图）</strong>：阶数越高、步数（门数）越多，距离越小——更高阶以更少门达到同样精度。</li></ul>
+<ul><li>取模型如 $H = (XXX) + (ZZZ\cdots)$ 用 Pauli 基分解，默认初态 $\ket{000}$。</li><li>用 Suzuki-Trotter 构造逼近 $e^{-iHt}$ 的量子线路：给定算符项 $A_i$、近似阶数、步数、总时间，得到 1 阶/2 阶、1 步/2 步的线路。</li><li>在 $t=1$ 计算精确 $U(t)$ 与 Trotter 化算符之间的<strong>迹距离</strong>（或 2-范数距离 $\varepsilon=\lVert U(t)-\mathrm{Trotter}\rVert$）。</li><li><strong>结论（log-log 图）</strong>：阶数越高、步数（门数）越多，距离越小——更高阶以更少门达到同样精度。</li></ul>
 <h2>关键要点</h2>
-<ol><li>局域哈密顿量之和 + 时间切片 + Trotter = 可高效模拟的线路。</li><li>Trotter 误差来自不对易项 [A,B]，由 BCH 公式刻画。</li><li>高阶 Suzuki-Trotter 用更少门达到给定精度（迹距离随门数下降）。</li></ol>
+<ol><li>局域哈密顿量之和 + 时间切片 + Trotter = 可高效模拟的线路。</li><li>Trotter 误差来自不对易项 $[A,B]$，由 BCH 公式刻画。</li><li>高阶 Suzuki-Trotter 用更少门达到给定精度（迹距离随门数下降）。</li></ol>
 <h2>关联</h2>
 <ul><li><strong>4.5</strong>：量子模拟是量子计算机的核心应用。</li><li><strong>4.1/4.2</strong>：局域演化由单/双比特门实现。</li><li><strong>第五章</strong>：模拟与相位估计可结合（如求基态能量）。</li></ul></section>
 <section id="sec-glossary"><h1>术语表 · QCQI 第四章</h1>
-<p><strong>BCH 公式</strong> — log(e^X e^Y)=X+Y+½[X,Y]+…，刻画 Trotter 误差 (4.6) <strong>CNOT</strong> — 受控非门，纠缠生成器 (4.2) <strong>CZ 门</strong> — 受控相位翻转，对控制/目标对称 (4.2) <strong>DiVincenzo 判据</strong> — 实用量子计算机五要素 (4.5) <strong>Hadamard (H)</strong> — 制备等权叠加 (4.1) <strong>Landauer 原理</strong> — 计算是物理过程，擦除信息有最小能耗 (4.5) <strong>MBQC / 单向 / 簇态</strong> — 基于测量的量子计算模型 (4.5) <strong>one clean qubit (DQC1)</strong> — 单纯态比特模型 (4.5) <strong>Rn(θ)</strong> — 绕轴 n 旋转 θ 的单比特门 (4.1) <strong>Rx/Ry/Rz</strong> — 绕 x/y/z 轴旋转门；Ry 可生成所有单比特门 (4.1) <strong>S 门</strong> — diag(1,i) 相位门 (4.1) <strong>SU(2)-SO(3) 对应</strong> — 2 维希尔伯特空间旋转 ↔ 3 维 Bloch 旋转 (4.1) <strong>Suzuki-Trotter</strong> — 对称高阶 Trotter 分解 (4.6) <strong>SWAP</strong> — 交换两比特，=3 个 CNOT (4.2) <strong>T 门 (π/8)</strong> — diag(1,e^{iπ/4}) (4.1) <strong>Toffoli (CCNOT)</strong> — 双控制非门，经典可逆计算通用门 (4.2) <strong>Trotter 公式</strong> — e^{−i(A+B)t}≈(e^{−iAt/n}e^{−iBt/n})ⁿ (4.6) <strong>ad_X / Ad_X</strong> — ad_X(Y)=[X,Y]，Ad_X(Y)=XYX⁻¹ (4.6) <strong>二级幺正门</strong> — 只作用在 2 维子空间的幺正门 (4.4) <strong>延迟测量原理</strong> — 中途测量可推迟到末端 (4.3) <strong>拓扑量子计算</strong> — 用任意子编织，抗局域噪声 (4.5) <strong>指数墙</strong> — 经典模拟量子系统的指数代价 (4.6) <strong>绝热量子计算</strong> — 缓慢演化保持基态 (4.5) <strong>迹距离</strong> — 度量算符/态差异，评估 Trotter 误差 (4.6) <strong>通用门集合</strong> — 能任意逼近任何幺正的门集，如 {H,T,CNOT} (4.4) <strong>通用非门（不存在）</strong> — 普适地把任意 |ψ⟩→|ψ⊥⟩ 不可能 (4.1) <strong>隐含测量原理</strong> — 末端未测比特视为已测 (4.3) <strong>量子随机游走</strong> — 经典游走的量子版 (4.5) <strong>z-y-z 分解</strong> — U=e^{iα}Rz(β)Ry(γ)Rz(δ)，欧拉角 (4.1)</p></section>
+<p><strong>BCH 公式</strong> — $\log(e^X e^Y)=X+Y+\tfrac{1}{2}[X,Y]+\cdots$，刻画 Trotter 误差 (4.6) <strong>CNOT</strong> — 受控非门，纠缠生成器 (4.2) <strong>CZ 门</strong> — 受控相位翻转，对控制/目标对称 (4.2) <strong>DiVincenzo 判据</strong> — 实用量子计算机五要素 (4.5) <strong>Hadamard (H)</strong> — 制备等权叠加 (4.1) <strong>Landauer 原理</strong> — 计算是物理过程，擦除信息有最小能耗 (4.5) <strong>MBQC / 单向 / 簇态</strong> — 基于测量的量子计算模型 (4.5) <strong>one clean qubit (DQC1)</strong> — 单纯态比特模型 (4.5) <strong>$R_n(\theta)$</strong> — 绕轴 $n$ 旋转 $\theta$ 的单比特门 (4.1) <strong>$R_x/R_y/R_z$</strong> — 绕 x/y/z 轴旋转门；$R_y$ 可生成所有单比特门 (4.1) <strong>S 门</strong> — $\mathrm{diag}(1,i)$ 相位门 (4.1) <strong>$SU(2)$-$SO(3)$ 对应</strong> — 2 维希尔伯特空间旋转 $\leftrightarrow$ 3 维 Bloch 旋转 (4.1) <strong>Suzuki-Trotter</strong> — 对称高阶 Trotter 分解 (4.6) <strong>SWAP</strong> — 交换两比特，=3 个 CNOT (4.2) <strong>T 门 ($\pi/8$)</strong> — $\mathrm{diag}(1,e^{i\pi/4})$ (4.1) <strong>Toffoli (CCNOT)</strong> — 双控制非门，经典可逆计算通用门 (4.2) <strong>Trotter 公式</strong> — $e^{-i(A+B)t}\approx(e^{-iAt/n}e^{-iBt/n})^n$ (4.6) <strong>$\mathrm{ad}_X / \mathrm{Ad}_X$</strong> — $\mathrm{ad}_X(Y)=[X,Y]$，$\mathrm{Ad}_X(Y)=XYX^{-1}$ (4.6) <strong>二级幺正门</strong> — 只作用在 2 维子空间的幺正门 (4.4) <strong>延迟测量原理</strong> — 中途测量可推迟到末端 (4.3) <strong>拓扑量子计算</strong> — 用任意子编织，抗局域噪声 (4.5) <strong>指数墙</strong> — 经典模拟量子系统的指数代价 (4.6) <strong>绝热量子计算</strong> — 缓慢演化保持基态 (4.5) <strong>迹距离</strong> — 度量算符/态差异，评估 Trotter 误差 (4.6) <strong>通用门集合</strong> — 能任意逼近任何幺正的门集，如 $\{H,T,\mathrm{CNOT}\}$ (4.4) <strong>通用非门（不存在）</strong> — 普适地把任意 $\ket{\psi}\to\ket{\psi^\perp}$ 不可能 (4.1) <strong>隐含测量原理</strong> — 末端未测比特视为已测 (4.3) <strong>量子随机游走</strong> — 经典游走的量子版 (4.5) <strong>z-y-z 分解</strong> — $U=e^{i\alpha}R_z(\beta)R_y(\gamma)R_z(\delta)$，欧拉角 (4.1)</p></section>
 <section id="sec-patterns"><h1>线路构造与模拟技巧 · QCQI 第四章</h1>
 <h2>把任意单比特门编译为旋转</h2>
-<p><strong>何时用</strong>：硬件只提供 Rz/Ry（或 Rx/Rz）。 <strong>怎么做</strong>：z-y-z 分解 U=e^{iα}Rz(β)Ry(γ)Rz(δ)；离散集下再用 Solovay-Kitaev 逼近。 <strong>权衡</strong>：精确分解需连续角；离散逼近门数随 log(1/ε) 增长。</p>
+<p><strong>何时用</strong>：硬件只提供 Rz/Ry（或 Rx/Rz）。 <strong>怎么做</strong>：z-y-z 分解 $U=e^{i\alpha}R_z(\beta)R_y(\gamma)R_z(\delta)$；离散集下再用 Solovay-Kitaev 逼近。 <strong>权衡</strong>：精确分解需连续角；离散逼近门数随 $\log(1/\varepsilon)$ 增长。</p>
 <h2>构造一般受控-U（ABC 法）</h2>
-<p><strong>何时用</strong>：需要任意单比特 U 的受控版本。 <strong>怎么做</strong>：写 U=e^{iα}AXBXC 且 ABC=I；用两个 CNOT 把控制位夹在 A、B、C 之间，再加条件相位。 <strong>权衡</strong>：每个受控-U 约需 2 个 CNOT + 3 个单比特门。</p>
+<p><strong>何时用</strong>：需要任意单比特 U 的受控版本。 <strong>怎么做</strong>：写 $U=e^{i\alpha}AXBXC$ 且 $ABC=I$；用两个 CNOT 把控制位夹在 A、B、C 之间，再加条件相位。 <strong>权衡</strong>：每个受控-U 约需 2 个 CNOT + 3 个单比特门。</p>
 <h2>SWAP = 3×CNOT</h2>
-<p><strong>何时用</strong>：只有 CNOT、要交换两比特（比特路由）。 <strong>怎么做</strong>：CNOT(a→b)·CNOT(b→a)·CNOT(a→b)。 <strong>权衡</strong>：占 3 个两比特门深度。</p>
+<p><strong>何时用</strong>：只有 CNOT、要交换两比特（比特路由）。 <strong>怎么做</strong>：$\mathrm{CNOT}(a\to b)\cdot\mathrm{CNOT}(b\to a)\cdot\mathrm{CNOT}(a\to b)$。 <strong>权衡</strong>：占 3 个两比特门深度。</p>
 <h2>延迟 / 隐含测量化简线路</h2>
 <p><strong>何时用</strong>：分析含中途测量+经典控制的线路。 <strong>怎么做</strong>：把中途测量推迟到末端，经典控制改为量子受控门（延迟）；末端未读比特直接当作已测（隐含）。 <strong>权衡</strong>：纯分析技巧，不改变统计结果；硬件上中途测量可能仍更省比特。</p>
 <h2>对幺正且厄米的 U 同时取概率与测后态</h2>
-<p><strong>何时用</strong>：U²=I（如 Pauli、反射算符），要本征值 ±1 的投影测量。 <strong>怎么做</strong>：辅助比特 H → 受控-U → H → 测辅助比特，主系统塌缩到 ±1 本征子空间。 <strong>权衡</strong>：需 1 个辅助比特和一次受控-U。</p>
+<p><strong>何时用</strong>：$U^2=I$（如 Pauli、反射算符），要本征值 $\pm 1$ 的投影测量。 <strong>怎么做</strong>：辅助比特 H $\to$ 受控-U $\to$ H $\to$ 测辅助比特，主系统塌缩到 $\pm 1$ 本征子空间。 <strong>权衡</strong>：需 1 个辅助比特和一次受控-U。</p>
 <h2>Trotter 化模拟时间演化</h2>
-<p><strong>何时用</strong>：模拟 H=ΣᵢAᵢ（局域之和）的 e^{−iHt}。 <strong>怎么做</strong>：切片 Δt；每片用 1 阶 ∏e^{−iAᵢΔt} 或 2 阶对称 e^{−iAΔt/2}e^{−iBΔt}e^{−iAΔt/2}。 <strong>权衡</strong>：步数↑/阶数↑ → 误差↓但门数↑；据迹距离-门数曲线选阶。</p>
+<p><strong>何时用</strong>：模拟 $H=\sum_i A_i$（局域之和）的 $e^{-iHt}$。 <strong>怎么做</strong>：切片 $\Delta t$；每片用 1 阶 $\prod e^{-iA_i\Delta t}$ 或 2 阶对称 $e^{-iA\Delta t/2}e^{-iB\Delta t}e^{-iA\Delta t/2}$。 <strong>权衡</strong>：步数 $\uparrow$ / 阶数 $\uparrow$ $\to$ 误差 $\downarrow$ 但门数 $\uparrow$；据迹距离-门数曲线选阶。</p>
 <h2>反模式</h2>
-<ul><li><strong>扇出/扇入/回路</strong>：违反不可克隆/可逆/无环。</li><li><strong>忽略 [A,B]≠0</strong>：不对易项是 Trotter 误差主因，不能当作可交换。</li><li><strong>盲目堆步数</strong>：高阶分解常以更少门达到同精度，先选阶再加步。</li><li><strong>以为存在通用非门</strong>：普适取反不可能。</li></ul></section>
+<ul><li><strong>扇出/扇入/回路</strong>：违反不可克隆/可逆/无环。</li><li><strong>忽略 $[A,B]\ne 0$</strong>：不对易项是 Trotter 误差主因，不能当作可交换。</li><li><strong>盲目堆步数</strong>：高阶分解常以更少门达到同精度，先选阶再加步。</li><li><strong>以为存在通用非门</strong>：普适取反不可能。</li></ul></section>
 <section id="sec-cheatsheet"><h1>速查表 · QCQI 第四章</h1>
 <h2>单比特门速查</h2>
-<table><thead><tr><th>门</th><th>矩阵</th><th>作用</th></tr></thead><tbody><tr><td>Rx(θ)</td><td>cos(θ/2)I−i sin(θ/2)X</td><td>绕 x 轴转 θ</td></tr><tr><td>Ry(θ)</td><td>cos(θ/2)I−i sin(θ/2)Y</td><td>绕 y 轴转 θ；可生成所有单比特门</td></tr><tr><td>Rz(θ)</td><td>diag(e^{−iθ/2},e^{iθ/2})</td><td>绕 z 轴转 θ</td></tr><tr><td>H</td><td>(1/√2)[[1,1],[1,−1]]</td><td>等权叠加，交换 X↔Z</td></tr><tr><td>S</td><td>diag(1,i)</td><td>π/2 相位</td></tr><tr><td>T</td><td>diag(1,e^{iπ/4})</td><td>π/4 相位 (π/8 门)</td></tr></tbody></table>
+<table><thead><tr><th>门</th><th>矩阵</th><th>作用</th></tr></thead><tbody><tr><td>$R_x(\theta)$</td><td>$\cos(\theta/2)I-i\sin(\theta/2)X$</td><td>绕 x 轴转 $\theta$</td></tr><tr><td>$R_y(\theta)$</td><td>$\cos(\theta/2)I-i\sin(\theta/2)Y$</td><td>绕 y 轴转 $\theta$；可生成所有单比特门</td></tr><tr><td>$R_z(\theta)$</td><td>$\mathrm{diag}(e^{-i\theta/2},e^{i\theta/2})$</td><td>绕 z 轴转 $\theta$</td></tr><tr><td>H</td><td>$\tfrac{1}{\sqrt{2}}\begin{pmatrix}1 &amp; 1 \\ 1 &amp; -1\end{pmatrix}$</td><td>等权叠加，交换 $X\leftrightarrow Z$</td></tr><tr><td>S</td><td>$\mathrm{diag}(1,i)$</td><td>$\pi/2$ 相位</td></tr><tr><td>T</td><td>$\mathrm{diag}(1,e^{i\pi/4})$</td><td>$\pi/4$ 相位 ($\pi/8$ 门)</td></tr></tbody></table>
 <h2>多比特门速查</h2>
-<table><thead><tr><th>门</th><th>作用</th><th>备注</th></tr></thead><tbody><tr><td>CNOT</td><td>控制=1 翻转目标</td><td>纠缠生成器</td></tr><tr><td>CZ</td><td>控制=1 施 Z</td><td>对称；= 目标侧 H·CNOT·H</td></tr><tr><td>SWAP</td><td>交换两比特</td><td>= 3×CNOT</td></tr><tr><td>Toffoli</td><td>双控制翻转</td><td>经典可逆通用门</td></tr></tbody></table>
+<table><thead><tr><th>门</th><th>作用</th><th>备注</th></tr></thead><tbody><tr><td>CNOT</td><td>控制=1 翻转目标</td><td>纠缠生成器</td></tr><tr><td>CZ</td><td>控制=1 施 Z</td><td>对称；= 目标侧 $H\cdot\mathrm{CNOT}\cdot H$</td></tr><tr><td>SWAP</td><td>交换两比特</td><td>$= 3\times\mathrm{CNOT}$</td></tr><tr><td>Toffoli</td><td>双控制翻转</td><td>经典可逆通用门</td></tr></tbody></table>
 <h2>通用性三步（决策）</h2>
-<ol><li>任意 U(2ⁿ) → <strong>二级幺正门</strong>之积。</li><li>二级门 → <strong>单比特门 + CNOT</strong>。</li><li>单比特门 → <strong>{H, T}</strong> 稠密逼近 ⇒ 通用集 <strong>{H, T, CNOT}</strong>。</li><li>逼近精度 ε：门数 O(log^c(1/ε))（Solovay-Kitaev）。</li></ol>
+<ol><li>任意 $U(2^n)$ $\to$ <strong>二级幺正门</strong>之积。</li><li>二级门 $\to$ <strong>单比特门 + CNOT</strong>。</li><li>单比特门 $\to$ <strong>$\{H, T\}$</strong> 稠密逼近 $\Rightarrow$ 通用集 <strong>$\{H, T, \mathrm{CNOT}\}$</strong>。</li><li>逼近精度 $\varepsilon$：门数 $O(\log^c(1/\varepsilon))$（Solovay-Kitaev）。</li></ol>
 <h2>测量原理速记</h2>
-<ul><li><strong>延迟测量</strong>：中途测+经典控制 ⟺ 量子受控门+末端测。</li><li><strong>隐含测量</strong>：末端未读比特 = 已测。</li><li><strong>U²=I 的测量</strong>：辅助比特 H–受控U–H–测，取 ±1 投影。</li></ul>
+<ul><li><strong>延迟测量</strong>：中途测+经典控制 $\Leftrightarrow$ 量子受控门+末端测。</li><li><strong>隐含测量</strong>：末端未读比特 = 已测。</li><li><strong>$U^2=I$ 的测量</strong>：辅助比特 H–受控U–H–测，取 $\pm 1$ 投影。</li></ul>
 <h2>量子模拟决策</h2>
-<table><thead><tr><th>想要</th><th>怎么做</th></tr></thead><tbody><tr><td>模拟 e^{−iHt}, H=ΣAᵢ</td><td>切片 + Trotter</td></tr><tr><td>误差 O(Δt²)</td><td>1 阶 ∏e^{−iAᵢΔt}</td></tr><tr><td>误差 O(Δt³)</td><td>2 阶对称 Suzuki-Trotter</td></tr><tr><td>估计误差</td><td>迹距离 / ‖U−Trotter‖ vs 门数</td></tr><tr><td>误差根源</td><td>BCH：[A,B]≠0</td></tr></tbody></table>
+<table><thead><tr><th>想要</th><th>怎么做</th></tr></thead><tbody><tr><td>模拟 $e^{-iHt}$, $H=\sum A_i$</td><td>切片 + Trotter</td></tr><tr><td>误差 $O(\Delta t^2)$</td><td>1 阶 $\prod e^{-iA_i\Delta t}$</td></tr><tr><td>误差 $O(\Delta t^3)$</td><td>2 阶对称 Suzuki-Trotter</td></tr><tr><td>估计误差</td><td>迹距离 / $\lVert U-\mathrm{Trotter}\rVert$ vs 门数</td></tr><tr><td>误差根源</td><td>BCH：$[A,B]\ne 0$</td></tr></tbody></table>
 <h2>量子计算机三环节</h2>
-<p><strong>初始化 → 幺正变换 → 测量</strong>（DiVincenzo 五要素的核心）。</p>
+<p><strong>初始化 $\to$ 幺正变换 $\to$ 测量</strong>（DiVincenzo 五要素的核心）。</p>
 <h2>其他模型一览</h2>
 <p>绝热 · 拓扑(任意子) · 量子游走 · one-clean-qubit · MBQC/簇态 · 量子图灵机。</p></section>
 </main>

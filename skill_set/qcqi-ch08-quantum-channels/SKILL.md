@@ -21,16 +21,16 @@ description: "《量子计算与量子信息》(Nielsen & Chuang) 第八章补�
 
 ## 核心概念框架
 
-**量子信道 = CPTP 映射**：开放量子系统的演化由完全正定且保迹 (Completely Positive Trace-Preserving) 的映射 ℰ(ρ) 描述。它有三种等价描述，本补充围绕它们之间的相互转换展开。
+**量子信道 = CPTP 映射**：开放量子系统的演化由完全正定且保迹 (Completely Positive Trace-Preserving) 的映射 $\mathcal{E}(\rho)$ 描述。它有三种等价描述，本补充围绕它们之间的相互转换展开。
 
 **三种等价描述**：
-1. **信道映射 ℰ**：直接给出 ρ → ℰ(ρ)。
-2. **Kraus 算符** {E_k}：ℰ(ρ)=Σ_k E_k ρ E_k†，保迹条件 Σ_k E_k†E_k = I。
-3. **蔡氏矩阵 (Choi matrix)** J(ℰ)：把信道作用在最大纠缠态上得到的矩阵，J(ℰ)=(ℰ⊗I)(|Ω⟩⟨Ω|)。
+1. **信道映射 $\mathcal{E}$**：直接给出 $\rho \to \mathcal{E}(\rho)$。
+2. **Kraus 算符** $\{E_k\}$：$\mathcal{E}(\rho)=\sum_k E_k \rho E_k^\dagger$，保迹条件 $\sum_k E_k^\dagger E_k = I$。
+3. **蔡氏矩阵 (Choi matrix)** $J(\mathcal{E})$：把信道作用在最大纠缠态上得到的矩阵，$J(\mathcal{E})=(\mathcal{E}\otimes I)(\ketbra{\Omega}{\Omega})$。
 
-**转换路径（本补充主线）**：信道 ⟶ 蔡氏矩阵（以比特翻转为例）⟶ 对蔡氏矩阵做谱分解（本征值/本征态）⟶ Kraus 算符。Choi-Jamiołkowski 同构是这条路径的理论基础。
+**转换路径（本补充主线）**：信道 $\to$ 蔡氏矩阵（以比特翻转为例）$\to$ 对蔡氏矩阵做谱分解（本征值/本征态）$\to$ Kraus 算符。Choi-Jamiołkowski 同构是这条路径的理论基础。
 
-**典型信道**：比特翻转、相位翻转、相位阻尼（与相位翻转效果一致）、去极化、振幅阻尼——每个都有标准 Kraus 算符与对应的 **Bloch 向量仿射变换矩阵**（r → Mr + c，描述 Bloch 球如何被压缩/平移）。
+**典型信道**：比特翻转、相位翻转、相位阻尼（与相位翻转效果一致）、去极化、振幅阻尼——每个都有标准 Kraus 算符与对应的 **Bloch 向量仿射变换矩阵**（$\vec r \mapsto M\vec r + \vec c$，描述 Bloch 球如何被压缩/平移）。
 
 **应用**：用上述工具数值验证扰动量子纠错 (Perturbative Quantum Error Correction) 中两个公式 (18) 与 (20) 的等价性。
 
@@ -41,20 +41,20 @@ description: "《量子计算与量子信息》(Nielsen & Chuang) 第八章补�
 | 小节 | 标题 | 关键概念 |
 |---|---|---|
 | [8.1](chapters/sec8.1-channel-to-choi.md) | 从信道到蔡氏矩阵 | CPTP、Choi 矩阵定义、比特翻转为例 |
-| [8.2](chapters/sec8.2-choi-to-kraus.md) | 从蔡氏矩阵到 Kraus 算符 | 谱分解、本征值/本征态 → Kraus |
+| [8.2](chapters/sec8.2-choi-to-kraus.md) | 从蔡氏矩阵到 Kraus 算符 | 谱分解、本征值/本征态 $\to$ Kraus |
 | [8.3](chapters/sec8.3-typical-channels.md) | 典型信道 | Kraus 算符 + Bloch 仿射变换矩阵 |
-| [8.4](chapters/sec8.4-examples.md) | 算例与验证 | 信道→Kraus 多例、换基、Perturbative QEC 验证 |
+| [8.4](chapters/sec8.4-examples.md) | 算例与验证 | 信道 $\to$ Kraus 多例、换基、Perturbative QEC 验证 |
 
 ## 主题索引
 
-- **Bloch 向量仿射变换** → 8.3
-- **CPTP / 完全正定保迹** → 8.1
-- **Choi / 蔡氏矩阵** → 8.1, 8.2
-- **Kraus 算符** → 8.2, 8.3, 8.4
-- **去极化 / 振幅阻尼** → 8.3
-- **比特翻转 / 相位翻转 / 相位阻尼** → 8.1, 8.3
-- **扰动量子纠错验证** → 8.4
-- **谱分解（蔡氏矩阵）** → 8.2
+- **Bloch 向量仿射变换** $\to$ 8.3
+- **CPTP / 完全正定保迹** $\to$ 8.1
+- **Choi / 蔡氏矩阵** $\to$ 8.1, 8.2
+- **Kraus 算符** $\to$ 8.2, 8.3, 8.4
+- **去极化 / 振幅阻尼** $\to$ 8.3
+- **比特翻转 / 相位翻转 / 相位阻尼** $\to$ 8.1, 8.3
+- **扰动量子纠错验证** $\to$ 8.4
+- **谱分解（蔡氏矩阵）** $\to$ 8.2
 
 ## 辅助文件
 

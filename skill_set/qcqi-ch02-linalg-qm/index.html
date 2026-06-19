@@ -52,6 +52,25 @@ hr{border:none;border-top:1px dashed var(--border);margin:16px 0}
 .badge{display:inline-block;background:var(--accent);color:#fff;border-radius:6px;padding:2px 9px;font-size:12px;font-weight:600}
 @media(max-width:820px){.sidebar{display:none}.main{padding:24px 18px}}
 </style>
+<script>
+window.MathJax={
+ tex:{
+  inlineMath:[['$','$'],['\\(','\\)']],
+  displayMath:[['$$','$$'],['\\[','\\]']],
+  macros:{
+   ket:['{\\lvert #1\\rangle}',1],
+   bra:['{\\langle #1\\rvert}',1],
+   braket:['{\\langle #1\\vert #2\\rangle}',2],
+   ketbra:['{\\lvert #1\\rangle\\langle #2\\rvert}',2],
+   Tr:'{\\operatorname{Tr}}',
+   tr:'{\\operatorname{tr}}'
+  }
+ },
+ svg:{fontCache:'global'},
+ options:{skipHtmlTags:['script','style','textarea','pre','code'],ignoreHtmlClass:'viz'}
+};
+</script>
+<script src="../vendor/tex-svg.js" id="MathJax-script" async></script>
 </head>
 <body>
 <div class="layout">
@@ -240,10 +259,10 @@ hr{border:none;border-top:1px dashed var(--border);margin:16px 0}
 <h2>核心概念框架</h2>
 <p><strong>量子力学四公理</strong>：① 系统状态 = 希尔伯特空间中的态矢/密度算符；② 演化 = 幺正变换（薛定谔方程）；③ 测量 = 一组测量算符/PVM；④ 复合系统 = 子系统希尔伯特空间的张量积。第二章用线性代数把这四条公理精确化。</p>
 <p><strong>线性代数骨架</strong>：线性空间 → 线性映射（算符）→ 内积空间 → 标准正交基 (ONB) 完备性关系 → 矩阵分类（正规/Hermite/幺正/正定/投影）→ 奇异值分解 (SVD) 与极分解 → 张量积。这是量子力学的"语言"。</p>
-<p><strong>量子态 = 迹为 1 的正定算符 ρ</strong>：纯态 ρ=|ψ⟩⟨ψ|（秩 1，不可写成其他态的凸组合）；混态是纯态的概率混合（球内，秩&gt;1）。知道 ρ 就能算任何可观测量的期望与方差。单 qubit 用 Bloch 矢量参数化。</p>
-<p><strong>演化 = 幺正变换</strong>：U†U=I 保持内积与归一。定态（哈密顿量本征态）的演化只是乘一个相位因子 e^{−iEt/ℏ}，概率分布不变。</p>
-<p><strong>测量公理 (PVM/POVM)</strong>：每个可观测量 ↔ 一个 PVM {Pᵢ}（正交投影、求和为 I），用 Hermite 算符 A=ΣaᵢPᵢ 表示物理量。POVM {Eᵢ} 是 PVM 的推广（只要正定且求和为 I，不必正交/幂等），用于最优态区分。测量给出结果概率 Tr(ρPᵢ) 和测后态。</p>
-<p><strong>复合系统工具</strong>：偏迹 → 约化密度矩阵（描述子系统）；施密特分解 |Ψ⟩=Σλᵢ|iₐ⟩|i_b⟩（施密特数 = 纠缠度量）；纯化（任何混态都能视为更大系统纯态的约化）。</p>
+<p><strong>量子态 = 迹为 1 的正定算符 $\rho$</strong>：纯态 $\rho=\ketbra{\psi}{\psi}$（秩 1，不可写成其他态的凸组合）；混态是纯态的概率混合（球内，秩 $&gt;1$）。知道 $\rho$ 就能算任何可观测量的期望与方差。单 qubit 用 Bloch 矢量参数化。</p>
+<p><strong>演化 = 幺正变换</strong>：$U^\dagger U=I$ 保持内积与归一。定态（哈密顿量本征态）的演化只是乘一个相位因子 $e^{-iEt/\hbar}$，概率分布不变。</p>
+<p><strong>测量公理 (PVM/POVM)</strong>：每个可观测量 ↔ 一个 PVM $\{P_i\}$（正交投影、求和为 $I$），用 Hermite 算符 $A=\sum_i a_i P_i$ 表示物理量。POVM $\{E_i\}$ 是 PVM 的推广（只要正定且求和为 $I$，不必正交/幂等），用于最优态区分。测量给出结果概率 $\Tr(\rho P_i)$ 和测后态。</p>
+<p><strong>复合系统工具</strong>：偏迹 → 约化密度矩阵（描述子系统）；施密特分解 $\ket{\Psi}=\sum_i \lambda_i \ket{i}_A\ket{i}_B$（施密特数 = 纠缠度量）；纯化（任何混态都能视为更大系统纯态的约化）。</p>
 <p><strong>纠缠与局域实在论</strong>：纠缠 = 不可分解为张量积的关联。EPR 悖论 + Bell 不等式：实验中 Bell 态违反 Bell 不等式，否定"局域隐变量"，确认量子力学正确。</p>
 <hr>
 <h2>小节索引</h2>
@@ -259,9 +278,9 @@ hr{border:none;border-top:1px dashed var(--border);margin:16px 0}
 <h2>核心思想</h2>
 <p>量子力学可由四条公理完整刻画。第二章用线性代数把这些公理精确化——所有后续概念（态、门、测量、纠缠）都是这四条的推论。</p>
 <h2>四条公理</h2>
-<ul><li><strong>公理 1（状态）</strong>：孤立量子系统的状态由其希尔伯特空间中的单位态矢 |ψ⟩ 描述；更一般地由密度算符 ρ（迹为 1 的正定算符）描述。知道 ρ 就能得到该系统关于任何物理量的任何命题的正确性，进而得到期望与方差等统计性质。</li><li><strong>公理 2（演化）</strong>：封闭系统的演化由幺正变换描述，|ψ'⟩=U|ψ⟩；连续时间下由薛定谔方程 iℏ d|ψ⟩/dt = H|ψ⟩ 给出。</li><li><strong>公理 3（测量）</strong>：测量由一组测量算符 {Mᵢ} 描述；可观测量 ↔ 一个 PVM（投影算符值测度），用 Hermite 算符表示物理量。测量给出结果概率与测后态。</li><li><strong>公理 4（复合系统）</strong>：复合系统的希尔伯特空间是各子系统希尔伯特空间的张量积 H_A ⊗ H_B。</li></ul>
+<ul><li><strong>公理 1（状态）</strong>：孤立量子系统的状态由其希尔伯特空间中的单位态矢 $\ket{\psi}$ 描述；更一般地由密度算符 $\rho$（迹为 1 的正定算符）描述。知道 $\rho$ 就能得到该系统关于任何物理量的任何命题的正确性，进而得到期望与方差等统计性质。</li><li><strong>公理 2（演化）</strong>：封闭系统的演化由幺正变换描述，$\ket{\psi'}=U\ket{\psi}$；连续时间下由薛定谔方程 $i\hbar\, d\ket{\psi}/dt = H\ket{\psi}$ 给出。</li><li><strong>公理 3（测量）</strong>：测量由一组测量算符 $\{M_i\}$ 描述；可观测量 ↔ 一个 PVM（投影算符值测度），用 Hermite 算符表示物理量。测量给出结果概率与测后态。</li><li><strong>公理 4（复合系统）</strong>：复合系统的希尔伯特空间是各子系统希尔伯特空间的张量积 $H_A \otimes H_B$。</li></ul>
 <h2>关键概念</h2>
-<ul><li><strong>正交投影算符就是"命题"</strong>：投影 P 对应一个是/非命题，⟨ψ|P|ψ⟩ 给出该命题为真的概率。</li><li><strong>态矢 vs 密度算符</strong>：纯态可用 |ψ⟩；混态必须用 ρ。ρ 是更普适的描述。</li></ul>
+<ul><li><strong>正交投影算符就是"命题"</strong>：投影 $P$ 对应一个是/非命题，$\bra{\psi}P\ket{\psi}$ 给出该命题为真的概率。</li><li><strong>态矢 vs 密度算符</strong>：纯态可用 $\ket{\psi}$；混态必须用 $\rho$。$\rho$ 是更普适的描述。</li></ul>
 <h2>关键要点</h2>
 <ol><li>四公理 = 态 / 演化 / 测量 / 复合，分别对应希尔伯特空间、幺正群、PVM、张量积。</li><li>量子态的本质是"迹为 1 的正定算符"，它编码了所有可测的统计信息。</li><li>测量是唯一把量子信息变成经典信息的环节，且会改变态。</li></ol>
 <h2>关联</h2>
@@ -270,7 +289,7 @@ hr{border:none;border-top:1px dashed var(--border);margin:16px 0}
 <h2>核心思想</h2>
 <p>量子力学的数学语言：线性空间 → 算符 → 内积空间 → 矩阵分类 → SVD/极分解 → 张量积。用狄拉克符号统一几何与代数。</p>
 <h2>框架与工具</h2>
-<ul><li><strong>线性映射（算符）与秩</strong>：秩的代数定义——若 A 中至少有一个 r 阶子式不为零，且当 r&lt;min(m,n) 时所有 r+1 阶子式全为零，则 rank(A)=r。本征值与本征向量是算符的核心不变量。</li><li><strong>内积空间</strong>：复内积空间到自身的同构 = 幺正变换。等距未必同构（例：维数不匹配）。ONB（标准正交基）满足完备性关系 Σᵢ|i⟩⟨i| = I。</li><li><strong>常见算符分类</strong>：</li><ul><li><strong>正规算符 A</strong>：AA†=A†A，可被幺正对角化（谱定理）。</li><li><strong>Hermite 算符 T</strong>：T†=T，本征值实，表示物理量（可观测量）。</li><li><strong>投影算符 P</strong>：P²=P 且 P†=P，对应"命题"。</li><li><strong>幺正算符 U</strong>：U†U=I，复内积空间到自身的同构，保内积。</li></ul><li><strong>奇异值分解 (SVD)</strong>：任意矩阵 A = U D V†，D 为非负对角（奇异值）。奇异值非简并时，若要求降序排列则 SVD 唯一；简并时在奇异值子空间上有旋转自由度。可用来确定秩为 r 矩阵的自由度。</li><li><strong>极分解</strong>：A = U P（幺正 × 正算符），类比复数的模-相位分解。</li><li><strong>张量积</strong>：张量积空间 = 笛卡尔积除以双线性关系。为什么用张量积？因为双线性——分别有 m、n 个能级的两系统合在一起应有 m×n 个能级。可在算符上定义张量积。</li></ul>
+<ul><li><strong>线性映射（算符）与秩</strong>：秩的代数定义——若 $A$ 中至少有一个 $r$ 阶子式不为零，且当 $r&lt;\min(m,n)$ 时所有 $r+1$ 阶子式全为零，则 $\mathrm{rank}(A)=r$。本征值与本征向量是算符的核心不变量。</li><li><strong>内积空间</strong>：复内积空间到自身的同构 = 幺正变换。等距未必同构（例：维数不匹配）。ONB（标准正交基）满足完备性关系 $\sum_i \ketbra{i}{i} = I$。</li><li><strong>常见算符分类</strong>：</li><ul><li><strong>正规算符 $A$</strong>：$AA^\dagger=A^\dagger A$，可被幺正对角化（谱定理）。</li><li><strong>Hermite 算符 $T$</strong>：$T^\dagger=T$，本征值实，表示物理量（可观测量）。</li><li><strong>投影算符 $P$</strong>：$P^2=P$ 且 $P^\dagger=P$，对应"命题"。</li><li><strong>幺正算符 $U$</strong>：$U^\dagger U=I$，复内积空间到自身的同构，保内积。</li></ul><li><strong>奇异值分解 (SVD)</strong>：任意矩阵 $A = U D V^\dagger$，$D$ 为非负对角（奇异值）。奇异值非简并时，若要求降序排列则 SVD 唯一；简并时在奇异值子空间上有旋转自由度。可用来确定秩为 $r$ 矩阵的自由度。</li><li><strong>极分解</strong>：$A = U P$（幺正 × 正算符），类比复数的模-相位分解。</li><li><strong>张量积</strong>：张量积空间 = 笛卡尔积除以双线性关系。为什么用张量积？因为双线性——分别有 $m$、$n$ 个能级的两系统合在一起应有 $m\times n$ 个能级。可在算符上定义张量积。</li></ul>
 <h2>关键概念</h2>
 <ul><li><strong>谱定理</strong>：正规算符可被一组 ONB 对角化。</li><li><strong>为何投影而非一般正算符</strong>（纠错条件中）：投影算符对应可完美区分的正交子空间，是可恢复性的关键。</li></ul>
 <h2>关键要点</h2>
@@ -279,52 +298,52 @@ hr{border:none;border-top:1px dashed var(--border);margin:16px 0}
 <ul><li><strong>2.1</strong>：这些工具实现四公理。</li><li><strong>2.3</strong>：密度矩阵是正定 Hermite 算符；Bloch 用本征分解。</li><li><strong>2.5</strong>：施密特分解本质就是对二分态矢做 SVD。</li></ul></section>
 <section id="sec-sec2-3-quantum-state"><h1>2.3 量子态</h1>
 <h2>核心思想</h2>
-<p>量子态 = 迹为 1 的正定算符 ρ。纯态是其极端情形（秩 1），混态是纯态的概率混合。单 qubit 可用 Bloch 矢量几何化。</p>
+<p>量子态 = 迹为 1 的正定算符 $\rho$。纯态是其极端情形（秩 1），混态是纯态的概率混合。单 qubit 可用 Bloch 矢量几何化。</p>
 <h2>框架</h2>
-<ul><li><strong>物理状态 vs 物理量（经典 vs 量子）</strong>：经典态是相空间一点、物理量是其上的函数；量子态是 ρ、物理量是 Hermite 算符，二者通过 Tr(ρA) 配对得期望。</li><li><strong>单 qubit 参数化</strong>：|ψ⟩=cos(θ/2)|0⟩+e^{iφ}sin(θ/2)|1⟩ ↔ Bloch 矢量 r=(sinθcosφ, sinθsinφ, cosθ)。U3 门 = 用欧拉角参数化 U(2) 群元。</li><li><strong>密度算符</strong>：ρ=Σpᵢ|ψᵢ⟩⟨ψᵢ|，Tr(ρ)=1，ρ≥0。rᵢ=Tr(ρσᵢ) 给出 Bloch 分量。</li><li><strong>多比特计算基与 Bell 基</strong>：n 比特计算基 {|0…0⟩,…,|1…1⟩}；Bell 基是 4 个最大纠缠两比特态。在计算基下测量 Bell 态，Alice 和 Bob 总是得到相同结果（强关联）。</li><li><strong>希尔伯特空间上的距离</strong>：d(u,v) 由内积导出，如 Re⟨u|v⟩ 相关的保真度/迹距离类度量。</li></ul>
+<ul><li><strong>物理状态 vs 物理量（经典 vs 量子）</strong>：经典态是相空间一点、物理量是其上的函数；量子态是 $\rho$、物理量是 Hermite 算符，二者通过 $\Tr(\rho A)$ 配对得期望。</li><li><strong>单 qubit 参数化</strong>：$\ket{\psi}=\cos(\theta/2)\ket{0}+e^{i\phi}\sin(\theta/2)\ket{1}$ ↔ Bloch 矢量 $r=(\sin\theta\cos\phi,\ \sin\theta\sin\phi,\ \cos\theta)$。U3 门 = 用欧拉角参数化 $U(2)$ 群元。</li><li><strong>密度算符</strong>：$\rho=\sum_i p_i \ketbra{\psi_i}{\psi_i}$，$\Tr(\rho)=1$，$\rho\ge0$。$r_i=\Tr(\rho\sigma_i)$ 给出 Bloch 分量。</li><li><strong>多比特计算基与 Bell 基</strong>：$n$ 比特计算基 $\{\ket{0\cdots0},\dots,\ket{1\cdots1}\}$；Bell 基是 4 个最大纠缠两比特态。在计算基下测量 Bell 态，Alice 和 Bob 总是得到相同结果（强关联）。</li><li><strong>希尔伯特空间上的距离</strong>：$d(u,v)$ 由内积导出，如 $\mathrm{Re}\,\braket{u}{v}$ 相关的保真度/迹距离类度量。</li></ul>
 <h2>纯态 vs 混态判据</h2>
-<ul><li><strong>纯态</strong>：Tr(ρ²)=1；不能写成另外两个量子态的凸线性组合；密度矩阵秩为 1；Bloch 矢量在球面 |r|=1。</li><li><strong>混态</strong>：Tr(ρ²)&lt;1；秩&gt;1；|r|&lt;1（球内）；最大混合 ρ=I/2 → 球心。</li></ul>
+<ul><li><strong>纯态</strong>：$\Tr(\rho^2)=1$；不能写成另外两个量子态的凸线性组合；密度矩阵秩为 1；Bloch 矢量在球面 $\lvert r\rvert=1$。</li><li><strong>混态</strong>：$\Tr(\rho^2)&lt;1$；秩 $&gt;1$；$\lvert r\rvert&lt;1$（球内）；最大混合 $\rho=I/2$ → 球心。</li></ul>
 <h2>关键要点</h2>
-<ol><li>ρ 是迹 1 正定算符；它编码系统所有可测统计信息。</li><li>单 qubit ↔ Bloch 球：纯态在面、混态在内、最大混合在心。</li><li>纯/混判据：Tr(ρ²)、秩、凸组合可分解性、|r| 四者等价。</li></ol>
+<ol><li>$\rho$ 是迹 1 正定算符；它编码系统所有可测统计信息。</li><li>单 qubit ↔ Bloch 球：纯态在面、混态在内、最大混合在心。</li><li>纯/混判据：$\Tr(\rho^2)$、秩、凸组合可分解性、$\lvert r\rvert$ 四者等价。</li></ol>
 <h2>关联</h2>
-<ul><li><strong>2.2</strong>：ρ 是 Hermite 正定算符，用本征分解写成纯态混合。</li><li><strong>2.4</strong>：ρ 经幺正演化 ρ→UρU†；测量给出 Tr(ρPᵢ)。</li><li><strong>2.5</strong>：约化密度矩阵通常是混态，即使全局是纯态（纠缠的标志）。</li></ul></section>
+<ul><li><strong>2.2</strong>：$\rho$ 是 Hermite 正定算符，用本征分解写成纯态混合。</li><li><strong>2.4</strong>：$\rho$ 经幺正演化 $\rho\to U\rho U^\dagger$；测量给出 $\Tr(\rho P_i)$。</li><li><strong>2.5</strong>：约化密度矩阵通常是混态，即使全局是纯态（纠缠的标志）。</li></ul></section>
 <section id="sec-sec2-4-evolution-measurement"><h1>2.4 演化与测量</h1>
 <h2>核心思想</h2>
 <p>封闭系统按幺正变换演化（公理 2）；测量按 PVM/POVM 给出概率与测后态（公理 3）。这两条把"态如何变化"和"如何提取信息"精确化。</p>
 <h2>幺正演化</h2>
-<ul><li><strong>薛定谔方程</strong>：iℏ d|ψ⟩/dt = H|ψ⟩，解为 |ψ(t)⟩=U(t)|ψ(0)⟩，U=e^{−iHt/ℏ} 幺正。</li><li><strong>定态</strong>：哈密顿量本征态 H|E⟩=E|E⟩，演化只是乘相位 e^{−iEt/ℏ}，概率分布不随时间变化。</li><li><strong>密度算符演化</strong>：ρ→UρU†。</li></ul>
+<ul><li><strong>薛定谔方程</strong>：$i\hbar\, d\ket{\psi}/dt = H\ket{\psi}$，解为 $\ket{\psi(t)}=U(t)\ket{\psi(0)}$，$U=e^{-iHt/\hbar}$ 幺正。</li><li><strong>定态</strong>：哈密顿量本征态 $H\ket{E}=E\ket{E}$，演化只是乘相位 $e^{-iEt/\hbar}$，概率分布不随时间变化。</li><li><strong>密度算符演化</strong>：$\rho\to U\rho U^\dagger$。</li></ul>
 <h2>测量：PVM 与 POVM</h2>
-<ul><li><strong>PVM（投影算符值测度）</strong>：一族投影 {Pᵢ}，满足 Pᵢ正交幂等 + ΣPᵢ=I。从 PVM 构建物理量 A=ΣaᵢPᵢ（Hermite）。</li><ul><li>结果 i 的概率 = Tr(ρPᵢ)（纯态 = ⟨ψ|Pᵢ|ψ⟩）；测后态 = PᵢρPᵢ/Tr(ρPᵢ)。</li></ul><li><strong>POVM</strong>：一族正定算符 {Eᵢ}，只需 Eᵢ≥0 且 ΣEᵢ=I（不要求正交/幂等）。是 PVM 的推广，用于不关心测后态、只求最优区分概率的场景。</li><li><strong>单 qubit 测量</strong>：计算基测量 = 用 {|0⟩⟨0|,|1⟩⟨1|}；测 σ_x 则用 {|+⟩⟨+|,|−⟩⟨−|}（非计算基方向）。</li><li><strong>Bell 基测量</strong>：在计算基下测 Bell 态，两方结果总相同（关联）。</li></ul>
+<ul><li><strong>PVM（投影算符值测度）</strong>：一族投影 $\{P_i\}$，满足 $P_i$ 正交幂等 $+\ \sum_i P_i=I$。从 PVM 构建物理量 $A=\sum_i a_i P_i$（Hermite）。</li><ul><li>结果 $i$ 的概率 $=\Tr(\rho P_i)$（纯态 $=\bra{\psi}P_i\ket{\psi}$）；测后态 $=P_i\rho P_i/\Tr(\rho P_i)$。</li></ul><li><strong>POVM</strong>：一族正定算符 $\{E_i\}$，只需 $E_i\ge0$ 且 $\sum_i E_i=I$（不要求正交/幂等）。是 PVM 的推广，用于不关心测后态、只求最优区分概率的场景。</li><li><strong>单 qubit 测量</strong>：计算基测量 = 用 $\{\ketbra{0}{0},\ketbra{1}{1}\}$；测 $\sigma_x$ 则用 $\{\ketbra{+}{+},\ketbra{-}{-}\}$（非计算基方向）。</li><li><strong>Bell 基测量</strong>：在计算基下测 Bell 态，两方结果总相同（关联）。</li></ul>
 <h2>统计量与不确定性</h2>
-<ul><li><strong>期望</strong>：⟨A⟩=Tr(ρA)。</li><li><strong>方差</strong>：(ΔA)²=⟨A²⟩−⟨A⟩²。</li><li><strong>海森堡不确定性关系</strong>：ΔA·ΔB ≥ ½|⟨[A,B]⟩|，源于算符不对易。</li></ul>
+<ul><li><strong>期望</strong>：$\langle A\rangle=\Tr(\rho A)$。</li><li><strong>方差</strong>：$(\Delta A)^2=\langle A^2\rangle-\langle A\rangle^2$。</li><li><strong>海森堡不确定性关系</strong>：$\Delta A\cdot\Delta B \ge \tfrac{1}{2}\lvert\langle[A,B]\rangle\rvert$，源于算符不对易。</li></ul>
 <h2>关键要点</h2>
 <ol><li>演化幺正、可逆；测量非幺正、不可逆且改变态。</li><li>可观测量 ↔ PVM ↔ Hermite 算符，三位一体。</li><li>POVM 比 PVM 更灵活，是态区分等任务的最优测量框架。</li><li>不对易算符不能同时确定 ⇒ 不确定性关系。</li></ol>
 <h2>关联</h2>
-<ul><li><strong>2.1</strong>：本节是公理 2、3 的展开。</li><li><strong>2.3</strong>：测量作用于 ρ，给出 Tr(ρPᵢ)。</li><li><strong>2.6</strong>：POVM 用于非正交态的最优区分。</li></ul></section>
+<ul><li><strong>2.1</strong>：本节是公理 2、3 的展开。</li><li><strong>2.3</strong>：测量作用于 $\rho$，给出 $\Tr(\rho P_i)$。</li><li><strong>2.6</strong>：POVM 用于非正交态的最优区分。</li></ul></section>
 <section id="sec-sec2-5-composite-systems"><h1>2.5 复合系统：偏迹、施密特分解与纯化</h1>
 <h2>核心思想</h2>
 <p>描述复合系统的子系统、量化纠缠的核心工具：偏迹给出约化密度矩阵；施密特分解给出二分态的标准型；纯化把混态升格为更大系统的纯态。</p>
 <h2>偏迹与约化密度矩阵</h2>
-<ul><li><strong>约化密度矩阵</strong>：ρ_A = Tr_B(ρ_AB)，对 B 取偏迹，描述只看 A 子系统时的状态。</li><li><strong>偏迹的两种惯例</strong>：不同教材对指标顺序约定不同（惯例 1 / 惯例 2），结果一致但写法有别。</li><li><strong>性质</strong>：偏迹是线性映射。</li><li><strong>关键现象</strong>：即使 ρ_AB 是纯态，ρ_A 也可能是混态——这正是纠缠的标志。</li></ul>
+<ul><li><strong>约化密度矩阵</strong>：$\rho_A = \Tr_B(\rho_{AB})$，对 B 取偏迹，描述只看 A 子系统时的状态。</li><li><strong>偏迹的两种惯例</strong>：不同教材对指标顺序约定不同（惯例 1 / 惯例 2），结果一致但写法有别。</li><li><strong>性质</strong>：偏迹是线性映射。</li><li><strong>关键现象</strong>：即使 $\rho_{AB}$ 是纯态，$\rho_A$ 也可能是混态——这正是纠缠的标志。</li></ul>
 <h2>施密特分解 (Schmidt)</h2>
-<ul><li><strong>形式</strong>：任意二分纯态 |Ψ⟩=Σᵢ λᵢ |iₐ⟩⊗|i_b⟩，λᵢ≥0 且 Σλᵢ²=1。</li><li><strong>本质</strong>：对态矢的系数矩阵做 SVD，λᵢ 是奇异值。</li><li><strong>施密特数</strong>（非零 λᵢ 个数）= 纠缠度量；施密特数=1 ⟺ 可分（无纠缠）。</li><li>ρ_A 与 ρ_B 有相同的非零本征值 {λᵢ²}。</li></ul>
+<ul><li><strong>形式</strong>：任意二分纯态 $\ket{\Psi}=\sum_i \lambda_i \ket{i}_A\otimes\ket{i}_B$，$\lambda_i\ge0$ 且 $\sum_i \lambda_i^2=1$。</li><li><strong>本质</strong>：对态矢的系数矩阵做 SVD，$\lambda_i$ 是奇异值。</li><li><strong>施密特数</strong>（非零 $\lambda_i$ 个数）= 纠缠度量；施密特数 $=1$ ⟺ 可分（无纠缠）。</li><li>$\rho_A$ 与 $\rho_B$ 有相同的非零本征值 $\{\lambda_i^2\}$。</li></ul>
 <h2>纠缠</h2>
-<ul><li><strong>定义</strong>：不可写成张量积 |a⟩⊗|b⟩ 的态。复合量子系统的奇妙特性。</li><li><strong>判据</strong>：施密特数 &gt; 1 ⟺ 纠缠。</li></ul>
+<ul><li><strong>定义</strong>：不可写成张量积 $\ket{a}\otimes\ket{b}$ 的态。复合量子系统的奇妙特性。</li><li><strong>判据</strong>：施密特数 $&gt;1$ ⟺ 纠缠。</li></ul>
 <h2>纯化 (Purification)</h2>
-<ul><li><strong>思想</strong>：任何混态 ρ_A 都可视为某个更大系统纯态 |Ψ⟩_AB 的约化：ρ_A = Tr_B(|Ψ⟩⟨Ψ|)。</li><li><strong>规范自由度</strong>：|Ψ⟩=Σ_{i,k} |ψᵢ⟩⊗(|e_k⟩ u_{ik})，纯化不唯一，差一个辅助系统上的幺正 u。</li></ul>
+<ul><li><strong>思想</strong>：任何混态 $\rho_A$ 都可视为某个更大系统纯态 $\ket{\Psi}_{AB}$ 的约化：$\rho_A = \Tr_B(\ketbra{\Psi}{\Psi})$。</li><li><strong>规范自由度</strong>：$\ket{\Psi}=\sum_{i,k} \ket{\psi_i}\otimes(\ket{e_k} u_{ik})$，纯化不唯一，差一个辅助系统上的幺正 $u$。</li></ul>
 <h2>关键要点</h2>
 <ol><li>偏迹 → 子系统状态；纯态的子系统可以是混态（纠缠的指纹）。</li><li>施密特分解 = 二分态的 SVD；施密特数量化纠缠。</li><li>纯化：混态总能"提纯"为更大纯态，差一个辅助幺正自由度。</li></ol>
 <h2>关联</h2>
-<ul><li><strong>2.2</strong>：施密特分解 = SVD 的物理版本。</li><li><strong>2.3</strong>：约化态通常是混态 ρ。</li><li><strong>2.6</strong>：纠缠态违反 Bell 不等式。</li></ul></section>
+<ul><li><strong>2.2</strong>：施密特分解 = SVD 的物理版本。</li><li><strong>2.3</strong>：约化态通常是混态 $\rho$。</li><li><strong>2.6</strong>：纠缠态违反 Bell 不等式。</li></ul></section>
 <section id="sec-sec2-6-applications"><h1>2.6 量子力学的应用：EPR/Bell、态区分、超密编码</h1>
 <h2>核心思想</h2>
 <p>用前面的公理与工具解决具体问题：纠缠能否被局域隐变量解释（Bell）？非正交态能区分到什么程度（态区分/POVM）？纠缠如何提升通信容量（超密编码）？</p>
 <h2>EPR 悖论与 Bell 不等式的违反</h2>
 <ul><li><strong>EPR</strong>：Einstein 等质疑量子力学不完备，设想存在"局域隐变量"。</li><li><strong>Bell 不等式</strong>：任何局域实在论模型都满足某不等式；量子纠缠态（Bell 态）的关联会<strong>违反</strong>该不等式。</li><li><strong>结论</strong>：实验确认违反 ⇒ 否定局域实在论，确认量子力学正确。纠缠是真实的非经典关联。</li></ul>
 <h2>态区分</h2>
-<ul><li><strong>正交态可完美区分</strong>：相互正交的两个态可被一组投影测量确定区分；非正交态无法完美区分。</li><li><strong>POVM 区分非正交态</strong>（Nielsen 2.2.4）：用 POVM 对非正交态做"无错但允许失败"的区分（unambiguous discrimination）。</li><li><strong>Worked Example（Bob 的判定）</strong>：Bob 收到两种等概率的可能态。设计 POVM {E₁,E₂,E?}：测到 E₁ 确定是态 1，E₂ 确定是态 2，测到 E? 则"无法判断"（弃权）。代价是有限的失败概率，换来零错误率。</li></ul>
+<ul><li><strong>正交态可完美区分</strong>：相互正交的两个态可被一组投影测量确定区分；非正交态无法完美区分。</li><li><strong>POVM 区分非正交态</strong>（Nielsen 2.2.4）：用 POVM 对非正交态做"无错但允许失败"的区分（unambiguous discrimination）。</li><li><strong>Worked Example（Bob 的判定）</strong>：Bob 收到两种等概率的可能态。设计 POVM $\{E_1,E_2,E_?\}$：测到 $E_1$ 确定是态 1，$E_2$ 确定是态 2，测到 $E_?$ 则"无法判断"（弃权）。代价是有限的失败概率，换来零错误率。</li></ul>
 <h2>超密编码 (Superdense Coding)</h2>
-<ul><li><strong>思想</strong>：Alice 与 Bob 预共享一对 Bell 态，Alice 只对自己 1 个 qubit 施加 {I,X,Z,XZ} 之一，再把该 qubit 发给 Bob，Bob 做 Bell 测量即可读出 <strong>2 个经典比特</strong>。</li><li><strong>要点</strong>：1 个量子比特 + 预共享纠缠 = 传 2 经典比特。是隐形传态的"对偶"。</li></ul>
+<ul><li><strong>思想</strong>：Alice 与 Bob 预共享一对 Bell 态，Alice 只对自己 1 个 qubit 施加 $\{I,X,Z,XZ\}$ 之一，再把该 qubit 发给 Bob，Bob 做 Bell 测量即可读出 <strong>2 个经典比特</strong>。</li><li><strong>要点</strong>：1 个量子比特 + 预共享纠缠 = 传 2 经典比特。是隐形传态的"对偶"。</li></ul>
 <h2>不可克隆定理</h2>
 <ul><li><strong>内容</strong>：不存在能复制任意未知量子态的幺正操作。</li><li><strong>后果</strong>：禁止线路扇出；保障量子密码安全。</li></ul>
 <h2>关键要点</h2>
@@ -332,33 +351,33 @@ hr{border:none;border-top:1px dashed var(--border);margin:16px 0}
 <h2>关联</h2>
 <ul><li><strong>2.5</strong>：纠缠（施密特数&gt;1）是本节所有协议的资源。</li><li><strong>2.4</strong>：态区分用 POVM；超密编码末端用 Bell 测量。</li><li><strong>第一章</strong>：隐形传态是超密编码的对偶协议。</li></ul></section>
 <section id="sec-glossary"><h1>术语表 · QCQI 第二章</h1>
-<p><strong>Bell 不等式</strong> — 局域实在论满足的不等式，量子纠缠态违反之 (2.6) <strong>Bloch 矢量</strong> — 单 qubit 态 ↔ 球内/面点 r=Tr(ρσ) (2.3) <strong>EPR 悖论</strong> — Einstein 等对量子力学完备性的质疑，引出局域隐变量 (2.6) <strong>Hermite 算符</strong> — T†=T，本征值实，表示可观测量/物理量 (2.2,2.4) <strong>ONB（标准正交基）</strong> — 满足完备性 Σ|i⟩⟨i|=I (2.2) <strong>POVM</strong> — 正算符值测度 {Eᵢ}，Eᵢ≥0 且 ΣEᵢ=I，PVM 的推广 (2.4) <strong>PVM（投影算符值测度）</strong> — 正交投影族 {Pᵢ}，ΣPᵢ=I，对应可观测量 (2.4) <strong>Schmidt 分解</strong> — 二分纯态 |Ψ⟩=Σλᵢ|iₐ⟩|i_b⟩，= 系数矩阵的 SVD (2.5) <strong>Schmidt 数</strong> — 非零施密特系数个数，纠缠度量；&gt;1 ⟺ 纠缠 (2.5) <strong>SVD（奇异值分解）</strong> — A=UDV†，D 非负对角；揭示秩与几何 (2.2) <strong>U3 门 / 欧拉角</strong> — 用三个角参数化 U(2) 群元 (2.3) <strong>von Neumann 测量</strong> — 由 PVM 描述的投影测量 (2.4) <strong>不可克隆定理</strong> — 任意未知态不可被完美复制 (2.6) <strong>偏迹 (partial trace)</strong> — Tr_B，对子系统求迹得约化密度矩阵 (2.5) <strong>几何意义 (SVD)</strong> — 旋转 → 沿轴缩放 → 旋转 (2.2) <strong>幺正算符 U</strong> — U†U=I，保内积，复内积空间到自身的同构 (2.2,2.4) <strong>态区分</strong> — 正交态可完美区分，非正交态须用 POVM (2.6) <strong>密度算符 ρ</strong> — 迹 1 正定算符；纯态 Tr(ρ²)=1，混态 &lt;1 (2.3) <strong>定态</strong> — 哈密顿量本征态，演化仅乘相位，分布不变 (2.4) <strong>张量积</strong> — 复合系统希尔伯特空间 H_A⊗H_B；源于双线性 (2.2) <strong>投影算符 P</strong> — P²=P, P†=P，对应"命题" (2.2) <strong>施密特数</strong> — 见 Schmidt 数 (2.5) <strong>极分解</strong> — A=UP，幺正×正算符 (2.2) <strong>正规算符</strong> — AA†=A†A，可被幺正对角化（谱定理） (2.2) <strong>海森堡不确定性</strong> — ΔA·ΔB≥½|⟨[A,B]⟩| (2.4) <strong>混态</strong> — 纯态的概率混合，Tr(ρ²)&lt;1，Bloch 球内 (2.3) <strong>纠缠</strong> — 不可写成张量积的态，施密特数&gt;1 (2.5,2.6) <strong>纯化 (purification)</strong> — 混态视为更大系统纯态的约化，差一辅助幺正 (2.5) <strong>纯态</strong> — ρ=|ψ⟩⟨ψ|，秩 1，Bloch 球面 (2.3) <strong>约化密度矩阵</strong> — ρ_A=Tr_B(ρ_AB)，子系统状态 (2.5) <strong>薛定谔方程</strong> — iℏ d|ψ⟩/dt=H|ψ⟩，给出幺正演化 (2.4) <strong>超密编码</strong> — 1 qubit + 共享纠缠传 2 经典比特 (2.6) <strong>谱定理</strong> — 正规算符可被一组 ONB 对角化 (2.2) <strong>量子力学四公理</strong> — 态/演化/测量/复合系统 (2.1) <strong>期望与方差</strong> — ⟨A⟩=Tr(ρA)，(ΔA)²=⟨A²⟩−⟨A⟩² (2.4) <strong>秩 (rank)</strong> — 最大非零子式阶数 (2.2)</p></section>
+<p><strong>Bell 不等式</strong> — 局域实在论满足的不等式，量子纠缠态违反之 (2.6) <strong>Bloch 矢量</strong> — 单 qubit 态 ↔ 球内/面点 $r=\Tr(\rho\sigma)$ (2.3) <strong>EPR 悖论</strong> — Einstein 等对量子力学完备性的质疑，引出局域隐变量 (2.6) <strong>Hermite 算符</strong> — $T^\dagger=T$，本征值实，表示可观测量/物理量 (2.2,2.4) <strong>ONB（标准正交基）</strong> — 满足完备性 $\sum_i \ketbra{i}{i}=I$ (2.2) <strong>POVM</strong> — 正算符值测度 $\{E_i\}$，$E_i\ge0$ 且 $\sum_i E_i=I$，PVM 的推广 (2.4) <strong>PVM（投影算符值测度）</strong> — 正交投影族 $\{P_i\}$，$\sum_i P_i=I$，对应可观测量 (2.4) <strong>Schmidt 分解</strong> — 二分纯态 $\ket{\Psi}=\sum_i \lambda_i \ket{i}_A\ket{i}_B$，= 系数矩阵的 SVD (2.5) <strong>Schmidt 数</strong> — 非零施密特系数个数，纠缠度量；$&gt;1$ ⟺ 纠缠 (2.5) <strong>SVD（奇异值分解）</strong> — $A=UDV^\dagger$，$D$ 非负对角；揭示秩与几何 (2.2) <strong>U3 门 / 欧拉角</strong> — 用三个角参数化 $U(2)$ 群元 (2.3) <strong>von Neumann 测量</strong> — 由 PVM 描述的投影测量 (2.4) <strong>不可克隆定理</strong> — 任意未知态不可被完美复制 (2.6) <strong>偏迹 (partial trace)</strong> — $\Tr_B$，对子系统求迹得约化密度矩阵 (2.5) <strong>几何意义 (SVD)</strong> — 旋转 → 沿轴缩放 → 旋转 (2.2) <strong>幺正算符 $U$</strong> — $U^\dagger U=I$，保内积，复内积空间到自身的同构 (2.2,2.4) <strong>态区分</strong> — 正交态可完美区分，非正交态须用 POVM (2.6) <strong>密度算符 $\rho$</strong> — 迹 1 正定算符；纯态 $\Tr(\rho^2)=1$，混态 $&lt;1$ (2.3) <strong>定态</strong> — 哈密顿量本征态，演化仅乘相位，分布不变 (2.4) <strong>张量积</strong> — 复合系统希尔伯特空间 $H_A\otimes H_B$；源于双线性 (2.2) <strong>投影算符 $P$</strong> — $P^2=P$, $P^\dagger=P$，对应"命题" (2.2) <strong>施密特数</strong> — 见 Schmidt 数 (2.5) <strong>极分解</strong> — $A=UP$，幺正×正算符 (2.2) <strong>正规算符</strong> — $AA^\dagger=A^\dagger A$，可被幺正对角化（谱定理） (2.2) <strong>海森堡不确定性</strong> — $\Delta A\cdot\Delta B\ge\tfrac{1}{2}\lvert\langle[A,B]\rangle\rvert$ (2.4) <strong>混态</strong> — 纯态的概率混合，$\Tr(\rho^2)&lt;1$，Bloch 球内 (2.3) <strong>纠缠</strong> — 不可写成张量积的态，施密特数 $&gt;1$ (2.5,2.6) <strong>纯化 (purification)</strong> — 混态视为更大系统纯态的约化，差一辅助幺正 (2.5) <strong>纯态</strong> — $\rho=\ketbra{\psi}{\psi}$，秩 1，Bloch 球面 (2.3) <strong>约化密度矩阵</strong> — $\rho_A=\Tr_B(\rho_{AB})$，子系统状态 (2.5) <strong>薛定谔方程</strong> — $i\hbar\, d\ket{\psi}/dt=H\ket{\psi}$，给出幺正演化 (2.4) <strong>超密编码</strong> — 1 qubit + 共享纠缠传 2 经典比特 (2.6) <strong>谱定理</strong> — 正规算符可被一组 ONB 对角化 (2.2) <strong>量子力学四公理</strong> — 态/演化/测量/复合系统 (2.1) <strong>期望与方差</strong> — $\langle A\rangle=\Tr(\rho A)$，$(\Delta A)^2=\langle A^2\rangle-\langle A\rangle^2$ (2.4) <strong>秩 (rank)</strong> — 最大非零子式阶数 (2.2)</p></section>
 <section id="sec-patterns"><h1>线性代数 / 量子力学计算技巧 · QCQI 第二章</h1>
 <h2>用本征分解写密度矩阵</h2>
-<p><strong>何时用</strong>：判断纯/混、算 Tr(ρ²)、求 Bloch 矢量。 <strong>怎么做</strong>：ρ=Σpᵢ|i⟩⟨i|（谱分解），pᵢ 为本征值（概率）。rₐ=Tr(ρσₐ)。 <strong>权衡</strong>：本征基随 ρ 变化；混态本征值不止一个非零。</p>
+<p><strong>何时用</strong>：判断纯/混、算 $\Tr(\rho^2)$、求 Bloch 矢量。 <strong>怎么做</strong>：$\rho=\sum_i p_i \ketbra{i}{i}$（谱分解），$p_i$ 为本征值（概率）。$r_a=\Tr(\rho\sigma_a)$。 <strong>权衡</strong>：本征基随 $\rho$ 变化；混态本征值不止一个非零。</p>
 <h2>对二分态做施密特分解</h2>
-<p><strong>何时用</strong>：判断/量化两体纯态纠缠，求约化密度矩阵本征值。 <strong>怎么做</strong>：把 |Ψ⟩ 的系数排成矩阵 C，做 SVD：C=UDV†，λᵢ=D 的奇异值；|Ψ⟩=Σλᵢ|iₐ⟩|i_b⟩。 <strong>权衡</strong>：仅适用于两体纯态；多体或混态需其他纠缠度量。</p>
+<p><strong>何时用</strong>：判断/量化两体纯态纠缠，求约化密度矩阵本征值。 <strong>怎么做</strong>：把 $\ket{\Psi}$ 的系数排成矩阵 $C$，做 SVD：$C=UDV^\dagger$，$\lambda_i=D$ 的奇异值；$\ket{\Psi}=\sum_i \lambda_i \ket{i}_A\ket{i}_B$。 <strong>权衡</strong>：仅适用于两体纯态；多体或混态需其他纠缠度量。</p>
 <h2>用偏迹求子系统状态</h2>
-<p><strong>何时用</strong>：只关心复合系统的一部分。 <strong>怎么做</strong>：ρ_A=Tr_B(ρ_AB)，对 B 的基求和 Σ_k ⟨k_B|ρ_AB|k_B⟩。注意惯例一致。 <strong>权衡</strong>：丢失关联信息；纯态偏迹后可能变混态。</p>
+<p><strong>何时用</strong>：只关心复合系统的一部分。 <strong>怎么做</strong>：$\rho_A=\Tr_B(\rho_{AB})$，对 B 的基求和 $\sum_k \bra{k_B}\rho_{AB}\ket{k_B}$。注意惯例一致。 <strong>权衡</strong>：丢失关联信息；纯态偏迹后可能变混态。</p>
 <h2>用 POVM 做非正交态区分</h2>
-<p><strong>何时用</strong>：要无错地区分非正交态，可容忍"弃权"。 <strong>怎么做</strong>：构造 {E₁,E₂,E?}，ΣEᵢ=I；E₁/E₂ 确定判定，E? 弃权。 <strong>权衡</strong>：零错误率换取有限失败概率（无法判断的概率）。</p>
+<p><strong>何时用</strong>：要无错地区分非正交态，可容忍"弃权"。 <strong>怎么做</strong>：构造 $\{E_1,E_2,E_?\}$，$\sum_i E_i=I$；$E_1/E_2$ 确定判定，$E_?$ 弃权。 <strong>权衡</strong>：零错误率换取有限失败概率（无法判断的概率）。</p>
 <h2>用 SVD 求秩与自由度</h2>
-<p><strong>何时用</strong>：分析矩阵秩、低秩逼近、几何分解。 <strong>怎么做</strong>：A=UDV†；非零奇异值个数 = 秩；降序排列使分解唯一（非简并时）。 <strong>权衡</strong>：简并奇异值子空间上有旋转自由度，分解不唯一。</p>
+<p><strong>何时用</strong>：分析矩阵秩、低秩逼近、几何分解。 <strong>怎么做</strong>：$A=UDV^\dagger$；非零奇异值个数 = 秩；降序排列使分解唯一（非简并时）。 <strong>权衡</strong>：简并奇异值子空间上有旋转自由度，分解不唯一。</p>
 <h2>用欧拉角参数化单 qubit 门</h2>
-<p><strong>何时用</strong>：把任意 U(2) 编译为硬件旋转 / U3 门。 <strong>怎么做</strong>：U=e^{iα}Rz(β)Ry(γ)Rz(δ)，对应 Bloch 球上一次合成旋转。 <strong>权衡</strong>：同一目标态可由不同 (轴,角) 实现，参数化不唯一。</p>
+<p><strong>何时用</strong>：把任意 U(2) 编译为硬件旋转 / U3 门。 <strong>怎么做</strong>：$U=e^{i\alpha}R_z(\beta)R_y(\gamma)R_z(\delta)$，对应 Bloch 球上一次合成旋转。 <strong>权衡</strong>：同一目标态可由不同 (轴,角) 实现，参数化不唯一。</p>
 <h2>反模式</h2>
-<ul><li><strong>混淆纯态与混态判据</strong>：务必用 Tr(ρ²)=1 / 秩 1 / |r|=1 同时核验。</li><li><strong>偏迹惯例不一致</strong>：两种指标约定混用会算错约化矩阵。</li><li><strong>以为非正交态可完美区分</strong>：只有正交态可完美区分。</li><li><strong>忘记归一</strong>：测后态要除以 Tr(ρPᵢ)。</li></ul></section>
+<ul><li><strong>混淆纯态与混态判据</strong>：务必用 $\Tr(\rho^2)=1$ / 秩 1 / $\lvert r\rvert=1$ 同时核验。</li><li><strong>偏迹惯例不一致</strong>：两种指标约定混用会算错约化矩阵。</li><li><strong>以为非正交态可完美区分</strong>：只有正交态可完美区分。</li><li><strong>忘记归一</strong>：测后态要除以 $\Tr(\rho P_i)$。</li></ul></section>
 <section id="sec-cheatsheet"><h1>速查表 · QCQI 第二章</h1>
 <h2>算符分类速查</h2>
-<table><thead><tr><th>算符</th><th>定义</th><th>角色</th></tr></thead><tbody><tr><td>正规</td><td>AA†=A†A</td><td>可幺正对角化（谱定理）</td></tr><tr><td>Hermite</td><td>A†=A</td><td>可观测量，本征值实</td></tr><tr><td>幺正</td><td>U†U=I</td><td>演化/门，保内积</td></tr><tr><td>投影</td><td>P²=P, P†=P</td><td>命题 / PVM 元</td></tr><tr><td>正定</td><td>A≥0</td><td>密度矩阵、POVM 元</td></tr></tbody></table>
+<table><thead><tr><th>算符</th><th>定义</th><th>角色</th></tr></thead><tbody><tr><td>正规</td><td>$AA^\dagger=A^\dagger A$</td><td>可幺正对角化（谱定理）</td></tr><tr><td>Hermite</td><td>$A^\dagger=A$</td><td>可观测量，本征值实</td></tr><tr><td>幺正</td><td>$U^\dagger U=I$</td><td>演化/门，保内积</td></tr><tr><td>投影</td><td>$P^2=P,\ P^\dagger=P$</td><td>命题 / PVM 元</td></tr><tr><td>正定</td><td>$A\ge0$</td><td>密度矩阵、POVM 元</td></tr></tbody></table>
 <h2>纯态 vs 混态判据（四者等价）</h2>
-<table><thead><tr><th>判据</th><th>纯态</th><th>混态</th></tr></thead><tbody><tr><td>Tr(ρ²)</td><td>=1</td><td>&lt;1</td></tr><tr><td>秩</td><td>1</td><td>&gt;1</td></tr><tr><td>凸分解</td><td>不可</td><td>可</td></tr><tr><td>Bloch \</td><td>r\</td><td></td><td>=1（面）</td><td>&lt;1（内），心=I/2</td></tr></tbody></table>
+<table><thead><tr><th>判据</th><th>纯态</th><th>混态</th></tr></thead><tbody><tr><td>$\Tr(\rho^2)$</td><td>$=1$</td><td>$&lt;1$</td></tr><tr><td>秩</td><td>1</td><td>$&gt;1$</td></tr><tr><td>凸分解</td><td>不可</td><td>可</td></tr><tr><td>Bloch $\lvert r\rvert$</td><td>$=1$（面）</td><td>$&lt;1$（内），心 $=I/2$</td></tr></tbody></table>
 <h2>测量速查</h2>
-<ul><li><strong>概率</strong>：P(i)=Tr(ρPᵢ)，纯态 =⟨ψ|Pᵢ|ψ⟩。</li><li><strong>测后态</strong>：PᵢρPᵢ/P(i)（PVM）。</li><li><strong>期望</strong>：⟨A⟩=Tr(ρA)；<strong>方差</strong> (ΔA)²=⟨A²⟩−⟨A⟩²。</li><li><strong>PVM</strong>：正交+幂等+ΣP=I（要测后态用它）。</li><li><strong>POVM</strong>：只需 E≥0 且 ΣE=I（只求概率/最优区分用它）。</li></ul>
+<ul><li><strong>概率</strong>：$P(i)=\Tr(\rho P_i)$，纯态 $=\bra{\psi}P_i\ket{\psi}$。</li><li><strong>测后态</strong>：$P_i\rho P_i/P(i)$（PVM）。</li><li><strong>期望</strong>：$\langle A\rangle=\Tr(\rho A)$；<strong>方差</strong> $(\Delta A)^2=\langle A^2\rangle-\langle A\rangle^2$。</li><li><strong>PVM</strong>：正交 + 幂等 + $\sum_i P_i=I$（要测后态用它）。</li><li><strong>POVM</strong>：只需 $E_i\ge0$ 且 $\sum_i E_i=I$（只求概率/最优区分用它）。</li></ul>
 <h2>复合系统工具决策</h2>
-<ul><li>要<strong>子系统状态</strong> → 偏迹 ρ_A=Tr_B(ρ_AB)。</li><li>要<strong>判断/量化两体纠缠</strong> → 施密特分解，看施密特数。</li><li>要<strong>把混态变纯态</strong> → 纯化（加辅助系统）。</li><li>要<strong>判定全局纯态是否纠缠</strong> → 施密特数 &gt;1 ⟺ 纠缠。</li></ul>
+<ul><li>要<strong>子系统状态</strong> → 偏迹 $\rho_A=\Tr_B(\rho_{AB})$。</li><li>要<strong>判断/量化两体纠缠</strong> → 施密特分解，看施密特数。</li><li>要<strong>把混态变纯态</strong> → 纯化（加辅助系统）。</li><li>要<strong>判定全局纯态是否纠缠</strong> → 施密特数 $&gt;1$ ⟺ 纠缠。</li></ul>
 <h2>分解方法速记</h2>
-<table><thead><tr><th>分解</th><th>形式</th><th>用途</th></tr></thead><tbody><tr><td>谱分解</td><td>A=Σaᵢ\</td><td>i⟩⟨i\</td><td></td><td>正规算符对角化</td></tr><tr><td>SVD</td><td>A=UDV†</td><td>秩、自由度、低秩逼近</td></tr><tr><td>极分解</td><td>A=UP</td><td>模-相位类比</td></tr><tr><td>施密特</td><td>\</td><td>Ψ⟩=Σλᵢ\</td><td>iₐ⟩\</td><td>i_b⟩</td><td>两体纠缠</td></tr></tbody></table>
+<table><thead><tr><th>分解</th><th>形式</th><th>用途</th></tr></thead><tbody><tr><td>谱分解</td><td>$A=\sum_i a_i \ketbra{i}{i}$</td><td>正规算符对角化</td></tr><tr><td>SVD</td><td>$A=UDV^\dagger$</td><td>秩、自由度、低秩逼近</td></tr><tr><td>极分解</td><td>$A=UP$</td><td>模-相位类比</td></tr><tr><td>施密特</td><td>$\ket{\Psi}=\sum_i \lambda_i \ket{i}_A\ket{i}_B$</td><td>两体纠缠</td></tr></tbody></table>
 <h2>核心红线</h2>
 <ol><li><strong>正交才能完美区分</strong>；非正交只能 POVM 无错-弃权区分。</li><li><strong>不可克隆</strong>：任意未知态不可复制。</li><li><strong>Bell 违反</strong>：纠缠否定局域实在论。</li><li><strong>偏迹惯例</strong>：全程统一一种指标约定。</li></ol></section>
 </main>

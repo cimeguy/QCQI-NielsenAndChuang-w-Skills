@@ -21,17 +21,17 @@ description: "《量子计算与量子信息》(Nielsen & Chuang) 第六章「�
 
 ## 核心概念框架
 
-**搜索问题**：在 N 个对象中找出满足条件 f(x)=1 的 M 个解之一。经典无结构搜索需 O(N)；Grover 用 **O(√N)** 次预言机查询，平方加速。
+**搜索问题**：在 $N$ 个对象中找出满足条件 $f(x)=1$ 的 $M$ 个解之一。经典无结构搜索需 $O(N)$；Grover 用 **$O(\sqrt{N})$** 次预言机查询，平方加速。
 
-**两类预言机**：① **布尔预言机** Uf|x⟩|q⟩=|x⟩|q⊕f(x)⟩（用辅助比特记录 f）；② **相位翻转预言机** O|x⟩=(−1)^{f(x)}|x⟩（辅助比特置 |−⟩，相位回踢把布尔预言机变成相位翻转）。
+**两类预言机**：① **布尔预言机** $U_f\ket{x}\ket{q}=\ket{x}\ket{q\oplus f(x)}$（用辅助比特记录 $f$）；② **相位翻转预言机** $O\ket{x}=(-1)^{f(x)}\ket{x}$（辅助比特置 $\ket{-}$，相位回踢把布尔预言机变成相位翻转）。
 
-**Grover 迭代 G = −H·O = (2|ψ⟩⟨ψ|−I)·O**：每次迭代 = 预言机 O（翻转解的相位）+ 关于均匀叠加态 |ψ⟩ 的反射（"对均值翻转"）。从均匀叠加 |ψ⟩=H^{⊗n}|0⟩ 出发，重复 G。
+**Grover 迭代 $G = -H\cdot O = (2\ketbra{\psi}{\psi}-I)\cdot O$**：每次迭代 = 预言机 $O$（翻转解的相位）+ 关于均匀叠加态 $\ket{\psi}$ 的反射（"对均值翻转"）。从均匀叠加 $\ket{\psi}=H^{\otimes n}\ket{0}$ 出发，重复 $G$。
 
-**几何意义**：在解空间 |β⟩ 与非解空间 |α⟩ 张成的 2 维平面内，每次 Grover 迭代是固定角度 θ 的旋转（sin(θ/2)=√(M/N)）。两次反射的复合 = 一次旋转——这正是 Householder 变换的几何。
+**几何意义**：在解空间 $\ket{\beta}$ 与非解空间 $\ket{\alpha}$ 张成的 2 维平面内，每次 Grover 迭代是固定角度 $\theta$ 的旋转（$\sin(\theta/2)=\sqrt{M/N}$）。两次反射的复合 = 一次旋转——这正是 Householder 变换的几何。
 
-**成功概率与最优次数**：迭代约 **(π/4)√(N/M)** 次时，态最接近解空间，测得解的概率最大。迭代过多会"转过头"，概率下降——次数必须卡准。
+**成功概率与最优次数**：迭代约 **$(\pi/4)\sqrt{N/M}$** 次时，态最接近解空间，测得解的概率最大。迭代过多会"转过头"，概率下降——次数必须卡准。
 
-**启发式推导（量子模拟视角）**：猜哈密顿量 H=|ψ⟩⟨ψ|+|x⟩⟨x|，用 e^{−iHt}≈exp(−i|ψ⟩⟨ψ|t)·exp(−i|x⟩⟨x|t) 的 Trotter 形式；取 t=π 使每步转角最大，恰好得到 Grover 迭代 G=−HO。
+**启发式推导（量子模拟视角）**：猜哈密顿量 $H=\ketbra{\psi}{\psi}+\ketbra{x}{x}$，用 $e^{-iHt}\approx\exp(-i\ketbra{\psi}{\psi}t)\cdot\exp(-i\ketbra{x}{x}t)$ 的 Trotter 形式；取 $t=\pi$ 使每步转角最大，恰好得到 Grover 迭代 $G=-HO$。
 
 ---
 
@@ -40,21 +40,21 @@ description: "《量子计算与量子信息》(Nielsen & Chuang) 第六章「�
 | 小节 | 标题 | 关键概念 |
 |---|---|---|
 | [6.1](chapters/sec6.1-problem-oracle.md) | 搜索问题与预言机 | 搜索提法、布尔预言机、相位翻转预言机、3-SAT 例 |
-| [6.2](chapters/sec6.2-grover-flow.md) | Grover 算法流程 | 均匀叠加初态、Grover 迭代 G=−HO、完整流程 |
-| [6.3](chapters/sec6.3-geometry.md) | 几何意义 | Householder 反射、2 维旋转、固定角度 θ |
-| [6.4](chapters/sec6.4-success-probability.md) | 成功概率 | 最优迭代 (π/4)√(N/M)、布尔 vs 相位实现、过冲 |
-| [6.5](chapters/sec6.5-heuristic.md) | 启发式推导 | 猜哈密顿量、量子模拟/Trotter 导出 G=HO |
+| [6.2](chapters/sec6.2-grover-flow.md) | Grover 算法流程 | 均匀叠加初态、Grover 迭代 $G=-HO$、完整流程 |
+| [6.3](chapters/sec6.3-geometry.md) | 几何意义 | Householder 反射、2 维旋转、固定角度 $\theta$ |
+| [6.4](chapters/sec6.4-success-probability.md) | 成功概率 | 最优迭代 $(\pi/4)\sqrt{N/M}$、布尔 vs 相位实现、过冲 |
+| [6.5](chapters/sec6.5-heuristic.md) | 启发式推导 | 猜哈密顿量、量子模拟/Trotter 导出 $G=HO$ |
 
 ## 主题索引
 
 - **3-SAT / 真值表 / 线路** → 6.1
-- **Grover 迭代 G=−HO** → 6.2, 6.3
+- **Grover 迭代 $G=-HO$** → 6.2, 6.3
 - **Householder 变换** → 6.3
 - **布尔预言机 / 相位翻转预言机** → 6.1
 - **几何意义 / 2 维旋转** → 6.3
 - **成功概率 / 最优迭代次数** → 6.4
 - **启发式推导 / 量子模拟** → 6.5
-- **平方加速 O(√N)** → 6.2, 6.4
+- **平方加速 $O(\sqrt{N})$** → 6.2, 6.4
 
 ## 辅助文件
 

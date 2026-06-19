@@ -2,31 +2,31 @@
 
 ## 信道 → 蔡氏矩阵
 **何时用**：要检验 CP、或准备求 Kraus。
-**怎么做**：J(ℰ)=(ℰ⊗I)(|Ω⟩⟨Ω|)，|Ω⟩=Σ|ii⟩；等价于把 ℰ 作用在最大纠缠态一半上。
-**权衡**：维度升到 d²×d²；但把"映射"变成可分解的矩阵。
+**怎么做**：$J(\mathcal{E})=(\mathcal{E}\otimes I)(\ketbra{\Omega}{\Omega})$，$\ket{\Omega}=\sum_i\ket{ii}$；等价于把 $\mathcal{E}$ 作用在最大纠缠态一半上。
+**权衡**：维度升到 $d^2\times d^2$；但把"映射"变成可分解的矩阵。
 
 ## 蔡氏矩阵 → Kraus
 **何时用**：已有 J，要算符和表示。
-**怎么做**：谱分解 J=Σλ_k|v_k⟩⟨v_k|；E_k=√λ_k·mat(|v_k⟩)（向量 reshape 成 d×d）。
+**怎么做**：谱分解 $J=\sum_k\lambda_k\ketbra{v_k}{v_k}$；$E_k=\sqrt{\lambda_k}\cdot\mathrm{mat}(\ket{v_k})$（向量 reshape 成 $d\times d$）。
 **权衡**：得到正交规范的一组 Kraus；Kraus 表示不唯一（差幺正混合）。
 
 ## 检验是否合法信道
 **何时用**：判断给定映射是不是物理信道。
-**怎么做**：CP ⟺ J(ℰ)≥0（半正定）；TP ⟺ ΣE_k†E_k=I（或 J 部分迹=I）。
+**怎么做**：CP $\iff J(\mathcal{E})\ge 0$（半正定）；TP $\iff \sum_k E_k^\dagger E_k=I$（或 $J$ 部分迹$=I$）。
 **权衡**：两个条件都要查，缺一不可。
 
 ## Kraus ↔ Bloch 仿射变换
 **何时用**：想直观看单 qubit 信道对 Bloch 球的作用。
-**怎么做**：M_{ij}=½Tr(σ_i ℰ(σ_j))，c_i=½Tr(σ_i ℰ(I))；得 r→Mr+c。
+**怎么做**：$M_{ij}=\tfrac{1}{2}\Tr(\sigma_i \mathcal{E}(\sigma_j))$，$c_i=\tfrac{1}{2}\Tr(\sigma_i \mathcal{E}(I))$；得 $\vec r\mapsto M\vec r+\vec c$。
 **权衡**：只适用于单 qubit；高维无此简单几何。
 
 ## 换基底展开 Kraus（验证非唯一）
 **何时用**：要把 Kraus 写在另一组算符基下，或核对两组 Kraus 等价。
-**怎么做**：F_j=Σ_k u_{jk}E_k（u 幺正）；两组给出同一信道。
+**怎么做**：$F_j=\sum_k u_{jk}E_k$（$u$ 幺正）；两组给出同一信道。
 **权衡**：纯表示变换，物理信道不变。
 
 ## 反模式
-- **忘记保迹检验**：只看 CP（J≥0）不够，还要 ΣE_k†E_k=I。
+- **忘记保迹检验**：只看 CP（$J\ge 0$）不够，还要 $\sum_k E_k^\dagger E_k=I$。
 - **以为 Kraus 唯一**：差一个幺正混合都等价。
-- **混淆相位阻尼与振幅阻尼**：前者只退相干 (c=0)，后者耗能并平移 (c≠0)。
+- **混淆相位阻尼与振幅阻尼**：前者只退相干 $(\vec c=0)$，后者耗能并平移 $(\vec c\ne 0)$。
 - **向量化 reshape 顺序搞错**：行/列约定不一致会得到转置的 Kraus。

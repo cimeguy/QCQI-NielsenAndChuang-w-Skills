@@ -52,6 +52,25 @@ hr{border:none;border-top:1px dashed var(--border);margin:16px 0}
 .badge{display:inline-block;background:var(--accent);color:#fff;border-radius:6px;padding:2px 9px;font-size:12px;font-weight:600}
 @media(max-width:820px){.sidebar{display:none}.main{padding:24px 18px}}
 </style>
+<script>
+window.MathJax={
+ tex:{
+  inlineMath:[['$','$'],['\\(','\\)']],
+  displayMath:[['$$','$$'],['\\[','\\]']],
+  macros:{
+   ket:['{\\lvert #1\\rangle}',1],
+   bra:['{\\langle #1\\rvert}',1],
+   braket:['{\\langle #1\\vert #2\\rangle}',2],
+   ketbra:['{\\lvert #1\\rangle\\langle #2\\rvert}',2],
+   Tr:'{\\operatorname{Tr}}',
+   tr:'{\\operatorname{tr}}'
+  }
+ },
+ svg:{fontCache:'global'},
+ options:{skipHtmlTags:['script','style','textarea','pre','code'],ignoreHtmlClass:'viz'}
+};
+</script>
+<script src="../vendor/tex-svg.js" id="MathJax-script" async></script>
 </head>
 <body>
 <div class="layout">
@@ -227,9 +246,9 @@ hr{border:none;border-top:1px dashed var(--border);margin:16px 0}
 <ul><li><strong>Deutsch-Jozsa</strong> 算法展现量子计算的并行性。</li><li><strong>量子傅里叶变换 (QFT)</strong>。</li><li><strong>相位估计</strong>：若能制备 U 的本征态，QFT 可用于估计 U 的本征值（相位）。</li><li><strong>Shor 算法</strong>（分解 → 求阶 → 相位估计）。</li><li><strong>隐藏子群问题 (HSP)</strong>（QFT 家族的统一框架）。</li></ul>
 <hr>
 <h2>章节导航</h2>
-<table><thead><tr><th>章</th><th>主题</th><th>一句话</th><th>专门 skill</th></tr></thead><tbody><tr><td>1</td><td>量子计算简介</td><td>qubit/门/线路/隐形传态/Deutsch 入门</td><td><code>qcqi-ch01-intro</code></td></tr><tr><td>2</td><td>线性代数与量子力学</td><td>四公理 + 数学工具 + 纠缠</td><td><code>qcqi-ch02-linalg-qm</code></td></tr><tr><td>4</td><td>量子线路与模拟</td><td>门/通用性/Trotter</td><td><code>qcqi-ch04-circuits</code></td></tr><tr><td>5</td><td>QFT 与 Shor</td><td>QFT/相位估计/Shor/HSP</td><td><code>qcqi-ch05-qft</code></td></tr><tr><td>6</td><td>量子搜索</td><td>Grover/预言机/√N</td><td><code>qcqi-ch06-search</code></td></tr><tr><td>8补</td><td>量子信道</td><td>信道/Kraus/蔡氏矩阵</td><td><code>qcqi-ch08-quantum-channels</code></td></tr></tbody></table>
+<table><thead><tr><th>章</th><th>主题</th><th>一句话</th><th>专门 skill</th></tr></thead><tbody><tr><td>1</td><td>量子计算简介</td><td>qubit/门/线路/隐形传态/Deutsch 入门</td><td><code>qcqi-ch01-intro</code></td></tr><tr><td>2</td><td>线性代数与量子力学</td><td>四公理 + 数学工具 + 纠缠</td><td><code>qcqi-ch02-linalg-qm</code></td></tr><tr><td>4</td><td>量子线路与模拟</td><td>门/通用性/Trotter</td><td><code>qcqi-ch04-circuits</code></td></tr><tr><td>5</td><td>QFT 与 Shor</td><td>QFT/相位估计/Shor/HSP</td><td><code>qcqi-ch05-qft</code></td></tr><tr><td>6</td><td>量子搜索</td><td>Grover/预言机/$\sqrt{N}$</td><td><code>qcqi-ch06-search</code></td></tr><tr><td>8补</td><td>量子信道</td><td>信道/Kraus/蔡氏矩阵</td><td><code>qcqi-ch08-quantum-channels</code></td></tr></tbody></table>
 <h2>主题→章 快速定位</h2>
-<ul><li><strong>PVM/POVM、密度矩阵、Schmidt、Bell</strong> → 第 2 章</li><li><strong>z-y-z、通用门、Trotter/BCH、量子模拟</strong> → 第 4 章</li><li><strong>QFT、相位估计、Shor、求阶、HSP</strong> → 第 5 章</li><li><strong>Grover、预言机、√N 搜索</strong> → 第 6 章</li><li><strong>Kraus、蔡氏矩阵、量子信道</strong> → 第 8 章补充</li><li><strong>qubit、Bloch、隐形传态、Deutsch</strong> → 第 1 章</li></ul>
+<ul><li><strong>PVM/POVM、密度矩阵、Schmidt、Bell</strong> → 第 2 章</li><li><strong>z-y-z、通用门、Trotter/BCH、量子模拟</strong> → 第 4 章</li><li><strong>QFT、相位估计、Shor、求阶、HSP</strong> → 第 5 章</li><li><strong>Grover、预言机、$\sqrt{N}$ 搜索</strong> → 第 6 章</li><li><strong>Kraus、蔡氏矩阵、量子信道</strong> → 第 8 章补充</li><li><strong>qubit、Bloch、隐形传态、Deutsch</strong> → 第 1 章</li></ul>
 <h2>配套 skill</h2>
 <p>本 skill 是索引/复习层。深入学习请加载： <code>qcqi-ch01-intro</code>、<code>qcqi-ch02-linalg-qm</code>、<code>qcqi-ch04-circuits</code>、<code>qcqi-ch05-qft</code>、<code>qcqi-ch06-search</code>、<code>qcqi-ch08-quantum-channels</code>。</p>
 <h2>辅助文件</h2>
@@ -242,19 +261,19 @@ hr{border:none;border-top:1px dashed var(--border);margin:16px 0}
 <h2>一条主线</h2>
 <p>四公理（态/演化/测量/复合）+ 把它们精确化的线性代数工具。</p>
 <h2>必记要点</h2>
-<ol><li><strong>投影算符 = 命题</strong>：⟨ψ|P|ψ⟩ 是该命题为真的概率。</li><li><strong>量子态 ρ = 迹 1 的正定算符</strong>：编码所有可测统计信息；期望 ⟨A⟩=Tr(ρA)，方差 (ΔA)²=⟨A²⟩−⟨A⟩²。</li><li><strong>测量公理</strong>：给出测量结果概率 Tr(ρPᵢ) 和测后态 PᵢρPᵢ/Tr(ρPᵢ)。</li><li><strong>可观测量 ↔ PVM ↔ Hermite 算符</strong>；POVM 是推广，用于最优态区分。</li><li><strong>演化 = 幺正</strong>：薛定谔方程 iℏd|ψ⟩/dt=H|ψ⟩；定态只乘相位。</li><li><strong>复合系统 = 张量积</strong> H_A⊗H_B；源于"双线性 ⇒ 能级相乘"。</li><li><strong>常见算符</strong>：正规（可对角化）、Hermite（实谱）、幺正（保内积）、投影（命题）、正定（密度/POVM）。</li><li><strong>SVD</strong>：A=UDV†；揭示秩、自由度、几何；施密特分解就是它的物理版。</li><li><strong>纠缠 + Bell test</strong>：纠缠态违反 Bell 不等式 ⇒ 否定局域实在论，确认量子力学。</li></ol>
+<ol><li><strong>投影算符 = 命题</strong>：$\bra{\psi}P\ket{\psi}$ 是该命题为真的概率。</li><li><strong>量子态 $\rho$ = 迹 1 的正定算符</strong>：编码所有可测统计信息；期望 $\langle A\rangle=\Tr(\rho A)$，方差 $(\Delta A)^2=\langle A^2\rangle-\langle A\rangle^2$。</li><li><strong>测量公理</strong>：给出测量结果概率 $\Tr(\rho P_i)$ 和测后态 $P_i\rho P_i/\Tr(\rho P_i)$。</li><li><strong>可观测量 ↔ PVM ↔ Hermite 算符</strong>；POVM 是推广，用于最优态区分。</li><li><strong>演化 = 幺正</strong>：薛定谔方程 $i\hbar\,d\ket{\psi}/dt=H\ket{\psi}$；定态只乘相位。</li><li><strong>复合系统 = 张量积</strong> $H_A\otimes H_B$；源于"双线性 ⇒ 能级相乘"。</li><li><strong>常见算符</strong>：正规（可对角化）、Hermite（实谱）、幺正（保内积）、投影（命题）、正定（密度/POVM）。</li><li><strong>SVD</strong>：$A=UDV^\dagger$；揭示秩、自由度、几何；施密特分解就是它的物理版。</li><li><strong>纠缠 + Bell test</strong>：纠缠态违反 Bell 不等式 ⇒ 否定局域实在论，确认量子力学。</li></ol>
 <h2>易混点</h2>
-<ul><li>纯/混判据四等价：Tr(ρ²)=1 / 秩 1 / 不可凸分解 / |r|=1。</li><li>偏迹两种惯例要统一；纯态的子系统可为混态（纠缠指纹）。</li></ul>
+<ul><li>纯/混判据四等价：$\Tr(\rho^2)=1$ / 秩 1 / 不可凸分解 / $\lvert r\rvert=1$。</li><li>偏迹两种惯例要统一；纯态的子系统可为混态（纠缠指纹）。</li></ul>
 <h2>串讲顺序建议</h2>
-<p>公理 → 算符分类与 SVD → 量子态(ρ,Bloch) → 演化与测量(PVM/POVM) → 复合系统(偏迹/Schmidt/纯化) → 应用(Bell/态区分/超密编码)。</p></section>
+<p>公理 → 算符分类与 SVD → 量子态($\rho$,Bloch) → 演化与测量(PVM/POVM) → 复合系统(偏迹/Schmidt/纯化) → 应用(Bell/态区分/超密编码)。</p></section>
 <section id="sec-ch4-keypoints"><h1>第四章要点串讲 · 量子线路与量子模拟</h1>
 <blockquote>深入：<code>qcqi-ch04-circuits</code>。本文是考前/复习用的串讲。</blockquote>
 <h2>一条主线</h2>
 <p>用幺正门搭线路（单比特门=旋转 → 受控门 → 通用门），再用 Trotter 把哈密顿量演化变成线路（量子模拟）。</p>
 <h2>必记要点</h2>
-<ol><li><strong>单比特门 = U(2) 旋转</strong>：可一次实现，也可 <strong>z-y-z</strong>（欧拉角）分三次实现；SU(2) 作用 2 维希尔伯特空间 ↔ SO(3) 作用 3 维 Bloch。</li><li><strong>基本门</strong>：Rx/Ry/Rz/Rn、H（等权叠加）、S、T。Ry 可生成所有单比特门。</li><li><strong>两比特 CU 门的制作</strong>：用 U 的分解 U=e^{iα}AXBXC（ABC=I）+ 两个 CNOT。</li><li><strong>受控门</strong>：CNOT（纠缠源）、CZ、SWAP=3CNOT、Toffoli（经典可逆通用门）。</li><li><strong>测量原理</strong>：延迟测量（中途测+经典控制 ⟺ 量子受控门+末端测）、隐含测量（末端未测=已测）、对幺正且厄米 U（U²=I）的测量。</li><li><strong>通用门</strong>：{H,T,CNOT}；三步证明（二级门 → 单比特+CNOT → {H,T,CNOT}）；精度 ε 需 O(log^c(1/ε)) 门。</li><li><strong>量子计算机核心三环节</strong>：初始化、幺正变换、测量。</li><li><strong>其他模型</strong>：绝热、拓扑、量子游走、one-clean-qubit、MBQC/簇态、量子图灵机。</li><li><strong>量子模拟</strong>：H=ΣAᵢ → 切片 + <strong>Trotter</strong>；误差来自 [A,B]≠0，由 <strong>BCH 公式</strong>刻画；高阶 Suzuki-Trotter 用更少门达同精度（看迹距离 vs 门数）。</li></ol>
+<ol><li><strong>单比特门 = $U(2)$ 旋转</strong>：可一次实现，也可 <strong>z-y-z</strong>（欧拉角）分三次实现；$SU(2)$ 作用 2 维希尔伯特空间 ↔ $SO(3)$ 作用 3 维 Bloch。</li><li><strong>基本门</strong>：$R_x$/$R_y$/$R_z$/$R_n$、H（等权叠加）、S、T。$R_y$ 可生成所有单比特门。</li><li><strong>两比特 CU 门的制作</strong>：用 U 的分解 $U=e^{i\alpha}AXBXC$（$ABC=I$）+ 两个 CNOT。</li><li><strong>受控门</strong>：CNOT（纠缠源）、CZ、SWAP=3CNOT、Toffoli（经典可逆通用门）。</li><li><strong>测量原理</strong>：延迟测量（中途测+经典控制 ⟺ 量子受控门+末端测）、隐含测量（末端未测=已测）、对幺正且厄米 U（$U^2=I$）的测量。</li><li><strong>通用门</strong>：$\{H,T,\mathrm{CNOT}\}$；三步证明（二级门 → 单比特+CNOT → $\{H,T,\mathrm{CNOT}\}$）；精度 $\varepsilon$ 需 $O(\log^c(1/\varepsilon))$ 门。</li><li><strong>量子计算机核心三环节</strong>：初始化、幺正变换、测量。</li><li><strong>其他模型</strong>：绝热、拓扑、量子游走、one-clean-qubit、MBQC/簇态、量子图灵机。</li><li><strong>量子模拟</strong>：$H=\sum A_i$ → 切片 + <strong>Trotter</strong>；误差来自 $[A,B]\ne 0$，由 <strong>BCH 公式</strong>刻画；高阶 Suzuki-Trotter 用更少门达同精度（看迹距离 vs 门数）。</li></ol>
 <h2>易混点</h2>
-<ul><li>不存在通用非门（普适 |ψ⟩→|ψ⊥⟩ 不可能）。</li><li>量子线路三禁忌：无环、不扇入、不扇出。</li></ul>
+<ul><li>不存在通用非门（普适 $\ket{\psi}\to\ket{\psi^\perp}$ 不可能）。</li><li>量子线路三禁忌：无环、不扇入、不扇出。</li></ul>
 <h2>串讲顺序建议</h2>
 <p>单比特门(旋转/zyz) → 受控门(CU/CNOT/Toffoli) → 测量原理 → 通用性三步 → 计算机要素与其他模型 → 量子模拟(Trotter/BCH)。</p></section>
 <section id="sec-ch5-keypoints"><h1>第五章要点串讲 · 量子算法（QFT 及其应用）</h1>
@@ -262,22 +281,22 @@ hr{border:none;border-top:1px dashed var(--border);margin:16px 0}
 <h2>一条主线</h2>
 <p>量子并行（Deutsch）→ QFT → 相位估计 → Shor（求阶）→ HSP（统一框架）。</p>
 <h2>必记要点</h2>
-<ol><li><strong>Deutsch-Jozsa 展现量子并行性</strong>：一次 Uf 判 f 常数/平衡，经典最坏 2^{n−1}+1 次。启发：经典有"计算冗余"时量子可加速。</li><li><strong>量子傅里叶变换 (QFT)</strong>：|j⟩→(1/√N)Σ_k e^{2πijk/N}|k⟩；输出态可<strong>因式分解</strong>为单比特态张量积 ⇒ H+受控相位门 <strong>O(n²)</strong> 门。结果藏在概率幅，不能直接读。</li><li><strong>相位估计</strong>：若能制备 U 的本征态 |u⟩，用受控-U^{2^k}+逆 QFT 估计本征值（相位）φ；完美二进制相位时精确。</li><li><strong>Shor 算法</strong>：分解 → 求阶（找最小 r 使 y^r≡1 mod N）→ 对模乘 U|x⟩=|yx mod N⟩ 做相位估计；输入 |1⟩=所有本征态 |u_s⟩ 均匀叠加；经连分数+GCD 恢复因子。威胁 RSA。</li><li><strong>隐藏子群问题 (HSP)</strong>：f:G→X 隐藏子群 H，求 H 生成元；Deutsch-Jozsa/Simon/求阶/离散对数都是特例；阿贝尔已解，非阿贝尔开放。</li></ol>
+<ol><li><strong>Deutsch-Jozsa 展现量子并行性</strong>：一次 $U_f$ 判 $f$ 常数/平衡，经典最坏 $2^{n-1}+1$ 次。启发：经典有"计算冗余"时量子可加速。</li><li><strong>量子傅里叶变换 (QFT)</strong>：$\ket{j}\to\tfrac{1}{\sqrt{N}}\sum_k e^{2\pi i jk/N}\ket{k}$；输出态可<strong>因式分解</strong>为单比特态张量积 ⇒ H+受控相位门 <strong>$O(n^2)$</strong> 门。结果藏在概率幅，不能直接读。</li><li><strong>相位估计</strong>：若能制备 U 的本征态 $\ket{u}$，用受控-$U^{2^k}$+逆 QFT 估计本征值（相位）$\varphi$；完美二进制相位时精确。</li><li><strong>Shor 算法</strong>：分解 → 求阶（找最小 $r$ 使 $y^r\equiv 1 \pmod N$）→ 对模乘 $U\ket{x}=\ket{yx \bmod N}$ 做相位估计；输入 $\ket{1}$=所有本征态 $\ket{u_s}$ 均匀叠加；经连分数+GCD 恢复因子。威胁 RSA。</li><li><strong>隐藏子群问题 (HSP)</strong>：$f\colon G\to X$ 隐藏子群 $H$，求 $H$ 生成元；Deutsch-Jozsa/Simon/求阶/离散对数都是特例；阿贝尔已解，非阿贝尔开放。</li></ol>
 <h2>易混点</h2>
-<ul><li>QFT 与逆 QFT：Shor 求阶里两者给相同 Pr(k)，但语义不同。</li><li>U 不唯一：模乘 U 只需在子空间定义，能造一个即可。</li><li>端到端复杂度：含连分数/GCD 等经典后处理，不只量子线路。</li></ul>
+<ul><li>QFT 与逆 QFT：Shor 求阶里两者给相同 $\Pr(k)$，但语义不同。</li><li>U 不唯一：模乘 U 只需在子空间定义，能造一个即可。</li><li>端到端复杂度：含连分数/GCD 等经典后处理，不只量子线路。</li></ul>
 <h2>串讲顺序建议</h2>
 <p>量子并行(Deutsch-Jozsa) → QFT(因式分解/线路) → 相位估计 → Shor(分解→求阶→后处理) → HSP(统一视角)。</p></section>
 <section id="sec-cheatsheet"><h1>速记总表 · QCQI 各章关键点</h1>
 <h2>一页纸概览</h2>
-<table><thead><tr><th>章</th><th>一句话</th><th>三个关键词</th></tr></thead><tbody><tr><td>2 线代+量力</td><td>四公理 + 数学工具</td><td>ρ=迹1正定、PVM/POVM、纠缠/Bell</td></tr><tr><td>4 线路+模拟</td><td>门→通用→模拟</td><td>z-y-z、{H,T,CNOT}、Trotter/BCH</td></tr><tr><td>5 QFT 家族</td><td>并行→QFT→Shor</td><td>因式分解、相位估计、求阶/HSP</td></tr></tbody></table>
+<table><thead><tr><th>章</th><th>一句话</th><th>三个关键词</th></tr></thead><tbody><tr><td>2 线代+量力</td><td>四公理 + 数学工具</td><td>$\rho$=迹1正定、PVM/POVM、纠缠/Bell</td></tr><tr><td>4 线路+模拟</td><td>门→通用→模拟</td><td>z-y-z、$\{H,T,\mathrm{CNOT}\}$、Trotter/BCH</td></tr><tr><td>5 QFT 家族</td><td>并行→QFT→Shor</td><td>因式分解、相位估计、求阶/HSP</td></tr></tbody></table>
 <h2>第 2 章速记</h2>
-<ul><li>投影=命题；ρ=迹1正定；⟨A⟩=Tr(ρA)。</li><li>可观测量 ↔ PVM ↔ Hermite；POVM 推广。</li><li>演化幺正、定态乘相位；复合=张量积。</li><li>SVD=UDV†；Schmidt=SVD 物理版；Bell 违反 → 否定局域实在论。</li></ul>
+<ul><li>投影=命题；$\rho$=迹1正定；$\langle A\rangle=\Tr(\rho A)$。</li><li>可观测量 ↔ PVM ↔ Hermite；POVM 推广。</li><li>演化幺正、定态乘相位；复合=张量积。</li><li>$\mathrm{SVD}=UDV^\dagger$；Schmidt=SVD 物理版；Bell 违反 → 否定局域实在论。</li></ul>
 <h2>第 4 章速记</h2>
-<ul><li>单比特门=旋转，z-y-z 三次；Ry 生成所有。</li><li>CNOT/CZ/SWAP=3CNOT/Toffoli；CU 用 ABC+2CNOT。</li><li>延迟/隐含测量；通用集 {H,T,CNOT}，门数 O(log^c(1/ε))。</li><li>三环节：初始化/幺正/测量；Trotter 误差 ← [A,B]≠0（BCH）。</li></ul>
+<ul><li>单比特门=旋转，z-y-z 三次；$R_y$ 生成所有。</li><li>CNOT/CZ/SWAP=3CNOT/Toffoli；CU 用 ABC+2CNOT。</li><li>延迟/隐含测量；通用集 $\{H,T,\mathrm{CNOT}\}$，门数 $O(\log^c(1/\varepsilon))$。</li><li>三环节：初始化/幺正/测量；Trotter 误差 ← $[A,B]\ne 0$（BCH）。</li></ul>
 <h2>第 5 章速记</h2>
-<ul><li>Deutsch-Jozsa：一次 Uf 判常数/平衡。</li><li>QFT：|j⟩→(1/√N)Σe^{2πijk/N}|k⟩，O(n²)门，结果在幅里。</li><li>相位估计：受控-U^{2^k}+逆 QFT 读 φ（需本征态）。</li><li>Shor：分解→求阶→相位估计；|1⟩=Σ|u_s⟩；连分数+GCD。</li><li>HSP：阿贝尔已解，非阿贝尔开放。</li></ul>
+<ul><li>Deutsch-Jozsa：一次 $U_f$ 判常数/平衡。</li><li>QFT：$\ket{j}\to\tfrac{1}{\sqrt{N}}\sum e^{2\pi i jk/N}\ket{k}$，$O(n^2)$门，结果在幅里。</li><li>相位估计：受控-$U^{2^k}$+逆 QFT 读 $\varphi$（需本征态）。</li><li>Shor：分解→求阶→相位估计；$\ket{1}=\sum\ket{u_s}$；连分数+GCD。</li><li>HSP：阿贝尔已解，非阿贝尔开放。</li></ul>
 <h2>复杂度对照</h2>
-<table><thead><tr><th>任务</th><th>经典</th><th>量子</th></tr></thead><tbody><tr><td>傅里叶</td><td>O(N log N)</td><td>O(log²N)</td></tr><tr><td>分解</td><td>超多项式</td><td>多项式 (Shor)</td></tr><tr><td>无结构搜索</td><td>O(N)</td><td>O(√N) (Grover, 第6章)</td></tr><tr><td>Deutsch-Jozsa</td><td>最坏 2^{n−1}+1</td><td>1 次</td></tr></tbody></table>
+<table><thead><tr><th>任务</th><th>经典</th><th>量子</th></tr></thead><tbody><tr><td>傅里叶</td><td>$O(N\log N)$</td><td>$O(\log^2 N)$</td></tr><tr><td>分解</td><td>超多项式</td><td>多项式 (Shor)</td></tr><tr><td>无结构搜索</td><td>$O(N)$</td><td>$O(\sqrt{N})$ (Grover, 第6章)</td></tr><tr><td>Deutsch-Jozsa</td><td>最坏 $2^{n-1}+1$</td><td>1 次</td></tr></tbody></table>
 <h2>三条贯穿全书的红线</h2>
 <ol><li><strong>不可克隆</strong> → 禁扇出。</li><li><strong>幺正可逆</strong> → 禁扇入/环路。</li><li><strong>测量即塌缩</strong> → 信息藏在幅里，干涉后再测。</li></ol></section>
 </main>

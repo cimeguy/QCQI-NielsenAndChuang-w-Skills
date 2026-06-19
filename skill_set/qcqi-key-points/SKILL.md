@@ -58,7 +58,7 @@ description: "《量子计算与量子信息》(Nielsen & Chuang) 各章关键�
 | 2 | 线性代数与量子力学 | 四公理 + 数学工具 + 纠缠 | `qcqi-ch02-linalg-qm` |
 | 4 | 量子线路与模拟 | 门/通用性/Trotter | `qcqi-ch04-circuits` |
 | 5 | QFT 与 Shor | QFT/相位估计/Shor/HSP | `qcqi-ch05-qft` |
-| 6 | 量子搜索 | Grover/预言机/√N | `qcqi-ch06-search` |
+| 6 | 量子搜索 | Grover/预言机/$\sqrt{N}$ | `qcqi-ch06-search` |
 | 8补 | 量子信道 | 信道/Kraus/蔡氏矩阵 | `qcqi-ch08-quantum-channels` |
 
 ## 主题→章 快速定位
@@ -66,7 +66,7 @@ description: "《量子计算与量子信息》(Nielsen & Chuang) 各章关键�
 - **PVM/POVM、密度矩阵、Schmidt、Bell** → 第 2 章
 - **z-y-z、通用门、Trotter/BCH、量子模拟** → 第 4 章
 - **QFT、相位估计、Shor、求阶、HSP** → 第 5 章
-- **Grover、预言机、√N 搜索** → 第 6 章
+- **Grover、预言机、$\sqrt{N}$ 搜索** → 第 6 章
 - **Kraus、蔡氏矩阵、量子信道** → 第 8 章补充
 - **qubit、Bloch、隐形传态、Deutsch** → 第 1 章
 

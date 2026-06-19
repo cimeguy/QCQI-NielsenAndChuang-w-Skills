@@ -52,6 +52,25 @@ hr{border:none;border-top:1px dashed var(--border);margin:16px 0}
 .badge{display:inline-block;background:var(--accent);color:#fff;border-radius:6px;padding:2px 9px;font-size:12px;font-weight:600}
 @media(max-width:820px){.sidebar{display:none}.main{padding:24px 18px}}
 </style>
+<script>
+window.MathJax={
+ tex:{
+  inlineMath:[['$','$'],['\\(','\\)']],
+  displayMath:[['$$','$$'],['\\[','\\]']],
+  macros:{
+   ket:['{\\lvert #1\\rangle}',1],
+   bra:['{\\langle #1\\rvert}',1],
+   braket:['{\\langle #1\\vert #2\\rangle}',2],
+   ketbra:['{\\lvert #1\\rangle\\langle #2\\rvert}',2],
+   Tr:'{\\operatorname{Tr}}',
+   tr:'{\\operatorname{tr}}'
+  }
+ },
+ svg:{fontCache:'global'},
+ options:{skipHtmlTags:['script','style','textarea','pre','code'],ignoreHtmlClass:'viz'}
+};
+</script>
+<script src="../vendor/tex-svg.js" id="MathJax-script" async></script>
 </head>
 <body>
 <div class="layout">
@@ -256,17 +275,17 @@ hr{border:none;border-top:1px dashed var(--border);margin:16px 0}
 <p>当你问的主题不在下面的核心框架里，我会先读相关小节文件再回答。</p>
 <hr>
 <h2>核心概念框架</h2>
-<p><strong>搜索问题</strong>：在 N 个对象中找出满足条件 f(x)=1 的 M 个解之一。经典无结构搜索需 O(N)；Grover 用 <strong>O(√N)</strong> 次预言机查询，平方加速。</p>
-<p><strong>两类预言机</strong>：① <strong>布尔预言机</strong> Uf|x⟩|q⟩=|x⟩|q⊕f(x)⟩（用辅助比特记录 f）；② <strong>相位翻转预言机</strong> O|x⟩=(−1)^{f(x)}|x⟩（辅助比特置 |−⟩，相位回踢把布尔预言机变成相位翻转）。</p>
-<p><strong>Grover 迭代 G = −H·O = (2|ψ⟩⟨ψ|−I)·O</strong>：每次迭代 = 预言机 O（翻转解的相位）+ 关于均匀叠加态 |ψ⟩ 的反射（"对均值翻转"）。从均匀叠加 |ψ⟩=H^{⊗n}|0⟩ 出发，重复 G。</p>
-<p><strong>几何意义</strong>：在解空间 |β⟩ 与非解空间 |α⟩ 张成的 2 维平面内，每次 Grover 迭代是固定角度 θ 的旋转（sin(θ/2)=√(M/N)）。两次反射的复合 = 一次旋转——这正是 Householder 变换的几何。</p>
-<p><strong>成功概率与最优次数</strong>：迭代约 <strong>(π/4)√(N/M)</strong> 次时，态最接近解空间，测得解的概率最大。迭代过多会"转过头"，概率下降——次数必须卡准。</p>
-<p><strong>启发式推导（量子模拟视角）</strong>：猜哈密顿量 H=|ψ⟩⟨ψ|+|x⟩⟨x|，用 e^{−iHt}≈exp(−i|ψ⟩⟨ψ|t)·exp(−i|x⟩⟨x|t) 的 Trotter 形式；取 t=π 使每步转角最大，恰好得到 Grover 迭代 G=−HO。</p>
+<p><strong>搜索问题</strong>：在 $N$ 个对象中找出满足条件 $f(x)=1$ 的 $M$ 个解之一。经典无结构搜索需 $O(N)$；Grover 用 <strong>$O(\sqrt{N})$</strong> 次预言机查询，平方加速。</p>
+<p><strong>两类预言机</strong>：① <strong>布尔预言机</strong> $U_f\ket{x}\ket{q}=\ket{x}\ket{q\oplus f(x)}$（用辅助比特记录 $f$）；② <strong>相位翻转预言机</strong> $O\ket{x}=(-1)^{f(x)}\ket{x}$（辅助比特置 $\ket{-}$，相位回踢把布尔预言机变成相位翻转）。</p>
+<p><strong>Grover 迭代 $G = -H\cdot O = (2\ketbra{\psi}{\psi}-I)\cdot O$</strong>：每次迭代 = 预言机 $O$（翻转解的相位）+ 关于均匀叠加态 $\ket{\psi}$ 的反射（"对均值翻转"）。从均匀叠加 $\ket{\psi}=H^{\otimes n}\ket{0}$ 出发，重复 $G$。</p>
+<p><strong>几何意义</strong>：在解空间 $\ket{\beta}$ 与非解空间 $\ket{\alpha}$ 张成的 2 维平面内，每次 Grover 迭代是固定角度 $\theta$ 的旋转（$\sin(\theta/2)=\sqrt{M/N}$）。两次反射的复合 = 一次旋转——这正是 Householder 变换的几何。</p>
+<p><strong>成功概率与最优次数</strong>：迭代约 <strong>$(\pi/4)\sqrt{N/M}$</strong> 次时，态最接近解空间，测得解的概率最大。迭代过多会"转过头"，概率下降——次数必须卡准。</p>
+<p><strong>启发式推导（量子模拟视角）</strong>：猜哈密顿量 $H=\ketbra{\psi}{\psi}+\ketbra{x}{x}$，用 $e^{-iHt}\approx\exp(-i\ketbra{\psi}{\psi}t)\cdot\exp(-i\ketbra{x}{x}t)$ 的 Trotter 形式；取 $t=\pi$ 使每步转角最大，恰好得到 Grover 迭代 $G=-HO$。</p>
 <hr>
 <h2>小节索引</h2>
-<table><thead><tr><th>小节</th><th>标题</th><th>关键概念</th></tr></thead><tbody><tr><td><a href="#sec-sec6-1-problem-oracle">6.1</a></td><td>搜索问题与预言机</td><td>搜索提法、布尔预言机、相位翻转预言机、3-SAT 例</td></tr><tr><td><a href="#sec-sec6-2-grover-flow">6.2</a></td><td>Grover 算法流程</td><td>均匀叠加初态、Grover 迭代 G=−HO、完整流程</td></tr><tr><td><a href="#sec-sec6-3-geometry">6.3</a></td><td>几何意义</td><td>Householder 反射、2 维旋转、固定角度 θ</td></tr><tr><td><a href="#sec-sec6-4-success-probability">6.4</a></td><td>成功概率</td><td>最优迭代 (π/4)√(N/M)、布尔 vs 相位实现、过冲</td></tr><tr><td><a href="#sec-sec6-5-heuristic">6.5</a></td><td>启发式推导</td><td>猜哈密顿量、量子模拟/Trotter 导出 G=HO</td></tr></tbody></table>
+<table><thead><tr><th>小节</th><th>标题</th><th>关键概念</th></tr></thead><tbody><tr><td><a href="#sec-sec6-1-problem-oracle">6.1</a></td><td>搜索问题与预言机</td><td>搜索提法、布尔预言机、相位翻转预言机、3-SAT 例</td></tr><tr><td><a href="#sec-sec6-2-grover-flow">6.2</a></td><td>Grover 算法流程</td><td>均匀叠加初态、Grover 迭代 $G=-HO$、完整流程</td></tr><tr><td><a href="#sec-sec6-3-geometry">6.3</a></td><td>几何意义</td><td>Householder 反射、2 维旋转、固定角度 $\theta$</td></tr><tr><td><a href="#sec-sec6-4-success-probability">6.4</a></td><td>成功概率</td><td>最优迭代 $(\pi/4)\sqrt{N/M}$、布尔 vs 相位实现、过冲</td></tr><tr><td><a href="#sec-sec6-5-heuristic">6.5</a></td><td>启发式推导</td><td>猜哈密顿量、量子模拟/Trotter 导出 $G=HO$</td></tr></tbody></table>
 <h2>主题索引</h2>
-<ul><li><strong>3-SAT / 真值表 / 线路</strong> → 6.1</li><li><strong>Grover 迭代 G=−HO</strong> → 6.2, 6.3</li><li><strong>Householder 变换</strong> → 6.3</li><li><strong>布尔预言机 / 相位翻转预言机</strong> → 6.1</li><li><strong>几何意义 / 2 维旋转</strong> → 6.3</li><li><strong>成功概率 / 最优迭代次数</strong> → 6.4</li><li><strong>启发式推导 / 量子模拟</strong> → 6.5</li><li><strong>平方加速 O(√N)</strong> → 6.2, 6.4</li></ul>
+<ul><li><strong>3-SAT / 真值表 / 线路</strong> → 6.1</li><li><strong>Grover 迭代 $G=-HO$</strong> → 6.2, 6.3</li><li><strong>Householder 变换</strong> → 6.3</li><li><strong>布尔预言机 / 相位翻转预言机</strong> → 6.1</li><li><strong>几何意义 / 2 维旋转</strong> → 6.3</li><li><strong>成功概率 / 最优迭代次数</strong> → 6.4</li><li><strong>启发式推导 / 量子模拟</strong> → 6.5</li><li><strong>平方加速 $O(\sqrt{N})$</strong> → 6.2, 6.4</li></ul>
 <h2>辅助文件</h2>
 <ul><li><a href="#sec-glossary">glossary.md</a> — 关键术语表（中英对照）</li><li><a href="#sec-patterns">patterns.md</a> — Grover 构件与技巧</li><li><a href="#sec-cheatsheet">cheatsheet.md</a> — 流程、角度与次数速查</li></ul>
 <hr>
@@ -274,102 +293,102 @@ hr{border:none;border-top:1px dashed var(--border);margin:16px 0}
 <p>本 skill 仅覆盖 QCQI 第六章（量子搜索算法）的概念框架，源自一份中文 Mathematica 笔记（作者魏文杰，2024-03-02）。公式以纯文本/Unicode 近似表示。笔记中的 3-SAT 真值表、Wolfram 量子线路、成功概率随迭代次数的图像未完整转录，精确实现请参阅原书与原笔记。</p></section>
 <section id="sec-sec6-1-problem-oracle"><h1>6.1 搜索问题与预言机</h1>
 <h2>核心思想</h2>
-<p>量子搜索解决"无结构搜索"：在 N 个对象中找满足 f(x)=1 的解。问题通过<strong>预言机</strong>（oracle）访问 f，分布尔型与相位翻转型两种。</p>
+<p>量子搜索解决"无结构搜索"：在 $N$ 个对象中找满足 $f(x)=1$ 的解。问题通过<strong>预言机</strong>（oracle）访问 $f$，分布尔型与相位翻转型两种。</p>
 <h2>搜索问题的提法</h2>
-<ul><li>给定可计算的布尔判定函数 f:{0,…,N−1}→{0,1}（N=2ⁿ），有 M 个解（f=1）。</li><li>目标：找到一个解 x（使 f(x)=1）。经典无结构搜索需 O(N) 次查询。</li></ul>
+<ul><li>给定可计算的布尔判定函数 $f:\{0,\dots,N-1\}\to\{0,1\}$（$N=2^n$），有 $M$ 个解（$f=1$）。</li><li>目标：找到一个解 $x$（使 $f(x)=1$）。经典无结构搜索需 $O(N)$ 次查询。</li></ul>
 <h2>布尔预言机</h2>
-<ul><li><strong>形式</strong>：Uf|x⟩|q⟩ = |x⟩|q⊕f(x)⟩，q 是记录 f(x) 计算结果的辅助比特。</li><li><strong>构造例（3-SAT）</strong>：定义一个含若干 clause 的 3-SAT 布尔函数，写出真值表，用经典可逆逻辑（Toffoli 等）搭出对应量子线路；辅助比特初始化为 0。可验证经典线路与量子线路实现相同功能。</li></ul>
+<ul><li><strong>形式</strong>：$U_f\ket{x}\ket{q} = \ket{x}\ket{q\oplus f(x)}$，$q$ 是记录 $f(x)$ 计算结果的辅助比特。</li><li><strong>构造例（3-SAT）</strong>：定义一个含若干 clause 的 3-SAT 布尔函数，写出真值表，用经典可逆逻辑（Toffoli 等）搭出对应量子线路；辅助比特初始化为 0。可验证经典线路与量子线路实现相同功能。</li></ul>
 <h2>相位翻转预言机</h2>
-<ul><li><strong>形式</strong>：O|x⟩ = (−1)^{f(x)}|x⟩——对解（真输入）的态前加负号。</li><li><strong>从布尔到相位</strong>：把辅助比特置于 |−⟩=(|0⟩−|1⟩)/√2，作用布尔预言机 Uf 后，相位回踢使 |x⟩|−⟩→(−1)^{f(x)}|x⟩|−⟩，即得相位翻转预言机。</li><li>index register 是 n 个 qubit 的 |x⟩。</li></ul>
+<ul><li><strong>形式</strong>：$O\ket{x} = (-1)^{f(x)}\ket{x}$——对解（真输入）的态前加负号。</li><li><strong>从布尔到相位</strong>：把辅助比特置于 $\ket{-}=(\ket{0}-\ket{1})/\sqrt{2}$，作用布尔预言机 $U_f$ 后，相位回踢使 $\ket{x}\ket{-}\to(-1)^{f(x)}\ket{x}\ket{-}$，即得相位翻转预言机。</li><li>index register 是 $n$ 个 qubit 的 $\ket{x}$。</li></ul>
 <h2>关键要点</h2>
-<ol><li>搜索 = 在 N 对象中找 M 个 f=1 的解；经典 O(N)。</li><li>布尔预言机用辅助比特记 f(x)；相位翻转预言机给解打 −1 相位。</li><li>辅助比特置 |−⟩ + 相位回踢 = 把布尔预言机转成相位翻转预言机。</li></ol>
+<ol><li>搜索 = 在 $N$ 对象中找 $M$ 个 $f=1$ 的解；经典 $O(N)$。</li><li>布尔预言机用辅助比特记 $f(x)$；相位翻转预言机给解打 $-1$ 相位。</li><li>辅助比特置 $\ket{-}$ + 相位回踢 = 把布尔预言机转成相位翻转预言机。</li></ol>
 <h2>关联</h2>
-<ul><li><strong>6.2</strong>：相位翻转预言机 O 是 Grover 迭代的第一步。</li><li><strong>第四章 4.2</strong>：Toffoli 等可逆门构造布尔预言机。</li><li><strong>第五章 5.2</strong>：相位回踢与 Deutsch 同源。</li></ul></section>
+<ul><li><strong>6.2</strong>：相位翻转预言机 $O$ 是 Grover 迭代的第一步。</li><li><strong>第四章 4.2</strong>：Toffoli 等可逆门构造布尔预言机。</li><li><strong>第五章 5.2</strong>：相位回踢与 Deutsch 同源。</li></ul></section>
 <section id="sec-sec6-2-grover-flow"><h1>6.2 Grover 算法流程</h1>
 <h2>核心思想</h2>
-<p>从均匀叠加态出发，重复施加 Grover 迭代 G——每次把"解"的概率幅放大一点，约 (π/4)√(N/M) 次后测量即以高概率得到解。</p>
+<p>从均匀叠加态出发，重复施加 Grover 迭代 $G$——每次把"解"的概率幅放大一点，约 $(\pi/4)\sqrt{N/M}$ 次后测量即以高概率得到解。</p>
 <h2>完整流程</h2>
-<ol><li><strong>初始化</strong>：n 个比特置 |0⟩，施 H^{⊗n} 得均匀叠加 |ψ⟩=(1/√N)Σ_x|x⟩。（视实现，辅助比特置 |1⟩→H 得 |−⟩。）</li><li><strong>重复 Grover 迭代 G</strong>（约 (π/4)√(N/M) 次）。</li><li><strong>测量</strong> index register，以高概率得到一个解。</li></ol>
+<ol><li><strong>初始化</strong>：$n$ 个比特置 $\ket{0}$，施 $H^{\otimes n}$ 得均匀叠加 $\ket{\psi}=(1/\sqrt{N})\sum_x\ket{x}$。（视实现，辅助比特置 $\ket{1}$→$H$ 得 $\ket{-}$。）</li><li><strong>重复 Grover 迭代 $G$</strong>（约 $(\pi/4)\sqrt{N/M}$ 次）。</li><li><strong>测量</strong> index register，以高概率得到一个解。</li></ol>
 <h2>Grover 迭代 G = −H·O</h2>
-<ul><li>写法：<strong>G = −HO</strong>，其中</li><ul><li><strong>O</strong>：相位翻转预言机，O|x⟩=(−1)^{f(x)}|x⟩（翻转解的相位）。</li><li><strong>H</strong>（此处指关于均匀叠加 |ψ⟩ 的反射算符，常写 2|ψ⟩⟨ψ|−I，亦称"对均值的翻转/inversion about the mean"）。</li></ul><li>直观：O 把解的幅变负，再"绕均值翻转"使解的幅被放大、非解的幅被压低。</li></ul>
+<ul><li>写法：<strong>$G = -HO$</strong>，其中</li><ul><li><strong>$O$</strong>：相位翻转预言机，$O\ket{x}=(-1)^{f(x)}\ket{x}$（翻转解的相位）。</li><li><strong>$H$</strong>（此处指关于均匀叠加 $\ket{\psi}$ 的反射算符，常写 $2\ketbra{\psi}{\psi}-I$，亦称"对均值的翻转/inversion about the mean"）。</li></ul><li>直观：$O$ 把解的幅变负，再"绕均值翻转"使解的幅被放大、非解的幅被压低。</li></ul>
 <h2>复杂度</h2>
-<ul><li>每次迭代调用一次预言机；总查询 <strong>O(√N)</strong>（M=1 时 ~(π/4)√N）。</li><li>相比经典 O(N) 的<strong>平方加速</strong>。</li></ul>
+<ul><li>每次迭代调用一次预言机；总查询 <strong>$O(\sqrt{N})$</strong>（$M=1$ 时 $\sim(\pi/4)\sqrt{N}$）。</li><li>相比经典 $O(N)$ 的<strong>平方加速</strong>。</li></ul>
 <h2>关键要点</h2>
-<ol><li>流程：均匀叠加 → 重复 G → 测量。</li><li>G=−HO = 预言机相位翻转 + 关于 |ψ⟩ 的反射（对均值翻转）。</li><li>平方加速：O(√N) 次查询 vs 经典 O(N)。</li></ol>
+<ol><li>流程：均匀叠加 → 重复 $G$ → 测量。</li><li>$G=-HO$ = 预言机相位翻转 + 关于 $\ket{\psi}$ 的反射（对均值翻转）。</li><li>平方加速：$O(\sqrt{N})$ 次查询 vs 经典 $O(N)$。</li></ol>
 <h2>关联</h2>
-<ul><li><strong>6.1</strong>：O 来自相位翻转预言机。</li><li><strong>6.3</strong>：G 的两次反射 = 一次 2 维旋转（几何意义）。</li><li><strong>6.4</strong>：迭代次数必须卡在 (π/4)√(N/M)。</li></ul></section>
+<ul><li><strong>6.1</strong>：$O$ 来自相位翻转预言机。</li><li><strong>6.3</strong>：$G$ 的两次反射 = 一次 2 维旋转（几何意义）。</li><li><strong>6.4</strong>：迭代次数必须卡在 $(\pi/4)\sqrt{N/M}$。</li></ul></section>
 <section id="sec-sec6-3-geometry"><h1>6.3 Grover 算法的几何意义</h1>
 <h2>核心思想</h2>
 <p>Grover 迭代在一个 2 维平面内是固定角度的旋转。把高维搜索压缩到这个平面，算法的行为一目了然。</p>
 <h2>2 维平面</h2>
-<ul><li>定义两个正交态：</li><ul><li><strong>|β⟩</strong>：所有解的均匀叠加（解空间，M 个）。</li><li><strong>|α⟩</strong>：所有非解的均匀叠加（非解空间，N−M 个）。</li></ul><li>初态 |ψ⟩ = √((N−M)/N)|α⟩ + √(M/N)|β⟩ 落在 |α⟩-|β⟩ 平面内。当 M≪N 时，初态与 |α⟩ 很接近（离解很远）。</li></ul>
+<ul><li>定义两个正交态：</li><ul><li><strong>$\ket{\beta}$</strong>：所有解的均匀叠加（解空间，$M$ 个）。</li><li><strong>$\ket{\alpha}$</strong>：所有非解的均匀叠加（非解空间，$N-M$ 个）。</li></ul><li>初态 $\ket{\psi} = \sqrt{(N-M)/N}\ket{\alpha} + \sqrt{M/N}\ket{\beta}$ 落在 $\ket{\alpha}$-$\ket{\beta}$ 平面内。当 $M\ll N$ 时，初态与 $\ket{\alpha}$ 很接近（离解很远）。</li></ul>
 <h2>Householder 变换（反射）</h2>
-<ul><li>关于态 |ψ⟩ 的反射算符是一个 <strong>Householder 变换</strong> u = 2|ψ⟩⟨ψ|−I（u^H=⟨ψ| 相关），把向量关于 |ψ⟩ 轴做镜像反射。</li><li>预言机 O 是关于 |α⟩ 的反射（把 |β⟩ 分量取负）。</li></ul>
+<ul><li>关于态 $\ket{\psi}$ 的反射算符是一个 <strong>Householder 变换</strong> $u = 2\ketbra{\psi}{\psi}-I$（$u^H=\bra{\psi}$ 相关），把向量关于 $\ket{\psi}$ 轴做镜像反射。</li><li>预言机 $O$ 是关于 $\ket{\alpha}$ 的反射（把 $\ket{\beta}$ 分量取负）。</li></ul>
 <h2>每次迭代 = 固定角度的 2 维旋转</h2>
-<ul><li><strong>G = −HO</strong> = 两次反射（先关于 |α⟩，再关于 |ψ⟩）的复合 = 一次<strong>旋转</strong>。</li><li>旋转角 θ 满足 sin(θ/2)=√(M/N)（初态与 |α⟩ 夹角 θ/2）。</li><li>每作用一次 G，态在平面内朝 |β⟩（解空间）转过固定角 θ。</li><li><strong>综合</strong>：两次反射 ⇒ 一次旋转，是 Householder/反射几何的标准结论。</li></ul>
+<ul><li><strong>$G = -HO$</strong> = 两次反射（先关于 $\ket{\alpha}$，再关于 $\ket{\psi}$）的复合 = 一次<strong>旋转</strong>。</li><li>旋转角 $\theta$ 满足 $\sin(\theta/2)=\sqrt{M/N}$（初态与 $\ket{\alpha}$ 夹角 $\theta/2$）。</li><li>每作用一次 $G$，态在平面内朝 $\ket{\beta}$（解空间）转过固定角 $\theta$。</li><li><strong>综合</strong>：两次反射 ⇒ 一次旋转，是 Householder/反射几何的标准结论。</li></ul>
 <h2>关键要点</h2>
-<ol><li>搜索发生在 |α⟩（非解）与 |β⟩（解）张成的 2 维平面。</li><li>反射 = Householder 变换；预言机与"对均值翻转"各是一次反射。</li><li>两次反射复合 = 固定角 θ 旋转，sin(θ/2)=√(M/N)，朝解空间转。</li></ol>
+<ol><li>搜索发生在 $\ket{\alpha}$（非解）与 $\ket{\beta}$（解）张成的 2 维平面。</li><li>反射 = Householder 变换；预言机与"对均值翻转"各是一次反射。</li><li>两次反射复合 = 固定角 $\theta$ 旋转，$\sin(\theta/2)=\sqrt{M/N}$，朝解空间转。</li></ol>
 <h2>关联</h2>
-<ul><li><strong>6.2</strong>：G=−HO 的代数形式在此获得几何解释。</li><li><strong>6.4</strong>：旋转角 θ 决定最优迭代次数 ~(π/4)√(N/M)。</li><li><strong>第四章 4.1</strong>：单比特门=旋转的几何直觉在此推广到搜索平面。</li></ul></section>
+<ul><li><strong>6.2</strong>：$G=-HO$ 的代数形式在此获得几何解释。</li><li><strong>6.4</strong>：旋转角 $\theta$ 决定最优迭代次数 $\sim(\pi/4)\sqrt{N/M}$。</li><li><strong>第四章 4.1</strong>：单比特门=旋转的几何直觉在此推广到搜索平面。</li></ul></section>
 <section id="sec-sec6-4-success-probability"><h1>6.4 Grover 算法的成功概率</h1>
 <h2>核心思想</h2>
-<p>每次迭代把态朝解空间转固定角 θ，约 (π/4)√(N/M) 次后态最接近 |β⟩，测得解的概率最大。迭代过多会"转过头"，概率反而下降。</p>
+<p>每次迭代把态朝解空间转固定角 $\theta$，约 $(\pi/4)\sqrt{N/M}$ 次后态最接近 $\ket{\beta}$，测得解的概率最大。迭代过多会"转过头"，概率反而下降。</p>
 <h2>最优迭代次数</h2>
-<ul><li>初态与 |α⟩ 夹角 θ/2，sin(θ/2)=√(M/N)。要把态转到 |β⟩（再转 (π−θ)/2 ≈ π/2），需迭代次数</li></ul>
-<p>R ≈ (π/2)/θ ≈ <strong>(π/4)√(N/M)</strong>（M≪N 时 θ≈2√(M/N)）。</p>
-<ul><li>M=1 时 R≈(π/4)√N。</li><li><strong>过冲风险</strong>：迭代次数必须取整且卡准；转过头则测得解的概率下降（成功概率是迭代次数的振荡函数）。</li></ul>
+<ul><li>初态与 $\ket{\alpha}$ 夹角 $\theta/2$，$\sin(\theta/2)=\sqrt{M/N}$。要把态转到 $\ket{\beta}$（再转 $(\pi-\theta)/2 \approx \pi/2$），需迭代次数</li></ul>
+<p>$R \approx (\pi/2)/\theta \approx$ <strong>$(\pi/4)\sqrt{N/M}$</strong>（$M\ll N$ 时 $\theta\approx 2\sqrt{M/N}$）。</p>
+<ul><li>$M=1$ 时 $R\approx(\pi/4)\sqrt{N}$。</li><li><strong>过冲风险</strong>：迭代次数必须取整且卡准；转过头则测得解的概率下降（成功概率是迭代次数的振荡函数）。</li></ul>
 <h2>Worked Example：唯一解 111111（N=2⁶）</h2>
-<ul><li>布尔函数以 111111 为唯一解（即 |x=2⁶−1⟩）。线路设计与辅助比特初态的选择会得到相同的成功概率。</li><li><strong>用布尔预言机实现</strong>：</li><ul><li>辅助比特 |1⟩：前六个比特置 0、最后一个置 1，作用 Grover 迭代 20 次。</li><li>辅助比特 |0⟩：同样作用 20 次。</li></ul><li><strong>用相位翻转实现</strong>：</li><ul><li>预言机以 |111111⟩ 为解；初态前六比特各置 |+⟩；作用 Grover 迭代 20 次。</li><li>每次迭代后计算成功概率并作图。</li></ul><li><strong>结论</strong>：N=64、M=1 时最优次数 ≈(π/4)·8 ≈ 6.3，故约第 6 次迭代成功概率最高；继续到 20 次会看到概率随迭代振荡（先升后降再升）。布尔预言机（辅助 |0⟩/|1⟩）与相位翻转实现给出相同的成功概率曲线。</li></ul>
+<ul><li>布尔函数以 111111 为唯一解（即 $\ket{x=2^6-1}$）。线路设计与辅助比特初态的选择会得到相同的成功概率。</li><li><strong>用布尔预言机实现</strong>：</li><ul><li>辅助比特 $\ket{1}$：前六个比特置 0、最后一个置 1，作用 Grover 迭代 20 次。</li><li>辅助比特 $\ket{0}$：同样作用 20 次。</li></ul><li><strong>用相位翻转实现</strong>：</li><ul><li>预言机以 $\ket{111111}$ 为解；初态前六比特各置 $\ket{+}$；作用 Grover 迭代 20 次。</li><li>每次迭代后计算成功概率并作图。</li></ul><li><strong>结论</strong>：$N=64$、$M=1$ 时最优次数 $\approx(\pi/4)\cdot 8 \approx 6.3$，故约第 6 次迭代成功概率最高；继续到 20 次会看到概率随迭代振荡（先升后降再升）。布尔预言机（辅助 $\ket{0}$/$\ket{1}$）与相位翻转实现给出相同的成功概率曲线。</li></ul>
 <h2>关键要点</h2>
-<ol><li>最优迭代次数 ≈ (π/4)√(N/M)；M=1 时 ≈(π/4)√N。</li><li>成功概率随迭代次数振荡——次数不准会过冲、概率下降。</li><li>布尔预言机（辅助 |0⟩/|1⟩）与相位翻转实现成功概率相同。</li></ol>
+<ol><li>最优迭代次数 $\approx (\pi/4)\sqrt{N/M}$；$M=1$ 时 $\approx(\pi/4)\sqrt{N}$。</li><li>成功概率随迭代次数振荡——次数不准会过冲、概率下降。</li><li>布尔预言机（辅助 $\ket{0}$/$\ket{1}$）与相位翻转实现成功概率相同。</li></ol>
 <h2>关联</h2>
-<ul><li><strong>6.3</strong>：(π/4)√(N/M) 来自旋转角 θ。</li><li><strong>6.2</strong>：每次迭代调用一次预言机 ⇒ O(√N) 查询。</li><li><strong>6.5</strong>：启发式推导给出 G 的连续时间来源。</li></ul></section>
+<ul><li><strong>6.3</strong>：$(\pi/4)\sqrt{N/M}$ 来自旋转角 $\theta$。</li><li><strong>6.2</strong>：每次迭代调用一次预言机 ⇒ $O(\sqrt{N})$ 查询。</li><li><strong>6.5</strong>：启发式推导给出 $G$ 的连续时间来源。</li></ul></section>
 <section id="sec-sec6-5-heuristic"><h1>6.5 启发式推导</h1>
 <h2>核心思想</h2>
-<p>Grover 迭代不是凭空猜出的。可从"量子模拟"视角出发：猜一个哈密顿量，用 Trotter 分解去模拟它，恰好导出 Grover 迭代 G=−HO。</p>
+<p>Grover 迭代不是凭空猜出的。可从"量子模拟"视角出发：猜一个哈密顿量，用 Trotter 分解去模拟它，恰好导出 Grover 迭代 $G=-HO$。</p>
 <h2>猜哈密顿量</h2>
-<ul><li>设目标解为 |x⟩，初态为均匀叠加 |ψ⟩。猜哈密顿量为</li></ul>
-<p><strong>H = |ψ⟩⟨ψ| + |x⟩⟨x|</strong>（两个投影之和，分别"吸引"向 |ψ⟩ 和 |x⟩）。</p>
+<ul><li>设目标解为 $\ket{x}$，初态为均匀叠加 $\ket{\psi}$。猜哈密顿量为</li></ul>
+<p><strong>$H = \ketbra{\psi}{\psi} + \ketbra{x}{x}$</strong>（两个投影之和，分别"吸引"向 $\ket{\psi}$ 和 $\ket{x}$）。</p>
 <h2>用量子模拟方法实现 H ⇒ Grover</h2>
 <ul><li>用 Trotter 近似把演化拆开：</li></ul>
-<p>e^{−iHt} ≈ U(t) ≡ exp(−i|ψ⟩⟨ψ| t) · exp(−i|x⟩⟨x| t)。</p>
-<ul><li>每个因子 exp(−i|φ⟩⟨φ| t) 是"绕 |φ⟩ 的相位旋转"，作用在 2 维平面上对应一次部分旋转/反射。</li><li>每经过时间 t，态在平面内转过的角对应 cos θ 的关系。</li></ul>
-<h2>取 t=π 得到 G=HO</h2>
-<ul><li>为使每步转角最大，应令 <strong>t=π</strong>：此时 exp(−i|x⟩⟨x|π)=I−2|x⟩⟨x| 正是关于 |x⟩ 的反射（= 相位翻转预言机 O，差全局相位），exp(−i|ψ⟩⟨ψ|π)=I−2|ψ⟩⟨ψ| 是关于 |ψ⟩ 的反射。</li><li>两者复合恰好就是 Grover 迭代中的 <strong>G = −HO</strong>（H 指对 |ψ⟩ 的反射）。</li></ul>
+<p>$e^{-iHt} \approx U(t) \equiv \exp(-i\ketbra{\psi}{\psi} t) \cdot \exp(-i\ketbra{x}{x} t)$。</p>
+<ul><li>每个因子 $\exp(-i\ketbra{\phi}{\phi} t)$ 是"绕 $\ket{\phi}$ 的相位旋转"，作用在 2 维平面上对应一次部分旋转/反射。</li><li>每经过时间 $t$，态在平面内转过的角对应 $\cos\theta$ 的关系。</li></ul>
+<h2>取 $t=\pi$ 得到 $G=HO$</h2>
+<ul><li>为使每步转角最大，应令 <strong>$t=\pi$</strong>：此时 $\exp(-i\ketbra{x}{x}\pi)=I-2\ketbra{x}{x}$ 正是关于 $\ket{x}$ 的反射（= 相位翻转预言机 $O$，差全局相位），$\exp(-i\ketbra{\psi}{\psi}\pi)=I-2\ketbra{\psi}{\psi}$ 是关于 $\ket{\psi}$ 的反射。</li><li>两者复合恰好就是 Grover 迭代中的 <strong>$G = -HO$</strong>（$H$ 指对 $\ket{\psi}$ 的反射）。</li></ul>
 <h2>关键要点</h2>
-<ol><li>猜 H=|ψ⟩⟨ψ|+|x⟩⟨x|，用 Trotter 模拟其演化。</li><li>取 t=π 使转角最大，两个相位旋转各变成一次反射。</li><li>两次反射复合 = Grover 迭代 G=−HO——算法从模拟视角"自然涌现"。</li></ol>
+<ol><li>猜 $H=\ketbra{\psi}{\psi}+\ketbra{x}{x}$，用 Trotter 模拟其演化。</li><li>取 $t=\pi$ 使转角最大，两个相位旋转各变成一次反射。</li><li>两次反射复合 = Grover 迭代 $G=-HO$——算法从模拟视角"自然涌现"。</li></ol>
 <h2>关联</h2>
-<ul><li><strong>6.2/6.3</strong>：印证 G=−HO 与"两次反射=一次旋转"。</li><li><strong>第四章 4.6</strong>：Trotter 分解/量子模拟的工具在此被反用来"设计"算法。</li></ul></section>
+<ul><li><strong>6.2/6.3</strong>：印证 $G=-HO$ 与"两次反射=一次旋转"。</li><li><strong>第四章 4.6</strong>：Trotter 分解/量子模拟的工具在此被反用来"设计"算法。</li></ul></section>
 <section id="sec-glossary"><h1>术语表 · QCQI 第六章</h1>
-<p><strong>Grover 迭代 G</strong> — G=−HO，预言机 + 关于 |ψ⟩ 的反射 (6.2,6.3) <strong>Householder 变换</strong> — 关于某态的反射 2|ψ⟩⟨ψ|−I (6.3) <strong>index register</strong> — 存放 |x⟩ 的 n 个 qubit (6.1) <strong>inversion about the mean</strong> — 对均值翻转，= 关于 |ψ⟩ 反射 (6.2) <strong>|α⟩（非解空间）</strong> — 所有非解的均匀叠加 (6.3) <strong>|β⟩（解空间）</strong> — 所有解的均匀叠加 (6.3) <strong>3-SAT</strong> — 构造布尔预言机的示例布尔函数 (6.1) <strong>布尔预言机</strong> — Uf|x⟩|q⟩=|x⟩|q⊕f(x)⟩ (6.1) <strong>成功概率</strong> — 随迭代次数振荡的测得解概率 (6.4) <strong>均匀叠加初态 |ψ⟩</strong> — H^{⊗n}|0⟩=(1/√N)Σ|x⟩ (6.2) <strong>平方加速</strong> — O(√N) vs 经典 O(N) (6.2,6.4) <strong>最优迭代次数</strong> — ≈(π/4)√(N/M) (6.4) <strong>相位回踢</strong> — 辅助比特 |−⟩ 把布尔预言机变相位翻转 (6.1) <strong>相位翻转预言机 O</strong> — O|x⟩=(−1)^{f(x)}|x⟩ (6.1) <strong>旋转角 θ</strong> — sin(θ/2)=√(M/N)，每次迭代转过 θ (6.3) <strong>搜索问题</strong> — N 对象中找 M 个 f=1 的解 (6.1) <strong>启发式推导</strong> — 猜 H=|ψ⟩⟨ψ|+|x⟩⟨x|，Trotter 导出 G (6.5) <strong>过冲 (overshoot)</strong> — 迭代过多致成功概率下降 (6.4)</p></section>
+<p><strong>Grover 迭代 $G$</strong> — $G=-HO$，预言机 + 关于 $\ket{\psi}$ 的反射 (6.2,6.3) <strong>Householder 变换</strong> — 关于某态的反射 $2\ketbra{\psi}{\psi}-I$ (6.3) <strong>index register</strong> — 存放 $\ket{x}$ 的 $n$ 个 qubit (6.1) <strong>inversion about the mean</strong> — 对均值翻转，= 关于 $\ket{\psi}$ 反射 (6.2) <strong>$\ket{\alpha}$（非解空间）</strong> — 所有非解的均匀叠加 (6.3) <strong>$\ket{\beta}$（解空间）</strong> — 所有解的均匀叠加 (6.3) <strong>3-SAT</strong> — 构造布尔预言机的示例布尔函数 (6.1) <strong>布尔预言机</strong> — $U_f\ket{x}\ket{q}=\ket{x}\ket{q\oplus f(x)}$ (6.1) <strong>成功概率</strong> — 随迭代次数振荡的测得解概率 (6.4) <strong>均匀叠加初态 $\ket{\psi}$</strong> — $H^{\otimes n}\ket{0}=(1/\sqrt{N})\sum\ket{x}$ (6.2) <strong>平方加速</strong> — $O(\sqrt{N})$ vs 经典 $O(N)$ (6.2,6.4) <strong>最优迭代次数</strong> — $\approx(\pi/4)\sqrt{N/M}$ (6.4) <strong>相位回踢</strong> — 辅助比特 $\ket{-}$ 把布尔预言机变相位翻转 (6.1) <strong>相位翻转预言机 $O$</strong> — $O\ket{x}=(-1)^{f(x)}\ket{x}$ (6.1) <strong>旋转角 $\theta$</strong> — $\sin(\theta/2)=\sqrt{M/N}$，每次迭代转过 $\theta$ (6.3) <strong>搜索问题</strong> — $N$ 对象中找 $M$ 个 $f=1$ 的解 (6.1) <strong>启发式推导</strong> — 猜 $H=\ketbra{\psi}{\psi}+\ketbra{x}{x}$，Trotter 导出 $G$ (6.5) <strong>过冲 (overshoot)</strong> — 迭代过多致成功概率下降 (6.4)</p></section>
 <section id="sec-patterns"><h1>Grover 构件与技巧 · QCQI 第六章</h1>
 <h2>把布尔预言机变成相位翻转预言机</h2>
-<p><strong>何时用</strong>：手头是 Uf（布尔型），但 Grover 需要相位翻转 O。 <strong>怎么做</strong>：辅助比特置 |−⟩，作用 Uf，相位回踢得 |x⟩→(−1)^{f(x)}|x⟩；辅助比特解耦。 <strong>权衡</strong>：多一个辅助比特；辅助初态 |0⟩/|1⟩ 不影响成功概率。</p>
+<p><strong>何时用</strong>：手头是 Uf（布尔型），但 Grover 需要相位翻转 O。 <strong>怎么做</strong>：辅助比特置 $\ket{-}$，作用 $U_f$，相位回踢得 $\ket{x}\to(-1)^{f(x)}\ket{x}$；辅助比特解耦。 <strong>权衡</strong>：多一个辅助比特；辅助初态 $\ket{0}$/$\ket{1}$ 不影响成功概率。</p>
 <h2>用可逆逻辑搭布尔预言机</h2>
-<p><strong>何时用</strong>：把一个经典判定函数（如 3-SAT）做成 Uf。 <strong>怎么做</strong>：写真值表 → 用 Toffoli/CNOT 等可逆门搭线路 → 辅助比特记 f(x)，用完反计算清理。 <strong>权衡</strong>：需要 ancilla 与 uncompute；门数随 clause 数增长。</p>
+<p><strong>何时用</strong>：把一个经典判定函数（如 3-SAT）做成 Uf。 <strong>怎么做</strong>：写真值表 → 用 Toffoli/CNOT 等可逆门搭线路 → 辅助比特记 $f(x)$，用完反计算清理。 <strong>权衡</strong>：需要 ancilla 与 uncompute；门数随 clause 数增长。</p>
 <h2>把 Grover 迭代看作 2 维旋转</h2>
-<p><strong>何时用</strong>：分析成功概率、决定迭代次数。 <strong>怎么做</strong>：在 |α⟩-|β⟩ 平面里，G 是转角 θ 的旋转，sin(θ/2)=√(M/N)。 <strong>权衡</strong>：仅 2 维有效；多解时 |β⟩ 是所有解的叠加（测得随机一个解）。</p>
+<p><strong>何时用</strong>：分析成功概率、决定迭代次数。 <strong>怎么做</strong>：在 $\ket{\alpha}$-$\ket{\beta}$ 平面里，$G$ 是转角 $\theta$ 的旋转，$\sin(\theta/2)=\sqrt{M/N}$。 <strong>权衡</strong>：仅 2 维有效；多解时 $\ket{\beta}$ 是所有解的叠加（测得随机一个解）。</p>
 <h2>卡准最优迭代次数</h2>
-<p><strong>何时用</strong>：实际运行 Grover。 <strong>怎么做</strong>：R=round((π/4)√(N/M))；M 未知时可用指数递增猜测策略或量子计数先估 M。 <strong>权衡</strong>：次数偏离最优会过冲，成功概率振荡下降。</p>
+<p><strong>何时用</strong>：实际运行 Grover。 <strong>怎么做</strong>：$R=\mathrm{round}((\pi/4)\sqrt{N/M})$；$M$ 未知时可用指数递增猜测策略或量子计数先估 $M$。 <strong>权衡</strong>：次数偏离最优会过冲，成功概率振荡下降。</p>
 <h2>用量子模拟"设计"算法（启发式）</h2>
-<p><strong>何时用</strong>：想理解 G 的来历 / 设计变体。 <strong>怎么做</strong>：取 H=|ψ⟩⟨ψ|+|x⟩⟨x|，Trotter 化 e^{−iHt}，令 t=π 使两因子各成反射 ⇒ G=−HO。 <strong>权衡</strong>：是推导视角，非更优实现。</p>
+<p><strong>何时用</strong>：想理解 G 的来历 / 设计变体。 <strong>怎么做</strong>：取 $H=\ketbra{\psi}{\psi}+\ketbra{x}{x}$，Trotter 化 $e^{-iHt}$，令 $t=\pi$ 使两因子各成反射 ⇒ $G=-HO$。 <strong>权衡</strong>：是推导视角，非更优实现。</p>
 <h2>反模式</h2>
-<ul><li><strong>迭代次数照搬 √N 不取整/不按 M 调整</strong>：会过冲。</li><li><strong>忘记 M&gt;1</strong>：最优次数含 √(N/M)，且只能得到随机一个解。</li><li><strong>直接用布尔预言机不转相位</strong>：Grover 的反射需要相位翻转 O。</li><li><strong>测量过早或过晚</strong>：必须在态最接近 |β⟩ 时测。</li></ul></section>
+<ul><li><strong>迭代次数照搬 $\sqrt{N}$ 不取整/不按 $M$ 调整</strong>：会过冲。</li><li><strong>忘记 $M&gt;1$</strong>：最优次数含 $\sqrt{N/M}$，且只能得到随机一个解。</li><li><strong>直接用布尔预言机不转相位</strong>：Grover 的反射需要相位翻转 $O$。</li><li><strong>测量过早或过晚</strong>：必须在态最接近 $\ket{\beta}$ 时测。</li></ul></section>
 <section id="sec-cheatsheet"><h1>速查表 · QCQI 第六章</h1>
 <h2>算法流程</h2>
-<ol><li><strong>初始化</strong>：H^{⊗n}|0⟩ = 均匀叠加 |ψ⟩；（辅助比特 |−⟩）。</li><li><strong>重复 G</strong> 约 (π/4)√(N/M) 次。</li><li><strong>测量</strong> index register → 高概率得解。</li></ol>
+<ol><li><strong>初始化</strong>：$H^{\otimes n}\ket{0}$ = 均匀叠加 $\ket{\psi}$；（辅助比特 $\ket{-}$）。</li><li><strong>重复 $G$</strong> 约 $(\pi/4)\sqrt{N/M}$ 次。</li><li><strong>测量</strong> index register → 高概率得解。</li></ol>
 <h2>Grover 迭代 G = −H·O</h2>
-<table><thead><tr><th>部件</th><th>作用</th><th>几何</th></tr></thead><tbody><tr><td>O（预言机）</td><td>O</td><td>x⟩=(−1)^{f(x)}</td><td>x⟩</td><td>关于</td><td>α⟩ 反射</td></tr><tr><td>H（2</td><td>ψ⟩⟨ψ</td><td>−I）</td><td>对均值翻转</td><td>关于</td><td>ψ⟩ 反射</td></tr><tr><td>G=−HO</td><td>一次迭代</td><td>转角 θ 的旋转</td></tr></tbody></table>
+<table><thead><tr><th>部件</th><th>作用</th><th>几何</th></tr></thead><tbody><tr><td>O（预言机）</td><td>$O\ket{x}=(-1)^{f(x)}\ket{x}$</td><td>关于 $\ket{\alpha}$ 反射</td></tr><tr><td>H（$2\ketbra{\psi}{\psi}-I$）</td><td>对均值翻转</td><td>关于 $\ket{\psi}$ 反射</td></tr><tr><td>$G=-HO$</td><td>一次迭代</td><td>转角 $\theta$ 的旋转</td></tr></tbody></table>
 <h2>关键数字</h2>
-<ul><li><strong>旋转角</strong>：sin(θ/2)=√(M/N)，M≪N 时 θ≈2√(M/N)。</li><li><strong>最优迭代次数</strong>：R ≈ (π/4)√(N/M)；M=1 → (π/4)√N。</li><li><strong>复杂度</strong>：O(√N) 查询（经典 O(N)）——平方加速。</li><li>N=64,M=1 → R≈6。</li></ul>
+<ul><li><strong>旋转角</strong>：$\sin(\theta/2)=\sqrt{M/N}$，$M\ll N$ 时 $\theta\approx 2\sqrt{M/N}$。</li><li><strong>最优迭代次数</strong>：$R \approx (\pi/4)\sqrt{N/M}$；$M=1$ → $(\pi/4)\sqrt{N}$。</li><li><strong>复杂度</strong>：$O(\sqrt{N})$ 查询（经典 $O(N)$）——平方加速。</li><li>$N=64,M=1$ → $R\approx 6$。</li></ul>
 <h2>预言机两型</h2>
-<table><thead><tr><th>类型</th><th>形式</th><th>备注</th></tr></thead><tbody><tr><td>布尔</td><td>Uf</td><td>x⟩</td><td>q⟩=</td><td>x⟩</td><td>q⊕f(x)⟩</td><td>用辅助比特记 f</td></tr><tr><td>相位翻转</td><td>O</td><td>x⟩=(−1)^{f(x)}</td><td>x⟩</td><td>辅助</td><td>−⟩+回踢从布尔得到</td></tr></tbody></table>
+<table><thead><tr><th>类型</th><th>形式</th><th>备注</th></tr></thead><tbody><tr><td>布尔</td><td>$U_f\ket{x}\ket{q}=\ket{x}\ket{q\oplus f(x)}$</td><td>用辅助比特记 $f$</td></tr><tr><td>相位翻转</td><td>$O\ket{x}=(-1)^{f(x)}\ket{x}$</td><td>辅助 $\ket{-}$+回踢从布尔得到</td></tr></tbody></table>
 <h2>几何要点</h2>
-<ul><li>平面：|α⟩（非解）、|β⟩（解）。</li><li>初态 |ψ⟩=√((N−M)/N)|α⟩+√(M/N)|β⟩。</li><li>反射 = Householder；两次反射 = 一次旋转。</li></ul>
+<ul><li>平面：$\ket{\alpha}$（非解）、$\ket{\beta}$（解）。</li><li>初态 $\ket{\psi}=\sqrt{(N-M)/N}\ket{\alpha}+\sqrt{M/N}\ket{\beta}$。</li><li>反射 = Householder；两次反射 = 一次旋转。</li></ul>
 <h2>注意事项</h2>
-<ul><li>成功概率随迭代次数<strong>振荡</strong>，必须卡准次数（过冲会下降）。</li><li>多解 M&gt;1：得到随机一个解；M 未知先做量子计数或指数猜测。</li><li>布尔（辅助 |0⟩/|1⟩）与相位翻转实现成功概率相同。</li></ul>
+<ul><li>成功概率随迭代次数<strong>振荡</strong>，必须卡准次数（过冲会下降）。</li><li>多解 $M&gt;1$：得到随机一个解；$M$ 未知先做量子计数或指数猜测。</li><li>布尔（辅助 $\ket{0}$/$\ket{1}$）与相位翻转实现成功概率相同。</li></ul>
 <h2>启发式来源</h2>
-<p>H=|ψ⟩⟨ψ|+|x⟩⟨x| → Trotter，t=π → 两反射复合 = G=−HO。</p></section>
+<p>$H=\ketbra{\psi}{\psi}+\ketbra{x}{x}$ → Trotter，$t=\pi$ → 两反射复合 = $G=-HO$。</p></section>
 </main>
 </div>
 <script>

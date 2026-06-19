@@ -52,6 +52,25 @@ hr{border:none;border-top:1px dashed var(--border);margin:16px 0}
 .badge{display:inline-block;background:var(--accent);color:#fff;border-radius:6px;padding:2px 9px;font-size:12px;font-weight:600}
 @media(max-width:820px){.sidebar{display:none}.main{padding:24px 18px}}
 </style>
+<script>
+window.MathJax={
+ tex:{
+  inlineMath:[['$','$'],['\\(','\\)']],
+  displayMath:[['$$','$$'],['\\[','\\]']],
+  macros:{
+   ket:['{\\lvert #1\\rangle}',1],
+   bra:['{\\langle #1\\rvert}',1],
+   braket:['{\\langle #1\\vert #2\\rangle}',2],
+   ketbra:['{\\lvert #1\\rangle\\langle #2\\rvert}',2],
+   Tr:'{\\operatorname{Tr}}',
+   tr:'{\\operatorname{tr}}'
+  }
+ },
+ svg:{fontCache:'global'},
+ options:{skipHtmlTags:['script','style','textarea','pre','code'],ignoreHtmlClass:'viz'}
+};
+</script>
+<script src="../vendor/tex-svg.js" id="MathJax-script" async></script>
 </head>
 <body>
 <div class="layout">
@@ -217,17 +236,17 @@ hr{border:none;border-top:1px dashed var(--border);margin:16px 0}
 <p>当你问的主题不在下面的核心框架里，我会先读相关小节文件再回答。</p>
 <hr>
 <h2>核心概念框架</h2>
-<p><strong>量子信道 = CPTP 映射</strong>：开放量子系统的演化由完全正定且保迹 (Completely Positive Trace-Preserving) 的映射 ℰ(ρ) 描述。它有三种等价描述，本补充围绕它们之间的相互转换展开。</p>
+<p><strong>量子信道 = CPTP 映射</strong>：开放量子系统的演化由完全正定且保迹 (Completely Positive Trace-Preserving) 的映射 $\mathcal{E}(\rho)$ 描述。它有三种等价描述，本补充围绕它们之间的相互转换展开。</p>
 <p><strong>三种等价描述</strong>：</p>
-<ol><li><strong>信道映射 ℰ</strong>：直接给出 ρ → ℰ(ρ)。</li><li><strong>Kraus 算符</strong> {E_k}：ℰ(ρ)=Σ_k E_k ρ E_k†，保迹条件 Σ_k E_k†E_k = I。</li><li><strong>蔡氏矩阵 (Choi matrix)</strong> J(ℰ)：把信道作用在最大纠缠态上得到的矩阵，J(ℰ)=(ℰ⊗I)(|Ω⟩⟨Ω|)。</li></ol>
-<p><strong>转换路径（本补充主线）</strong>：信道 ⟶ 蔡氏矩阵（以比特翻转为例）⟶ 对蔡氏矩阵做谱分解（本征值/本征态）⟶ Kraus 算符。Choi-Jamiołkowski 同构是这条路径的理论基础。</p>
-<p><strong>典型信道</strong>：比特翻转、相位翻转、相位阻尼（与相位翻转效果一致）、去极化、振幅阻尼——每个都有标准 Kraus 算符与对应的 <strong>Bloch 向量仿射变换矩阵</strong>（r → Mr + c，描述 Bloch 球如何被压缩/平移）。</p>
+<ol><li><strong>信道映射 $\mathcal{E}$</strong>：直接给出 $\rho \to \mathcal{E}(\rho)$。</li><li><strong>Kraus 算符</strong> $\{E_k\}$：$\mathcal{E}(\rho)=\sum_k E_k \rho E_k^\dagger$，保迹条件 $\sum_k E_k^\dagger E_k = I$。</li><li><strong>蔡氏矩阵 (Choi matrix)</strong> $J(\mathcal{E})$：把信道作用在最大纠缠态上得到的矩阵，$J(\mathcal{E})=(\mathcal{E}\otimes I)(\ketbra{\Omega}{\Omega})$。</li></ol>
+<p><strong>转换路径（本补充主线）</strong>：信道 $\to$ 蔡氏矩阵（以比特翻转为例）$\to$ 对蔡氏矩阵做谱分解（本征值/本征态）$\to$ Kraus 算符。Choi-Jamiołkowski 同构是这条路径的理论基础。</p>
+<p><strong>典型信道</strong>：比特翻转、相位翻转、相位阻尼（与相位翻转效果一致）、去极化、振幅阻尼——每个都有标准 Kraus 算符与对应的 <strong>Bloch 向量仿射变换矩阵</strong>（$\vec r \mapsto M\vec r + \vec c$，描述 Bloch 球如何被压缩/平移）。</p>
 <p><strong>应用</strong>：用上述工具数值验证扰动量子纠错 (Perturbative Quantum Error Correction) 中两个公式 (18) 与 (20) 的等价性。</p>
 <hr>
 <h2>小节索引</h2>
-<table><thead><tr><th>小节</th><th>标题</th><th>关键概念</th></tr></thead><tbody><tr><td><a href="#sec-sec8-1-channel-to-choi">8.1</a></td><td>从信道到蔡氏矩阵</td><td>CPTP、Choi 矩阵定义、比特翻转为例</td></tr><tr><td><a href="#sec-sec8-2-choi-to-kraus">8.2</a></td><td>从蔡氏矩阵到 Kraus 算符</td><td>谱分解、本征值/本征态 → Kraus</td></tr><tr><td><a href="#sec-sec8-3-typical-channels">8.3</a></td><td>典型信道</td><td>Kraus 算符 + Bloch 仿射变换矩阵</td></tr><tr><td><a href="#sec-sec8-4-examples">8.4</a></td><td>算例与验证</td><td>信道→Kraus 多例、换基、Perturbative QEC 验证</td></tr></tbody></table>
+<table><thead><tr><th>小节</th><th>标题</th><th>关键概念</th></tr></thead><tbody><tr><td><a href="#sec-sec8-1-channel-to-choi">8.1</a></td><td>从信道到蔡氏矩阵</td><td>CPTP、Choi 矩阵定义、比特翻转为例</td></tr><tr><td><a href="#sec-sec8-2-choi-to-kraus">8.2</a></td><td>从蔡氏矩阵到 Kraus 算符</td><td>谱分解、本征值/本征态 $\to$ Kraus</td></tr><tr><td><a href="#sec-sec8-3-typical-channels">8.3</a></td><td>典型信道</td><td>Kraus 算符 + Bloch 仿射变换矩阵</td></tr><tr><td><a href="#sec-sec8-4-examples">8.4</a></td><td>算例与验证</td><td>信道 $\to$ Kraus 多例、换基、Perturbative QEC 验证</td></tr></tbody></table>
 <h2>主题索引</h2>
-<ul><li><strong>Bloch 向量仿射变换</strong> → 8.3</li><li><strong>CPTP / 完全正定保迹</strong> → 8.1</li><li><strong>Choi / 蔡氏矩阵</strong> → 8.1, 8.2</li><li><strong>Kraus 算符</strong> → 8.2, 8.3, 8.4</li><li><strong>去极化 / 振幅阻尼</strong> → 8.3</li><li><strong>比特翻转 / 相位翻转 / 相位阻尼</strong> → 8.1, 8.3</li><li><strong>扰动量子纠错验证</strong> → 8.4</li><li><strong>谱分解（蔡氏矩阵）</strong> → 8.2</li></ul>
+<ul><li><strong>Bloch 向量仿射变换</strong> $\to$ 8.3</li><li><strong>CPTP / 完全正定保迹</strong> $\to$ 8.1</li><li><strong>Choi / 蔡氏矩阵</strong> $\to$ 8.1, 8.2</li><li><strong>Kraus 算符</strong> $\to$ 8.2, 8.3, 8.4</li><li><strong>去极化 / 振幅阻尼</strong> $\to$ 8.3</li><li><strong>比特翻转 / 相位翻转 / 相位阻尼</strong> $\to$ 8.1, 8.3</li><li><strong>扰动量子纠错验证</strong> $\to$ 8.4</li><li><strong>谱分解（蔡氏矩阵）</strong> $\to$ 8.2</li></ul>
 <h2>辅助文件</h2>
 <ul><li><a href="#sec-glossary">glossary.md</a> — 关键术语表（中英对照）</li><li><a href="#sec-patterns">patterns.md</a> — 信道/Kraus/蔡氏矩阵转换技巧</li><li><a href="#sec-cheatsheet">cheatsheet.md</a> — 典型信道 Kraus 与仿射变换速查</li></ul>
 <hr>
@@ -235,82 +254,82 @@ hr{border:none;border-top:1px dashed var(--border);margin:16px 0}
 <p>本 skill 来自一份内容较"骨架化"的 Mathematica 补充笔记——原文主要由标题、公式单元与数值代码构成，散文说明很少。因此本 skill 的小节在忠实转录笔记结构的基础上，结合量子信道的标准知识补全了概念脉络；具体的矩阵数值、谱分解结果、QEC 公式 (18)/(20) 的完整表达式与数值验证代码未在笔记文本层中完整保留。精确公式与数值请参阅原书第 8 章与原笔记。</p></section>
 <section id="sec-sec8-1-channel-to-choi"><h1>8.1 从信道到蔡氏矩阵（以比特翻转为例）</h1>
 <h2>核心思想</h2>
-<p>量子信道 ℰ 是描述开放系统演化的 CPTP 映射。把它作用在最大纠缠态的一半上，得到的矩阵就是<strong>蔡氏矩阵 (Choi matrix)</strong>——它把"映射"编码成一个普通矩阵，便于分析。</p>
+<p>量子信道 $\mathcal{E}$ 是描述开放系统演化的 CPTP 映射。把它作用在最大纠缠态的一半上，得到的矩阵就是<strong>蔡氏矩阵 (Choi matrix)</strong>——它把"映射"编码成一个普通矩阵，便于分析。</p>
 <h2>量子信道 (CPTP 映射)</h2>
-<ul><li><strong>完全正定 (CP)</strong>：ℰ⊗I 对任意扩展系统都保持正定（保证物理性）。</li><li><strong>保迹 (TP)</strong>：Tr(ℰ(ρ))=Tr(ρ)（概率守恒）。</li></ul>
+<ul><li><strong>完全正定 (CP)</strong>：$\mathcal{E}\otimes I$ 对任意扩展系统都保持正定（保证物理性）。</li><li><strong>保迹 (TP)</strong>：$\Tr(\mathcal{E}(\rho))=\Tr(\rho)$（概率守恒）。</li></ul>
 <h2>蔡氏矩阵 / Choi-Jamiołkowski 同构</h2>
-<ul><li><strong>定义</strong>：J(ℰ) = (ℰ⊗I)(|Ω⟩⟨Ω|)，其中 |Ω⟩=Σ_i|ii⟩ 是（未归一）最大纠缠态。</li><li><strong>意义</strong>：信道 ℰ ↔ 矩阵 J(ℰ) 一一对应（同构）。ℰ 是 CP ⟺ J(ℰ)≥0（半正定）；ℰ 保迹 ⟺ J 的部分迹 = I。</li><li><strong>作用</strong>：把"对所有输入 ρ 的映射"压缩成一个有限维矩阵，可直接做谱分解。</li></ul>
+<ul><li><strong>定义</strong>：$J(\mathcal{E}) = (\mathcal{E}\otimes I)(\ketbra{\Omega}{\Omega})$，其中 $\ket{\Omega}=\sum_i\ket{ii}$ 是（未归一）最大纠缠态。</li><li><strong>意义</strong>：信道 $\mathcal{E}\leftrightarrow$ 矩阵 $J(\mathcal{E})$ 一一对应（同构）。$\mathcal{E}$ 是 CP $\iff J(\mathcal{E})\ge 0$（半正定）；$\mathcal{E}$ 保迹 $\iff J$ 的部分迹 $= I$。</li><li><strong>作用</strong>：把"对所有输入 $\rho$ 的映射"压缩成一个有限维矩阵，可直接做谱分解。</li></ul>
 <h2>Worked Example：比特翻转信道</h2>
-<ul><li>比特翻转信道：ℰ(ρ)=(1−p)ρ + p XρX（以概率 p 施加 Pauli-X）。</li><li>把它作用在最大纠缠态一半上，按定义算出对应的蔡氏矩阵 J，作为后续（§8.2）谱分解 → Kraus 的输入。</li></ul>
+<ul><li>比特翻转信道：$\mathcal{E}(\rho)=(1-p)\rho + p X\rho X$（以概率 $p$ 施加 Pauli-X）。</li><li>把它作用在最大纠缠态一半上，按定义算出对应的蔡氏矩阵 $J$，作为后续（§8.2）谱分解 $\to$ Kraus 的输入。</li></ul>
 <h2>关键要点</h2>
-<ol><li>量子信道 = CPTP 映射；CP 保证物理、TP 保证概率守恒。</li><li>蔡氏矩阵 J(ℰ)=(ℰ⊗I)|Ω⟩⟨Ω| 把信道编码成一个矩阵。</li><li>CP ⟺ J≥0；这使"映射的正定性"变成"矩阵的半正定性"，便于检验与分解。</li></ol>
+<ol><li>量子信道 = CPTP 映射；CP 保证物理、TP 保证概率守恒。</li><li>蔡氏矩阵 $J(\mathcal{E})=(\mathcal{E}\otimes I)\ketbra{\Omega}{\Omega}$ 把信道编码成一个矩阵。</li><li>CP $\iff J\ge 0$；这使"映射的正定性"变成"矩阵的半正定性"，便于检验与分解。</li></ol>
 <h2>关联</h2>
 <ul><li><strong>8.2</strong>：对 J 做谱分解即得 Kraus 算符。</li><li><strong>8.3</strong>：比特翻转是典型信道之一。</li></ul></section>
 <section id="sec-sec8-2-choi-to-kraus"><h1>8.2 从蔡氏矩阵到 Kraus 算符</h1>
 <h2>核心思想</h2>
-<p>蔡氏矩阵 J(ℰ) 是半正定矩阵，对它做谱分解（求本征值与本征态），每个本征对就给出一个 Kraus 算符。这是从信道矩阵表示恢复算符和表示的标准途径。</p>
+<p>蔡氏矩阵 $J(\mathcal{E})$ 是半正定矩阵，对它做谱分解（求本征值与本征态），每个本征对就给出一个 Kraus 算符。这是从信道矩阵表示恢复算符和表示的标准途径。</p>
 <h2>谱分解 → Kraus</h2>
-<ul><li>对 J(ℰ) 做谱分解：J = Σ_k λ_k |v_k⟩⟨v_k|，λ_k≥0（因 J 半正定）。</li><li>每个本征向量 |v_k⟩（d²维）按"向量化逆操作"reshape 成 d×d 矩阵，再乘 √λ_k，即得一个 <strong>Kraus 算符</strong> E_k = √λ_k · mat(|v_k⟩)。</li><li>于是 ℰ(ρ)=Σ_k E_k ρ E_k†，且保迹 Σ_k E_k†E_k=I。</li></ul>
+<ul><li>对 $J(\mathcal{E})$ 做谱分解：$J = \sum_k \lambda_k \ketbra{v_k}{v_k}$，$\lambda_k\ge 0$（因 $J$ 半正定）。</li><li>每个本征向量 $\ket{v_k}$（$d^2$ 维）按"向量化逆操作"reshape 成 $d\times d$ 矩阵，再乘 $\sqrt{\lambda_k}$，即得一个 <strong>Kraus 算符</strong> $E_k = \sqrt{\lambda_k}\cdot\mathrm{mat}(\ket{v_k})$。</li><li>于是 $\mathcal{E}(\rho)=\sum_k E_k \rho E_k^\dagger$，且保迹 $\sum_k E_k^\dagger E_k=I$。</li></ul>
 <h2>讨论蔡氏矩阵的本征值与本征态</h2>
-<ul><li><strong>非零本征值个数</strong> = 信道的 <strong>Kraus 秩</strong>（最少需要的 Kraus 算符数）。</li><li>本征值 λ_k 给出各 Kraus 通道的"权重"；λ_k=0 的方向不贡献 Kraus 算符。</li><li><strong>Kraus 表示不唯一</strong>：任意一组 Kraus {E_k} 与另一组 {F_j} 等价 ⟺ 差一个幺正混合 F_j=Σ_k u_{jk}E_k（谱分解给出的是正交规范的一组）。</li></ul>
+<ul><li><strong>非零本征值个数</strong> = 信道的 <strong>Kraus 秩</strong>（最少需要的 Kraus 算符数）。</li><li>本征值 $\lambda_k$ 给出各 Kraus 通道的"权重"；$\lambda_k=0$ 的方向不贡献 Kraus 算符。</li><li><strong>Kraus 表示不唯一</strong>：任意一组 Kraus $\{E_k\}$ 与另一组 $\{F_j\}$ 等价 $\iff$ 差一个幺正混合 $F_j=\sum_k u_{jk}E_k$（谱分解给出的是正交规范的一组）。</li></ul>
 <h2>关键要点</h2>
-<ol><li>J 半正定 ⇒ 谱分解 J=Σλ_k|v_k⟩⟨v_k|，λ_k≥0。</li><li>每个 (√λ_k, |v_k⟩) → 一个 Kraus 算符 E_k（向量 reshape 成矩阵）。</li><li>非零本征值数 = Kraus 秩；Kraus 表示差一个幺正自由度，不唯一。</li></ol>
+<ol><li>$J$ 半正定 $\Rightarrow$ 谱分解 $J=\sum_k\lambda_k\ketbra{v_k}{v_k}$，$\lambda_k\ge 0$。</li><li>每个 $(\sqrt{\lambda_k}, \ket{v_k}) \to$ 一个 Kraus 算符 $E_k$（向量 reshape 成矩阵）。</li><li>非零本征值数 = Kraus 秩；Kraus 表示差一个幺正自由度，不唯一。</li></ol>
 <h2>关联</h2>
-<ul><li><strong>8.1</strong>：J 由信道→蔡氏矩阵得到。</li><li><strong>8.3/8.4</strong>：对典型信道与算例执行这套谱分解流程。</li></ul></section>
+<ul><li><strong>8.1</strong>：$J$ 由信道 $\to$ 蔡氏矩阵得到。</li><li><strong>8.3/8.4</strong>：对典型信道与算例执行这套谱分解流程。</li></ul></section>
 <section id="sec-sec8-3-typical-channels"><h1>8.3 几种典型信道的 Kraus 算符与 Bloch 仿射变换</h1>
 <h2>核心思想</h2>
-<p>单 qubit 信道既可用 Kraus 算符描述，也可用 <strong>Bloch 向量仿射变换</strong> r → Mr + c 描述（M 是 3×3 矩阵、c 是平移向量）——后者直观展示信道如何压缩/平移 Bloch 球。</p>
+<p>单 qubit 信道既可用 Kraus 算符描述，也可用 <strong>Bloch 向量仿射变换</strong> $\vec r \mapsto M\vec r + \vec c$ 描述（$M$ 是 $3\times 3$ 矩阵、$\vec c$ 是平移向量）——后者直观展示信道如何压缩/平移 Bloch 球。</p>
 <h2>典型信道的 Kraus 算符</h2>
-<p>（p 为出错概率，σ 为 Pauli 矩阵）</p>
-<ul><li><strong>比特翻转</strong>：E₀=√(1−p)I，E₁=√p X。</li><li><strong>相位翻转</strong>：E₀=√(1−p)I，E₁=√p Z。</li><li><strong>相位阻尼 (phase damping)</strong>：与相位翻转效果一致（笔记原话："相位阻尼和相位反转一样"）——同样只衰减相干（off-diagonal）项，等价于一个退相位过程。</li><li><strong>比特-相位翻转</strong>：E₀=√(1−p)I，E₁=√p Y。</li><li><strong>去极化 (depolarizing)</strong>：E₀=√(1−3p/4)I，E₁=√(p/4)X，E₂=√(p/4)Y，E₃=√(p/4)Z（以概率 p 把态替换为最大混合）。</li><li><strong>振幅阻尼 (amplitude damping)</strong>：E₀=[[1,0],[0,√(1−γ)]]，E₁=[[0,√γ],[0,0]]（描述能量耗散 |1⟩→|0⟩）。</li></ul>
+<p>（$p$ 为出错概率，$\sigma$ 为 Pauli 矩阵）</p>
+<ul><li><strong>比特翻转</strong>：$E_0=\sqrt{1-p}\,I$，$E_1=\sqrt{p}\,X$。</li><li><strong>相位翻转</strong>：$E_0=\sqrt{1-p}\,I$，$E_1=\sqrt{p}\,Z$。</li><li><strong>相位阻尼 (phase damping)</strong>：与相位翻转效果一致（笔记原话："相位阻尼和相位反转一样"）——同样只衰减相干（off-diagonal）项，等价于一个退相位过程。</li><li><strong>比特-相位翻转</strong>：$E_0=\sqrt{1-p}\,I$，$E_1=\sqrt{p}\,Y$。</li><li><strong>去极化 (depolarizing)</strong>：$E_0=\sqrt{1-3p/4}\,I$，$E_1=\sqrt{p/4}\,X$，$E_2=\sqrt{p/4}\,Y$，$E_3=\sqrt{p/4}\,Z$（以概率 $p$ 把态替换为最大混合）。</li><li><strong>振幅阻尼 (amplitude damping)</strong>：$E_0=\begin{pmatrix}1&amp;0\\0&amp;\sqrt{1-\gamma}\end{pmatrix}$，$E_1=\begin{pmatrix}0&amp;\sqrt{\gamma}\\0&amp;0\end{pmatrix}$（描述能量耗散 $\ket{1}\to\ket{0}$）。</li></ul>
 <h2>Bloch 向量仿射变换矩阵 r → Mr + c</h2>
-<ul><li><strong>比特翻转</strong>：M=diag(1, 1−2p, 1−2p)，c=0（沿 y、z 收缩）。</li><li><strong>相位翻转 / 相位阻尼</strong>：M=diag(1−2p, 1−2p, 1)，c=0（沿 x、y 收缩，z 不变）。</li><li><strong>去极化</strong>：M=diag(1−p, 1−p, 1−p)，c=0（各向同性缩小，整球向球心收缩）。</li><li><strong>振幅阻尼</strong>：M=diag(√(1−γ), √(1−γ), 1−γ)，c=(0,0,γ)（球收缩并向北极 |0⟩ 平移）——这是唯一带非零平移 c 的典型例子。</li></ul>
+<ul><li><strong>比特翻转</strong>：$M=\mathrm{diag}(1,\, 1-2p,\, 1-2p)$，$\vec c=0$（沿 $y$、$z$ 收缩）。</li><li><strong>相位翻转 / 相位阻尼</strong>：$M=\mathrm{diag}(1-2p,\, 1-2p,\, 1)$，$\vec c=0$（沿 $x$、$y$ 收缩，$z$ 不变）。</li><li><strong>去极化</strong>：$M=\mathrm{diag}(1-p,\, 1-p,\, 1-p)$，$\vec c=0$（各向同性缩小，整球向球心收缩）。</li><li><strong>振幅阻尼</strong>：$M=\mathrm{diag}(\sqrt{1-\gamma},\, \sqrt{1-\gamma},\, 1-\gamma)$，$\vec c=(0,0,\gamma)$（球收缩并向北极 $\ket{0}$ 平移）——这是唯一带非零平移 $\vec c$ 的典型例子。</li></ul>
 <h2>关键要点</h2>
-<ol><li>相位阻尼与相位翻转效果一致：都只衰减相干项。</li><li>Kraus 与 Bloch 仿射变换是同一信道的两种描述；仿射形 r→Mr+c。</li><li>去极化各向同性收缩 (c=0)；振幅阻尼收缩并平移 (c≠0)，反映能量耗散的不可逆性。</li></ol>
+<ol><li>相位阻尼与相位翻转效果一致：都只衰减相干项。</li><li>Kraus 与 Bloch 仿射变换是同一信道的两种描述；仿射形 $\vec r\mapsto M\vec r+\vec c$。</li><li>去极化各向同性收缩 $(\vec c=0)$；振幅阻尼收缩并平移 $(\vec c\ne 0)$，反映能量耗散的不可逆性。</li></ol>
 <h2>关联</h2>
 <ul><li><strong>8.2</strong>：这些 Kraus 算符可由各自蔡氏矩阵谱分解得到。</li><li><strong>8.4</strong>：算例中在不同基底下展开同一信道的 Kraus 算符。</li></ul></section>
 <section id="sec-sec8-4-examples"><h1>8.4 算例与验证</h1>
 <h2>核心思想</h2>
 <p>把 §8.1–8.3 的转换流程应用到具体信道：从信道求 Kraus、在不同基底下展开 Kraus，并用这些工具数值验证扰动量子纠错的两个公式等价。</p>
 <h2>信道 → Kraus 的多个算例</h2>
-<ul><li><strong>算例 1–3</strong>：给定若干单 qubit 信道（或其蔡氏矩阵），按 §8.2 流程谱分解得到各自的 Kraus 算符组，并核验保迹条件 Σ E_k†E_k = I。</li><li><strong>算例 4：换基底展开 Kraus（单比特）</strong>：与算例 1 计算的是<strong>同一个信道</strong>，但把 Kraus 算符在另一组算符基底下展开——验证 Kraus 表示的非唯一性（不同基底/幺正混合给出等价的信道）。</li><li><strong>检验式 (transflat)</strong>：核验某个把信道"展平"为矩阵的变换式（向量化/transfer matrix 形式）与直接计算一致。</li></ul>
+<ul><li><strong>算例 1–3</strong>：给定若干单 qubit 信道（或其蔡氏矩阵），按 §8.2 流程谱分解得到各自的 Kraus 算符组，并核验保迹条件 $\sum_k E_k^\dagger E_k = I$。</li><li><strong>算例 4：换基底展开 Kraus（单比特）</strong>：与算例 1 计算的是<strong>同一个信道</strong>，但把 Kraus 算符在另一组算符基底下展开——验证 Kraus 表示的非唯一性（不同基底/幺正混合给出等价的信道）。</li><li><strong>检验式 (transflat)</strong>：核验某个把信道"展平"为矩阵的变换式（向量化/transfer matrix 形式）与直接计算一致。</li></ul>
 <h2>验证扰动量子纠错 (Perturbative QEC) 公式 (18) 与 (20) 的等价性</h2>
 <ul><li><strong>目标</strong>：用上述信道/Kraus 工具，数值检验某篇扰动量子纠错工作中公式 (18) 与公式 (20) 在数值上等价。</li><li><strong>结果</strong>：笔记记录"<strong>数值验证通过</strong>"——两式在所测参数下给出一致结果。</li></ul>
 <h2>关键要点</h2>
-<ol><li>算例 1–3：标准"信道→蔡氏矩阵→谱分解→Kraus"流程并核验保迹。</li><li>算例 4：同一信道在不同基底下的 Kraus 展开等价——印证 Kraus 非唯一。</li><li>Perturbative QEC 公式 (18)≡(20) 经数值验证通过。</li></ol>
+<ol><li>算例 1–3：标准"信道$\to$蔡氏矩阵$\to$谱分解$\to$Kraus"流程并核验保迹。</li><li>算例 4：同一信道在不同基底下的 Kraus 展开等价——印证 Kraus 非唯一。</li><li>Perturbative QEC 公式 (18) $\equiv$ (20) 经数值验证通过。</li></ol>
 <h2>关联</h2>
 <ul><li><strong>8.1/8.2</strong>：算例使用的核心转换路径。</li><li><strong>8.3</strong>：算例信道多为典型信道或其组合。</li></ul>
 <h2>备注</h2>
 <p>本节在原笔记中以公式单元与数值代码为主，散文极少；上述为依据可见标题与"数值验证通过"等记录的归纳。具体矩阵、(18)/(20) 表达式与代码请见原笔记。</p></section>
 <section id="sec-glossary"><h1>术语表 · QCQI 第八章补充（量子信道）</h1>
-<p><strong>Bloch 仿射变换</strong> — 单 qubit 信道写成 r→Mr+c (8.3) <strong>Choi-Jamiołkowski 同构</strong> — 信道 ↔ 蔡氏矩阵一一对应 (8.1) <strong>CP（完全正定）</strong> — ℰ⊗I 对任意扩展保持正定 (8.1) <strong>CPTP 映射</strong> — 完全正定且保迹，量子信道的定义 (8.1) <strong>Kraus 算符 {E_k}</strong> — ℰ(ρ)=ΣE_k ρ E_k†，ΣE_k†E_k=I (8.2) <strong>Kraus 秩</strong> — 非零 Kraus 算符个数 = 蔡氏矩阵非零本征值数 (8.2) <strong>Perturbative QEC</strong> — 扰动量子纠错，验证公式 (18)≡(20) (8.4) <strong>TP（保迹）</strong> — Tr(ℰ(ρ))=Tr(ρ)，概率守恒 (8.1) <strong>transfer matrix / 展平</strong> — 把信道向量化为矩阵的表示 (8.4) <strong>比特翻转信道</strong> — E₀=√(1−p)I, E₁=√p X (8.1,8.3) <strong>去极化信道</strong> — 以概率 p 替换为最大混合，M 各向同性收缩 (8.3) <strong>振幅阻尼</strong> — 能量耗散 |1⟩→|0⟩，仿射含平移 c=(0,0,γ) (8.3) <strong>最大纠缠态 |Ω⟩</strong> — Σ|ii⟩，定义蔡氏矩阵用 (8.1) <strong>相位阻尼</strong> — 衰减相干项，与相位翻转效果一致 (8.3) <strong>相位翻转信道</strong> — E₀=√(1−p)I, E₁=√p Z (8.3) <strong>蔡氏矩阵 (Choi matrix)</strong> — J(ℰ)=(ℰ⊗I)|Ω⟩⟨Ω|；CP⟺J≥0 (8.1,8.2) <strong>谱分解</strong> — J=Σλ_k|v_k⟩⟨v_k| → Kraus 算符 (8.2)</p></section>
+<p><strong>Bloch 仿射变换</strong> — 单 qubit 信道写成 $\vec r\mapsto M\vec r+\vec c$ (8.3) <strong>Choi-Jamiołkowski 同构</strong> — 信道 $\leftrightarrow$ 蔡氏矩阵一一对应 (8.1) <strong>CP（完全正定）</strong> — $\mathcal{E}\otimes I$ 对任意扩展保持正定 (8.1) <strong>CPTP 映射</strong> — 完全正定且保迹，量子信道的定义 (8.1) <strong>Kraus 算符 $\{E_k\}$</strong> — $\mathcal{E}(\rho)=\sum_k E_k \rho E_k^\dagger$，$\sum_k E_k^\dagger E_k=I$ (8.2) <strong>Kraus 秩</strong> — 非零 Kraus 算符个数 = 蔡氏矩阵非零本征值数 (8.2) <strong>Perturbative QEC</strong> — 扰动量子纠错，验证公式 (18) $\equiv$ (20) (8.4) <strong>TP（保迹）</strong> — $\Tr(\mathcal{E}(\rho))=\Tr(\rho)$，概率守恒 (8.1) <strong>transfer matrix / 展平</strong> — 把信道向量化为矩阵的表示 (8.4) <strong>比特翻转信道</strong> — $E_0=\sqrt{1-p}\,I$, $E_1=\sqrt{p}\,X$ (8.1,8.3) <strong>去极化信道</strong> — 以概率 $p$ 替换为最大混合，$M$ 各向同性收缩 (8.3) <strong>振幅阻尼</strong> — 能量耗散 $\ket{1}\to\ket{0}$，仿射含平移 $\vec c=(0,0,\gamma)$ (8.3) <strong>最大纠缠态 $\ket{\Omega}$</strong> — $\sum_i\ket{ii}$，定义蔡氏矩阵用 (8.1) <strong>相位阻尼</strong> — 衰减相干项，与相位翻转效果一致 (8.3) <strong>相位翻转信道</strong> — $E_0=\sqrt{1-p}\,I$, $E_1=\sqrt{p}\,Z$ (8.3) <strong>蔡氏矩阵 (Choi matrix)</strong> — $J(\mathcal{E})=(\mathcal{E}\otimes I)\ketbra{\Omega}{\Omega}$；CP $\iff J\ge 0$ (8.1,8.2) <strong>谱分解</strong> — $J=\sum_k\lambda_k\ketbra{v_k}{v_k} \to$ Kraus 算符 (8.2)</p></section>
 <section id="sec-patterns"><h1>信道/Kraus/蔡氏矩阵转换技巧 · QCQI 第八章补充</h1>
 <h2>信道 → 蔡氏矩阵</h2>
-<p><strong>何时用</strong>：要检验 CP、或准备求 Kraus。 <strong>怎么做</strong>：J(ℰ)=(ℰ⊗I)(|Ω⟩⟨Ω|)，|Ω⟩=Σ|ii⟩；等价于把 ℰ 作用在最大纠缠态一半上。 <strong>权衡</strong>：维度升到 d²×d²；但把"映射"变成可分解的矩阵。</p>
+<p><strong>何时用</strong>：要检验 CP、或准备求 Kraus。 <strong>怎么做</strong>：$J(\mathcal{E})=(\mathcal{E}\otimes I)(\ketbra{\Omega}{\Omega})$，$\ket{\Omega}=\sum_i\ket{ii}$；等价于把 $\mathcal{E}$ 作用在最大纠缠态一半上。 <strong>权衡</strong>：维度升到 $d^2\times d^2$；但把"映射"变成可分解的矩阵。</p>
 <h2>蔡氏矩阵 → Kraus</h2>
-<p><strong>何时用</strong>：已有 J，要算符和表示。 <strong>怎么做</strong>：谱分解 J=Σλ_k|v_k⟩⟨v_k|；E_k=√λ_k·mat(|v_k⟩)（向量 reshape 成 d×d）。 <strong>权衡</strong>：得到正交规范的一组 Kraus；Kraus 表示不唯一（差幺正混合）。</p>
+<p><strong>何时用</strong>：已有 J，要算符和表示。 <strong>怎么做</strong>：谱分解 $J=\sum_k\lambda_k\ketbra{v_k}{v_k}$；$E_k=\sqrt{\lambda_k}\cdot\mathrm{mat}(\ket{v_k})$（向量 reshape 成 $d\times d$）。 <strong>权衡</strong>：得到正交规范的一组 Kraus；Kraus 表示不唯一（差幺正混合）。</p>
 <h2>检验是否合法信道</h2>
-<p><strong>何时用</strong>：判断给定映射是不是物理信道。 <strong>怎么做</strong>：CP ⟺ J(ℰ)≥0（半正定）；TP ⟺ ΣE_k†E_k=I（或 J 部分迹=I）。 <strong>权衡</strong>：两个条件都要查，缺一不可。</p>
+<p><strong>何时用</strong>：判断给定映射是不是物理信道。 <strong>怎么做</strong>：CP $\iff J(\mathcal{E})\ge 0$（半正定）；TP $\iff \sum_k E_k^\dagger E_k=I$（或 $J$ 部分迹$=I$）。 <strong>权衡</strong>：两个条件都要查，缺一不可。</p>
 <h2>Kraus ↔ Bloch 仿射变换</h2>
-<p><strong>何时用</strong>：想直观看单 qubit 信道对 Bloch 球的作用。 <strong>怎么做</strong>：M_{ij}=½Tr(σ_i ℰ(σ_j))，c_i=½Tr(σ_i ℰ(I))；得 r→Mr+c。 <strong>权衡</strong>：只适用于单 qubit；高维无此简单几何。</p>
+<p><strong>何时用</strong>：想直观看单 qubit 信道对 Bloch 球的作用。 <strong>怎么做</strong>：$M_{ij}=\tfrac{1}{2}\Tr(\sigma_i \mathcal{E}(\sigma_j))$，$c_i=\tfrac{1}{2}\Tr(\sigma_i \mathcal{E}(I))$；得 $\vec r\mapsto M\vec r+\vec c$。 <strong>权衡</strong>：只适用于单 qubit；高维无此简单几何。</p>
 <h2>换基底展开 Kraus（验证非唯一）</h2>
-<p><strong>何时用</strong>：要把 Kraus 写在另一组算符基下，或核对两组 Kraus 等价。 <strong>怎么做</strong>：F_j=Σ_k u_{jk}E_k（u 幺正）；两组给出同一信道。 <strong>权衡</strong>：纯表示变换，物理信道不变。</p>
+<p><strong>何时用</strong>：要把 Kraus 写在另一组算符基下，或核对两组 Kraus 等价。 <strong>怎么做</strong>：$F_j=\sum_k u_{jk}E_k$（$u$ 幺正）；两组给出同一信道。 <strong>权衡</strong>：纯表示变换，物理信道不变。</p>
 <h2>反模式</h2>
-<ul><li><strong>忘记保迹检验</strong>：只看 CP（J≥0）不够，还要 ΣE_k†E_k=I。</li><li><strong>以为 Kraus 唯一</strong>：差一个幺正混合都等价。</li><li><strong>混淆相位阻尼与振幅阻尼</strong>：前者只退相干 (c=0)，后者耗能并平移 (c≠0)。</li><li><strong>向量化 reshape 顺序搞错</strong>：行/列约定不一致会得到转置的 Kraus。</li></ul></section>
+<ul><li><strong>忘记保迹检验</strong>：只看 CP（$J\ge 0$）不够，还要 $\sum_k E_k^\dagger E_k=I$。</li><li><strong>以为 Kraus 唯一</strong>：差一个幺正混合都等价。</li><li><strong>混淆相位阻尼与振幅阻尼</strong>：前者只退相干 $(\vec c=0)$，后者耗能并平移 $(\vec c\ne 0)$。</li><li><strong>向量化 reshape 顺序搞错</strong>：行/列约定不一致会得到转置的 Kraus。</li></ul></section>
 <section id="sec-cheatsheet"><h1>速查表 · QCQI 第八章补充（量子信道）</h1>
 <h2>三种等价描述</h2>
-<table><thead><tr><th>描述</th><th>形式</th><th>合法性条件</th></tr></thead><tbody><tr><td>信道映射 ℰ</td><td>ρ → ℰ(ρ)</td><td>CPTP</td></tr><tr><td>Kraus</td><td>ℰ(ρ)=ΣE_kρE_k†</td><td>ΣE_k†E_k=I</td></tr><tr><td>蔡氏矩阵 J</td><td>(ℰ⊗I)</td><td>Ω⟩⟨Ω</td><td></td><td>J≥0 且部分迹=I</td></tr></tbody></table>
+<table><thead><tr><th>描述</th><th>形式</th><th>合法性条件</th></tr></thead><tbody><tr><td>信道映射 $\mathcal{E}$</td><td>$\rho \to \mathcal{E}(\rho)$</td><td>CPTP</td></tr><tr><td>Kraus</td><td>$\mathcal{E}(\rho)=\sum_k E_k\rho E_k^\dagger$</td><td>$\sum_k E_k^\dagger E_k=I$</td></tr><tr><td>蔡氏矩阵 $J$</td><td>$(\mathcal{E}\otimes I)\ketbra{\Omega}{\Omega}$</td><td>$J\ge 0$ 且部分迹$=I$</td></tr></tbody></table>
 <h2>转换路线</h2>
 <pre><code>信道 ℰ ──(ℰ⊗I)|Ω⟩⟨Ω|──► 蔡氏矩阵 J ──谱分解──► Kraus {E_k}
 ℰ ──M_ij=½Tr(σ_iℰ(σ_j))──► Bloch 仿射 r→Mr+c  (单 qubit)</code></pre>
 <h2>典型单 qubit 信道：Kraus</h2>
-<table><thead><tr><th>信道</th><th>Kraus</th></tr></thead><tbody><tr><td>比特翻转</td><td>√(1−p)I, √p X</td></tr><tr><td>相位翻转</td><td>√(1−p)I, √p Z</td></tr><tr><td>相位阻尼</td><td>同相位翻转（退相干）</td></tr><tr><td>比特-相位翻转</td><td>√(1−p)I, √p Y</td></tr><tr><td>去极化</td><td>√(1−3p/4)I, √(p/4){X,Y,Z}</td></tr><tr><td>振幅阻尼</td><td>[[1,0],[0,√(1−γ)]], [[0,√γ],[0,0]]</td></tr></tbody></table>
-<h2>典型信道：Bloch 仿射 r→Mr+c</h2>
-<table><thead><tr><th>信道</th><th>M=diag(·)</th><th>c</th></tr></thead><tbody><tr><td>比特翻转</td><td>(1, 1−2p, 1−2p)</td><td>0</td></tr><tr><td>相位翻转/阻尼</td><td>(1−2p, 1−2p, 1)</td><td>0</td></tr><tr><td>去极化</td><td>(1−p, 1−p, 1−p)</td><td>0</td></tr><tr><td>振幅阻尼</td><td>(√(1−γ), √(1−γ), 1−γ)</td><td>(0,0,γ)</td></tr></tbody></table>
+<table><thead><tr><th>信道</th><th>Kraus</th></tr></thead><tbody><tr><td>比特翻转</td><td>$\sqrt{1-p}\,I,\ \sqrt{p}\,X$</td></tr><tr><td>相位翻转</td><td>$\sqrt{1-p}\,I,\ \sqrt{p}\,Z$</td></tr><tr><td>相位阻尼</td><td>同相位翻转（退相干）</td></tr><tr><td>比特-相位翻转</td><td>$\sqrt{1-p}\,I,\ \sqrt{p}\,Y$</td></tr><tr><td>去极化</td><td>$\sqrt{1-3p/4}\,I,\ \sqrt{p/4}\,\{X,Y,Z\}$</td></tr><tr><td>振幅阻尼</td><td>$\left[\begin{smallmatrix}1&amp;0\\0&amp;\sqrt{1-\gamma}\end{smallmatrix}\right],\ \left[\begin{smallmatrix}0&amp;\sqrt{\gamma}\\0&amp;0\end{smallmatrix}\right]$</td></tr></tbody></table>
+<h2>典型信道：Bloch 仿射 $\vec r\to M\vec r+\vec c$</h2>
+<table><thead><tr><th>信道</th><th>$M=\mathrm{diag}(\cdot)$</th><th>$\vec c$</th></tr></thead><tbody><tr><td>比特翻转</td><td>$(1,\ 1-2p,\ 1-2p)$</td><td>$0$</td></tr><tr><td>相位翻转/阻尼</td><td>$(1-2p,\ 1-2p,\ 1)$</td><td>$0$</td></tr><tr><td>去极化</td><td>$(1-p,\ 1-p,\ 1-p)$</td><td>$0$</td></tr><tr><td>振幅阻尼</td><td>$(\sqrt{1-\gamma},\ \sqrt{1-\gamma},\ 1-\gamma)$</td><td>$(0,0,\gamma)$</td></tr></tbody></table>
 <h2>关键判据</h2>
-<ul><li><strong>CP</strong> ⟺ 蔡氏矩阵 J ≥ 0。</li><li><strong>TP</strong> ⟺ ΣE_k†E_k=I（⟺ J 部分迹=I）。</li><li><strong>Kraus 秩</strong> = J 的非零本征值个数。</li><li><strong>Kraus 非唯一</strong>：差一个幺正混合 F_j=Σu_{jk}E_k。</li></ul>
+<ul><li><strong>CP</strong> $\iff$ 蔡氏矩阵 $J\ge 0$。</li><li><strong>TP</strong> $\iff \sum_k E_k^\dagger E_k=I$（$\iff J$ 部分迹$=I$）。</li><li><strong>Kraus 秩</strong> $=J$ 的非零本征值个数。</li><li><strong>Kraus 非唯一</strong>：差一个幺正混合 $F_j=\sum_k u_{jk}E_k$。</li></ul>
 <h2>记忆点</h2>
-<ul><li>相位阻尼 ≡ 相位翻转（都只衰减相干项）。</li><li>去极化各向同性收缩；振幅阻尼收缩 + 向 |0⟩ 平移（唯一 c≠0）。</li><li>Perturbative QEC：公式 (18) ≡ (20)，数值验证通过。</li></ul></section>
+<ul><li>相位阻尼 $\equiv$ 相位翻转（都只衰减相干项）。</li><li>去极化各向同性收缩；振幅阻尼收缩 + 向 $\ket{0}$ 平移（唯一 $\vec c\ne 0$）。</li><li>Perturbative QEC：公式 (18) $\equiv$ (20)，数值验证通过。</li></ul></section>
 </main>
 </div>
 <script>
