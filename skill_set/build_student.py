@@ -69,6 +69,31 @@ def style_callouts(html_text):
     return re.sub(r"<blockquote>\s*(🎯|⚛️|📖|🧮|💭|⚠️|✅)", repl, html_text)
 
 
+EXPAND_RE = re.compile(r"(?ms)^:::expand[ \t]+(.+?)[ \t]*\n(.*?)\n:::[ \t]*$")
+
+
+def render_md(md_text):
+    """md -> html, turning `:::expand TITLE … :::` blocks into collapsible <details>."""
+    parts = []
+    pos = 0
+    for m in EXPAND_RE.finditer(md_text):
+        parts.append(("md", md_text[pos:m.start()]))
+        parts.append(("expand", m.group(1).strip(), m.group(2)))
+        pos = m.end()
+    parts.append(("md", md_text[pos:]))
+    out = []
+    for p in parts:
+        if p[0] == "md":
+            if p[1].strip():
+                out.append(style_callouts(bh.md_to_html(p[1], {})))
+        else:
+            _, title, inner = p
+            inner_html = style_callouts(bh.md_to_html(inner, {}))
+            out.append(f'<details class="expand"><summary>{html.escape(title)}</summary>'
+                       f'<div class="expand-body">{inner_html}</div></details>')
+    return "\n".join(out)
+
+
 CSS = """
 :root{--bg:#f4f7fb;--panel:#fff;--panel2:#eaf0f8;--fg:#1c2733;--muted:#64748b;
 --accent:#2563eb;--accent2:#0891b2;--border:#d7e1ee;--code:#eef3f9;--th:#e6eef8;
@@ -128,6 +153,14 @@ blockquote.callout.calc{border-left-color:var(--calc);background:var(--calcbg)}
 blockquote.callout.intuition{border-left-color:var(--intuition);background:var(--intuitionbg)}
 blockquote.callout.mistake{border-left-color:var(--mistake);background:var(--mistakebg)}
 blockquote.callout.summary{border-left-color:var(--summary);background:var(--summarybg);font-weight:600}
+details.expand{border:1px solid var(--border);border-radius:10px;margin:14px 0;background:var(--panel);overflow:hidden}
+details.expand>summary{cursor:pointer;list-style:none;padding:11px 16px;font-weight:600;color:var(--physics);
+background:var(--physicsbg);font-size:14.5px}
+details.expand>summary::-webkit-details-marker{display:none}
+details.expand>summary::before{content:"▸";display:inline-block;margin-right:8px;transition:transform .15s}
+details.expand[open]>summary::before{transform:rotate(90deg)}
+details.expand .expand-body{padding:2px 18px 8px}
+details.expand .expand-body>*:first-child{margin-top:8px}
 .legend{display:flex;gap:10px;flex-wrap:wrap;margin:6px 0 18px;font-size:12.5px;color:var(--muted)}
 .legend span{background:var(--panel);border:1px solid var(--border);border-radius:20px;padding:3px 11px}
 .badge{display:inline-block;background:var(--accent);color:#fff;border-radius:6px;padding:2px 9px;font-size:12px;font-weight:700}
@@ -175,7 +208,7 @@ def build_skill(slug, label):
     for idx, (stitle, body) in enumerate(sections):
         anchor = f"s{idx}"
         nav.append(f'<a href="#{anchor}">{html.escape(stitle)}</a>')
-        inner = style_callouts(bh.md_to_html(("## " + stitle + "\n\n" + body) if idx else ("# " + page_title + "\n\n" + ("## " + stitle + "\n\n" + body)), {}))
+        inner = render_md(("## " + stitle + "\n\n" + body) if idx else ("# " + page_title + "\n\n" + ("## " + stitle + "\n\n" + body)))
         secs_html.append(f'<section id="{anchor}">{inner}</section>')
     nav.append("</nav></aside>")
 
