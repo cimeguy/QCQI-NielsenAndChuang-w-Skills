@@ -2,6 +2,18 @@
 
 Nielsen & Chuang《Quantum Computation and Quantum Information》(QCQI) 的中文学习笔记，以及从笔记生成的 Agent 技能集。
 
+## 🌐 在线阅读
+
+**<https://cimeguy.github.io/QCQI-NielsenAndChuang-w-Skills/>**
+
+三套面向不同读者的版本（门户互相链接，公式由 MathJax 渲染、支持搜索与深浅色）：
+
+- 公式精简版（首页）：<https://cimeguy.github.io/QCQI-NielsenAndChuang-w-Skills/>
+- 🗣️ 人话版（程序员友好）：<https://cimeguy.github.io/QCQI-NielsenAndChuang-w-Skills/explained.html>
+- 🎓 大学生版（从零补线代/概率）：<https://cimeguy.github.io/QCQI-NielsenAndChuang-w-Skills/student.html>
+
+> 由 GitHub Actions 自动部署，发布流程见 [`部署网站.md`](部署网站.md)。
+
 ## 内容
 
 - **`.nb` 笔记**：第 1、2、4、5、6 章 + 第八章补充（Mathematica 笔记）。
