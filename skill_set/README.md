@@ -56,7 +56,7 @@ python3 skill_set/build_student.py     # 🎓 大学生版 student.html（从零
 | 用途 | 依赖 | 说明 |
 |---|---|---|
 | 生成 HTML | **Python ≥ 3.8** | 仅用标准库（`html`、`re`、`pathlib`），**无需 `pip install` 任何包**。 |
-| 公式渲染 | **MathJax（已内置）** | `tex-svg` 单文件包随仓库提交于 `skill_set/vendor/tex-svg.js`（约 2.1 MB），**离线可用，无需联网或 CDN**。 |
+| 公式渲染 | **MathJax** | 国内 CDN（npmmirror/bootcdn）优先，失败回退仓库自带的 `skill_set/vendor/tex-svg.js`（约 2.1 MB）；联网时秒开，离线/CDN 不可用时仍可渲染。 |
 | 浏览页面 | 任意现代浏览器 | 双击 `index.html`，`file://` 直接打开即可，无需本地服务器。 |
 
 > 不依赖 Node.js、npm、`markdown`/`jinja2` 等第三方库；Markdown→HTML 由 `build_html.py` 内置的精简转换器完成。升级公式引擎只需替换 `vendor/tex-svg.js`。
@@ -109,7 +109,7 @@ python3 skill_set/build_student.py        # 同样纯标准库，离线可用
 
 ### 公式渲染（LaTeX / MathJax，离线）
 
-各 `.md` 笔记中的公式以 LaTeX 书写（行内 `$...$`、行间 `$$...$$`），HTML 页面用**本地打包的 MathJax**（`tex-svg`，SVG 输出、自带字形、无需字体目录）渲染，存放于 `skill_set/vendor/tex-svg.js`，因此**离线也能正常显示公式**。
+各 `.md` 笔记中的公式以 LaTeX 书写（行内 `$...$`、行间 `$$...$$`），HTML 页面用 **MathJax**（`tex-svg`，SVG 输出、自带字形）渲染。加载策略为**国内 CDN 优先 + 本地兜底**：先从 npmmirror（阿里）/ bootcdn 拉取 `tex-svg.js`，失败再回退到仓库自带的 `skill_set/vendor/tex-svg.js`，因此国内访问秒开、离线或 CDN 不可用时仍能正常显示公式。
 
 约定与注意：
 
