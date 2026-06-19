@@ -19,7 +19,7 @@ ROOT = Path(__file__).resolve().parent
 SKILLS = bh.SKILLS
 
 # callout marker -> css class
-CALLOUTS = {"🎯": "purpose", "📖": "review", "🧮": "calc", "💭": "intuition", "⚠️": "mistake", "✅": "summary"}
+CALLOUTS = {"🎯": "purpose", "⚛️": "physics", "📖": "review", "🧮": "calc", "💭": "intuition", "⚠️": "mistake", "✅": "summary"}
 
 
 def split_sections(md):
@@ -66,19 +66,21 @@ def style_callouts(html_text):
         emoji = m.group(1)
         cls = CALLOUTS.get(emoji, "")
         return f'<blockquote class="callout {cls}">{emoji}'
-    return re.sub(r"<blockquote>\s*(🎯|📖|🧮|💭|⚠️|✅)", repl, html_text)
+    return re.sub(r"<blockquote>\s*(🎯|⚛️|📖|🧮|💭|⚠️|✅)", repl, html_text)
 
 
 CSS = """
 :root{--bg:#f4f7fb;--panel:#fff;--panel2:#eaf0f8;--fg:#1c2733;--muted:#64748b;
 --accent:#2563eb;--accent2:#0891b2;--border:#d7e1ee;--code:#eef3f9;--th:#e6eef8;
 --purpose:#ea580c;--purposebg:#fff5ec;
+--physics:#a21caf;--physicsbg:#fbf0fb;
 --review:#7c3aed;--reviewbg:#f5f1ff;--calc:#0891b2;--calcbg:#ecfbfd;
 --intuition:#2563eb;--intuitionbg:#eef4ff;--mistake:#dc2626;--mistakebg:#fef2f2;
 --summary:#15803d;--summarybg:#ecfdf3;}
 [data-theme=dark]{--bg:#0d1320;--panel:#161f30;--panel2:#121a29;--fg:#e3eaf3;--muted:#8595a8;
 --accent:#60a5fa;--accent2:#22d3ee;--border:#27344a;--code:#16203200;--th:#1a2538;
 --purposebg:#2a1709;
+--physicsbg:#2a0e2e;
 --reviewbg:#1f1633;--calcbg:#0a2730;--intuitionbg:#10203b;--mistakebg:#2a1414;--summarybg:#0f2417;}
 *{box-sizing:border-box}
 body{margin:0;font-family:-apple-system,"PingFang SC","Microsoft YaHei",Segoe UI,system-ui,sans-serif;
@@ -121,6 +123,7 @@ blockquote.callout{border-left-width:5px;border-radius:10px;padding:12px 18px;co
 margin:14px 0;font-size:15px}
 blockquote.callout.review{border-left-color:var(--review);background:var(--reviewbg)}
 blockquote.callout.purpose{border-left-color:var(--purpose);background:var(--purposebg)}
+blockquote.callout.physics{border-left-color:var(--physics);background:var(--physicsbg)}
 blockquote.callout.calc{border-left-color:var(--calc);background:var(--calcbg)}
 blockquote.callout.intuition{border-left-color:var(--intuition);background:var(--intuitionbg)}
 blockquote.callout.mistake{border-left-color:var(--mistake);background:var(--mistakebg)}
@@ -176,7 +179,7 @@ def build_skill(slug, label):
         secs_html.append(f'<section id="{anchor}">{inner}</section>')
     nav.append("</nav></aside>")
 
-    legend = ('<div class="legend"><span>🎯 用来干嘛</span><span>📖 补基础</span><span>🧮 一步步算</span>'
+    legend = ('<div class="legend"><span>🎯 用来干嘛</span><span>⚛️ 物理上是啥</span><span>📖 补基础</span><span>🧮 一步步算</span>'
               '<span>💭 直觉</span><span>⚠️ 常见错误</span><span>✅ 小结</span></div>')
     body = ['<div class="topbar"><span class="badge">大学生版</span>'
             f'<span class="home">{html.escape(label)}</span>'
@@ -219,7 +222,7 @@ def build_hub(built):
 <div class="sub">写给刚学过矩阵、概率、线性代数但基础还不太牢的同学：每个量子概念都先把用到的数学基础<b>从头讲一遍</b>，
 再一步步代数字演算，标出最容易踩的坑。<br>
 已经能看懂公式？试试 <a href="index.html">公式精简版</a>；有编程背景想要类比？看 <a href="explained.html">🗣️ 人话版</a>。</div>
-<div class="legend"><span>🎯 用来干嘛＝先搞懂它解决什么问题</span><span>📖 补基础＝先复习这块线代/概率</span><span>🧮 一步步算＝每一步都不跳</span>
+<div class="legend"><span>🎯 用来干嘛＝先搞懂它解决什么问题</span><span>⚛️ 物理上是啥＝这堆数学背后的物理意义</span><span>📖 补基础＝先复习这块线代/概率</span><span>🧮 一步步算＝每一步都不跳</span>
 <span>💭 直觉＝它到底在干什么</span><span>⚠️ 常见错误＝同学最常栽的地方</span><span>✅ 小结＝一句话记住</span></div>
 <div class="grid">{''.join(cards)}</div>
 <div class="foot">面向数学基础薄弱的本科生，不假设你学好了线代/概率。源自 <code>skill_set/&lt;skill&gt;/student.md</code>，

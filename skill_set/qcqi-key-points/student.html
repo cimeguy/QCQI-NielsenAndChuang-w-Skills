@@ -8,12 +8,14 @@
 :root{--bg:#f4f7fb;--panel:#fff;--panel2:#eaf0f8;--fg:#1c2733;--muted:#64748b;
 --accent:#2563eb;--accent2:#0891b2;--border:#d7e1ee;--code:#eef3f9;--th:#e6eef8;
 --purpose:#ea580c;--purposebg:#fff5ec;
+--physics:#a21caf;--physicsbg:#fbf0fb;
 --review:#7c3aed;--reviewbg:#f5f1ff;--calc:#0891b2;--calcbg:#ecfbfd;
 --intuition:#2563eb;--intuitionbg:#eef4ff;--mistake:#dc2626;--mistakebg:#fef2f2;
 --summary:#15803d;--summarybg:#ecfdf3;}
 [data-theme=dark]{--bg:#0d1320;--panel:#161f30;--panel2:#121a29;--fg:#e3eaf3;--muted:#8595a8;
 --accent:#60a5fa;--accent2:#22d3ee;--border:#27344a;--code:#16203200;--th:#1a2538;
 --purposebg:#2a1709;
+--physicsbg:#2a0e2e;
 --reviewbg:#1f1633;--calcbg:#0a2730;--intuitionbg:#10203b;--mistakebg:#2a1414;--summarybg:#0f2417;}
 *{box-sizing:border-box}
 body{margin:0;font-family:-apple-system,"PingFang SC","Microsoft YaHei",Segoe UI,system-ui,sans-serif;
@@ -56,6 +58,7 @@ blockquote.callout{border-left-width:5px;border-radius:10px;padding:12px 18px;co
 margin:14px 0;font-size:15px}
 blockquote.callout.review{border-left-color:var(--review);background:var(--reviewbg)}
 blockquote.callout.purpose{border-left-color:var(--purpose);background:var(--purposebg)}
+blockquote.callout.physics{border-left-color:var(--physics);background:var(--physicsbg)}
 blockquote.callout.calc{border-left-color:var(--calc);background:var(--calcbg)}
 blockquote.callout.intuition{border-left-color:var(--intuition);background:var(--intuitionbg)}
 blockquote.callout.mistake{border-left-color:var(--mistake);background:var(--mistakebg)}
@@ -104,7 +107,7 @@ window.MathJax={
 </nav></aside>
 <main class="main">
 <div class="topbar"><span class="badge">大学生版</span><span class="home">各章关键知识点汇总</span><button class="toggle" id="themeToggle">🌓 深/浅色</button></div>
-<div class="legend"><span>🎯 用来干嘛</span><span>📖 补基础</span><span>🧮 一步步算</span><span>💭 直觉</span><span>⚠️ 常见错误</span><span>✅ 小结</span></div>
+<div class="legend"><span>🎯 用来干嘛</span><span>⚛️ 物理上是啥</span><span>📖 补基础</span><span>🧮 一步步算</span><span>💭 直觉</span><span>⚠️ 常见错误</span><span>✅ 小结</span></div>
 <section id="s0"><h1>各章关键知识点 · 大学生版</h1>
 <h2>导读</h2>
 <p>这是整本《量子计算与量子信息》的<strong>考前速通 + 全书地图</strong>——相当于学长帮你划重点，但每划到一个数学符号，都先停下来用一句话补一补它到底是什么、用到了哪块线代/概率。它不替代各章的细讲，而是帮你把第 2/4/5 章串成一条线，外加三条贯穿全书的"红线"和一张复杂度对照表。</p>
@@ -116,6 +119,7 @@ window.MathJax={
 <blockquote class="callout purpose">🎯 <strong>用来干嘛：</strong> 把这三条物理硬约束记死，你就能解释全书 80% 的"为什么不能这样做"。它们是量子计算的"语法底线"，后面所有章节的限制几乎都能往这三条上靠。</blockquote>
 <p>整本书有三条物理约束，贯穿始终。把它们当成量子计算这门"语言"的三条硬规则：</p>
 <ol><li><strong>不可克隆 → 禁扇出</strong>：你不能把一个未知量子态复制成两份。</li><li><strong>幺正可逆 → 禁扇入 / 禁环路</strong>：所有演化都必须可逆，线路里不能有回路、不能多根线汇成一根。</li><li><strong>测量即塌缩 → 信息藏在"幅"里，干涉后再测</strong>：一读取就坍缩，所以算法的全部魔法都发生在"测量之前"。</li></ol>
+<blockquote class="callout physics">⚛️ <strong>物理上是啥：</strong> 这三条不是人为约定，而是量子力学基本原理的直接后果。"幺正可逆"来自薛定谔方程——它描述的演化天生保模长、可以倒着回放；"不可克隆"来自量子态的线性性，线性操作没法完美复制一个任意未知态；"测量即塌缩"来自测量公设（现实中由系统和环境纠缠造成的退相干触发），一旦发生，叠加就被破坏，只剩下一个被测到的分支。</blockquote>
 <blockquote class="callout review">📖 <strong>补基础：</strong> "扇出（fan-out）"是数字电路术语，指一根输出线分叉接到好几个地方——本质就是<strong>复制</strong>信号。"扇入（fan-in）"是反过来，多根线汇成一根。这两个词记不住没关系，记住对应的禁令就行：不能复制、不能合并。</blockquote>
 <blockquote class="callout review">📖 <strong>补基础：</strong> "幺正（unitary）"是这本书最高频的形容词。一个矩阵 $U$ 叫幺正，当且仅当 $U^\dagger U=I$，其中 $U^\dagger$ 是 $U$ 的<strong>共轭转置</strong>（转置之后每个元素再取复共轭），$I$ 是单位矩阵。幺正矩阵的几何意义是<strong>保持向量长度不变的旋转/反射</strong>——它一定可逆，逆就是 $U^\dagger$。量子里所有"演化"（即态怎么变）都是幺正变换，所以天然可逆，这就是第二条红线的来源。</blockquote>
 <blockquote class="callout intuition">💭 <strong>直觉：</strong> 量子线路像一种<strong>纯函数式、可逆、且变量不能复制</strong>的电路语言。它没有 <code>=</code> 赋值（赋值会丢掉旧值，不可逆），没有 <code>copy()</code>（不可克隆），没有 <code>while</code> 回路（禁环）。你能做的只有：用可逆的门把各个振幅"搅"在一起，最后 <code>read()</code> 一次——而这个 <code>read()</code> 会摧毁现场。</blockquote>
@@ -124,6 +128,7 @@ window.MathJax={
 <section id="s2"><h2>第 2 章速记 · 线性代数与量子力学</h2>
 <p>一条主线：<strong>四条公理（态 / 演化 / 测量 / 复合）+ 把它们说清楚的那套线性代数工具</strong>。下面逐条过。</p>
 <blockquote class="callout purpose">🎯 <strong>用来干嘛：</strong> 这一章给你一套<strong>描述量子世界的数学语言</strong>——怎么写一个态、怎么让它演化、怎么测量它、怎么把多个系统拼起来。学完你就能把任何量子现象翻译成矩阵运算，是读懂后面所有章节的地基。</blockquote>
+<blockquote class="callout physics">⚛️ <strong>物理上是啥：</strong> 这一章其实就是量子力学的数学框架本身：一个"态"是希尔伯特空间里的矢量（更一般地是密度算符 $\rho$），一个"可观测量"是厄米算符，"演化"是幺正变换，"多个系统合体"用张量积。把这套对应关系记牢，物理问题就被翻译成了线性代数运算。</blockquote>
 <p><strong>态：用密度算符 $\rho$ 描述。</strong> 它是一个<strong>迹为 1 的正定矩阵</strong>，编码了关于这个系统你能问的所有统计信息。</p>
 <blockquote class="callout review">📖 <strong>补基础：</strong> "迹（trace）"$\Tr$ 就是矩阵主对角线上元素之和，比如 $\Tr\begin{pmatrix}a&amp;b\\c&amp;d\end{pmatrix}=a+d$。"正定（positive，更准确是半正定）"是指这个矩阵的所有本征值都 $\ge 0$——直觉上它代表"合法的概率分布"，因为概率不能是负数。"$\Tr\rho=1$"则对应"所有概率加起来等于 1"。</blockquote>
 <blockquote class="callout review">📖 <strong>补基础：</strong> 期望值和方差就是概率论里那两个量，只不过换成了矩阵写法：$\langle A\rangle=\Tr(\rho A)$ 是可观测量 $A$ 的平均值，$(\Delta A)^2=\langle A^2\rangle-\langle A\rangle^2$ 是它的方差（"平方的平均"减去"平均的平方"，跟你高中学的方差公式一模一样）。</blockquote>
@@ -152,6 +157,7 @@ window.MathJax={
 <section id="s3"><h2>第 4 章速记 · 量子线路与量子模拟</h2>
 <p>一条主线：<strong>用幺正门搭线路（单比特门=旋转 → 受控门 → 通用门），再用 Trotter 把哈密顿量演化变成线路（量子模拟）</strong>。</p>
 <blockquote class="callout purpose">🎯 <strong>用来干嘛：</strong> 这一章告诉你<strong>用哪几个基本门就能拼出任何量子计算</strong>——就像知道了"与非门通吃"之后，你就能搭任何数字电路。学完你能看懂任何量子线路图，并知道一台量子计算机到底由哪几块组成。</blockquote>
+<blockquote class="callout physics">⚛️ <strong>物理上是啥：</strong> 量子门不是抽象符号，它对应着用可控的哈密顿量去驱动一个真实的两能级系统（比如超导电路、被囚禁的离子、光子的偏振）。给系统施加一段精心设计的相互作用、让它演化一小段时间，就实现了一个幺正门——所谓"搭线路"，物理上就是按顺序安排这些受控的演化脉冲。</blockquote>
 <p><strong>单比特门 = $U(2)$ 旋转。</strong> 任何单比特门都是 Bloch 球上的一次旋转。可以一步实现，也可以用 <strong>z-y-z 欧拉角</strong>分三步拼出来。</p>
 <blockquote class="callout review">📖 <strong>补基础：</strong> "Bloch 球"是把单比特态画成一个三维球面上的点的图示——纯态在球面上，混态在球内。所以"单比特门 = 旋转"是很实在的几何图像。"$U(2)$ / $SU(2)$"是 $2\times 2$ 幺正矩阵构成的群（$SU$ 多一个行列式为 1 的约束），它作用在 2 维的量子态空间上，恰好对应 $SO(3)$（三维空间的旋转）作用在 3 维 Bloch 球上。"欧拉角"你在图形学里见过：任意 3D 旋转都能拆成绕三个固定轴的三次旋转。</blockquote>
 <blockquote class="callout review">📖 <strong>补基础：</strong> 常用单比特门：$R_x,R_y,R_z$ 是绕三个轴转固定角度的旋转门；H（Hadamard 门）$=\tfrac{1}{\sqrt2}\begin{pmatrix}1&amp;1\\1&amp;-1\end{pmatrix}$ 把 $\ket0$ 变成等权叠加 $\tfrac{1}{\sqrt2}(\ket0+\ket1)$；S、T 是给相位加固定角度的门。其中 $R_y$ 配合相位就能生成所有单比特门。</blockquote>
@@ -173,6 +179,7 @@ window.MathJax={
 <section id="s4"><h2>第 5 章速记 · 量子算法（QFT 及其应用）</h2>
 <p>一条主线：<strong>量子并行（Deutsch）→ QFT → 相位估计 → Shor（求阶）→ HSP（统一框架）</strong>。</p>
 <blockquote class="callout purpose">🎯 <strong>用来干嘛：</strong> 这是 QFT 家族——量子计算<strong>最赚钱的杀手级应用</strong>。它就是能分解大数、威胁 RSA 加密的那套算法。学完你会明白量子凭什么能指数级加速，以及这种加速到底靠的是什么（藏在问题里的"周期结构"）。</blockquote>
+<blockquote class="callout physics">⚛️ <strong>物理上是啥：</strong> 这一族算法的物理核心是"让周期结构经由干涉在频率上显形"。把信息编码进各分量的相位后，不同分量在测量前发生干涉：与隐藏周期匹配的频率被相长叠加、其余的相消抵消——于是一测量就大概率读到周期信息。这就是 Shor 能指数级加速的物理来源。</blockquote>
 <p><strong>Deutsch-Jozsa 算法。</strong> 只调用一次 $U_f$ 就能判断函数 $f$ 是常数还是平衡，而经典最坏要 $2^{n-1}+1$ 次。它展现的是<strong>量子并行性</strong>。</p>
 <blockquote class="callout review">📖 <strong>补基础：</strong> $U_f$ 是把经典函数 $f$ 装进量子线路的标准做法（一个可逆的"黑盒"门）。"常数函数"指 $f$ 对所有输入都输出同一个值；"平衡函数"指 $f$ 在一半输入上输出 0、另一半输出 1。任务是只用尽量少的查询分辨这两类。</blockquote>
 <blockquote class="callout intuition">💭 <strong>直觉：</strong> "量子并行"不是字面意义的"同时算所有输入"那么简单——而是把所有输入的结果都塞进振幅里，再用<strong>干涉</strong>让"答案"凸显出来、让"无关项"互相抵消。启发：经典算法里如果存在"计算冗余"，量子往往能加速。</blockquote>
@@ -196,6 +203,7 @@ window.MathJax={
 <blockquote class="callout review">📖 <strong>补基础：</strong> 表格里的记号是"大 O"，描述运算量随问题规模增长的快慢。$N$ 是问题规模（比如数据库条目数、傅里叶变换的点数）；$n=\log_2 N$ 是用多少个比特来编码它。$O(\sqrt{N})$ 比 $O(N)$ 快（平方根级），$O(\log^2 N)$ 又比它们都快得多（指数级优势）。</blockquote>
 <table><thead><tr><th>任务</th><th>经典</th><th>量子</th></tr></thead><tbody><tr><td>傅里叶变换</td><td>$O(N\log N)$</td><td>$O(\log^2 N)$</td></tr><tr><td>大数分解</td><td>超多项式</td><td>多项式（Shor）</td></tr><tr><td>无结构搜索</td><td>$O(N)$</td><td>$O(\sqrt{N})$（Grover，第 6 章）</td></tr><tr><td>Deutsch-Jozsa</td><td>最坏 $2^{n-1}+1$ 次</td><td>1 次</td></tr></tbody></table>
 <blockquote class="callout intuition">💭 <strong>直觉：</strong> 量子加速分两档。<strong>Shor / QFT 是指数级加速</strong>——靠的是问题里藏着"周期结构"，QFT 能一把抓出来。<strong>Grover 是平方级加速</strong>——无结构搜索没有周期可利用，只能靠"振幅放大"把 $N$ 压到 $\sqrt{N}$，而且这已经是无结构搜索的理论上限了。</blockquote>
+<blockquote class="callout physics">⚛️ <strong>物理上是啥：</strong> 加速的大小，物理上取决于"干涉能利用多少结构"。问题里藏的规律（比如周期）越多，干涉就能把越多无关分量抵消掉、把正确答案放得越亮，加速就越大；完全无结构时干涉无从借力，最多只能做到平方级（Grover）。所以量子不是无限快的加速器，更不能超光速传信息。</blockquote>
 <blockquote class="callout summary">✅ <strong>小结：</strong> 有结构（周期）→ 指数加速（Shor）；无结构 → 至多平方加速（Grover）。<strong>不是所有问题量子都快。</strong></blockquote>
 <hr></section>
 <section id="s6"><h2>一页纸收尾</h2>

@@ -8,12 +8,14 @@
 :root{--bg:#f4f7fb;--panel:#fff;--panel2:#eaf0f8;--fg:#1c2733;--muted:#64748b;
 --accent:#2563eb;--accent2:#0891b2;--border:#d7e1ee;--code:#eef3f9;--th:#e6eef8;
 --purpose:#ea580c;--purposebg:#fff5ec;
+--physics:#a21caf;--physicsbg:#fbf0fb;
 --review:#7c3aed;--reviewbg:#f5f1ff;--calc:#0891b2;--calcbg:#ecfbfd;
 --intuition:#2563eb;--intuitionbg:#eef4ff;--mistake:#dc2626;--mistakebg:#fef2f2;
 --summary:#15803d;--summarybg:#ecfdf3;}
 [data-theme=dark]{--bg:#0d1320;--panel:#161f30;--panel2:#121a29;--fg:#e3eaf3;--muted:#8595a8;
 --accent:#60a5fa;--accent2:#22d3ee;--border:#27344a;--code:#16203200;--th:#1a2538;
 --purposebg:#2a1709;
+--physicsbg:#2a0e2e;
 --reviewbg:#1f1633;--calcbg:#0a2730;--intuitionbg:#10203b;--mistakebg:#2a1414;--summarybg:#0f2417;}
 *{box-sizing:border-box}
 body{margin:0;font-family:-apple-system,"PingFang SC","Microsoft YaHei",Segoe UI,system-ui,sans-serif;
@@ -56,6 +58,7 @@ blockquote.callout{border-left-width:5px;border-radius:10px;padding:12px 18px;co
 margin:14px 0;font-size:15px}
 blockquote.callout.review{border-left-color:var(--review);background:var(--reviewbg)}
 blockquote.callout.purpose{border-left-color:var(--purpose);background:var(--purposebg)}
+blockquote.callout.physics{border-left-color:var(--physics);background:var(--physicsbg)}
 blockquote.callout.calc{border-left-color:var(--calc);background:var(--calcbg)}
 blockquote.callout.intuition{border-left-color:var(--intuition);background:var(--intuitionbg)}
 blockquote.callout.mistake{border-left-color:var(--mistake);background:var(--mistakebg)}
@@ -104,7 +107,7 @@ window.MathJax={
 </nav></aside>
 <main class="main">
 <div class="topbar"><span class="badge">大学生版</span><span class="home">第五章 · QFT 与 Shor</span><button class="toggle" id="themeToggle">🌓 深/浅色</button></div>
-<div class="legend"><span>🎯 用来干嘛</span><span>📖 补基础</span><span>🧮 一步步算</span><span>💭 直觉</span><span>⚠️ 常见错误</span><span>✅ 小结</span></div>
+<div class="legend"><span>🎯 用来干嘛</span><span>⚛️ 物理上是啥</span><span>📖 补基础</span><span>🧮 一步步算</span><span>💭 直觉</span><span>⚠️ 常见错误</span><span>✅ 小结</span></div>
 <section id="s0"><h1>第五章 量子傅里叶变换与 Shor 算法 · 大学生版</h1>
 <h2>导读</h2>
 <p>这一章是量子算法里「最赚钱」的一支：先讲清楚量子并行快在哪，再造出量子版的傅里叶变换（QFT），然后用它搭出相位估计这把「万能扳手」，最后用相位估计把 RSA 赖以生存的大数分解给端了（Shor 算法）。</p>
@@ -131,6 +134,7 @@ window.MathJax={
 <section id="s3"><h2>5.3 量子傅里叶变换 (QFT)</h2>
 <p>大白话：QFT 就是离散傅里叶变换（DFT）的量子版。经典 DFT 把一串数 $u_k$ 变成另一串数 $y_j$；QFT 干的是同一件数学，只不过把这串数当作量子态的概率幅来处理。它定义在基态上：</p>
 <blockquote class="callout purpose">🎯 <strong>用来干嘛：</strong> 用来把「藏在数据里的周期 / 频率」转换成「相位结构」，好让后续操作能高概率把它测出来。它是相位估计和 Shor 算法的引擎——Shor 破解 RSA 的关键一步就是用 QFT 找出周期。注意：QFT 本身只是个内部零件，傅里叶系数全在概率幅里、<strong>不能直接读出来</strong>当 FFT 用，必须配相位估计这类技巧才有意义。</blockquote>
+<blockquote class="callout physics">⚛️ <strong>物理上是啥：</strong> QFT 本质上是一次<strong>换基</strong>——把量子态从「位置 / 计算基」表象换到「频率 / 动量」表象，就像物理里在时域和频域之间切换。所以原本藏在数据里的周期性，过完 QFT 就变成了频率轴上一个明显的结构。</blockquote>
 <p>$$\ket{j} \;\longrightarrow\; \frac{1}{\sqrt{N}}\sum_{k=0}^{N-1} e^{2\pi i\, jk/N}\,\ket{k},\qquad N=2^n.$$</p>
 <blockquote class="callout review">📖 <strong>补基础（单位根 $\omega$）：</strong> 记 $\omega=e^{2\pi i/N}$，叫「$N$ 次单位根」。它是单位圆上把整圈 $2\pi$ 均分成 $N$ 份的第一个点；它的幂 $\omega^0,\omega^1,\dots,\omega^{N-1}$ 是圆上均匀分布的 $N$ 个点，且 $\omega^N=1$（转满一圈回到 1）。例如 $N=4$ 时 $\omega=e^{2\pi i/4}=e^{i\pi/2}=i$，四个幂是 $1,i,-1,-i$。</blockquote>
 <blockquote class="callout review">📖 <strong>补基础（DFT 矩阵长什么样）：</strong> 把 QFT 写成 $N\times N$ 矩阵 $F$，第 $j$ 行第 $k$ 列就是 $F_{jk}=\frac{1}{\sqrt N}\omega^{jk}$（行列下标都从 0 数起）。它和经典 DFT 矩阵一模一样：每一列对应一个频率，是一串复指数的采样，$\frac{1}{\sqrt N}$ 负责归一化让它幺正。关键点：<strong>每个矩阵元都是单位圆上的一点</strong>，相位随乘积 $jk$ 线性增长。</blockquote>
@@ -149,6 +153,7 @@ window.MathJax={
 <blockquote class="callout purpose">🎯 <strong>用来干嘛：</strong> 它是一台<strong>通用读数器</strong>——给个幺正算符 $U$，把它本征值的相位用二进制读到寄存器里。很多量子算法（Shor 求阶、量子化学里估计分子能量、各种 HSP 类算法）最后都归结为「调用一次相位估计」。把它当成 <code>read_phase(U, u, 精度=t)</code> 这个被反复复用的标准函数就对了。</blockquote>
 <p>$$U\ket{u}=e^{2\pi i\varphi}\ket{u}.$$</p>
 <blockquote class="callout review">📖 <strong>补基础（本征值的相位）：</strong> 幺正算符的本征值模长都是 1，所以一定能写成 $e^{2\pi i\varphi}$ 的形式，全部信息就在相位 $\varphi\in[0,1)$ 里。把 $U$ 想成一个「返回值永远落在单位圆上」的操作，$\ket u$ 是它的不动方向，唯一发生的事就是转了个角度 $2\pi\varphi$。相位估计就是个「测这个角度」的子程序，把 $\varphi$ 二进制采样到 $t$ 个比特上。</blockquote>
+<blockquote class="callout physics">⚛️ <strong>物理上是啥：</strong> 相位估计在物理上，就是把一个幺正算符（或哈密顿量）本征态的本征相位——这相位往往对应着能量或频率——读进寄存器里，很像干涉仪靠干涉条纹去测一个相位。注意它读的只是<strong>本征相位</strong>这一个量，并不能直接读出本征态里藏的任意信息。</blockquote>
 <p>算法三步走（计数寄存器 $t$ 比特决定精度，另有寄存器装 $\ket u$）：</p>
 <ol><li>计数比特全置 $\ket+$（即 $H^{\otimes t}\ket0$）。</li><li>施一串<strong>受控-$U^{2^k}$</strong>：第 $k$ 个计数比特控制 $U^{2^k}$（把 $U$ 重复作用 $2^k$ 次，相位被放大 $2^k$ 倍，正好对应二进制第 $k$ 位）。靠相位回踢，把 $\varphi$ 编码进计数比特，得到</li></ol>
 <p>$$\frac{1}{\sqrt{2^t}}\sum_{j=0}^{2^t-1} e^{2\pi i\varphi j}\,\ket{j}\,\ket{u}.$$ 注意这个态和 5.3 里 QFT 的输出<strong>长得一模一样</strong>——它就是 $\varphi$ 的「傅里叶编码」。</p>
@@ -170,6 +175,7 @@ window.MathJax={
 <p>问题是：你根本不知道 $r$，怎么制备 $\ket{u_s}$？<strong>最妙的技巧</strong>是这些本征态的均匀叠加恰好等于一个随手就能造的态：</p>
 <p>$$\frac{1}{\sqrt{r}}\sum_{s=0}^{r-1}\ket{u_s} = \ket{1}.$$</p>
 <blockquote class="callout intuition">💭 <strong>直觉：</strong> 你不用费劲去造某个特定本征态。直接拿计算基里的 $\ket1$（数字 1 的编码，几乎零成本）当输入，它本身就是全体本征态的「大杂烩」。做一次相位估计，叠加会让你<strong>等概率</strong>地塌缩到某个 $s/r$ 上——相当于免费随机抽一个本征态来量。</blockquote>
+<blockquote class="callout physics">⚛️ <strong>物理上是啥：</strong> 求阶的物理图像是一个<strong>周期性的叠加态</strong>：模乘 $U$ 每作用一次就往前转一格，转 $r$ 次回到原点。这种周期信号经傅里叶变换后，会在对应「频率」$s/r$ 处发生相长干涉、其它地方相消，于是测量就大概率落到带着周期 $r$ 的那些点上。</blockquote>
 <blockquote class="callout calc">🧮 <strong>一步步算（$N=15,\ y=7$ 求阶并分解）：</strong> 逐次算模幂（每步乘 7 再对 15 取余）： $$7^1=7,\quad 7^2=49\equiv4,\quad 7^3\equiv7\cdot4=28\equiv13,\quad 7^4\equiv7\cdot13=91\equiv1\pmod{15}.$$ 最小使 $y^r\equiv1$ 的是 $r=4$。$r$ 是偶数，且 $7^{r/2}=7^2=49\equiv4\not\equiv-1\pmod{15}$，满足导出因子的条件。于是 $$\gcd(7^2-1,\,15)=\gcd(48,15)=3,\qquad \gcd(7^2+1,\,15)=\gcd(50,15)=5,$$ 直接得到 $15=3\times5$。（$\gcd(50,15)$：$50=3\times15+5$，再 $\gcd(15,5)=5$。）量子部分的全部价值，就是对大 $N$ 也能高效地找出这个周期 $r$。</blockquote>
 <p>量子线路吐出一个测量值 $s/r$（分母带着我们要的 $r$，但 $s$ 是随机的、还可能约分了），接下来全是经典后处理：<strong>连分数展开</strong>把测得的近似分数逼成最简分数恢复 $r$，再用 $\gcd(y^{r/2}\pm1,N)$ 拿到因子。</p>
 <blockquote class="callout mistake">⚠️ <strong>常见错误：</strong> Shor 不是一锤定音。可能抽到的 $r$ 是奇数，或者 $y^{r/2}\equiv-1$，这两种情况无法导出因子——换个 $y$ 重试即可（每次成功概率都不低）。</blockquote>

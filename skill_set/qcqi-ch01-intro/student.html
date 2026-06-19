@@ -8,12 +8,14 @@
 :root{--bg:#f4f7fb;--panel:#fff;--panel2:#eaf0f8;--fg:#1c2733;--muted:#64748b;
 --accent:#2563eb;--accent2:#0891b2;--border:#d7e1ee;--code:#eef3f9;--th:#e6eef8;
 --purpose:#ea580c;--purposebg:#fff5ec;
+--physics:#a21caf;--physicsbg:#fbf0fb;
 --review:#7c3aed;--reviewbg:#f5f1ff;--calc:#0891b2;--calcbg:#ecfbfd;
 --intuition:#2563eb;--intuitionbg:#eef4ff;--mistake:#dc2626;--mistakebg:#fef2f2;
 --summary:#15803d;--summarybg:#ecfdf3;}
 [data-theme=dark]{--bg:#0d1320;--panel:#161f30;--panel2:#121a29;--fg:#e3eaf3;--muted:#8595a8;
 --accent:#60a5fa;--accent2:#22d3ee;--border:#27344a;--code:#16203200;--th:#1a2538;
 --purposebg:#2a1709;
+--physicsbg:#2a0e2e;
 --reviewbg:#1f1633;--calcbg:#0a2730;--intuitionbg:#10203b;--mistakebg:#2a1414;--summarybg:#0f2417;}
 *{box-sizing:border-box}
 body{margin:0;font-family:-apple-system,"PingFang SC","Microsoft YaHei",Segoe UI,system-ui,sans-serif;
@@ -56,6 +58,7 @@ blockquote.callout{border-left-width:5px;border-radius:10px;padding:12px 18px;co
 margin:14px 0;font-size:15px}
 blockquote.callout.review{border-left-color:var(--review);background:var(--reviewbg)}
 blockquote.callout.purpose{border-left-color:var(--purpose);background:var(--purposebg)}
+blockquote.callout.physics{border-left-color:var(--physics);background:var(--physicsbg)}
 blockquote.callout.calc{border-left-color:var(--calc);background:var(--calcbg)}
 blockquote.callout.intuition{border-left-color:var(--intuition);background:var(--intuitionbg)}
 blockquote.callout.mistake{border-left-color:var(--mistake);background:var(--mistakebg)}
@@ -104,7 +107,7 @@ window.MathJax={
 </nav></aside>
 <main class="main">
 <div class="topbar"><span class="badge">大学生版</span><span class="home">第一章 · 量子计算简介</span><button class="toggle" id="themeToggle">🌓 深/浅色</button></div>
-<div class="legend"><span>🎯 用来干嘛</span><span>📖 补基础</span><span>🧮 一步步算</span><span>💭 直觉</span><span>⚠️ 常见错误</span><span>✅ 小结</span></div>
+<div class="legend"><span>🎯 用来干嘛</span><span>⚛️ 物理上是啥</span><span>📖 补基础</span><span>🧮 一步步算</span><span>💭 直觉</span><span>⚠️ 常见错误</span><span>✅ 小结</span></div>
 <section id="s0"><h1>第一章 量子计算简介 · 大学生版</h1>
 <h2>导读</h2>
 <p>这一章是整本书的"地图"：先说量子计算想干什么，再把最核心的"数据"（量子比特 qubit）和"操作"（量子门、测量、线路）讲清楚，最后用隐形传态和 Deutsch 算法两个小例子说明量子凭什么可能比经典快。</p>
@@ -125,14 +128,17 @@ window.MathJax={
 <hr></section>
 <section id="s2"><h2>1.2 量子比特：归一化的二维复向量</h2>
 <blockquote class="callout purpose">🎯 <strong>用来干嘛：</strong> qubit 是量子计算机里存信息的最小单位，相当于经典电脑的比特。它能"同时有点像 0、又有点像 1"，这是经典比特做不到的。看懂它是看懂后面一切（门、测量、算法）的地基。</blockquote>
+<blockquote class="callout physics">⚛️ <strong>物理上是啥（qubit）：</strong> qubit 不是凭空造的符号，它就是一个真实的"<strong>两能级量子系统</strong>"——电子自旋的上/下、光子偏振的水平/竖直、原子的基态/激发态、超导电路里的两个最低能级，都能当 qubit 用。$\ket{0}$ 和 $\ket{1}$ 就是从这套物理系统里挑出来的两个可区分状态，理论上把它们记成两个抽象基向量而已。</blockquote>
 <p>经典比特只能是 0 或 1。量子比特（qubit）不一样：它是 $\ket{0}$ 和 $\ket{1}$ 这两个基向量的<strong>复数线性组合</strong>，并且要求总概率为 1：</p>
 <p>$$\ket{\psi} = \alpha\ket{0} + \beta\ket{1}, \qquad \lvert\alpha\rvert^2 + \lvert\beta\rvert^2 = 1$$</p>
 <blockquote class="callout review">📖 <strong>补基础（列向量与基）：</strong> <strong>列向量</strong>就是竖着写的一列数，比如 $\begin{pmatrix}3\\4\end{pmatrix}$。二维空间的<strong>标准基</strong>是 $\begin{pmatrix}1\\0\end{pmatrix}$ 和 $\begin{pmatrix}0\\1\end{pmatrix}$——任何二维向量都能写成它俩的组合：$\begin{pmatrix}a\\b\end{pmatrix}=a\begin{pmatrix}1\\0\end{pmatrix}+b\begin{pmatrix}0\\1\end{pmatrix}$。量子力学里把这两个基向量起名叫 $\ket{0}=\begin{pmatrix}1\\0\end{pmatrix}$ 和 $\ket{1}=\begin{pmatrix}0\\1\end{pmatrix}$。这个 $\ket{\ }$ 记号（叫 ket）就是"竖着写的列向量"的意思，没有别的玄机。</blockquote>
 <blockquote class="callout purpose">🎯 <strong>用来干嘛：</strong> 归一化保证你写下的态是"物理上真实存在"的——它逼着两个测量结果的概率刚好加成 100%。没归一化的态算出来概率会大于 1 或不足 1，纯属废态。</blockquote>
 <blockquote class="callout review">📖 <strong>补基础（归一化）：</strong> 一个向量的<strong>长度（范数）</strong>是各分量模方之和再开根号。对 $\ket{\psi}=\begin{pmatrix}\alpha\\\beta\end{pmatrix}$，长度就是 $\sqrt{\lvert\alpha\rvert^2+\lvert\beta\rvert^2}$。"<strong>归一化</strong>"就是要求长度等于 1，也就是 $\lvert\alpha\rvert^2+\lvert\beta\rvert^2=1$。为什么要这样？因为 $\lvert\alpha\rvert^2$ 和 $\lvert\beta\rvert^2$ 是两个测量结果的概率，<strong>概率加起来必须等于 1</strong>——这就是归一化的物理含义。</blockquote>
 <p>把这两条拼起来：$\alpha\ket{0}+\beta\ket{1}=\alpha\begin{pmatrix}1\\0\end{pmatrix}+\beta\begin{pmatrix}0\\1\end{pmatrix}=\begin{pmatrix}\alpha\\\beta\end{pmatrix}$。所以<strong>一个 qubit 就是一个长度为 1 的二维复列向量</strong> $\begin{pmatrix}\alpha\\\beta\end{pmatrix}$。$\alpha,\beta$ 叫<strong>概率幅（振幅）</strong>，是复数。</p>
+<blockquote class="callout physics">⚛️ <strong>物理上是啥（为什么振幅是复数）：</strong> 因为量子态本质上是一种<strong>波</strong>，振幅就像波的"幅度 + 相位"，天生需要复数来记。波最关键的本事是<strong>干涉</strong>：两支波叠加时，同相会相长、反相会相消——就像双缝实验里屏上的明暗条纹。复数振幅正是为了把这种相长/相消算对，单用正实数（经典概率）根本表达不出"相消"。</blockquote>
 <blockquote class="callout calc">🧮 <strong>一步步算：</strong> 取 $\alpha=\tfrac{1}{\sqrt2}$、$\beta=\tfrac{i}{\sqrt2}$，即 $\ket{\psi}=\begin{pmatrix}1/\sqrt2\\ i/\sqrt2\end{pmatrix}$。先验证归一化：$\lvert\alpha\rvert^2=\left(\tfrac{1}{\sqrt2}\right)^2=\tfrac12$；$\lvert\beta\rvert^2=\left\lvert\tfrac{i}{\sqrt2}\right\rvert^2=\tfrac{\lvert i\rvert^2}{2}=\tfrac{1}{2}$（因为 $\lvert i\rvert=\sqrt{0^2+1^2}=1$）。两者相加 $\tfrac12+\tfrac12=1$ ✓。所以测得 $\ket{0}$ 的概率是 $\tfrac12$，测得 $\ket{1}$ 的概率也是 $\tfrac12$。</blockquote>
 <blockquote class="callout intuition">💭 <strong>直觉：</strong> 上例里 $\beta$ 带的那个 $i$ 叫<strong>相位</strong>。注意它在概率里被"模方"吃掉了（$\lvert i/\sqrt2\rvert^2$ 和 $\lvert 1/\sqrt2\rvert^2$ 一样大）。所以相位在单次测量的概率上"看不见"，但它真实存在——等到做干涉（两个振幅相加）时它就会显形。相位是量子算法的命根子。</blockquote>
+<blockquote class="callout physics">⚛️ <strong>物理上是啥（相位）：</strong> 相位不是数学装饰，它来自量子态随时间的演化——一个能量为 $E$ 的态会自己转相位 $e^{-iEt/\hbar}$（$\hbar$ 是普朗克常数）。两条路径走过不同的"相位历程"，再合到一起时，相位差就决定了干涉是相长还是相消。所以"控制相位"在物理上就是"控制让态演化多久、走哪条路"。</blockquote>
 <blockquote class="callout mistake">⚠️ <strong>常见错误：</strong> $\alpha,\beta$ 本身<strong>不是概率</strong>，它们是复数振幅；真正的概率是它们的<strong>模方</strong> $\lvert\alpha\rvert^2,\lvert\beta\rvert^2$。比如 $\beta=\tfrac{i}{\sqrt2}$ 看起来是虚的、"负的"，但它对应的概率 $\tfrac12$ 是正常的正实数。永远先取模方再谈概率。</blockquote>
 <h3>密度矩阵（统一描述的工具）</h3>
 <blockquote class="callout purpose">🎯 <strong>用来干嘛：</strong> 用来同时描述"确定的叠加态"和"我不确定它处于哪个态"这两种情况——普通态向量只能表达前者、经典概率只能表达后者。处理真实有噪声的量子系统时几乎都得靠它。</blockquote>
@@ -149,15 +155,18 @@ window.MathJax={
 <blockquote class="callout review">📖 <strong>补基础（欧拉公式与相位因子）：</strong> $e^{i\phi}=\cos\phi+i\sin\phi$（欧拉公式），它的模 $\lvert e^{i\phi}\rvert=\sqrt{\cos^2\phi+\sin^2\phi}=1$。所以乘上 $e^{i\phi}$ <strong>不改变长度、只旋转相位</strong>，因此叫"相位因子"。又因为它模为 1，乘在 $\ket{1}$ 前面<strong>不影响测量概率</strong>（概率只看模方）——但它决定了态在赤道上转到哪个方向。</blockquote>
 <blockquote class="callout calc">🧮 <strong>一步步算（三个特殊点）：</strong> ① $\ket{0}$：取 $\theta=0$，则 $\cos\tfrac{0}{2}=1$、$\sin\tfrac02=0$，态就是 $\ket{0}$，坐标 $r=(0,0,\cos0)=(0,0,1)$——正北极。② $\ket{+}$：取 $\theta=\tfrac\pi2,\phi=0$，则 $\cos\tfrac\pi4=\sin\tfrac\pi4=\tfrac{1}{\sqrt2}$，态是 $\tfrac{1}{\sqrt2}(\ket{0}+\ket{1})$ ✓，坐标 $r=(\sin\tfrac\pi2,0,\cos\tfrac\pi2)=(1,0,0)$——赤道 $+x$ 方向。③ $\ket{1}$：取 $\theta=\pi$，坐标 $r=(0,0,\cos\pi)=(0,0,-1)$——正南极。</blockquote>
 <blockquote class="callout intuition">💭 <strong>直觉：</strong> 一个单 qubit 纯态恰好是球面上一个点，跟用经纬度定位地球上一点完全一样：$\theta$ 是"纬度"（决定 $\ket{0}/\ket{1}$ 的权重），$\phi$ 是"经度"（只动相位）。北极 $\ket{0}$、南极 $\ket{1}$、赤道上全是各种等权叠加。纯态在<strong>球面</strong>上（半径 1）；混合态在<strong>球内部</strong>（半径 $&lt;1$）；正球心是"啥都不知道"的最大混合态。</blockquote>
+<blockquote class="callout physics">⚛️ <strong>物理上是啥（Bloch 向量）：</strong> 对一个真实的自旋 1/2 粒子，Bloch 球上那根箭头不是比喻——它就是这个自旋在空间里<strong>实际指的方向</strong>，也对应它磁矩的朝向。比如箭头指 $+z$ 就是"自旋朝上"。这也是为什么量子门作用在 Bloch 球上看起来像"把箭头转个方向"：物理上往往真的是用磁场让自旋进动（转向）。</blockquote>
 <blockquote class="callout mistake">⚠️ <strong>常见错误：</strong> 公式里是 $\theta/2$ 不是 $\theta$。一个常见的混淆是把 Bloch 球上的角度直接当成态向量里的角度——它们差一个因子 2。这来源于 qubit 的"旋量"特性，1.3 节还会再遇到。</blockquote>
 <p><strong>制备任意态 = 旋转。</strong> 任意 qubit 态都能由某个幺正变换 $U$ 把 $\ket{0}$ 转过去：$\ket{\psi}=U\ket{0}$。几何上就是把北极的 $\ket{0}$ 绕某根轴转到目标点。</p>
 <blockquote class="callout summary">✅ <strong>小结：</strong> 单 qubit 纯态 ↔ Bloch 球面上一点，两个角 $(\theta,\phi)$ 定位它；制备一个态就是从北极出发做一次旋转。</blockquote>
 <h3>测量：从概率分布里采一次样，且会塌缩</h3>
 <blockquote class="callout purpose">🎯 <strong>用来干嘛：</strong> 测量是你从量子系统里"读出"经典答案的唯一手段。理解它为什么会破坏叠加，才能明白量子算法为什么不能"算完直接读"、而要费劲设计干涉——这是量子编程跟普通编程最大的区别。</blockquote>
 <p>在计算基下测量 $\ket{\psi}=\alpha\ket{0}+\beta\ket{1}$：得 $\ket{0}$ 的概率是 $\lvert\alpha\rvert^2$，得 $\ket{1}$ 的概率是 $\lvert\beta\rvert^2$。测完之后，态会<strong>塌缩</strong>到你测到的那个基态。</p>
+<blockquote class="callout physics">⚛️ <strong>物理上是啥（Born 规则）：</strong> "概率 = 振幅模方"这条规则（叫 Born 规则）不是从更基本的东西推出来的，它是量子力学的一条<strong>物理公设</strong>，靠的是近百年无数实验反复验证、从没出过错。它把"波一样的复数振幅"翻译成"实验里能数出来的频率"，是连接抽象态向量和真实测量数据的桥。</blockquote>
 <blockquote class="callout review">📖 <strong>补基础（为什么概率和为 1）：</strong> 概率论的第一条公理：所有互斥结果的概率加起来必须是 1。这里只有 $\ket{0}$ 和 $\ket{1}$ 两个结果，所以要求 $\lvert\alpha\rvert^2+\lvert\beta\rvert^2=1$——这正是前面的归一化条件。归一化不是数学洁癖，它就是"概率必须凑成 1"的另一种说法。</blockquote>
 <blockquote class="callout calc">🧮 <strong>一步步算：</strong> 用 $\ket{\psi}=\begin{pmatrix}1/\sqrt2\\ i/\sqrt2\end{pmatrix}$。测量得 $\ket{0}$ 概率 $\lvert 1/\sqrt2\rvert^2=\tfrac12$；得 $\ket{1}$ 概率 $\lvert i/\sqrt2\rvert^2=\tfrac12$。假设这次测到了 $\ket{1}$——那么态<strong>立刻变成</strong> $\ket{1}=\begin{pmatrix}0\\1\end{pmatrix}$。你再测一次，100% 还是 $\ket{1}$，原来那个 $\tfrac12$ 概率和那个相位 $i$ 永远消失了。</blockquote>
 <blockquote class="callout mistake">⚠️ <strong>常见错误：</strong> 测量是<strong>破坏性、不可逆</strong>的，不像读一个普通变量那样无副作用。叠加里丰富的复数振幅信息，一测就塌缩没了，只剩一个经典比特。所以好的量子算法都把"提取有用信息"的活儿放在测量<strong>之前</strong>用干涉做完。</blockquote>
+<blockquote class="callout physics">⚛️ <strong>物理上是啥（塌缩）：</strong> 塌缩同样是测量公设的一部分。物理上一般这样理解：测量时被测系统跟庞大的仪器/环境<strong>纠缠</strong>在一起，相位关系迅速被环境打散（叫<strong>退相干</strong>），叠加在我们能观测的层面上就"散了"，看上去像塌缩到某一个结果。注意：这跟"超光速传信号"或"意识让它塌缩"都没关系，别被这类说法带偏。</blockquote>
 <blockquote class="callout summary">✅ <strong>小结：</strong> 测量 = 按 $\lvert\alpha\rvert^2,\lvert\beta\rvert^2$ 采样一次，且采完态就被钉死成那个基态。</blockquote>
 <h3>多比特与 Bell 基</h3>
 <blockquote class="callout purpose">🎯 <strong>用来干嘛：</strong> 纠缠是量子独有的"超强关联"，是隐形传态、超密编码、很多量子算法和量子通信的燃料。先认识最简单的 Bell 态，后面才看得懂这些应用是怎么用它的。</blockquote>
@@ -167,6 +176,7 @@ window.MathJax={
 <blockquote class="callout calc">🧮 <strong>一步步算：</strong> 把 $\ket{\Phi^+}=\tfrac{1}{\sqrt2}(\ket{00}+\ket{11})$ 写成 $4$ 维列向量。$\ket{00}$ 是第 1 个分量、$\ket{11}$ 是第 4 个分量，所以 $\ket{\Phi^+}=\tfrac{1}{\sqrt2}\begin{pmatrix}1\\0\\0\\1\end{pmatrix}$。在计算基下测量两个比特：得 $00$ 的概率 $\lvert\tfrac{1}{\sqrt2}\rvert^2=\tfrac12$，得 $11$ 的概率 $\tfrac12$，而得 $01$ 或 $10$ 的概率都是 $0$（这两个分量是零）。<strong>所以两比特测出来必然相同。</strong></blockquote>
 <blockquote class="callout intuition">💭 <strong>直觉：</strong> 单看第一个比特，它得 0 或 1 各占 $\tfrac12$，像随机硬币；可一旦你读了它，第二个比特的结果就被瞬间锁定（你测到 0，对方一定是 0）。这种"关联藏在整体、单看局部却是随机"的现象就是<strong>纠缠</strong>。</blockquote>
 <blockquote class="callout mistake">⚠️ <strong>常见错误：</strong> 纠缠态<strong>写不成两个单比特态的"组合（张量积）"</strong>，即 $\ket{\Phi^+}\ne\ket{a}\otimes\ket{b}$——这正是纠缠的数学定义。也别把它当成普通的经典相关：纠缠的关联强度超过任何经典模型能解释的范围（这就是 Bell 不等式要说的事）。</blockquote>
+<blockquote class="callout physics">⚛️ <strong>物理上是啥（纠缠从哪来）：</strong> 纠缠通常来自"一起诞生"的粒子——比如让一个光子在晶体里<strong>下转换</strong>裂成一对光子，这对光子天生共享一个不可拆分的联合态。真实的 <strong>Bell 实验</strong>反复测出它们的关联强度<strong>超过</strong>任何经典模型的上限，证明这种关联是真的、不是事先偷偷约好的。但要记住：纠缠<strong>不能拿来超光速传信息</strong>，单看一边永远只是随机结果。</blockquote>
 <blockquote class="callout summary">✅ <strong>小结：</strong> $n$ 比特 = $2^n$ 维复向量；Bell 态是纠缠招牌——局部随机、整体强关联、不可分解。</blockquote>
 <hr></section>
 <section id="s3"><h2>1.3 量子门与量子线路</h2>
@@ -174,6 +184,7 @@ window.MathJax={
 <h3>单比特门是 2×2 幺正矩阵</h3>
 <blockquote class="callout purpose">🎯 <strong>用来干嘛：</strong> 量子门是你在量子计算机上能下达的"指令"——所有量子算法都是把这些门按顺序排出来的。学会读门矩阵，就等于学会读量子程序的每一行。</blockquote>
 <p>每个单比特门都是一个保持向量长度的变换，也就是一个 $2\times2$ 的<strong>幺正矩阵</strong>。</p>
+<blockquote class="callout physics">⚛️ <strong>物理上是啥（为什么门是幺正的）：</strong> 一个不受外界打扰的<strong>封闭量子系统</strong>，按<strong>薛定谔方程</strong>演化，数学上必然是幺正的——因为它要守住"总概率永远等于 1"。所以一个量子门在物理上就是：让系统在一段精心设计的<strong>哈密顿量</strong>（能量环境，比如特定的激光或微波脉冲）下演化固定的一段时间，演化算符 $U=e^{-iHt/\hbar}$ 自动就是幺正的。门可逆、不丢信息，正因为薛定谔演化本身可逆。</blockquote>
 <blockquote class="callout review">📖 <strong>补基础（矩阵乘以向量、幺正）：</strong> 矩阵作用在向量上就是普通矩阵乘法：$\begin{pmatrix}a&amp;b\\c&amp;d\end{pmatrix}\begin{pmatrix}x\\y\end{pmatrix}=\begin{pmatrix}ax+by\\cx+dy\end{pmatrix}$——"用矩阵的每一行去点乘那个列向量"。一个矩阵 $U$ 叫<strong>幺正的</strong>，如果 $U^\dagger U=I$，其中 $U^\dagger$ 是"共轭转置"（转置 + 每个元素取共轭），$I$ 是单位矩阵 $\begin{pmatrix}1&amp;0\\0&amp;1\end{pmatrix}$。幺正的关键性质：它<strong>保持向量长度不变</strong>，所以归一化的态作用后还是归一化的（概率还是凑成 1）。而且它<strong>可逆</strong>，逆就是 $U^\dagger$——没有信息丢失，这跟测量的"塌缩、不可逆"正好相反。</blockquote>
 <p>最常用的几个门：</p>
 <ul><li><strong>Hadamard（$H$）</strong>——叠加制造机：$H=\tfrac{1}{\sqrt2}\begin{pmatrix}1&amp;1\\1&amp;-1\end{pmatrix}$。</li><li><strong>Pauli-X（非门）</strong>：$X=\begin{pmatrix}0&amp;1\\1&amp;0\end{pmatrix}$，把 $\ket{0}\leftrightarrow\ket{1}$ 翻转。</li><li><strong>Pauli-Z</strong>：$Z=\begin{pmatrix}1&amp;0\\0&amp;-1\end{pmatrix}$，给 $\ket{1}$ 加个负号。</li><li><strong>相位门</strong> $S=\begin{pmatrix}1&amp;0\\0&amp;i\end{pmatrix}$、<strong>$T$ 门</strong> $=\begin{pmatrix}1&amp;0\\0&amp;e^{i\pi/4}\end{pmatrix}$：只给 $\ket{1}$ 分量挂相位。</li></ul>

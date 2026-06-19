@@ -8,12 +8,14 @@
 :root{--bg:#f4f7fb;--panel:#fff;--panel2:#eaf0f8;--fg:#1c2733;--muted:#64748b;
 --accent:#2563eb;--accent2:#0891b2;--border:#d7e1ee;--code:#eef3f9;--th:#e6eef8;
 --purpose:#ea580c;--purposebg:#fff5ec;
+--physics:#a21caf;--physicsbg:#fbf0fb;
 --review:#7c3aed;--reviewbg:#f5f1ff;--calc:#0891b2;--calcbg:#ecfbfd;
 --intuition:#2563eb;--intuitionbg:#eef4ff;--mistake:#dc2626;--mistakebg:#fef2f2;
 --summary:#15803d;--summarybg:#ecfdf3;}
 [data-theme=dark]{--bg:#0d1320;--panel:#161f30;--panel2:#121a29;--fg:#e3eaf3;--muted:#8595a8;
 --accent:#60a5fa;--accent2:#22d3ee;--border:#27344a;--code:#16203200;--th:#1a2538;
 --purposebg:#2a1709;
+--physicsbg:#2a0e2e;
 --reviewbg:#1f1633;--calcbg:#0a2730;--intuitionbg:#10203b;--mistakebg:#2a1414;--summarybg:#0f2417;}
 *{box-sizing:border-box}
 body{margin:0;font-family:-apple-system,"PingFang SC","Microsoft YaHei",Segoe UI,system-ui,sans-serif;
@@ -56,6 +58,7 @@ blockquote.callout{border-left-width:5px;border-radius:10px;padding:12px 18px;co
 margin:14px 0;font-size:15px}
 blockquote.callout.review{border-left-color:var(--review);background:var(--reviewbg)}
 blockquote.callout.purpose{border-left-color:var(--purpose);background:var(--purposebg)}
+blockquote.callout.physics{border-left-color:var(--physics);background:var(--physicsbg)}
 blockquote.callout.calc{border-left-color:var(--calc);background:var(--calcbg)}
 blockquote.callout.intuition{border-left-color:var(--intuition);background:var(--intuitionbg)}
 blockquote.callout.mistake{border-left-color:var(--mistake);background:var(--mistakebg)}
@@ -105,7 +108,7 @@ window.MathJax={
 </nav></aside>
 <main class="main">
 <div class="topbar"><span class="badge">大学生版</span><span class="home">第八章补充 · 量子信道</span><button class="toggle" id="themeToggle">🌓 深/浅色</button></div>
-<div class="legend"><span>🎯 用来干嘛</span><span>📖 补基础</span><span>🧮 一步步算</span><span>💭 直觉</span><span>⚠️ 常见错误</span><span>✅ 小结</span></div>
+<div class="legend"><span>🎯 用来干嘛</span><span>⚛️ 物理上是啥</span><span>📖 补基础</span><span>🧮 一步步算</span><span>💭 直觉</span><span>⚠️ 常见错误</span><span>✅ 小结</span></div>
 <section id="s0"><h1>第八章补充 量子信道 · 大学生版</h1>
 <h2>导读</h2>
 <p>这一章讲"量子比特在现实里会被噪声搞坏"这件事，以及怎么用数学描述这个变坏的过程。核心对象叫<strong>量子信道</strong>——可以把它当成一个作用在量子态上的"带噪声的变换"。本章告诉你：这个变换有三种等价写法（信道映射、Kraus 算符、蔡氏矩阵），它们怎么互相转换，常见噪声长什么样，怎么用这套工具做数值验证。</p>
@@ -115,11 +118,13 @@ window.MathJax={
 <section id="s1"><h2>1. 量子信道是什么：带噪声的不可逆变换</h2>
 <p>量子信道 $\mathcal{E}$ 作用在<strong>密度矩阵</strong> $\rho$ 上：$\rho\to\mathcal{E}(\rho)$。</p>
 <blockquote class="callout purpose">🎯 <strong>用来干嘛：</strong> 量子信道是用来<strong>描述真实硬件里量子态怎么被噪声、环境弄脏</strong>的数学工具——比特随机翻转、相位丢失、能量耗散都能用它刻画。它是量子纠错的基础：你得先能写下"错误长什么样"，才能设计电路去纠正它。</blockquote>
+<blockquote class="callout physics">⚛️ <strong>物理上是啥：</strong> 量子信道描述的是一个<strong>开放量子系统</strong>——你的 qubit 没法和外界彻底隔绝，总会和周围环境（其它原子、电磁场、衬底振动等）发生耦合。所谓"噪声"，物理上就是 qubit 和环境<strong>纠缠</strong>在一起、把自己的相位/能量信息泄漏给环境，于是它单独看就不再是纯态、叠加被破坏——这个过程叫<strong>退相干（decoherence）</strong>。理想门是把系统当成完全孤立的；信道则承认系统永远在和环境对话。</blockquote>
 <blockquote class="callout review">📖 <strong>补基础：密度矩阵 $\rho$ 回顾。</strong> 之前我们用列向量 $\ket\psi$ 表示量子态，但那只能描述"纯态"。一旦有噪声、有概率混合，就要升级成<strong>密度矩阵</strong> $\rho$——一个 $d\times d$ 的方阵，满足三条：① <strong>厄米</strong> $\rho=\rho^\dagger$（共轭转置等于自己）；② <strong>半正定</strong> $\rho\ge0$（所有本征值 $\ge0$，保证概率非负）；③ <strong>迹为 1</strong> $\Tr(\rho)=1$（对角元之和为 1，即总概率）。例：纯态 $\ket0$ 写成 $\rho=\ketbra{0}{0}=\begin{pmatrix}1&amp;0\\0&amp;0\end{pmatrix}$；"一半 $\ket0$ 一半 $\ket1$"的混合态写成 $\tfrac12 I=\begin{pmatrix}1/2&amp;0\\0&amp;1/2\end{pmatrix}$（叫<strong>最大混合态</strong>，信息完全丢失）。对角元是"测到各结果的概率"，非对角元叫<strong>相干项</strong>，反映量子叠加。</blockquote>
 <p>一个合法的量子信道必须是 <strong>CPTP 映射</strong>（完全正定＋保迹）：</p>
 <p>$$\mathcal{E}\otimes I \ge 0 \quad(\text{CP}), \qquad \Tr(\mathcal{E}(\rho)) = \Tr(\rho) \quad(\text{TP})$$</p>
 <ul><li><strong>CP（完全正定）</strong>：哪怕把这个 qubit 和任意大的旁观系统纠缠在一起，一起变换后结果仍是合法量子态（概率非负）。</li><li><strong>TP（保迹）</strong>：变换前后总概率守恒，都等于 1。</li></ul>
 <blockquote class="callout intuition">💭 <strong>直觉：</strong> "完全正定"是说这个变换不能算出"负概率"这种非法结果，哪怕和别的系统挂钩也不行；"保迹"是说概率加起来始终是 1，没凭空多出来或漏掉。两条合起来＝"物理上说得通的有损变换"。</blockquote>
+<blockquote class="callout physics">⚛️ <strong>物理上是啥：</strong> CPTP 这两条不是数学洁癖，而是<strong>物理底线</strong>。TP（保迹）保证总概率永远是 1——qubit 不会凭空消失或多出来。CP（完全正定）比"正定"更强：要求这个 qubit 哪怕正和一个完全不参与变换的<strong>旁观系统</strong>纠缠着，整体经过信道后仍是合法量子态（概率非负）。现实中 qubit 几乎总和别的东西有牵连，所以只有满足 CP 的变换才在物理上处处说得通。</blockquote>
 <blockquote class="callout mistake">⚠️ <strong>常见错误：</strong> 只检查 CP 不够，TP 也得查；缺一个这个映射就不是合法信道。</blockquote>
 <hr></section>
 <section id="s2"><h2>2. 三种等价描述：同一个对象的三种写法</h2>
@@ -133,6 +138,7 @@ window.MathJax={
 <blockquote class="callout purpose">🎯 <strong>用来干嘛：</strong> Choi（蔡氏）矩阵是把"信道"这个抽象映射<strong>打包成一个普通矩阵</strong>，好处有二：① 判断信道合不合法（是否 CP）只要看它本征值有没有负的；② 它是"信道 → Kraus"转换的中转站，能直接上线性代数工具。</blockquote>
 <p>$$J(\mathcal{E}) = (\mathcal{E}\otimes I)(\ketbra{\Omega}{\Omega}), \qquad \ket{\Omega}=\sum_i \ket{ii}$$</p>
 <ul><li>$J(\mathcal{E})$：信道对应的蔡氏矩阵（Choi matrix），$d^2\times d^2$。</li><li>$\ket{\Omega}=\sum_i\ket{ii}$：未归一的最大纠缠态（单 qubit 时 $\ket{00}+\ket{11}$）。</li><li>$\mathcal{E}\otimes I$：只对纠缠态的"一半"施加信道，另一半放着不动。</li></ul>
+<blockquote class="callout physics">⚛️ <strong>物理上是啥：</strong> 蔡氏矩阵不只是个数学技巧，它对应一个能真做出来的实验：先制备一对<strong>最大纠缠的 qubit</strong>（如 $\ket{00}+\ket{11}$），把其中<strong>一半</strong>送进信道、另一半原封不动留着，最后得到的那个两 qubit 态就是 $J$。因为纠缠把信道对"所有输入"的反应一次性绑定下来，所以测完这一个态，就等于把整个信道的行为全测出来了——"喂一个特殊输入、反推整个变换"在物理上是这么实现的。</blockquote>
 <blockquote class="callout review">📖 <strong>补基础：矩阵分块。</strong> 一个 $4\times4$ 矩阵可以切成 $2\times2$ 个"小块"，每块是 $2\times2$ 矩阵： $$\begin{pmatrix}A&amp;B\\C&amp;D\end{pmatrix},\quad A,B,C,D\text{ 都是 }2\times2.$$ 蔡氏矩阵正好这样按块组织——这让"算一个大矩阵"变成"算四个小块再拼起来"。</blockquote>
 <blockquote class="callout calc">🧮 <strong>一步步算：逐块配方。</strong> 对单 qubit，有等价公式 $J=\sum_{i,j}\mathcal{E}(\ketbra{i}{j})\otimes\ketbra{i}{j}$。意思是：把 $J$ 切成 $2\times2$ 个小块（按 $\ketbra{i}{j}$ 编号），<strong>第 $(i,j)$ 块就等于把信道作用到 $\ketbra{i}{j}$ 上的结果</strong> $\mathcal{E}(\ketbra{i}{j})$。所以只要算四个 $2\times2$ 小块 $\mathcal{E}(\ketbra00),\mathcal{E}(\ketbra01),\mathcal{E}(\ketbra10),\mathcal{E}(\ketbra11)$，按 $\begin{pmatrix}\mathcal{E}(\ketbra00)&amp;\mathcal{E}(\ketbra01)\\\mathcal{E}(\ketbra10)&amp;\mathcal{E}(\ketbra11)\end{pmatrix}$ 拼起来就是整个 $J$。</blockquote>
 <p>这个对应关系叫 <strong>Choi–Jamiołkowski 同构</strong>：信道 $\mathcal{E}$ 和矩阵 $J(\mathcal{E})$ 一一对应，而且合法性条件也变简单了——</p>
@@ -145,6 +151,7 @@ window.MathJax={
 <section id="s4"><h2>4.（8.2）从蔡氏矩阵到 Kraus：对矩阵做"分解"还原出算子</h2>
 <p>蔡氏矩阵 $J$ 是半正定的，所以能做<strong>谱分解</strong>，每个本征对都能还原出一个 Kraus 算符。</p>
 <blockquote class="callout purpose">🎯 <strong>用来干嘛：</strong> Kraus 算符是信道<strong>最好用的一种写法</strong>——一组矩阵 $\{E_k\}$，把噪声拆成"可能发生的几种操作"（如"什么都没坏"分支、"翻转了"分支）。算噪声后的态、上数值模拟、推纠错条件，都直接用 $\mathcal{E}(\rho)=\sum_k E_k\rho E_k^\dagger$ 这个式子。</blockquote>
+<blockquote class="callout physics">⚛️ <strong>物理上是啥：</strong> 每个 Kraus 算符 $E_k$ 对应<strong>环境"记录到了哪个结果"的一个分支</strong>。qubit 和环境耦合后，环境相当于偷偷"测量"了系统：可能记下"什么都没发生"、也可能记下"发生了一次跃迁/翻转"等不同结果，每种结果就是一个 $E_k$ 分支。因为我们够不着环境、并不知道它到底记了哪个，数学上就对环境<strong>求迹</strong>（把它的所有可能结果按概率加起来），于是信道写成 $\sum_k E_k\rho E_k^\dagger$——这正是"对环境一无所知"时系统的样子。</blockquote>
 <blockquote class="callout review">📖 <strong>补基础：谱分解（本征值分解）。</strong> 对一个厄米矩阵 $J$，总能找到一组<strong>正交的单位本征向量</strong> $\ket{v_k}$ 和对应的实<strong>本征值</strong> $\lambda_k$（满足 $J\ket{v_k}=\lambda_k\ket{v_k}$），并把 $J$ 写成 $$J=\sum_k \lambda_k\,\ketbra{v_k}{v_k}.$$ 这叫谱分解。若 $J$ 还半正定，则所有 $\lambda_k\ge0$，可以开方 $\sqrt{\lambda_k}$。直觉上：谱分解把一个复杂矩阵拆成几个"纯方向"$\ketbra{v_k}{v_k}$ 的加权叠加，权重就是本征值。</blockquote>
 <blockquote class="callout review">📖 <strong>补基础：向量化与 reshape（$\mathrm{mat}$）。</strong> 一个 $d\times d$ 矩阵有 $d^2$ 个元素，把它们排成一列就是长度 $d^2$ 的<strong>向量化</strong>；反过来，把长度 $d^2$ 的向量按行优先折回 $d\times d$ 矩阵，就是 $\mathrm{mat}(\cdot)$（reshape 的逆操作）。单 qubit（$d=2$）时： $$(a,b,c,d)^\top \;\xrightarrow{\ \mathrm{mat}\ }\; \begin{pmatrix}a&amp;b\\c&amp;d\end{pmatrix}.$$</blockquote>
 <p>谱分解 → Kraus 的公式：</p>
@@ -169,9 +176,11 @@ window.MathJax={
 <table><thead><tr><th>信道</th><th>Kraus 算符</th><th>$M=\mathrm{diag}(\cdot)$</th><th>$\vec c$</th></tr></thead><tbody><tr><td>比特翻转</td><td>$\sqrt{1-p}\,I,\ \sqrt{p}\,X$</td><td>$(1,\ 1-2p,\ 1-2p)$</td><td>$0$</td></tr><tr><td>相位翻转</td><td>$\sqrt{1-p}\,I,\ \sqrt{p}\,Z$</td><td>$(1-2p,\ 1-2p,\ 1)$</td><td>$0$</td></tr><tr><td>比特-相位翻转</td><td>$\sqrt{1-p}\,I,\ \sqrt{p}\,Y$</td><td>—</td><td>$0$</td></tr><tr><td>去极化</td><td>$\sqrt{1-3p/4}\,I,\ \sqrt{p/4}\,X,\ \sqrt{p/4}\,Y,\ \sqrt{p/4}\,Z$</td><td>$(1-p,\ 1-p,\ 1-p)$</td><td>$0$</td></tr><tr><td>振幅阻尼</td><td>$\begin{pmatrix}1&amp;0\\0&amp;\sqrt{1-\gamma}\end{pmatrix},\ \begin{pmatrix}0&amp;\sqrt{\gamma}\\0&amp;0\end{pmatrix}$</td><td>$(\sqrt{1-\gamma},\ \sqrt{1-\gamma},\ 1-\gamma)$</td><td>$(0,0,\gamma)$</td></tr></tbody></table>
 <p>逐条说这些信道在干嘛：</p>
 <ul><li><strong>比特翻转</strong>：以概率 $p$ 翻转 $\ket0\leftrightarrow\ket1$（施加 $X$），沿 $y,z$ 轴压缩。</li><li><strong>相位翻转 / 相位阻尼</strong>：只破坏相位（施加 $Z$），衰减相干项（密度矩阵的非对角元），沿 $x,y$ 轴压缩、$z$ 不变。</li><li><strong>去极化</strong>：以概率 $p$ 把态彻底打乱成最大混合态，Bloch 球<strong>各向同性</strong>地朝球心缩。</li><li><strong>振幅阻尼</strong>：描述能量耗散 $\ket1\to\ket0$（如自发辐射），球收缩<strong>并向北极 $\ket0$ 平移</strong>。</li></ul>
+<blockquote class="callout physics">⚛️ <strong>物理上是啥（比特/相位翻转）：</strong> <strong>比特翻转</strong>就是物理上 qubit 以概率 $p$ 被随机翻了个面（$\ket0\leftrightarrow\ket1$），和经典比特受干扰跳变是一回事。<strong>相位翻转/退相位</strong>则更"量子"：它不改变 $\ket0$、$\ket1$ 的布居，只随机抹掉它们之间的相对相位，让叠加态的相干项衰减——这正是退相干最常见的形态，能量没丢但"量子性"在流失。</blockquote>
 <blockquote class="callout calc">🧮 <strong>一步步算：比特翻转 $p=\tfrac14$ 作用到 $\rho=\ketbra00=\begin{pmatrix}1&amp;0\\0&amp;0\end{pmatrix}$。</strong> 用 $\mathcal{E}(\rho)=(1-p)\rho+pX\rho X$，其中 $X\rho X=\ketbra11=\begin{pmatrix}0&amp;0\\0&amp;1\end{pmatrix}$： $$\mathcal{E}(\rho)=\tfrac34\begin{pmatrix}1&amp;0\\0&amp;0\end{pmatrix}+\tfrac14\begin{pmatrix}0&amp;0\\0&amp;1\end{pmatrix}=\begin{pmatrix}3/4&amp;0\\0&amp;1/4\end{pmatrix}.$$ 即有 $\tfrac14$ 的概率被翻到 $\ket1$。再用 Bloch 描述对照：$\ket0$ 的 $\vec r=(0,0,1)$，比特翻转 $M=\mathrm{diag}(1,1-2p,1-2p)$，代 $p=\tfrac14$ 得 $M=\mathrm{diag}(1,\tfrac12,\tfrac12)$，$\vec c=0$： $$\vec r\,'=M\vec r+\vec c=(0,\ 0,\ \tfrac12).$$ 换回密度矩阵，对角元 $=\tfrac{1\pm r_z'}{2}=\tfrac{1\pm 1/2}{2}=\{\tfrac34,\tfrac14\}$。✓ 与直接算 $\mathcal{E}(\rho)$ 一致。</blockquote>
 <p>振幅阻尼的两个 Kraus 算符值得单独看：</p>
 <p>$$E_0^{\text{amp}}=\begin{pmatrix}1&amp;0\\0&amp;\sqrt{1-\gamma}\end{pmatrix}, \qquad E_1^{\text{amp}}=\begin{pmatrix}0&amp;\sqrt{\gamma}\\0&amp;0\end{pmatrix}$$</p>
+<blockquote class="callout physics">⚛️ <strong>物理上是啥（振幅阻尼＝自发辐射）：</strong> 振幅阻尼<strong>就是</strong>自发辐射这个真实物理过程：处在激发态 $\ket1$ 的系统会自发衰变回基态 $\ket0$、同时向环境放出一个光子，$\gamma$ 就是这段时间内衰变的概率。$E_1$ 分支正对应"放出了光子、跳到基态"，$E_0$ 分支对应"还没衰变、但概率幅被相应压低"。这是真实超导、光子、原子 qubit 上<strong>最主要的能量耗散错误</strong>（对应器件里的 $T_1$ 寿命）。</blockquote>
 <blockquote class="callout calc">🧮 <strong>一步步算：逐元素读这两个算符。</strong> 把它们当成作用在列向量 $\begin{pmatrix}c_0\\c_1\end{pmatrix}$（$c_0$ 是 $\ket0$ 振幅、$c_1$ 是 $\ket1$ 振幅）上的矩阵： - $E_0$ 的 $(0,0)=1$：$\ket0$ 分量原封不动（基态不会自发往上跳）；$(1,1)=\sqrt{1-\gamma}$：$\ket1$ 分量打了个 $\sqrt{1-\gamma}$ 折扣（有概率衰减掉）。两个对角元、非对角全 0，说明这分支只做幅度缩放、不混合 $\ket0\ket1$。 - $E_1$ 只有 $(0,1)=\sqrt{\gamma}$ 一个非零元：把输入的 $\ket1$ 分量（第 2 列）搬到输出的 $\ket0$ 分量（第 1 行），振幅 $\sqrt{\gamma}$——这就是"激发态掉到基态、放出一个光子"的跃迁。第 1 列全 0 表示 $\ket0$ 不会触发这个分支。</blockquote>
 <blockquote class="callout calc">🧮 <strong>一步步算：振幅阻尼 $\gamma=\tfrac12$ 作用到激发态 $\rho=\ketbra11=\begin{pmatrix}0&amp;0\\0&amp;1\end{pmatrix}$。</strong> 算 $\sum_k E_k\rho E_k^\dagger$： $$E_0\rho E_0^\dagger=\begin{pmatrix}1&amp;0\\0&amp;\sqrt{1-\gamma}\end{pmatrix}\begin{pmatrix}0&amp;0\\0&amp;1\end{pmatrix}\begin{pmatrix}1&amp;0\\0&amp;\sqrt{1-\gamma}\end{pmatrix}=\begin{pmatrix}0&amp;0\\0&amp;1-\gamma\end{pmatrix},$$ $$E_1\rho E_1^\dagger=\begin{pmatrix}0&amp;\sqrt{\gamma}\\0&amp;0\end{pmatrix}\begin{pmatrix}0&amp;0\\0&amp;1\end{pmatrix}\begin{pmatrix}0&amp;0\\\sqrt{\gamma}&amp;0\end{pmatrix}=\begin{pmatrix}\gamma&amp;0\\0&amp;0\end{pmatrix}.$$ 相加得 $\mathcal{E}(\rho)=\begin{pmatrix}\gamma&amp;0\\0&amp;1-\gamma\end{pmatrix}$。代 $\gamma=\tfrac12$ 得 $\begin{pmatrix}1/2&amp;0\\0&amp;1/2\end{pmatrix}=I/2$——一半布居衰减到 $\ket0$，纯 $\ket1$ 变成了最大混合态。用 Bloch 对照也一致：$\ket1$ 的 $\vec r=(0,0,-1)$，代 $M=\mathrm{diag}(\sqrt{1-\gamma},\sqrt{1-\gamma},1-\gamma)$、$\vec c=(0,0,\gamma)$ 得 $\vec r\,'=(0,0,(1-\gamma)(-1)+\gamma)=(0,0,2\gamma-1)$，$\gamma=\tfrac12$ 时为 $(0,0,0)$＝球心＝$I/2$。✓ 再验证保迹 $\sum_k E_k^\dagger E_k=I$：$E_0^\dagger E_0=\begin{pmatrix}1&amp;0\\0&amp;1-\gamma\end{pmatrix}$，$E_1^\dagger E_1=\begin{pmatrix}0&amp;0\\0&amp;\gamma\end{pmatrix}$，相加 $=I$。✓ 对任意 $\gamma$ 都成立。</blockquote>
 <blockquote class="callout mistake">⚠️ <strong>常见错误：</strong> 别把相位阻尼和振幅阻尼搞混。<strong>相位阻尼</strong> $\vec c=0$，只退相干、不丢能量（它和相位翻转效果一样，都只衰减相干项、不改变对角布居）；<strong>振幅阻尼</strong> $\vec c\ne0$，会耗能并把球往 $\ket0$ 拽——它是表里唯一带非零平移的信道。</blockquote>

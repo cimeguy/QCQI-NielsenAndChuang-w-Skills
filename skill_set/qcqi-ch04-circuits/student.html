@@ -8,12 +8,14 @@
 :root{--bg:#f4f7fb;--panel:#fff;--panel2:#eaf0f8;--fg:#1c2733;--muted:#64748b;
 --accent:#2563eb;--accent2:#0891b2;--border:#d7e1ee;--code:#eef3f9;--th:#e6eef8;
 --purpose:#ea580c;--purposebg:#fff5ec;
+--physics:#a21caf;--physicsbg:#fbf0fb;
 --review:#7c3aed;--reviewbg:#f5f1ff;--calc:#0891b2;--calcbg:#ecfbfd;
 --intuition:#2563eb;--intuitionbg:#eef4ff;--mistake:#dc2626;--mistakebg:#fef2f2;
 --summary:#15803d;--summarybg:#ecfdf3;}
 [data-theme=dark]{--bg:#0d1320;--panel:#161f30;--panel2:#121a29;--fg:#e3eaf3;--muted:#8595a8;
 --accent:#60a5fa;--accent2:#22d3ee;--border:#27344a;--code:#16203200;--th:#1a2538;
 --purposebg:#2a1709;
+--physicsbg:#2a0e2e;
 --reviewbg:#1f1633;--calcbg:#0a2730;--intuitionbg:#10203b;--mistakebg:#2a1414;--summarybg:#0f2417;}
 *{box-sizing:border-box}
 body{margin:0;font-family:-apple-system,"PingFang SC","Microsoft YaHei",Segoe UI,system-ui,sans-serif;
@@ -56,6 +58,7 @@ blockquote.callout{border-left-width:5px;border-radius:10px;padding:12px 18px;co
 margin:14px 0;font-size:15px}
 blockquote.callout.review{border-left-color:var(--review);background:var(--reviewbg)}
 blockquote.callout.purpose{border-left-color:var(--purpose);background:var(--purposebg)}
+blockquote.callout.physics{border-left-color:var(--physics);background:var(--physicsbg)}
 blockquote.callout.calc{border-left-color:var(--calc);background:var(--calcbg)}
 blockquote.callout.intuition{border-left-color:var(--intuition);background:var(--intuitionbg)}
 blockquote.callout.mistake{border-left-color:var(--mistake);background:var(--mistakebg)}
@@ -104,7 +107,7 @@ window.MathJax={
 </nav></aside>
 <main class="main">
 <div class="topbar"><span class="badge">大学生版</span><span class="home">第四章 · 量子线路与模拟</span><button class="toggle" id="themeToggle">🌓 深/浅色</button></div>
-<div class="legend"><span>🎯 用来干嘛</span><span>📖 补基础</span><span>🧮 一步步算</span><span>💭 直觉</span><span>⚠️ 常见错误</span><span>✅ 小结</span></div>
+<div class="legend"><span>🎯 用来干嘛</span><span>⚛️ 物理上是啥</span><span>📖 补基础</span><span>🧮 一步步算</span><span>💭 直觉</span><span>⚠️ 常见错误</span><span>✅ 小结</span></div>
 <section id="s0"><h1>第四章 量子线路与量子模拟 · 大学生版</h1>
 <h2>导读</h2>
 <p>这一章是量子计算的「操作手册」：把抽象的量子操作画成一张<strong>电路图</strong>，再告诉你这张图能用哪几个「基本积木」拼出来。核心就三件事——单比特门是给一个 2 维列向量乘上一个 $2\times2$ 矩阵；多比特受控门负责把比特纠缠起来；而 $\{H,T,\mathrm{CNOT}\}$ 这三个门就能（近似）拼出一切量子操作。</p>
@@ -122,6 +125,7 @@ window.MathJax={
 <blockquote class="callout review">📖 <strong>补基础（Pauli 矩阵 X/Y/Z）：</strong> 三个最重要的 $2\times2$ 矩阵，背下来会很省事： $$X=\begin{pmatrix}0&amp;1\\1&amp;0\end{pmatrix},\quad Y=\begin{pmatrix}0&amp;-i\\i&amp;0\end{pmatrix},\quad Z=\begin{pmatrix}1&amp;0\\0&amp;-1\end{pmatrix}.$$ 直觉：$X$ 是「量子版的非门」（交换 $\ket0,\ket1$，因为 $X\binom10=\binom01$）；$Z$ 给 $\ket1$ 翻个负号（相位翻转）；$Y$ 同时翻位置和相位。它们都满足 $X^2=Y^2=Z^2=I$（自己乘自己等于单位阵），且都既是幺正又是厄米（$X^\dagger=X$）。</blockquote>
 <blockquote class="callout calc">🧮 <strong>一步步算（$H\ket0$ 和 $H^2=I$）：</strong> 把 $H$ 作用到 $\ket0=\binom10$，就是矩阵乘列向量： $$H\ket0=\frac{1}{\sqrt2}\begin{pmatrix}1&amp;1\\1&amp;-1\end{pmatrix}\begin{pmatrix}1\\0\end{pmatrix}=\frac{1}{\sqrt2}\begin{pmatrix}1\cdot1+1\cdot0\\1\cdot1+(-1)\cdot0\end{pmatrix}=\frac{1}{\sqrt2}\begin{pmatrix}1\\1\end{pmatrix}=\frac{\ket0+\ket1}{\sqrt2}.$$ 同理 $H\ket1=\frac{1}{\sqrt2}\binom{1}{-1}=\frac{\ket0-\ket1}{\sqrt2}$。再作用一次应回到原点，验证 $H^2=I$： $$H^2=\frac12\begin{pmatrix}1&amp;1\\1&amp;-1\end{pmatrix}\begin{pmatrix}1&amp;1\\1&amp;-1\end{pmatrix}=\frac12\begin{pmatrix}1+1&amp;1-1\\1-1&amp;1+1\end{pmatrix}=\frac12\begin{pmatrix}2&amp;0\\0&amp;2\end{pmatrix}=I.$$ 所以 $H$ 自己就是自己的逆（$H=H^{-1}$）。</blockquote>
 <blockquote class="callout intuition">💭 <strong>直觉：</strong> 单比特门 = 作用在 2 维向量上的可逆旋转。它不改长度、永远能撤销。几何上把 Bloch 球（一个用来画 qubit 的 3 维小球）转一个角度，态就从一个点转到另一个点。</blockquote>
+<blockquote class="callout physics">⚛️ <strong>物理上是啥：</strong> 单比特门在真实硬件里，就是对量子比特施加一段时长精确的受控外场脉冲（激光/微波脉冲、磁场），让 Bloch 矢量绕某根轴进动旋转。$R_y,R_z$ 这类旋转门正是来自一个「驱动哈密顿量」——调脉冲的强度、频率和持续时间，就等于选定旋转的轴和角度。</blockquote>
 <p><strong>任意单比特门 = 绕某根轴的旋转。</strong> 任何单比特门都可以写成绕单位轴 $n=(n_x,n_y,n_z)$ 旋转角度 $\theta$（再配一个全局相位 $e^{i\alpha}$）：</p>
 <p>$$R_n(\theta) = \cos\frac{\theta}{2}\, I - i\sin\frac{\theta}{2}\,(n_x X + n_y Y + n_z Z).$$</p>
 <blockquote class="callout review">📖 <strong>补基础（旋转矩阵与半角）：</strong> 你在线代里学过平面旋转矩阵 $\begin{pmatrix}\cos\phi&amp;-\sin\phi\\\sin\phi&amp;\cos\phi\end{pmatrix}$。量子里两个最常用的旋转门是 $$R_z(\theta)=\begin{pmatrix}e^{-i\theta/2}&amp;0\\0&amp;e^{i\theta/2}\end{pmatrix},\qquad R_y(\theta)=\begin{pmatrix}\cos\frac\theta2&amp;-\sin\frac\theta2\\[2pt]\sin\frac\theta2&amp;\cos\frac\theta2\end{pmatrix}.$$ $R_z$ 是<strong>对角阵</strong>：它不混 $\ket0,\ket1$，只给两者各加一个相反的相位（这就叫「绕 z 轴转」）。$R_y$ 就是你熟悉的平面旋转，会真的把 $\ket0,\ket1$ 的振幅搅在一起。<strong>注意都是半角 $\theta/2$</strong>：Bloch 球转 $\theta$，向量公式里只出现 $\theta/2$——记成「球转一圈，态只转半圈」。</blockquote>
@@ -133,6 +137,7 @@ window.MathJax={
 <section id="s2"><h2>4.2 受控门 = 量子版的 if-then</h2>
 <p>大白话：多比特门靠「受控操作」搭出来——一个<strong>控制位</strong>决定要不要对<strong>目标位</strong>施加某个门。最像编程里的 <code>if (控制位==1) 对目标做U</code>，只不过它必须整体可逆。要看懂多比特门，先得会把单比特态拼成多比特态，这就要用张量积。</p>
 <blockquote class="callout purpose">🎯 <strong>用来干嘛：</strong> 受控门是制造<strong>纠缠</strong>的唯一手段——光靠单比特门各转各的，比特之间永远没关联。一个 $H$ + 一个 CNOT 就能造出 Bell 态，让两个比特的命运绑死。几乎所有量子协议（隐形传态、纠错码、Shor/Grover 的核心线路）都靠受控门把比特连起来。</blockquote>
+<blockquote class="callout physics">⚛️ <strong>物理上是啥：</strong> 受控门（如 CNOT）在硬件上必须靠<strong>两个比特真的发生相互作用</strong>才能实现（偶极-偶极、交换耦合、共振耦合等）。没有相互作用，两个比特各转各的，就永远造不出纠缠——这也是为什么再多的单比特门都凑不出一个 CNOT。</blockquote>
 <blockquote class="callout review">📖 <strong>补基础（张量积 ⊗）：</strong> 两个 qubit 的联合状态是把各自的列向量做<strong>张量积（Kronecker 积）</strong>。规则：把左边向量的每个分量乘上整个右边向量，再竖着摞起来： $$\binom{a}{b}\otimes\binom{c}{d}=\begin{pmatrix}a\binom{c}{d}\\[4pt]b\binom{c}{d}\end{pmatrix}=\begin{pmatrix}ac\\ad\\bc\\bd\end{pmatrix}.$$ 所以两个 qubit 的状态是 $2\times2=4$ 维向量，基底为 $\ket{00},\ket{01},\ket{10},\ket{11}$。例如 $\ket{10}=\ket1\otimes\ket0=\binom01\otimes\binom10=(0,0,1,0)^{T}$（第 3 个分量是 1）。同理两个门 $A,B$ 分别作用在两个比特上，整体矩阵是 $A\otimes B$（$4\times4$）。</blockquote>
 <blockquote class="callout review">📖 <strong>补基础（受控门的分块矩阵）：</strong> 一个 $4\times4$ 矩阵可以切成四个 $2\times2$ 小块。受控门长这样： $$\begin{pmatrix}I&amp;0\\0&amp;U\end{pmatrix}=\begin{pmatrix}1&amp;0&amp;\cdot&amp;\cdot\\0&amp;1&amp;\cdot&amp;\cdot\\\cdot&amp;\cdot&amp;&amp;\\\cdot&amp;\cdot&amp;&amp;\end{pmatrix},$$ 含义：当控制位是 0（对应前两个基态 $\ket{00},\ket{01}$）时，左上角的 $I$ 让目标不动；当控制位是 1（后两个基态 $\ket{10},\ket{11}$）时，右下角的 $U$ 作用到目标上。这正是「if 控制位 then U」的矩阵写法。</blockquote>
 <p>几个基本受控门：</p>
@@ -156,6 +161,7 @@ window.MathJax={
 <section id="s4"><h2>4.4 通用量子门 = 量子世界的「基本指令集」</h2>
 <p>大白话：通用门集合就是一小组门，能以任意精度逼近<strong>任何</strong>幺正变换。这就像经典数字电路里「光靠 NAND 门就能搭出一切逻辑」。证明分三步，把「任意 $2^n\times2^n$ 幺正矩阵」一路归约到离散的 $\{H,T,\mathrm{CNOT}\}$。</p>
 <blockquote class="callout purpose">🎯 <strong>用来干嘛：</strong> 它告诉硬件厂商「只要把这三个门做好做准，就能跑任何量子算法」，不用为每种操作单独造硬件；也让编译器有了统一的「目标指令集」，把高层算法翻译成这几个门的序列。这是量子计算能工程化、能容错纠错的根基。</blockquote>
+<blockquote class="callout physics">⚛️ <strong>物理上是啥：</strong> 通用门集的物理意义是：硬件只要能稳定、精确地实现这么几种受控演化（一两个单比特旋转 + 一个两比特相互作用），就足以拼出任意量子操作，不必为每种算法单独搭一套物理装置。</blockquote>
 <p><strong>三步归约：</strong></p>
 <ul><li><strong>STEP 1：二级幺正门是通用的。</strong> 任意幺正矩阵都能拆成一串「二级幺正门」之积——每个只动两个基态张成的 2 维子空间，其它分量不变。这跟线代里用 Givens 旋转一个一个把矩阵元消成零是同一招。</li><li><strong>STEP 2：单比特门 + CNOT 是通用的。</strong> 每个二级门都能用单比特门和 CNOT 实现。</li><li><strong>STEP 3：$\{H,T,\mathrm{CNOT}\}$ 是通用的。</strong> 单比特门有连续无穷多个，但 $\{H,T\}$ 反复组合能在所有单比特门里「稠密」分布，从而任意逼近其中任何一个；再加 CNOT 就得到一个<strong>离散</strong>的通用集。</li></ul>
 <blockquote class="callout intuition">💭 <strong>直觉：</strong> 离散的几个门居然能逼近连续无穷多的门，靠的是「稠密 + 逼近」——就像有理数稠密地铺满实数轴，你总能用有理数无限逼近任意实数（比如用 $3,3.1,3.14,3.141,\dots$ 逼近 $\pi$）。</blockquote>
@@ -176,6 +182,7 @@ window.MathJax={
 <section id="s6"><h2>4.6 量子模拟 = 用算子分裂把 $e^{-iHt}$ 编译成门序列</h2>
 <p>大白话：Feynman 的设想是用一个可控量子系统去模拟另一个量子系统的演化，绕开经典模拟的「指数墙」。难点在于哈密顿量 $H$ 里各项一般<strong>不对易</strong>，没法简单地把 $e^{-iHt}$ 拆开成几个因子相乘。Trotter 公式就是那把「近似拆分」的钥匙。</p>
 <blockquote class="callout purpose">🎯 <strong>用来干嘛：</strong> 这是量子计算机眼下最被看好的实用方向——模拟分子、材料、化学反应。经典计算机模拟量子系统会随粒子数指数级变慢（算个中等分子就卡死），Trotter 把演化 $e^{-iHt}$ 编译成一串能在量子机上跑的小门，让「设计新药、新电池材料」这类问题有了高效算法。</blockquote>
+<blockquote class="callout physics">⚛️ <strong>物理上是啥：</strong> 量子模拟的物理本质，是把目标系统哈密顿量的时间演化 $e^{-iHt}$ 拆成一串能在硬件上直接实现的小步操作——说白了就是「用一个可控的量子系统去模仿另一个量子系统」，这正是 Feynman 当初提议造量子计算机的初衷。</blockquote>
 <blockquote class="callout review">📖 <strong>补基础（对易子 $[A,B]$）：</strong> 矩阵乘法一般不满足交换律：$AB\neq BA$。衡量「差多少」的量叫<strong>对易子</strong> $$[A,B]:=AB-BA.$$ 若 $[A,B]=0$（即 $AB=BA$）就说 $A,B$ <strong>对易</strong>。对易了，指数才能拆：$e^{A+B}=e^Ae^B$ 只在 $[A,B]=0$ 时成立。普通数总是对易的（$xy=yx$），所以你以前没注意过这条；但矩阵不是。</blockquote>
 <blockquote class="callout calc">🧮 <strong>一步步算（$[X,Z]=-2iY$）：</strong> 逐个算矩阵乘法。 $$XZ=\begin{pmatrix}0&amp;1\\1&amp;0\end{pmatrix}\begin{pmatrix}1&amp;0\\0&amp;-1\end{pmatrix}=\begin{pmatrix}0&amp;-1\\1&amp;0\end{pmatrix},\qquad ZX=\begin{pmatrix}1&amp;0\\0&amp;-1\end{pmatrix}\begin{pmatrix}0&amp;1\\1&amp;0\end{pmatrix}=\begin{pmatrix}0&amp;1\\-1&amp;0\end{pmatrix}.$$ 相减： $$[X,Z]=XZ-ZX=\begin{pmatrix}0&amp;-2\\2&amp;0\end{pmatrix}.$$ 又因为 $Y=\begin{pmatrix}0&amp;-i\\i&amp;0\end{pmatrix}$，所以 $-2iY=-2i\begin{pmatrix}0&amp;-i\\i&amp;0\end{pmatrix}=\begin{pmatrix}0&amp;-2\\2&amp;0\end{pmatrix}$，两者相等。结论：$[X,Z]=-2iY\neq0$，$X$ 和 $Z$ <strong>不对易</strong>。</blockquote>
 <p><strong>Trotter 公式（两项情形）：</strong> 既然 $A,B$ 一般不对易，就用「切小步、交替走」来逼近：</p>

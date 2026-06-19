@@ -8,12 +8,14 @@
 :root{--bg:#f4f7fb;--panel:#fff;--panel2:#eaf0f8;--fg:#1c2733;--muted:#64748b;
 --accent:#2563eb;--accent2:#0891b2;--border:#d7e1ee;--code:#eef3f9;--th:#e6eef8;
 --purpose:#ea580c;--purposebg:#fff5ec;
+--physics:#a21caf;--physicsbg:#fbf0fb;
 --review:#7c3aed;--reviewbg:#f5f1ff;--calc:#0891b2;--calcbg:#ecfbfd;
 --intuition:#2563eb;--intuitionbg:#eef4ff;--mistake:#dc2626;--mistakebg:#fef2f2;
 --summary:#15803d;--summarybg:#ecfdf3;}
 [data-theme=dark]{--bg:#0d1320;--panel:#161f30;--panel2:#121a29;--fg:#e3eaf3;--muted:#8595a8;
 --accent:#60a5fa;--accent2:#22d3ee;--border:#27344a;--code:#16203200;--th:#1a2538;
 --purposebg:#2a1709;
+--physicsbg:#2a0e2e;
 --reviewbg:#1f1633;--calcbg:#0a2730;--intuitionbg:#10203b;--mistakebg:#2a1414;--summarybg:#0f2417;}
 *{box-sizing:border-box}
 body{margin:0;font-family:-apple-system,"PingFang SC","Microsoft YaHei",Segoe UI,system-ui,sans-serif;
@@ -56,6 +58,7 @@ blockquote.callout{border-left-width:5px;border-radius:10px;padding:12px 18px;co
 margin:14px 0;font-size:15px}
 blockquote.callout.review{border-left-color:var(--review);background:var(--reviewbg)}
 blockquote.callout.purpose{border-left-color:var(--purpose);background:var(--purposebg)}
+blockquote.callout.physics{border-left-color:var(--physics);background:var(--physicsbg)}
 blockquote.callout.calc{border-left-color:var(--calc);background:var(--calcbg)}
 blockquote.callout.intuition{border-left-color:var(--intuition);background:var(--intuitionbg)}
 blockquote.callout.mistake{border-left-color:var(--mistake);background:var(--mistakebg)}
@@ -104,7 +107,7 @@ window.MathJax={
 </nav></aside>
 <main class="main">
 <div class="topbar"><span class="badge">大学生版</span><span class="home">第六章 · 量子搜索 (Grover)</span><button class="toggle" id="themeToggle">🌓 深/浅色</button></div>
-<div class="legend"><span>🎯 用来干嘛</span><span>📖 补基础</span><span>🧮 一步步算</span><span>💭 直觉</span><span>⚠️ 常见错误</span><span>✅ 小结</span></div>
+<div class="legend"><span>🎯 用来干嘛</span><span>⚛️ 物理上是啥</span><span>📖 补基础</span><span>🧮 一步步算</span><span>💭 直觉</span><span>⚠️ 常见错误</span><span>✅ 小结</span></div>
 <section id="s0"><h1>第六章 量子搜索算法（Grover）· 大学生版</h1>
 <h2>导读</h2>
 <p>这一章讲一个最朴素的问题：<strong>在一堆没有排序、没有索引的东西里，找出符合条件的那一个</strong>。经典做法只能挨个试，平均看一半、最坏看完全部，复杂度 $O(N)$。Grover 算法用量子叠加把它降到了 $O(\sqrt{N})$——$100$ 万个元素，经典约要试 $50$ 万次，Grover 只要约 $1000$ 次。</p>
@@ -146,6 +149,7 @@ window.MathJax={
 <blockquote class="callout calc">🧮 <strong>一步步算：$N=4$ 一步命中（务必算对）。</strong> 唯一解 $x_0=\ket{10}$。 1. 初态均匀叠加振幅 $(\tfrac12,\tfrac12,\tfrac12,\tfrac12)$。 2. 预言机 $O$ 把解变号 → $(\tfrac12,\tfrac12,-\tfrac12,\tfrac12)$。 3. 对均值翻转：先求均值 $\bar a=\tfrac14(\tfrac12+\tfrac12-\tfrac12+\tfrac12)=\tfrac14$（<strong>是 $\tfrac14$，不是 $\tfrac18$</strong>）。每个分量映成 $2\bar a-a_i=\tfrac12-a_i$：三个非解 $\tfrac12-\tfrac12=0$，解 $\tfrac12-(-\tfrac12)=1$。 4. 结果 $(0,0,1,0)$——解的概率 $1^2=100\%$，仅一次迭代就确定命中。</blockquote>
 <blockquote class="callout mistake">⚠️ <strong>常见错误：</strong> 求均值时分母写错（$N=4$ 要除以 4，得 $\bar a=\tfrac14$，绝不是 $\tfrac18$）；以及忘了翻转公式是 $2\bar a-a_i$ 而不是 $\bar a-a_i$。这两处错了，整个算例就崩了。</blockquote>
 <blockquote class="callout summary">✅ <strong>小结：</strong> 一次 Grover 迭代＝两步：① $O$ 给命中项打负号；② 对均值翻转 $a_i\mapsto 2\bar a-a_i$。打了负号的命中项远低于均值，翻转后被抬高；非命中略低于均值，翻转后略降。每迭代只调用一次预言机，总查询 $O(\sqrt N)$，相比经典 $O(N)$ 是<strong>平方加速</strong>（不是指数加速，别夸大）。</blockquote>
+<blockquote class="callout physics">⚛️ <strong>物理上是啥：</strong> 这种"放大"本质是<strong>波的干涉</strong>，不是"同时算了 $N$ 条路"的经典并行。每个振幅都像一道波，"打负号＋对均值翻转"让命中态的波峰相互叠加（相长干涉）、非命中态的波相互抵消（相消干涉），命中态的振幅就一点点长高。Grover 的加速来自这种干涉对振幅的精细调度，而不是同时尝试所有答案。</blockquote>
 <hr></section>
 <section id="s3"><h2>6.3 几何意义：其实是平面里转圈</h2>
 <p>大白话：别看 Grover 在 $2^n$ 维的巨大空间里跑，整个过程其实只发生在一个<strong>二维平面</strong>内。画出来后，每次迭代就是朝目标方向转一个固定角度。</p>
@@ -161,6 +165,7 @@ window.MathJax={
 <p><strong>两次反射 = 一次旋转</strong>：</p>
 <ul><li>预言机 $O$ 是关于 $\ket{\alpha}$ 轴的反射（把 $\ket{\beta}$ 分量取负——回忆 6.1 它给解打负号）。</li><li>$2\ketbra{\psi}{\psi}-I$ 是关于 $\ket{\psi}$ 的反射。</li><li>两次反射复合，结果恰好是一次<strong>旋转</strong>，旋转角 $\theta$ 满足 $\sin\dfrac{\theta}{2}=\sqrt{\dfrac{M}{N}}$。</li></ul>
 <blockquote class="callout calc">🧮 <strong>一步步算：$N=4,\ M=1$。</strong> $\sin\tfrac\theta2=\sqrt{M/N}=\sqrt{\tfrac14}=\tfrac12$，由 $\sin30°=\tfrac12$ 得 $\tfrac\theta2=30°$，故 $\theta=60°$。初态与 $\ket\alpha$ 夹角 $30°$；作用一次 $G$ 转 $60°$，到 $30°+60°=90°$——正好落在解轴 $\ket\beta$ 上，一次迭代 $100\%$ 命中（和 6.2 的振幅算例完全一致）。代次数公式 $R\approx\tfrac\pi4\sqrt{N/M}=\tfrac\pi4\cdot2\approx1.57$，取整后最优正是 $1$ 次。</blockquote>
+<blockquote class="callout physics">⚛️ <strong>物理上是啥：</strong> 整个量子态其实就是这个二维平面里的一根单位矢量（箭头）。每作用一次 Grover 迭代，物理上就是把这根态矢在平面内朝"解"方向稳稳转过一个固定角 $\theta$；转到贴着解轴 $\ket\beta$ 时测量，读到答案的概率最大。所谓"放大振幅"和"转动态矢"是同一件事的两种说法。</blockquote>
 <blockquote class="callout summary">✅ <strong>小结：</strong> 搜索只发生在 $\ket{\alpha}$（非解）和 $\ket{\beta}$（解）张成的二维平面里；$O$ 与"对均值翻转"各是一次反射；两者复合＝固定角 $\theta$ 的旋转，$\sin(\theta/2)=\sqrt{M/N}$。整个算法＝把那个几乎贴 $X$ 轴的箭头，以固定步长 $\theta$ 转向 $Y$ 轴。</blockquote>
 <hr></section>
 <section id="s4"><h2>6.4 成功概率与最优迭代次数</h2>
