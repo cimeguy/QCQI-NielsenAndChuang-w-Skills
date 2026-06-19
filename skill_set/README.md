@@ -30,12 +30,25 @@ qcqi-chNN-xxx/
 
 `SKILL.md` 的 `description` 字段决定智能体何时自动加载该 skill；`chapters/` 下的文件按需加载，避免一次性占用上下文。
 
+## 在线浏览（GitHub Pages）
+
+已部署到 GitHub Pages，可直接在线访问（公式渲染、深浅色、搜索均可用）：
+
+**<https://cimeguy.github.io/QCQI-NielsenAndChuang-w-Skills/>**
+
+三套门户互相链接：公式精简版 `index.html` · 🗣️ 人话版 `explained.html` · 🎓 大学生版 `student.html`。
+推送到 `main` 且改动 `skill_set/**` 时由 GitHub Actions 自动重新部署，发布的人工操作步骤见仓库根目录 [`部署网站.md`](../部署网站.md)。
+
 ## HTML 可视化浏览（离线）
 
 除了作为 Agent Skill 加载，本仓库还提供一套**可离线浏览的 HTML 知识页面**，把每个 skill 的全部内容（SKILL.md + 各小节 + 术语表 + 技巧 + 速查表）渲染成单文件页面，并在页首附带该章的**手绘 SVG 可视化图示**（Bloch 球、量子线路图、QFT/Shor 流程、Grover 几何旋转、量子信道仿射变换、跨章思维导图等）。
 
+本仓库提供三套面向不同读者的页面版本，由三个脚本分别生成（均为纯标准库、离线可用）：
+
 ```bash
-python3 skill_set/build_html.py      # 纯标准库，无需安装依赖
+python3 skill_set/build_html.py        # 公式精简版 index.html（忠实原书）
+python3 skill_set/build_explained.py   # 🗣️ 人话版 explained.html（程序员友好）
+python3 skill_set/build_student.py     # 🎓 大学生版 student.html（从零补线代/概率）
 ```
 
 ### 依赖与环境
@@ -73,6 +86,26 @@ python3 skill_set/build_explained.py     # 同样纯标准库，离线可用
   - 🔑 **记住**：一句话带走的结论。
 
 内容源文件为各 skill 目录下的 `explained.md`，公式约定与公式版一致（LaTeX + 内置 MathJax 离线渲染、数学中不使用裸 `|`、改用 `\ket{}` 等宏）。
+
+### 大学生版（从零补数学基础）
+
+第三套**「大学生版」**面向刚学过矩阵 / 概率 / 线性代数但基础还不太牢的同学：每个量子概念都先把用到的数学基础**从头讲一遍**，再一步步代数字演算，并标出最容易踩的坑。
+
+```bash
+python3 skill_set/build_student.py        # 同样纯标准库，离线可用
+```
+
+生成物：
+
+- `skill_set/student.html` — **大学生版门户**（冷色主题），与公式版、人话版门户相互链接。
+- `skill_set/<skill>/student.html` — 每章一页，含七类彩色提示框：🎯 用来干嘛 / ⚛️ 物理上是啥 / 📖 补基础 / 🧮 一步步算 / 💭 直觉 / ⚠️ 常见错误 / ✅ 小结。
+
+此外还支持两种可折叠 `<details>` 块：
+
+- `:::expand 标题 … :::` → ⚛️ 物理科普盒（讲清量子概念背后的物理意义）；
+- `:::qa 标题 … :::` → 蓝色「答疑」盒，收录不同背景读者（数学基础薄弱的学生、计算机/数学从业者等）最常问的问题与解答。
+
+内容源文件为各 skill 目录下的 `student.md`，公式约定与上面两版一致。
 
 ### 公式渲染（LaTeX / MathJax，离线）
 
