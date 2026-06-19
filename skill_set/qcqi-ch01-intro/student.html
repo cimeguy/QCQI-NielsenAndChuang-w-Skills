@@ -71,6 +71,7 @@ details.expand>summary::before{content:"▸";display:inline-block;margin-right:8
 details.expand[open]>summary::before{transform:rotate(90deg)}
 details.expand .expand-body{padding:2px 18px 8px}
 details.expand .expand-body>*:first-child{margin-top:8px}
+details.expand.qa>summary{color:var(--intuition);background:var(--intuitionbg)}
 .legend{display:flex;gap:10px;flex-wrap:wrap;margin:6px 0 18px;font-size:12.5px;color:var(--muted)}
 .legend span{background:var(--panel);border:1px solid var(--border);border-radius:20px;padding:3px 11px}
 .badge{display:inline-block;background:var(--accent);color:#fff;border-radius:6px;padding:2px 9px;font-size:12px;font-weight:700}
@@ -112,6 +113,7 @@ window.MathJax={
 <a href="#s4">1.4 量子算法：靠并行 + 干涉</a>
 <a href="#s5">1.5 量子信息处理实验</a>
 <a href="#s6">1.6 量子信息</a>
+<a href="#s7">💬 答疑（不同背景的人都在问）</a>
 </nav></aside>
 <main class="main">
 <div class="topbar"><span class="badge">大学生版</span><span class="home">第一章 · 量子计算简介</span><button class="toggle" id="themeToggle">🌓 深/浅色</button></div>
@@ -288,7 +290,16 @@ window.MathJax={
 <blockquote class="callout intuition">💭 <strong>直觉：</strong> 几乎是把经典信息论的每个概念做"量子升级"：比特 → qubit，Shannon 熵 → von Neumann 熵，无损压缩 → Schumacher 压缩。骨架一样，只是底层"数据类型"换成了量子的。</blockquote>
 <blockquote class="callout summary">✅ <strong>小结：</strong> 量子信息论 = 经典信息论的推广；<strong>纠缠是经典没有的新资源</strong>（支撑隐形传态、超密编码）；测量的概率性和不可克隆定理共同塑造了量子信息独有的极限。</blockquote>
 <hr>
-<blockquote class="callout summary">✅ <strong>整章一句话：</strong> qubit 是归一化的二维复向量、量子门是可逆的幺正矩阵、测量是带塌缩的概率采样、纠缠是不可分解的强关联；量子的真正威力来自叠加 + 纠缠 + <strong>干涉</strong>三者合力，而 $\mathrm{BPP}$ 是否真的小于 $\mathrm{BQP}$，至今仍是这个领域最大的悬念。</blockquote></section>
+<blockquote class="callout summary">✅ <strong>整章一句话：</strong> qubit 是归一化的二维复向量、量子门是可逆的幺正矩阵、测量是带塌缩的概率采样、纠缠是不可分解的强关联；量子的真正威力来自叠加 + 纠缠 + <strong>干涉</strong>三者合力，而 $\mathrm{BPP}$ 是否真的小于 $\mathrm{BQP}$，至今仍是这个领域最大的悬念。</blockquote>
+<hr></section>
+<section id="s7"><h2>💬 答疑（不同背景的人都在问）</h2>
+<details class="expand qa"><summary>❓【大一学生】叠加态 $\alpha\ket0+\beta\ket1$ 是不是&quot;又是 0 又是 1、同时存在&quot;？那我多测几次、把 0 和 1 都读出来不就行了？</summary><div class="expand-body"><p>不是"同时是 0 又是 1"。叠加更像一枚<strong>正在空中旋转的硬币</strong>：落地（测量）那一刻才定下正反，而且一旦落地就停住了，你再看还是同一面。"多测几次"也没用——第一次测量已经把它<strong>钉死</strong>成 $\ket0$ 或 $\ket1$，后面再测都是同一个结果，原来的叠加（尤其那个相位）永远消失了。所以叠加不是"两个答案都藏在里面等你读"，而是"测之前没有确定答案，测之后只剩一个"。</p></div></details>
+<details class="expand qa"><summary>❓【大一学生】为什么非要规定 $\lvert\alpha\rvert^2+\lvert\beta\rvert^2=1$？我写 $\ket0+\ket1$（不带 $1/\sqrt2$）不也是&quot;一半一半&quot;吗？</summary><div class="expand-body"><p>因为 $\lvert\alpha\rvert^2$ 和 $\lvert\beta\rvert^2$ 就是测到 0、1 的<strong>概率</strong>，而概率加起来必须正好是 1（不能是 2，也不能是 0.5）。你写 $\ket0+\ket1$ 时两个"概率"是 $1^2+1^2=2$，等于说"有 200% 的把握"，没意义。补上 $1/\sqrt2$ 后变成 $\tfrac12+\tfrac12=1$ 才合法。所以归一化不是数学洁癖，它就是"概率必须凑成 1"这条铁律换了身衣服。</p></div></details>
+<details class="expand qa"><summary>❓【大一学生】$\beta=\tfrac{i}{\sqrt2}$ 里那个 $i$ 到底干嘛用的？算概率时被模方吃掉了，能不能干脆扔掉？</summary><div class="expand-body"><p>不能扔。那个 $i$（相位）确实在<strong>单次测量</strong>的概率里被模方吃掉、看不见，但它在两个振幅<strong>相加（干涉）</strong>时会立刻显形——决定是相长还是相消。打个比方：相位像钟表指针的<strong>方向</strong>，单看一根针你只关心它多长（概率）；可两根针要叠加时，方向差就决定了合起来是变长还是互相抵消。量子算法的全部加速，恰恰藏在这个"看不见却能干涉"的相位里。扔掉它，量子就退化成普通的随机硬币。</p></div></details>
+<details class="expand qa"><summary>❓【程序员】qubit 是不是就是&quot;带相位的概率 bit&quot;？那个&quot;$\ket+$ 密度矩阵非对角项非零、抛硬币非对角项为 0&quot;是不是唯一的本质区别？</summary><div class="expand-body"><p>你的心智模型八九不离十——qubit 比概率 bit 多的就是"相位"，而这个差别在密度矩阵里正是<strong>非对角项（相干项）非零</strong>。经典概率 bit 的 $\rho$ 永远是对角的，纯叠加 qubit 有非零非对角元。关键后果：相位能<strong>干涉</strong>（振幅可相长/相消），经典概率只能相加、永远不能相消。所以"非对角项非零"不只是一个区别，它就是整个量子优势的入口——抹掉它（退相干），量子机立刻退化成一台带随机数的经典机。</p></div></details>
+<details class="expand qa"><summary>❓【程序员】量子并行&quot;一次 $U_f$ 同时算 $f(0),f(1)$&quot;，跟我开两个线程分别算、最后随机读一个，除了干涉那步，算力上有区别吗？是不是营销话术？</summary><div class="expand-body"><p>你的怀疑基本正确。单看"算了一堆值却只能随机读一个"，量子并行<strong>不比</strong>开 $2^n$ 个线程再随机挑一个强——直接测，信息量一样惨。真正的区别全在<strong>干涉</strong>：量子能让这 $2^n$ 个分支的振幅相互抵消/增强，把某个<strong>全局性质</strong>（周期、是否平衡……）汇聚到少数几个能被测到的输出上；线程之间没有这种跨分支的相干叠加。所以"同时算 $2^n$ 个"本身确实是营销话术，"算完再用干涉提取全局量"才是真本事。</p></div></details>
+<details class="expand qa"><summary>❓【数学】量子态严格说是 $\mathbb{C}^2$ 的单位球面，还是相位等价下的射影空间 $\mathbb{CP}^1$？密度矩阵 $\rho=\ketbra{\psi}{\psi}$ 是不是恰好消掉相位冗余的良定义代表？</summary><div class="expand-body"><p>严格说物理态是商空间 $\mathbb{CP}^1$。$\ket\psi$ 与 $e^{i\phi}\ket\psi$ 给出完全相同的一切测量统计，所以物理态是单位球面 $S^3\subset\mathbb{C}^2$ 模掉 $U(1)$ 全局相位，即 $\mathbb{CP}^1$（恰好同胚于 Bloch 球面 $S^2$）。而 $\rho=\ketbra{\psi}{\psi}$ 正是这个商的良定义代表：$e^{i\phi}\ket\psi$ 给出 $e^{i\phi}\ketbra{\psi}{\psi}e^{-i\phi}=\ketbra{\psi}{\psi}$，全局相位自动约掉。所以"纯态 $\leftrightarrow$ 秩 1 正交投影算符"是消除相位冗余后最干净的表述。</p></div></details>
+<details class="expand qa"><summary>❓【数学】为什么单比特门必须是酉矩阵 $U(2)$，而不是只&quot;保归一化&quot;的 $O(2)$ 或一般可逆矩阵？复空间里&quot;保长度&quot;和&quot;保内积&quot;等价吗？</summary><div class="expand-body"><p>关键是<strong>复极化恒等式</strong>：复内积可由范数完全恢复，$\langle x,y\rangle=\tfrac14\sum_{k=0}^3 i^k\lVert x+i^k y\rVert^2$。所以在复空间里"保范数 $\Rightarrow$ 保全部复内积 $\Rightarrow U^\dagger U=I$"，即酉——这三者等价。$O(2)$ 把系数限制在实数、丢掉了相位自由度，表达不出 qubit 必须的复相位（如 $S,T$ 门只在复酉群里）；一般可逆矩阵则不保长度、破坏概率归一。所以真正登场的必然是酉群 $U(2)$，而不是正交群 $O(2)$——这正是酉群出现的根本理由。</p></div></details></section>
 </main>
 </div>
 <script>

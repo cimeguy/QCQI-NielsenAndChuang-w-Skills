@@ -69,16 +69,19 @@ def style_callouts(html_text):
     return re.sub(r"<blockquote>\s*(🎯|⚛️|📖|🧮|💭|⚠️|✅)", repl, html_text)
 
 
-EXPAND_RE = re.compile(r"(?ms)^:::expand[ \t]+(.+?)[ \t]*\n(.*?)\n:::[ \t]*$")
+EXPAND_RE = re.compile(r"(?ms)^:::(expand|qa)[ \t]+(.+?)[ \t]*\n(.*?)\n:::[ \t]*$")
 
 
 def render_md(md_text):
-    """md -> html, turning `:::expand TITLE … :::` blocks into collapsible <details>."""
+    """md -> html, turning `:::expand`/`:::qa TITLE … :::` blocks into collapsible <details>.
+
+    `:::expand` → physics-flavored 科普 box; `:::qa` → blue Q&A box (class "expand qa").
+    """
     parts = []
     pos = 0
     for m in EXPAND_RE.finditer(md_text):
         parts.append(("md", md_text[pos:m.start()]))
-        parts.append(("expand", m.group(1).strip(), m.group(2)))
+        parts.append(("box", m.group(1), m.group(2).strip(), m.group(3)))
         pos = m.end()
     parts.append(("md", md_text[pos:]))
     out = []
@@ -87,9 +90,10 @@ def render_md(md_text):
             if p[1].strip():
                 out.append(style_callouts(bh.md_to_html(p[1], {})))
         else:
-            _, title, inner = p
+            _, kind, title, inner = p
+            cls = "expand qa" if kind == "qa" else "expand"
             inner_html = style_callouts(bh.md_to_html(inner, {}))
-            out.append(f'<details class="expand"><summary>{html.escape(title)}</summary>'
+            out.append(f'<details class="{cls}"><summary>{html.escape(title)}</summary>'
                        f'<div class="expand-body">{inner_html}</div></details>')
     return "\n".join(out)
 
@@ -161,6 +165,7 @@ details.expand>summary::before{content:"▸";display:inline-block;margin-right:8
 details.expand[open]>summary::before{transform:rotate(90deg)}
 details.expand .expand-body{padding:2px 18px 8px}
 details.expand .expand-body>*:first-child{margin-top:8px}
+details.expand.qa>summary{color:var(--intuition);background:var(--intuitionbg)}
 .legend{display:flex;gap:10px;flex-wrap:wrap;margin:6px 0 18px;font-size:12.5px;color:var(--muted)}
 .legend span{background:var(--panel);border:1px solid var(--border);border-radius:20px;padding:3px 11px}
 .badge{display:inline-block;background:var(--accent);color:#fff;border-radius:6px;padding:2px 9px;font-size:12px;font-weight:700}

@@ -71,6 +71,7 @@ details.expand>summary::before{content:"▸";display:inline-block;margin-right:8
 details.expand[open]>summary::before{transform:rotate(90deg)}
 details.expand .expand-body{padding:2px 18px 8px}
 details.expand .expand-body>*:first-child{margin-top:8px}
+details.expand.qa>summary{color:var(--intuition);background:var(--intuitionbg)}
 .legend{display:flex;gap:10px;flex-wrap:wrap;margin:6px 0 18px;font-size:12.5px;color:var(--muted)}
 .legend span{background:var(--panel);border:1px solid var(--border);border-radius:20px;padding:3px 11px}
 .badge{display:inline-block;background:var(--accent);color:#fff;border-radius:6px;padding:2px 9px;font-size:12px;font-weight:700}
@@ -112,6 +113,7 @@ window.MathJax={
 <a href="#s4">5.4 相位估计</a>
 <a href="#s5">5.5 Shor 算法（大数分解）</a>
 <a href="#s6">5.6 隐藏子群问题 (HSP)</a>
+<a href="#s7">💬 答疑（不同背景的人都在问）</a>
 </nav></aside>
 <main class="main">
 <div class="topbar"><span class="badge">大学生版</span><span class="home">第五章 · QFT 与 Shor</span><button class="toggle" id="themeToggle">🌓 深/浅色</button></div>
@@ -206,7 +208,15 @@ window.MathJax={
 <p>量子统一套路：① 在群寄存器上制备均匀叠加；② 查询 $f$ 把陪集信息编码进态；③ 对 $G$ 做（群上的）量子傅里叶变换；④ 测量，得到关于 $H$ 的「对偶」信息，多采几次拼出 $H$ 的生成元。经典朴素做法要遍历，复杂度 $O(\lvert G\rvert)$。</p>
 <blockquote class="callout intuition">💭 <strong>直觉：</strong> 注意第 ③ 步——所有这些算法的「魔法核心」都是同一个：在合适的群上做傅里叶变换。换群、换 $f$，框架不变。这就是为什么 QFT 是本章的底层基石。</blockquote>
 <blockquote class="callout mistake">⚠️ <strong>常见错误：</strong> 别以为「套进 HSP 就一定有量子加速」。只有<strong>阿贝尔群</strong>（交换群）$G$ 才有现成的高效算法；非阿贝尔情形（如二面体群关联格问题、对称群关联图同构）目前仍是开放问题，没有通用高效解法。</blockquote>
-<blockquote class="callout summary">✅ <strong>小结：</strong> HSP = 「给定隐藏子群的 oracle $f$，求子群生成元」，是 QFT 类算法的统一接口；阿贝尔 HSP 已解决，非阿贝尔 HSP 仍开放。整章调用链：QFT（底层工具）→ 相位估计（通用子程序）→ Shor（杀手级应用）→ HSP（统一框架）。</blockquote></section>
+<blockquote class="callout summary">✅ <strong>小结：</strong> HSP = 「给定隐藏子群的 oracle $f$，求子群生成元」，是 QFT 类算法的统一接口；阿贝尔 HSP 已解决，非阿贝尔 HSP 仍开放。整章调用链：QFT（底层工具）→ 相位估计（通用子程序）→ Shor（杀手级应用）→ HSP（统一框架）。</blockquote>
+<hr></section>
+<section id="s7"><h2>💬 答疑（不同背景的人都在问）</h2>
+<details class="expand qa"><summary>❓【大一学生】QFT 比经典 FFT 快指数级，那我能不能拿它当超快 FFT 来算信号？为啥说&quot;算出来读不出来&quot;？</summary><div class="expand-body"><p>不能当普通 FFT 用，这是最常见的误会。FFT 的价值在于它把全部 $N$ 个频率系数明明白白交到你手里，你能一个个读出来、画频谱。QFT 算完后这 $N$ 个系数确实"都在"，但它们藏在量子态的概率幅里——你测一次只能塌缩出一个下标，还测不到相位。所以"算得快"和"用得上"是两码事：QFT 只是个内部零件，必须配合相位估计、Shor 这类技巧，把你真正想要的那一个答案"逼"成大概率能测到的基态，才有意义。单拎出来当 FFT 库函数调，纯属误解。</p></div></details>
+<details class="expand qa"><summary>❓【程序员】QFT 只要 $O(n^2)$ 门、比 FFT 的 $O(N\log N)$ 指数级省，可系数又读不出来。这个加速能替代我代码里的 FFT 吗？当成一个比 FFT 快的库函数来调是不是彻底误解？</summary><div class="expand-body"><p>是彻头彻尾的误解。两者的"输出规格"根本不一样：经典 FFT 把 $N$ 个复系数全部写进内存，$O(N)$ 个数随便访问；QFT 把这些系数编码进 $N$ 维叠加态的振幅里，一次测量只塌缩出一个 $O(\log N)$ 比特的下标、且丢相位。换句话说 QFT 没有"返回 $N$ 个系数"这个 API。所以那个"指数加速"不能被外部调用方当 FFT 加速器利用——它只在你最终关心的是某个全局量（周期、本征相位）、能用干涉把它放大到可测时才兑现。把它 <code>import</code> 进来替你的 <code>np.fft</code> 是行不通的。</p></div></details>
+<details class="expand qa"><summary>❓【数学】QFT 矩阵 $F_{jk}=\frac{1}{\sqrt N}\omega^{jk}$ 的酉性，是不是完全归结为&quot;单位根几何级数求和：公比非 1 时和为 0&quot;这一条代数事实？</summary><div class="expand-body"><p>是的，正是这一条。验证酉性即验证各列标准正交：第 $j$ 列与第 $j'$ 列的内积为 $\frac1N\sum_{k=0}^{N-1}\overline{\omega^{jk}}\,\omega^{j'k}=\frac1N\sum_k\omega^{(j'-j)k}$。记 $m=j'-j$，这是公比 $\omega^m$ 的几何级数：当 $m\equiv0\pmod N$ 时每项为 1、和为 $N$；否则 $\omega^m\neq1$ 而 $(\omega^m)^N=1$，由 $\sum_{k=0}^{N-1}q^k=\frac{q^N-1}{q-1}$ 得和为 0。于是内积 $=\delta_{jj'}$，列正交归一 $\iff$ 酉。所以 QFT 酉性的全部根据，确实就是"非平凡单位根的整圈求和为零"。</p></div></details>
+<details class="expand qa"><summary>❓【大一学生】Shor 里说&quot;输入 $\ket1$ 就免去制备本征态&quot;，可你又不知道周期 $r$，凭什么 $\ket1$ 正好等于所有本征态的均匀叠加？</summary><div class="expand-body"><p>这一步确实像变魔术，但有道理。模乘算符 $U$ 有 $r$ 个本征态 $\ket{u_s}$，它们是一组"正交方向"，张成同一个空间。关键的代数恒等式是：把这 $r$ 个本征态等权重平均加起来，那些乱七八糟的相位会互相抵消，最后干干净净地等于 $\ket1$（这是能严格算出来的，不是凑的）。所以你根本不用知道 $r$、也不用费劲制备某个特定 $\ket{u_s}$——直接拿现成的 $\ket1$ 当输入，它本身就是这一大锅本征态的均匀混合，做一次相位估计就等概率随机抽中其中一个 $s/r$ 来读。</p></div></details>
+<details class="expand qa"><summary>❓【数学】$\ket{1}=\frac{1}{\sqrt r}\sum_s\ket{u_s}$ 是不是就等价于&quot;计算基与傅里叶基互为一个酉变换、且 $\ket1$ 在傅里叶基下的展开系数模长全相等&quot;这一线性代数事实？</summary><div class="expand-body"><p>正是如此。把 $U$ 限制在它生成的循环不变子空间 $\mathrm{span}\{\ket{y^t\bmod N}\}\cong\mathbb{C}^r$ 上，$U$ 就是 $\mathbb{Z}_r$ 上的循环移位算子。移位算子在该 $r$ 维空间的本征基恰是群 $\mathbb{Z}_r$ 的特征标 $\ket{u_s}=\frac{1}{\sqrt r}\sum_t\omega_r^{-st}\ket{y^t}$（$\omega_r=e^{2\pi i/r}$），即离散傅里叶基。于是 $\frac{1}{\sqrt r}\sum_{s=0}^{r-1}\ket{u_s}=\sum_t\big(\frac1r\sum_s\omega_r^{-st}\big)\ket{y^t}=\ket{y^0}=\ket1$，最后一步又用到单位根求和 $\frac1r\sum_s\omega_r^{-st}=\delta_{t,0}$。所以这就是"计算基 $\leftrightarrow$ 傅里叶基互为酉、$\ket1$ 在傅里叶基下各系数模长均为 $1/\sqrt r$"的直接体现。</p></div></details>
+<details class="expand qa"><summary>❓【程序员】Shor 对 RSA 的真实威胁，瓶颈到底在量子那段（受控模幂要多少门、多少 qubit）还是别处？破解 2048 位 RSA 现实里大概要多少 qubit，离现在差几个数量级？</summary><div class="expand-body"><p>瓶颈死死卡在量子那段，尤其是受控模幂 $U^{2^k}$（可逆地算 $a^x\bmod N$）——它占掉电路绝大部分门和深度，连分数 + gcd 那点经典后处理几乎免费。逻辑层面：约几千个逻辑 qubit（$\sim$ 几倍 $n$，$n=2048$），模幂门数 $\tilde O(n^2{\sim}n^3)$。真正的鸿沟在纠错开销：每个逻辑 qubit 要成千上万个物理 qubit。主流估计（Gidney–Ekerå, 2019）破 2048 位 RSA 约需 <strong>2000 万个物理 qubit</strong>、跑数小时。今天的设备在 $10^2$–$10^3$ 物理 qubit 量级，所以差大约 <strong>4 个数量级</strong>，且必须是高质量可纠错的——这正是"现在赶紧迁后量子密码、但 RSA 还没当场死"的原因。</p></div></details></section>
 </main>
 </div>
 <script>

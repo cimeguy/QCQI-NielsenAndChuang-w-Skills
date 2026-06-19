@@ -71,6 +71,7 @@ details.expand>summary::before{content:"▸";display:inline-block;margin-right:8
 details.expand[open]>summary::before{transform:rotate(90deg)}
 details.expand .expand-body{padding:2px 18px 8px}
 details.expand .expand-body>*:first-child{margin-top:8px}
+details.expand.qa>summary{color:var(--intuition);background:var(--intuitionbg)}
 .legend{display:flex;gap:10px;flex-wrap:wrap;margin:6px 0 18px;font-size:12.5px;color:var(--muted)}
 .legend span{background:var(--panel);border:1px solid var(--border);border-radius:20px;padding:3px 11px}
 .badge{display:inline-block;background:var(--accent);color:#fff;border-radius:6px;padding:2px 9px;font-size:12px;font-weight:700}
@@ -113,6 +114,7 @@ window.MathJax={
 <a href="#s5">5.（8.3）几种典型信道：Kraus 算符 + Bloch 球上的仿射变换</a>
 <a href="#s6">6.（8.4）算例与验证：把流程跑一遍并核对结果</a>
 <a href="#s7">一句话总览</a>
+<a href="#s8">💬 答疑（不同背景的人都在问）</a>
 </nav></aside>
 <main class="main">
 <div class="topbar"><span class="badge">大学生版</span><span class="home">第八章补充 · 量子信道</span><button class="toggle" id="themeToggle">🌓 深/浅色</button></div>
@@ -216,7 +218,13 @@ window.MathJax={
 <hr></section>
 <section id="s7"><h2>一句话总览</h2>
 <blockquote class="callout summary">✅ <strong>小结：</strong> 量子信道＝作用在密度矩阵上的有损变换 $\mathcal{E}(\rho)$；它有三种可互转的写法（信道 / Kraus / 蔡氏矩阵），主线转换是 <strong>信道 →(喂最大纠缠态)→ 蔡氏矩阵 →(谱分解)→ Kraus</strong>；单 qubit 时还能看成 Bloch 球上的仿射变换 $\vec r\mapsto M\vec r+\vec c$，球缩水就是信息在丢。</blockquote>
-<blockquote class="callout mistake">⚠️ <strong>范围说明：</strong> 本文忠实于第八章补充笔记的范围与结论。具体的矩阵数值、谱分解结果、QEC 公式 (18)/(20) 的完整表达式与验证代码未在文本层完整保留，精确细节请参阅原书第 8 章与原笔记。</blockquote></section>
+<blockquote class="callout mistake">⚠️ <strong>范围说明：</strong> 本文忠实于第八章补充笔记的范围与结论。具体的矩阵数值、谱分解结果、QEC 公式 (18)/(20) 的完整表达式与验证代码未在文本层完整保留，精确细节请参阅原书第 8 章与原笔记。</blockquote>
+<hr></section>
+<section id="s8"><h2>💬 答疑（不同背景的人都在问）</h2>
+<details class="expand qa"><summary>❓【大一学生】之前都用列向量 $\ket\psi$，这一章突然全换成密度矩阵 $\rho$，还说 $\ket\psi$ &quot;只能描述纯态&quot;。到底啥时候用 $\ket\psi$、啥时候必须用 $\rho$？它俩是不是一回事换了个写法？</summary><div class="expand-body"><p>不完全是换写法，$\rho$ 是更大的"升级版"。当你对系统了如指掌、它是一个确定的叠加态（纯态），用列向量 $\ket\psi$ 就够、也最省事。但现实里常出现两种"我不确定"：要么是经典的不确定（设备有 30% 概率制备成 $\ket0$、70% 成 $\ket1$），要么是它和环境纠缠后单看它已经不是任何一个确定叠加了——这两种叫混态，$\ket\psi$ 写不出来，必须用密度矩阵 $\rho$。关系是：纯态也能写成 $\rho=\ketbra{\psi}{\psi}$，所以 $\rho$ 涵盖了 $\ket\psi$ 的全部情形，还能多描述混态。这章讲噪声、退相干全是混态，所以非 $\rho$ 不可。</p></div></details>
+<details class="expand qa"><summary>❓【大一学生】相位翻转（退相位）说&quot;能量没丢、只把相位抹掉&quot;，可既然能量没变、$\ket0\ket1$ 的概率也没变，那到底丢了啥？为啥还算很糟的错误？</summary><div class="expand-body"><p>丢的是"相位关系"，也就是叠加之所以是量子叠加的那个凭证。回忆把每个振幅想成一根有方向的小时针：测 0、测 1 的概率只看针的长度，相位翻转不动长度（所以能量、概率都没变），但它把两根针的相对方向搅乱了。这个相对方向（密度矩阵里的非对角"相干项"）正是干涉能发生的根本——它一旦没了，你那个活生生的量子叠加就退化成"要么 0 要么 1"的普通经典硬币。量子算法全靠干涉吃饭，相干没了等于量子性没了，所以哪怕能量一点没少，这也是致命错误。这种"只丢相位"的快慢用 $T_2$ 衡量。</p></div></details>
+<details class="expand qa"><summary>❓【程序员】Kraus 形式 $\sum_k E_k\rho E_k^\dagger$ 很像经典概率性故障模型。比特翻转信道 $\{\sqrt{1-p}I,\sqrt p X\}$ 是不是就等价于经典随机位翻转？量子纠错相比经典 ECC 难在哪——是不是难在&quot;不能读出来看哪位错，一读就塌缩&quot;？</summary><div class="expand-body"><p>对<strong>计算基态</strong>而言，比特翻转信道确实就是经典随机位翻转——$\ket0/\ket1$ 以概率 $p$ 互换，和内存 bit flip 一模一样。但它作用在叠加态上还会破坏相位，这是经典模型没有的；而且量子还有<strong>根本没有经典对应</strong>的错误（相位翻转 $Z$、连续的振幅阻尼）。量子纠错真正难的地方你说中了一条，完整是三条：① 不可克隆，不能简单复制三份做多数表决；② 测量即塌缩，不能直接读数据位看哪位错——解法是只测<strong>校验子（syndrome）</strong>，它只暴露"错在哪、什么类型"却不泄露数据本身，故不塌缩编码态；③ 错误是连续的（任意小角度旋转），但测校验子会把它<strong>离散化</strong>成 $X$/$Z$/无错几种再对症纠。所以不能照搬"读出来比对再纠"，而是发明了校验子测量这套绕过塌缩的机制。</p></div></details>
+<details class="expand qa"><summary>❓【程序员】经典 bit 我只认识一种故障——值被翻了（0↔1）。为啥量子会多出&quot;能量没变但相位悄悄没了&quot;这种坏法？相位翻转在经典里完全没对应物吗？它比比特翻转更隐蔽吗？</summary><div class="expand-body"><p>因为量子信息不止存在"0 还是 1"里，还存在 0 和 1 之间的<strong>相对相位</strong>里——这是经典 bit 根本没有的自由度，于是多出一种只伤相位、不伤布居的坏法。经典里确实没有对应物：经典只有"值翻了"（对应 $X$），没有"相位丢了"（对应 $Z$）。它更隐蔽：你在计算基上测，$\ket0/\ket1$ 概率分布纹丝不动、看不出任何异常，可干涉已经废了——结果是悄悄算错而不报错。退相位（$T_2$）只丢相位不丢能量；要和振幅阻尼分清：振幅阻尼是自发辐射、$\ket1\to\ket0$ <strong>真丢能量</strong>（$T_1$），两者机制不同。</p></div></details></section>
 </main>
 </div>
 <script>

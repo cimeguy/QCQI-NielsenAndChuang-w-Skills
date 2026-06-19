@@ -71,6 +71,7 @@ details.expand>summary::before{content:"▸";display:inline-block;margin-right:8
 details.expand[open]>summary::before{transform:rotate(90deg)}
 details.expand .expand-body{padding:2px 18px 8px}
 details.expand .expand-body>*:first-child{margin-top:8px}
+details.expand.qa>summary{color:var(--intuition);background:var(--intuitionbg)}
 .legend{display:flex;gap:10px;flex-wrap:wrap;margin:6px 0 18px;font-size:12.5px;color:var(--muted)}
 .legend span{background:var(--panel);border:1px solid var(--border);border-radius:20px;padding:3px 11px}
 .badge{display:inline-block;background:var(--accent);color:#fff;border-radius:6px;padding:2px 9px;font-size:12px;font-weight:700}
@@ -112,6 +113,7 @@ window.MathJax={
 <a href="#s4">2.4 演化与测量：可逆的门 vs 不可逆的&quot;读数&quot;</a>
 <a href="#s5">2.5 复合系统：偏迹、施密特分解与纠缠</a>
 <a href="#s6">2.6 应用：EPR / Bell、态区分、超密编码</a>
+<a href="#s7">💬 答疑（不同背景的人都在问）</a>
 </nav></aside>
 <main class="main">
 <div class="topbar"><span class="badge">大学生版</span><span class="home">第二章 · 线性代数与量子力学</span><button class="toggle" id="themeToggle">🌓 深/浅色</button></div>
@@ -298,7 +300,16 @@ window.MathJax={
 <blockquote class="callout summary">✅ <strong>小结：</strong> 超密编码 = 1 qubit + 预共享纠缠 ⇒ 传 2 经典比特。注意纠缠是<strong>预先</strong>就要建立好的资源。</blockquote>
 <p><strong>不可克隆定理</strong>：不存在能复制任意未知量子态的幺正操作。</p>
 <blockquote class="callout intuition">💭 <strong>直觉：</strong> 量子态没有"复制"按钮。你不能克隆一个未知态——这既是限制（量子线路不能随便复制信号），也是特性（窃听者无法偷偷复制密钥，保障量子密码安全）。</blockquote>
-<blockquote class="callout summary">✅ <strong>小结（本章三条红线）：</strong> ① 只有正交态能完美区分；② 任意未知态不可克隆；③ Bell 违反否定局域实在论。纠缠（施密特数 $&gt;1$）是超密编码等协议的核心资源。</blockquote></section>
+<blockquote class="callout summary">✅ <strong>小结（本章三条红线）：</strong> ① 只有正交态能完美区分；② 任意未知态不可克隆；③ Bell 违反否定局域实在论。纠缠（施密特数 $&gt;1$）是超密编码等协议的核心资源。</blockquote>
+<hr></section>
+<section id="s7"><h2>💬 答疑（不同背景的人都在问）</h2>
+<details class="expand qa"><summary>❓【大一学生】内积 $\braket{\psi}{\phi}$ 和外积 $\ketbra{\psi}{\phi}$ 我老搞反——怎么一眼看出哪个出数、哪个出矩阵？</summary><div class="expand-body"><p>看 bra-ket 的<strong>摆放顺序</strong>就行。$\braket{\psi}{\phi}$ 是"bra 在左、ket 在右"= 行向量 × 列向量 = $1\times2$ 乘 $2\times1$ = <strong>一个数</strong>；$\ketbra{\psi}{\phi}$ 是"ket 在左、bra 在右"= 列 × 行 = $2\times1$ 乘 $1\times2$ = <strong>一个 $2\times2$ 矩阵</strong>。口诀："尖括号闭合（bra 和 ket 合成一个 $\langle\ \rangle$）就收缩成数；中间张开（ket 和 bra 各自露在外面）就膨胀成矩阵"。同样两个向量，乘的顺序不同，结果差一个量级。</p></div></details>
+<details class="expand qa"><summary>❓【大一学生】取 $\dagger$ 时我老忘了把 $i$ 变号。&quot;转置&quot;和&quot;取共轭&quot;明明是两件事，为什么量子里非得两个一起做？只转置不行吗？</summary><div class="expand-body"><p>只转置会把长度算错。检验一下：内积 $\braket{\psi}{\psi}$ 必须等于各分量模方之和（一个正实数）。取 $\ket\psi=\begin{pmatrix}1\\i\end{pmatrix}$，<strong>正确</strong>的 bra 是 $\begin{pmatrix}1&amp;-i\end{pmatrix}$，于是 $\braket{\psi}{\psi}=1\cdot1+(-i)\cdot i=1+1=2$ ✓。若<strong>只转置不共轭</strong>得 $\begin{pmatrix}1&amp;i\end{pmatrix}\begin{pmatrix}1\\i\end{pmatrix}=1+i^2=0$——长度变成 0，明显荒唐。共轭那一步就是为了让 $i$ 乘自己的共轭得正数；少了它，概率全错。</p></div></details>
+<details class="expand qa"><summary>❓【大一学生】纯态 $\ket+$ 和&quot;一半 $\ket0$ 一半 $\ket1$ 的经典混合&quot;测出来都是 50/50，到底差在哪？为什么非对角线（相干项）是不是 0 就是分水岭？</summary><div class="expand-body"><p>差别藏在"<strong>换个方向测</strong>"。经典混合是"它本来就是 0 或就是 1，你只是不知道是哪个"；$\ket+$ 是"它真的同时朝两边、有确定的相位关系"。把两者都拿去在 $\ket\pm$ 基下测（相当于先做个 $H$ 再测）：$\ket+$ 会 <strong>100%</strong> 给同一个结果，而经典混合还是 50/50。这个差别在密度矩阵里就是非对角项（相干）是否为 0——它记录了相位关系，决定了能不能干涉。所以非对角项为零 ⟺ 退化成经典随机，非零 ⟺ 真·量子叠加，这就是分水岭。</p></div></details>
+<details class="expand qa"><summary>❓【程序员】经典 $n$ bit 状态空间也是 $2^n$ 大，可我只用 $n$ 个 bit 就能存。为什么量子态非要 $2^n$ 个复数？纠缠是不是&quot;压不掉&quot;的原因？</summary><div class="expand-body"><p>对，纠缠正是压不掉的根源。经典 $n$ bit 任意时刻只<strong>处在</strong> $2^n$ 个状态中的某<strong>一个</strong>，所以 $n$ 位就够指定它。量子态是这 $2^n$ 个基态的<strong>叠加</strong>，需要给每个基态各配一个复振幅——这就是一个 $2^n$ 维向量。如果态可分（无纠缠）$\ket\psi=\ket{a_1}\otimes\cdots\otimes\ket{a_n}$，确实只要 $O(n)$ 个参数就能描述；但纠缠态写不成这种乘积，振幅之间无法因式分解，于是你被迫存全部 $2^n$ 个数。所以"指数级存储"的本质就是纠缠带来的不可分解性。</p></div></details>
+<details class="expand qa"><summary>❓【程序员】偏迹被类比成概率里的边缘化 $P(A)=\sum_B P(A,B)$。既然这么经典，纠缠（Bell 态偏迹后变最大混合）比&quot;经典强相关 + 边缘化&quot;多了什么？</summary><div class="expand-body"><p>边缘化这一步本身<strong>完全经典</strong>——偏迹 $\Tr_B$ 和 $P(A)=\sum_B P(A,B)$ 是一回事。纠缠多出来的东西在"<strong>换基测量下的关联结构</strong>"。经典强相关只在一组固定取值上相关；Bell 态在<strong>任意</strong>测量方向下都保持完美关联，而且这种跨方向关联的强度<strong>超过任何局域隐变量模型的上限</strong>（CHSH 不等式被违反）。所以纠缠 = 经典相关 + 在所有互补基下同时存在的相干关联。偏迹只看单系统的边缘分布，恰好把这种关联抹平了，于是子系统看起来是最大混合、看不出纠缠——这反而说明关联是"非局域"的，拆开看就丢。</p></div></details>
+<details class="expand qa"><summary>❓【数学】本征值简并时，同一本征子空间里两个本征向量未必正交。是不是必须靠谱定理保证&quot;存在标准正交本征基&quot;，而正规性 $AA^\dagger=A^\dagger A$ 才是酉可对角化的充要条件？</summary><div class="expand-body"><p>两点都对。$A^\dagger=A$ 只直接给出"<strong>不同</strong>本征值的本征向量正交"（由 $(\lambda-\mu)\braket{u}{v}=0$）；一旦本征值简并，同一本征子空间内任取两向量未必正交，必须在该子空间里再做一次 Gram–Schmidt——而"存在一组完整的标准正交本征基"正是<strong>谱定理</strong>保证的，无法由 $A^\dagger=A$ 朴素逐对推出。更一般地，可被酉矩阵对角化的充要条件正是<strong>正规性</strong> $AA^\dagger=A^\dagger A$；厄米、酉、反厄米都只是正规算符的特例。</p></div></details>
+<details class="expand qa"><summary>❓【数学】$\mathbb{C}^2\otimes\mathbb{C}^2$ 与 $\mathbb{C}^4$ 抽象同构，可&quot;可分/纠缠&quot;只在 ⊗ 结构里才有意义。那么一个态可分还是纠缠，是 $\mathbb{C}^4$ 自身的性质，还是依赖我们选定的张量分解？</summary><div class="expand-body"><p>依赖于选定的张量分解，<strong>不是</strong> $\mathbb{C}^4$ 的内禀性质。作为抽象向量空间 $\mathbb{C}^2\otimes\mathbb{C}^2\cong\mathbb{C}^4$，"可分性"无从谈起；只有固定了分解 $\mathcal H_A\otimes\mathcal H_B$（指定谁是子系统 A、谁是 B）后，"可分 = 能写成 $\ket a\otimes\ket b$"才有定义。几何上可分纯态构成 <strong>Segre 簇</strong> $\mathbb{CP}^1\times\mathbb{CP}^1\hookrightarrow\mathbb{CP}^3$，是 $\mathbb{CP}^3$ 中一个测度为零的真子簇；一个混合 A、B 自由度的全局幺正就能把可分态变成纠缠态——这正说明可分性是"相对于分解"的，换一组张量分解结论可能就变了。</p></div></details></section>
 </main>
 </div>
 <script>
