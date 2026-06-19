@@ -164,6 +164,7 @@ def build_skill(slug, label):
            f'<div class="brand"><div class="t">QCQI · 人话版</div><div class="s">{html.escape(label)}</div></div>',
            '<input class="search" id="search" placeholder="过滤小节…">',
            '<nav class="nav">',
+           '<a href="https://cimeguy.github.io/" style="color:var(--muted)">🏠 个人主页</a>',
            '<a href="../explained.html" style="color:var(--muted)">← 返回人话版门户</a>',
            '<a href="student.html" style="color:var(--muted)">🎓 看大学生版</a>',
            f'<a href="index.html" style="color:var(--muted)">≡ 看公式精简版</a>']
@@ -215,6 +216,7 @@ def build_hub(built):
             f'<a class="card" href="{slug}/explained.html"><div class="ct">{html.escape(label)}</div>'
             f'<div class="cs">{built[slug]} 节 · 人话讲解</div></a>')
     body = f"""<div class="wrap">
+<div style="margin-bottom:16px"><a href="https://cimeguy.github.io/" style="color:#2563eb;font-size:14px;text-decoration:none">🏠 返回个人主页</a></div>
 <h1>QCQI 知识库 · 人话版 🗣️</h1>
 <div class="sub">把晦涩的量子数学翻译成「程序员能懂的人话」：每条公式都配直觉解释、编程类比与避坑提示。<br>
 想看严谨的公式精简版？打开 <a href="index.html">公式版门户</a>；数学基础还不牢？看 <a href="student.html">🎓 大学生版门户</a>。</div>

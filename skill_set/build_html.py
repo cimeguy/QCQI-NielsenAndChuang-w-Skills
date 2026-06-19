@@ -379,6 +379,7 @@ def build_skill(slug, label):
            f'<div class="brand"><div class="t">QCQI 知识库</div><div class="s">{html.escape(label)}</div></div>',
            '<input class="search" id="search" placeholder="过滤小节…">',
            '<nav class="nav">',
+           '<a href="https://cimeguy.github.io/" style="color:var(--muted)">🏠 个人主页</a>',
            '<a href="index.html" style="color:var(--muted)">← 返回门户</a>',
            '<a href="explained.html" style="color:var(--muted)">🗣️ 看人话版</a>',
            '<a href="student.html" style="color:var(--muted)">🎓 看大学生版</a>']
@@ -424,6 +425,7 @@ def build_hub():
     .foot{margin-top:40px;color:#8b98a9;font-size:13px;line-height:1.8}
     """
     body = f"""<div class="wrap">
+<div style="margin-bottom:16px"><a href="https://cimeguy.github.io/" style="color:#5ab0ff;font-size:14px;text-decoration:none">🏠 返回个人主页</a></div>
 <h1>QCQI 知识库 · 可视化门户</h1>
 <div class="sub">Nielsen &amp; Chuang《量子计算与量子信息》中文学习笔记生成的 Agent 技能集。点击任意章节进入可浏览、可视化的知识页面。<br>
 看不懂晦涩的公式？换个版本：<a href="explained.html" style="color:#5ab0ff">🗣️ 人话版门户</a>（程序员友好）；数学基础还不牢？<a href="student.html" style="color:#5ab0ff">🎓 大学生版门户</a>（从零补线代/概率）。</div>

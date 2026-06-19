@@ -206,6 +206,7 @@ def build_skill(slug, label):
            f'<div class="brand"><div class="t">QCQI · 大学生版</div><div class="s">{html.escape(label)}</div></div>',
            '<input class="search" id="search" placeholder="过滤小节…">',
            '<nav class="nav">',
+           '<a href="https://cimeguy.github.io/" style="color:var(--muted)">🏠 个人主页</a>',
            '<a href="../student.html" style="color:var(--muted)">← 返回大学生版门户</a>',
            '<a href="explained.html" style="color:var(--muted)">🗣️ 看人话版</a>',
            f'<a href="index.html" style="color:var(--muted)">≡ 看公式精简版</a>']
@@ -256,6 +257,7 @@ def build_hub(built):
             f'<a class="card" href="{slug}/student.html"><div class="ct">{html.escape(label)}</div>'
             f'<div class="cs">{built[slug]} 节 · 从零补基础</div></a>')
     body = f"""<div class="wrap">
+<div style="margin-bottom:16px"><a href="https://cimeguy.github.io/" style="color:#2563eb;font-size:14px;text-decoration:none">🏠 返回个人主页</a></div>
 <h1>QCQI 知识库 · 大学生版 🎓</h1>
 <div class="sub">写给刚学过矩阵、概率、线性代数但基础还不太牢的同学：每个量子概念都先把用到的数学基础<b>从头讲一遍</b>，
 再一步步代数字演算，标出最容易踩的坑。<br>
