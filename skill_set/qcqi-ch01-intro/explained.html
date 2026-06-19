@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>第一章 · 量子计算简介 · 人话版 · QCQI</title>
+<style>
+:root{--bg:#fbf7f0;--panel:#fff;--panel2:#f3ede2;--fg:#2a2620;--muted:#7a7163;
+--accent:#c2410c;--accent2:#7c3aed;--border:#e6ddcd;--code:#f1ebde;--th:#efe7d6;
+--tip:#15803d;--tipbg:#ecfdf3;--analogy:#7c3aed;--analogybg:#f5f0ff;
+--pitfall:#b45309;--pitfallbg:#fff7ed;--key:#0369a1;--keybg:#eff8ff;}
+[data-theme=dark]{--bg:#15110c;--panel:#1f1a13;--panel2:#1a1610;--fg:#ece3d4;--muted:#9a8f7d;
+--accent:#fb923c;--accent2:#c4b5fd;--border:#332b20;--code:#241e16;--th:#241e16;
+--tipbg:#0f2417;--analogybg:#1c1430;--pitfallbg:#2a1d0c;--keybg:#0b1f2e;}
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,"PingFang SC","Microsoft YaHei",Segoe UI,system-ui,sans-serif;
+background:var(--bg);color:var(--fg);line-height:1.85;font-size:16px}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+.layout{display:flex;min-height:100vh}
+.sidebar{width:300px;flex:0 0 300px;background:var(--panel2);border-right:1px solid var(--border);
+position:sticky;top:0;height:100vh;overflow-y:auto;padding:20px 0}
+.sidebar h2{font-size:14px;margin:0 18px 6px;color:var(--muted);font-weight:600}
+.brand{padding:0 18px 14px;border-bottom:1px solid var(--border);margin-bottom:12px}
+.brand .t{font-size:18px;font-weight:800}
+.brand .s{font-size:12.5px;color:var(--muted);margin-top:3px}
+.search{margin:0 14px 12px;width:calc(100% - 28px);padding:9px 11px;border-radius:9px;
+border:1px solid var(--border);background:var(--panel);color:var(--fg);font-size:13px}
+.nav a{display:block;padding:6px 18px;color:var(--fg);font-size:13.5px;border-left:3px solid transparent}
+.nav a:hover{background:var(--panel);text-decoration:none}
+.nav a.active{border-left-color:var(--accent);background:var(--panel);color:var(--accent)}
+.nav a.hidden{display:none}
+.main{flex:1;min-width:0;padding:34px 52px 90px;max-width:920px}
+.topbar{display:flex;align-items:center;gap:14px;margin-bottom:8px;flex-wrap:wrap}
+.topbar .home{font-size:13px;color:var(--muted)}
+.toggle{margin-left:auto;cursor:pointer;border:1px solid var(--border);background:var(--panel);
+color:var(--fg);border-radius:8px;padding:6px 12px;font-size:13px}
+section{scroll-margin-top:20px;padding:16px 0;border-bottom:1px solid var(--border)}
+h1{font-size:28px;margin:.2em 0 .5em;line-height:1.3}
+h2{font-size:21px;margin:1.1em 0 .5em;color:var(--accent)}
+h3{font-size:17px;margin:1em 0 .4em;color:var(--accent2)}h4{font-size:15.5px;margin:.9em 0 .3em}
+code{background:var(--code);padding:1.5px 6px;border-radius:5px;font-size:.9em;
+font-family:"SF Mono",Menlo,Consolas,monospace}
+pre{background:var(--code);padding:14px 16px;border-radius:10px;overflow-x:auto;border:1px solid var(--border)}
+pre code{background:none;padding:0}
+table{border-collapse:collapse;width:100%;margin:12px 0;font-size:14px;border-radius:8px;overflow:hidden}
+th,td{border:1px solid var(--border);padding:7px 11px;text-align:left;vertical-align:top}
+th{background:var(--th);font-weight:600}
+ul,ol{padding-left:24px}li{margin:4px 0}
+hr{border:none;border-top:1px dashed var(--border);margin:16px 0}
+blockquote{border-left:4px solid var(--accent2);margin:12px 0;padding:8px 16px;color:var(--muted);
+background:var(--panel);border-radius:0 8px 8px 0}
+blockquote.callout{border-left-width:5px;border-radius:10px;padding:12px 18px;color:var(--fg);
+margin:14px 0;font-size:15px}
+blockquote.callout.tip{border-left-color:var(--tip);background:var(--tipbg)}
+blockquote.callout.analogy{border-left-color:var(--analogy);background:var(--analogybg)}
+blockquote.callout.pitfall{border-left-color:var(--pitfall);background:var(--pitfallbg)}
+blockquote.callout.key{border-left-color:var(--key);background:var(--keybg);font-weight:600}
+.legend{display:flex;gap:10px;flex-wrap:wrap;margin:6px 0 18px;font-size:12.5px;color:var(--muted)}
+.legend span{background:var(--panel);border:1px solid var(--border);border-radius:20px;padding:3px 11px}
+.badge{display:inline-block;background:var(--accent);color:#fff;border-radius:6px;padding:2px 9px;font-size:12px;font-weight:700}
+@media(max-width:820px){.sidebar{display:none}.main{padding:24px 18px}}
+</style>
+<script>
+window.MathJax={
+ tex:{
+  inlineMath:[['$','$'],['\\(','\\)']],
+  displayMath:[['$$','$$'],['\\[','\\]']],
+  macros:{
+   ket:['{\\lvert #1\\rangle}',1],
+   bra:['{\\langle #1\\rvert}',1],
+   braket:['{\\langle #1\\vert #2\\rangle}',2],
+   ketbra:['{\\lvert #1\\rangle\\langle #2\\rvert}',2],
+   Tr:'{\\operatorname{Tr}}',
+   tr:'{\\operatorname{tr}}'
+  }
+ },
+ svg:{fontCache:'global'},
+ options:{skipHtmlTags:['script','style','textarea','pre','code'],ignoreHtmlClass:'viz'}
+};
+</script>
+<script src="../vendor/tex-svg.js" id="MathJax-script" async></script>
+</head>
+<body>
+<div class="layout">
+<aside class="sidebar">
+<div class="brand"><div class="t">QCQI · 人话版</div><div class="s">第一章 · 量子计算简介</div></div>
+<input class="search" id="search" placeholder="过滤小节…">
+<nav class="nav">
+<a href="../explained.html" style="color:var(--muted)">← 返回人话版门户</a>
+<a href="index.html" style="color:var(--muted)">≡ 看公式精简版</a>
+<a href="#s0">导读</a>
+<a href="#s1">1.1 量子计算和量子信息简介</a>
+<a href="#s2">1.2 量子比特</a>
+<a href="#s3">1.3 量子计算</a>
+<a href="#s4">1.4 量子算法</a>
+<a href="#s5">1.5 量子信息处理实验</a>
+<a href="#s6">1.6 量子信息</a>
+</nav></aside>
+<main class="main">
+<div class="topbar"><span class="badge">人话版</span><span class="home">第一章 · 量子计算简介</span><button class="toggle" id="themeToggle">🌓 深/浅色</button></div>
+<div class="legend"><span>💡 人话</span><span>🧠 类比</span><span>⚠️ 坑</span><span>🔑 记住</span></div>
+<section id="s0"><h1>第一章 量子计算简介 · 人话版</h1>
+<h2>导读</h2>
+<p>这一章是整本书的"项目 README"：先告诉你量子计算到底想干什么，再把核心数据类型（qubit）和操作（量子门、测量、线路）摆出来，最后用隐形传态和 Deutsch 算法两个"Hello World"演示量子凭什么可能比经典快。作为程序员，你该关心的是：这里的"叠加""纠缠""测量"不是玄学，而是一套可以用<strong>复向量、矩阵乘法、概率采样</strong>精确描述的计算模型——它扩展了你对"什么是一次计算"的认知边界。读完你会有一套把量子术语翻译成线性代数 + 概率的速查心智模型。</p>
+<hr></section>
+<section id="s1"><h2>1.1 量子计算和量子信息简介</h2>
+<p>量子计算就是<strong>利用量子系统的几个反直觉特性来处理信息</strong>：态可以线性叠加、测量是概率性的、信息以"概率幅"的形式藏着不易直接读取、比特之间能纠缠（非定域关联）、整个系统对环境极其敏感（退相干）。这一节是全景导览，顺带把"可计算性"和"复杂性"这两个 CS 老朋友请出来，引出全书的核心悬念：量子到底比经典强不强。</p>
+<blockquote class="callout analogy">🧠 <strong>类比：</strong> 经典比特是一个 <code>bool</code>，量子比特更像一个<strong>带权重的概率分布对象</strong>，但权重是复数、而且在你 <code>read()</code> 它之前会按特定规则演化。整章都在讲这个"奇怪的数据类型"的 API。</blockquote>
+<p>丘奇-图灵论题说的是：图灵机能算的，就是"凭直觉认为能行可计算"的全部——它不是定理，而是一条至今没被推翻的工程经验。关键点在于 $\lambda$ 演算、图灵机这些<strong>独立设计的计算模型最后被证明等价</strong>。</p>
+<blockquote class="callout analogy">🧠 <strong>类比：</strong> 这就像 Python、Lisp、汇编虽然语法天差地别，但计算能力等价（都图灵完备）。不同的人从不同方向造模型，最后殊途同归，这才让人相信"可计算"这个概念是稳的。</blockquote>
+<p>复杂性版的丘奇-图灵论题更强硬：它不只问"能不能算"，还问"能不能<strong>高效</strong>算"。经典版断言概率图灵机能高效模拟任何现实计算模型；量子版则把主角换成量子图灵机。这里埋了一个全书最大的悬念——$\mathrm{BPP} \subsetneq \mathrm{BQP}$ 是否成立。</p>
+<blockquote class="callout tip">💡 <strong>人话：</strong> BPP = 经典电脑（允许抛硬币）能在多项式时间搞定的问题集合；BQP = 量子电脑能在多项式时间搞定的集合。问题是：BQP 是不是<strong>严格</strong>比 BPP 大？如果是，就说明量子真有经典做不到的快活。</blockquote>
+<blockquote class="callout pitfall">⚠️ <strong>坑：</strong> "若证明 BPP $\subsetneq$ BQP，丘奇-图灵论题就被推翻了"——这话只对<strong>复杂性版</strong>论题成立。原始论题只关心"能不能算"（可计算性），不关心快慢，所以不受影响。别把两个版本搞混。</blockquote>
+<p>发展简史里值得记的节点：1980s Feynman 提出用量子机模拟量子系统；1984 BB84 量子密钥分发；1985 Deutsch 算法；1994 Shor 算法（因数分解进了 BQP）；1996 Grover 搜索算法。</p>
+<blockquote class="callout key">🔑 <strong>记住：</strong> 量子的"威力"来自<strong>叠加 + 纠缠 + 干涉</strong>三者合力，而不是"同时跑很多份"的朴素并行——这个误解后面 1.4 会专门拆。</blockquote>
+<hr></section>
+<section id="s2"><h2>1.2 量子比特</h2>
+<p>qubit 是量子信息的"基本数据类型"。它不是 0 或 1，而是 $\ket{0}$ 和 $\ket{1}$ 这两个基向量的<strong>复数线性组合</strong>，并且要求总概率归一。</p>
+<p>$$\ket{\psi} = \alpha\ket{0} + \beta\ket{1}, \qquad \lvert\alpha\rvert^2 + \lvert\beta\rvert^2 = 1$$</p>
+<p>逐项翻译：$\ket{\psi}$ 是这个 qubit 的状态（一个二维复向量）；$\ket{0}$、$\ket{1}$ 是计算基（就是标准基 $(1,0)$ 和 $(0,1)$）；$\alpha,\beta \in \mathbb{C}$ 是<strong>概率幅</strong>（复数权重）；约束 $\lvert\alpha\rvert^2 + \lvert\beta\rvert^2 = 1$ 表示"读出 0 或 1 的概率加起来是 1"。</p>
+<blockquote class="callout analogy">🧠 <strong>类比：</strong> 一个 qubit 态 = <strong>一个长度为 1 的二维复数数组</strong> <code>[α, β]</code>，满足 <code>|α|² + |β|² == 1</code>。计算基 $\{\ket{0},\ket{1}\}$ 就是这个二维复向量空间的标准正交基（ONB），跟你写 <code>Vector2(x, y)</code> 里的 x/y 轴一个意思。</blockquote>
+<blockquote class="callout pitfall">⚠️ <strong>坑：</strong> $\alpha,\beta$ 是<strong>复数</strong>不是实数概率；真正的概率是它们的<strong>模方</strong> $\lvert\alpha\rvert^2$、$\lvert\beta\rvert^2$。复数里那部分"相位"信息在测量概率上看不见，但在干涉时至关重要——这是量子算法的命根子。</blockquote>
+<p>如果想统一描述纯态和混合态，用<strong>密度矩阵</strong> $\rho$：</p>
+<p>$$\rho = \ketbra{\psi}{\psi}, \qquad \Tr(\rho) = \lvert\alpha\rvert^2 + \lvert\beta\rvert^2 = 1$$</p>
+<p>这里 $\ketbra{\psi}{\psi}$ 是态向量和它的共轭转置的外积（一个 $2\times2$ 矩阵）；$\Tr$ 是求迹（对角线元素求和），迹为 1 就是概率归一的另一种写法。</p>
+<blockquote class="callout analogy">🧠 <strong>类比：</strong> 密度矩阵 $\rho$ = <strong>纯态上的一个概率分布（加权集合）</strong>。如果你确定系统就是某个 $\ket{\psi}$，那是"纯态"；如果你只知道"50% 是这个态、50% 是那个态"（经典不确定性叠加在量子不确定性之上），那是"混合态"。$\rho$ 把这两层不确定性统一打包，就像用一个 <code>WeightedSet&lt;State&gt;</code> 同时表达确定值和概率分布。</blockquote>
+<p><strong>Bloch 球</strong>：把单 qubit 纯态画成单位球面上的一个点。</p>
+<p>$$\ket{\psi} = \cos(\theta/2)\ket{0} + e^{i\phi}\sin(\theta/2)\ket{1} \;\longleftrightarrow\; r = (\sin\theta\cos\phi,\ \sin\theta\sin\phi,\ \cos\theta)$$</p>
+<p>$\theta$ 是纬度角（从北极 $\ket{0}$ 往下量），$\phi$ 是经度角（绕赤道转），$e^{i\phi}$ 是相位因子。Bloch 分量也能从密度矩阵算：$r_i = \Tr(\rho\,\sigma_i)$，其中 $\sigma_i$ 是 Pauli 矩阵。</p>
+<blockquote class="callout tip">💡 <strong>人话：</strong> 一个单 qubit 纯态恰好对应球面上一个点。北极是 $\ket{0}$、南极是 $\ket{1}$、赤道上是各种等权叠加。两个参数 $(\theta,\phi)$ 就能定位它，跟用经纬度定位地球上一点完全一样。</blockquote>
+<blockquote class="callout analogy">🧠 <strong>类比：</strong> 纯态 = 球<strong>面</strong>上的点（$\lVert r\rVert = 1$）；混合态 = 球<strong>内部</strong>的点（$\lVert r\rVert &lt; 1$）；最大混合态 $\rho = I/2$ = 正球心（完全不知道任何信息）。半径越小，信息越"糊"。</blockquote>
+<p>制备任意态 = 旋转：任意 qubit 态 $\ket{\psi}$ 都能找到某个幺正变换 $U \in U(2)$ 使 $\ket{\psi} = U\ket{0}$，几何上就是把北极的 $\ket{0}$ 绕某根轴转到目标点。</p>
+<blockquote class="callout key">🔑 <strong>记住：</strong> 制备一个态 = 从 $\ket{0}$ 出发在 Bloch 球上<strong>旋转</strong>。而且实现同一目标的转轴/转角不唯一——条条大路通罗马。</blockquote>
+<p><strong>测量</strong>：在计算基下测 $\ket{\psi} = \alpha\ket{0} + \beta\ket{1}$，得 $\ket{0}$ 的概率是 $\lvert\alpha\rvert^2$，得 $\ket{1}$ 的概率是 $\lvert\beta\rvert^2$。测完态就塌缩到对应的基态。想在别的基（比如测 $\sigma_x$）测量，等价于"先旋转到那个基，再做计算基测量"。</p>
+<blockquote class="callout analogy">🧠 <strong>类比：</strong> 测量 = 从概率分布里<strong>采样一次，然后变量就被钉死了</strong>。像 <code>x = random.choice([0,1], p=[|α|², |β|²])</code>，但副作用是：采样之后这个 qubit 就<strong>永久变成</strong>你采到的那个基态了（塌缩），再读还是同一个值。一次性随机变量，读完即定值。</blockquote>
+<blockquote class="callout pitfall">⚠️ <strong>坑：</strong> 测量是<strong>破坏性</strong>的、<strong>不可逆</strong>的。它不像读一个普通变量那样"无副作用"。叠加里那些丰富的复数幅信息，一测就塌缩没了，只剩一个经典比特。所以算法要在测量<strong>之前</strong>用干涉把有用信息攒到对的地方。</blockquote>
+<p><strong>多比特与 Bell 基</strong>：$n$ 个比特张成 $2^n$ 维空间，基矢从 $\ket{00\dots0}$ 到 $\ket{11\dots1}$。其中四个最大纠缠的两比特态叫 Bell 基：</p>
+<p>$$\ket{\Phi^\pm} = \frac{\ket{00} \pm \ket{11}}{\sqrt{2}}, \qquad \ket{\Psi^\pm} = \frac{\ket{01} \pm \ket{10}}{\sqrt{2}}$$</p>
+<blockquote class="callout analogy">🧠 <strong>类比：</strong> $n$ 比特的状态空间是 $2^n$ 维——这就是经典模拟量子为什么贵：50 个 qubit 就要 $2^{50}$ 个复数才能存下完整态向量。多比特基矢的构造是各比特基的<strong>笛卡尔积 / 张量积（Kronecker 积）</strong>，跟嵌套循环枚举所有组合一个道理。</blockquote>
+<blockquote class="callout tip">💡 <strong>人话：</strong> 拿 $\ket{\Phi^+} = (\ket{00}+\ket{11})/\sqrt{2}$ 来说：在计算基下测量这两个比特，<strong>总是得到相同结果</strong>（要么都 0、要么都 1），而且各占一半概率。两个比特的命运被锁死在一起了——这就是纠缠。</blockquote>
+<blockquote class="callout pitfall">⚠️ <strong>坑：</strong> 纠缠态<strong>写不成两个单比特态的张量积</strong>（$\ket{\Phi^+} \ne \ket{a}\otimes\ket{b}$）。这正是纠缠的数学定义。别以为"强关联"就是经典相关，纠缠的关联强度超出任何经典模型能解释的范围（Bell 不等式）。</blockquote>
+<blockquote class="callout key">🔑 <strong>记住：</strong> 单 qubit 纯态 ↔ Bloch 球面点；信息藏在复数幅里，测量只吐出一个概率性的比特；Bell 态是纠缠的招牌——局部测量结果强关联、不可分解。</blockquote>
+<hr></section>
+<section id="s3"><h2>1.3 量子计算</h2>
+<p>量子计算 = 用一串<strong>幺正门</strong>组成的线路去操纵 qubit，最后测量。这一节给出门的"指令集"：单比特门、多比特门、通用门集合，加上线路的"语法规则"，最后用隐形传态做综合 demo。</p>
+<p><strong>单比特门 ∈ U(2)</strong>：每个单比特门都是一个保持向量长度（归一）的幺正变换，也就是一个 $2\times2$ 幺正矩阵。绕任意轴 $n = (x,y,z)$ 旋转角度 $\theta$：</p>
+<p>$$R_n(\theta) = \cos(\theta/2)\,I - i\sin(\theta/2)\,(n\cdot\sigma)$$</p>
+<p>$I$ 是单位矩阵，$\sigma = (\sigma_x,\sigma_y,\sigma_z)$ 是 Pauli 矩阵三件套，$n\cdot\sigma = n_x\sigma_x + n_y\sigma_y + n_z\sigma_z$。$R_x,R_y,R_z$ 就是取轴为 $x/y/z$ 的特例。</p>
+<blockquote class="callout analogy">🧠 <strong>类比：</strong> 幺正变换 = <strong>可逆无损变换</strong>（保范数、保内积）。在编程里就像一个一定能 <code>undo</code> 的纯变换：$U^\dagger U = I$，逆就是它的共轭转置，没有信息丢失。这跟有损的 <code>hash()</code> 或会塌缩的测量正好相反。</blockquote>
+<blockquote class="callout tip">💡 <strong>人话：</strong> 单比特门就是"在 Bloch 球上把状态点转一下"。$R_x(\theta)$ 绕 x 轴转 $\theta$，以此类推。门不改变球的半径（纯态还是纯态），只改朝向。</blockquote>
+<p>几个常用门：</p>
+<ul><li><strong>Hadamard ($H$)</strong>——叠加制造机：$H\ket{0} = (\ket{0}+\ket{1})/\sqrt{2}$，$H\ket{1} = (\ket{0}-\ket{1})/\sqrt{2}$。</li><li><strong>相位门 $S = \operatorname{diag}(1, i)$</strong>、<strong>$T$ 门 $= \operatorname{diag}(1, e^{i\pi/4})$</strong>（又叫 $\pi/8$ 门）：只给 $\ket{1}$ 分量加一个相位。</li></ul>
+<blockquote class="callout analogy">🧠 <strong>类比：</strong> $H$ 是几乎所有量子算法的"第一行代码"：把确定的 $\ket{0}$ 砸成 50/50 的等权叠加，开启量子并行的入口。把它想成"初始化一个均匀概率分布"。</blockquote>
+<p>任意单比特门可以做 <strong>z-y-z 分解</strong>：</p>
+<p>$$U = e^{i\alpha}\, R_z(\beta)\, R_y(\gamma)\, R_z(\delta)$$</p>
+<p>也就是说任何 $U(2)$ 元素都能拆成一个全局相位 $e^{i\alpha}$ 加三次固定轴旋转，$(\alpha,\beta,\gamma,\delta)$ 是四个角（旋量空间里的欧拉角）。群关系记作 $(SU(2)\ltimes U(1))/2 = U(2)$。</p>
+<blockquote class="callout analogy">🧠 <strong>类比：</strong> 这就像 3D 图形里"任意旋转 = 三个欧拉角（绕 z-y-z）"，量子版只是把实旋转换成 $SU(2)$ 上的旋转。编译器把高级 <code>U</code> 拆成硬件能执行的三条旋转指令，就靠这个分解。</blockquote>
+<p><strong>多比特门</strong>（作用在 $U(2^n)$ 上）：</p>
+<ul><li><strong>CNOT（受控非）</strong>：控制位是 1 时翻转目标位。<strong>它是纠缠的生成器</strong>。</li><li><strong>SWAP</strong>：交换两比特，且 <strong>SWAP = 三个 CNOT 级联</strong>。</li><li><strong>Toffoli (CCNOT)</strong>：双控制非门，是经典可逆计算的通用门。</li></ul>
+<blockquote class="callout analogy">🧠 <strong>类比：</strong> CNOT 就像 <code>if control: target ^= 1</code>，但因为它作用在叠加态上，能把两个比特<strong>纠缠</strong>起来（$H$ + CNOT 就造出 Bell 态）。Toffoli <code>if (a and b): c ^= 1</code> 是可逆版的 AND，用它能把任意经典布尔电路塞进量子线路。</blockquote>
+<p><strong>通用门集合</strong>：一组能以<strong>任意精度</strong>模拟任何幺正变换的门，比如 $\{H, T, \mathrm{CNOT}\}$。精度要求越高，需要的门越多（Solovay-Kitaev 定理给出量级）。</p>
+<blockquote class="callout analogy">🧠 <strong>类比：</strong> 通用门集 = 量子世界的<strong>图灵完备指令集</strong>。就像 NAND 门能搭出任何经典电路、几条 RISC 指令能跑任何程序，$\{H,T,\mathrm{CNOT}\}$ 能逼近任何量子计算。"任意精度"对应浮点逼近：位数越多越准，但代价是更多指令。</blockquote>
+<p><strong>量子线路的语法规则</strong>（违反就报错）：</p>
+<blockquote class="callout pitfall">⚠️ <strong>坑：</strong> 量子线路有三条铁律—— ① <strong>无环</strong>：线路必须是有向无环图，不能有回路（不像经典电路可以有反馈）； ② <strong>禁止扇入</strong>：多根线合并成一根 = 不可逆，违反幺正性； ③ <strong>禁止扇出</strong>：把一根线复制成多根 = 克隆未知态，违反<strong>不可克隆定理</strong>。</blockquote>
+<h3>Worked Example：量子隐形传态</h3>
+<p>目标：把 Alice 手里的未知态 $\ket{\psi} = \alpha\ket{0} + \beta\ket{1}$ 传给远端 Bob，而双方谁都不知道 $\alpha,\beta$。</p>
+<ol><li><strong>共享纠缠</strong>：Alice 的比特 2 和 Bob 的比特 3 预先制备成 Bell 态 $\ket{\Phi^+}$。三比特总态是 $\ket{\psi}\otimes\ket{\Phi^+}$。</li><li><strong>Alice 本地操作</strong>：对她的比特 1、2 做 CNOT$(1\to2)$，再对比特 1 做 $H$，然后在计算基下测量比特 1、2，得到两个经典比特 $(m_1,m_2)\in\{00,01,10,11\}$。</li><li><strong>经典通信</strong>：Alice 把 $(m_1,m_2)$ 通过经典信道（线路图里画成双横线）发给 Bob。</li><li><strong>Bob 纠正</strong>：Bob 根据收到的 $(m_1,m_2)$ 对自己的比特施加 $I$ / $X$ / $Z$ / $XZ$ 之一，就还原出 $\ket{\psi}$。</li></ol>
+<blockquote class="callout tip">💡 <strong>人话：</strong> 无论 Alice 测出哪种结果，Bob 按对应的"纠正指令"操作后，手里<strong>一定</strong>是原来的 $\ket{\psi}$。那两个经典比特就是告诉 Bob "该用四把钥匙里的哪一把"。</blockquote>
+<blockquote class="callout analogy">🧠 <strong>类比：</strong> 这是一次 <strong>LOCC</strong>（本地操作 + 经典通信）。像分布式系统里：双方先共享一个"纠缠密钥对"（预置资源），Alice 本地算出一个 2-bit 校正码发给 Bob，Bob 用它把自己手里那半解码成原对象。传过去的只有 2 个经典比特，不是态本身。</blockquote>
+<blockquote class="callout pitfall">⚠️ <strong>坑：</strong> 隐形传态既<strong>不超光速</strong>也<strong>不违反不可克隆</strong>—— ① 它依赖经典信道传 $(m_1,m_2)$，经典通信受光速限制，所以信息传递不超光速； ② Alice 的原比特在第 2 步测量时已被<strong>破坏</strong>，世界上任意时刻只有一份 $\ket{\psi}$，没有"复制"。</blockquote>
+<blockquote class="callout key">🔑 <strong>记住：</strong> 单比特门 = Bloch 球旋转（任意门 z-y-z 拆成三转）；CNOT 是纠缠之源、SWAP = 3×CNOT、Toffoli 通用于经典可逆计算；通用门集 + 任意精度逼近 = 量子的"图灵完备"；隐形传态 = 纠缠资源 + 2 经典比特，传态不传物质。</blockquote>
+<hr></section>
+<section id="s4"><h2>1.4 量子算法</h2>
+<p>量子算法靠"<strong>量子并行 + 干涉</strong>"提取经典难以高效获取的全局信息。这一节先讲怎么在量子机上跑经典计算，再讲量子并行的真相，然后用 Deutsch 算法做最小范例，最后总结三大算法家族。</p>
+<p><strong>量子机上的经典计算</strong>：</p>
+<ul><li><strong>Landauer 原理</strong>：擦除一比特信息有最小能量代价 $kT\ln 2$；而<strong>可逆计算</strong>可以规避这笔开销。</li><li><strong>可逆替代</strong>：任何不可逆的经典逻辑门都能用可逆量子门等效实现（比如用 Toffoli 模拟 AND/NAND）。</li><li>用量子测量的概率性，可以模拟概率经典计算机。</li></ul>
+<blockquote class="callout analogy">🧠 <strong>类比：</strong> Landauer 原理像"删数据要发热"。可逆计算的思路：别真删，把信息搬到辅助比特上留着（最后再 uncompute 清理）。这跟函数式编程"不可变 + 不丢信息"的精神一脉相承。</blockquote>
+<p><strong>量子并行</strong>：量子机能在<strong>同一个幺正变换</strong>里同时算出函数 $f(x)$ 在许多不同 $x$ 上的值——它们以叠加态的形式共存。</p>
+<p>$$U_f:\ \ket{x}\ket{y} \;\longrightarrow\; \ket{x}\ket{y \oplus f(x)}$$</p>
+<p>$\ket{x}$ 是输入寄存器，$\ket{y}$ 是输出寄存器，$\oplus$ 是异或（模 2 加）。如果输入是叠加态 $\sum_x \ket{x}$，那一次 $U_f$ 就把所有 $f(x)$ 一起算了。</p>
+<blockquote class="callout pitfall">⚠️ <strong>坑：</strong> 量子并行<strong>不是免费午餐</strong>！所有 $f(x)$ 确实叠在一个态里，但你<strong>直接测量只能随机拿到其中一个</strong>——还塌缩掉其余全部。所以"同时算 $2^n$ 个值"本身没用，必须靠后续<strong>干涉</strong>把"全局性质"提炼到能测出来的地方。这就是为什么"量子 = 大规模并行"是个误导性说法。</blockquote>
+<blockquote class="callout analogy">🧠 <strong>类比：</strong> 想象你 <code>map(f, all_inputs)</code> 得到一个超大结果数组，但 API 只允许你 <code>sample()</code> 一次就销毁整个数组。光并行 map 没意义，你得设计一种"归约 + 相消"（干涉）让你想要的那个全局答案脱颖而出。</blockquote>
+<h3>Worked Example：Deutsch 算法</h3>
+<p>问题：给定 $f:\{0,1\}\to\{0,1\}$，判断它是<strong>常数型</strong>（$f(0)=f(1)$）还是<strong>平衡型</strong>（$f(0)\ne f(1)$）。经典做法要求两次值（算 $f(0)$ 和 $f(1)$ 再比），量子只要<strong>一次</strong>。</p>
+<ol><li>制备 $\ket{0}\ket{1}$，两个比特各过一个 $H$，得到 $(\ket{0}+\ket{1})(\ket{0}-\ket{1})/2$。</li><li>作用一次 $U_f$。由于第二比特处在 $\ket{-} = (\ket{0}-\ket{1})/\sqrt{2}$，发生<strong>相位回踢</strong>，给第一比特挂上 $(-1)^{f(x)}$ 的相位因子。</li><li>对第一比特再过一个 $H$ 然后测量：测得 $\ket{0}$ ⇒ 常数型，测得 $\ket{1}$ ⇒ 平衡型。</li></ol>
+<blockquote class="callout tip">💡 <strong>人话：</strong> Deutsch 问的根本不是 $f(0)$ 或 $f(1)$ 各自是多少，而是 $f(0)\oplus f(1)$ 这<strong>一个全局比特</strong>（相等还是不等）。量子线路通过相位回踢把这个全局信息编码进相位，再用 $H$ 做干涉读出来，所以一次 $U_f$ 就够。</blockquote>
+<blockquote class="callout analogy">🧠 <strong>类比：</strong> 相位回踢就像把答案藏进"符号位"而不是"数值位"。经典你得分别求两个值再对比（两次调用）；量子直接问"它俩的异或"，一次调用搞定——因为你不需要知道每个值，只需要它们的关系。</blockquote>
+<blockquote class="callout key">🔑 <strong>记住：</strong> 量子加速的本质直觉——<strong>当经典为得到答案被迫获取了超过答案所需的信息量（存在"计算冗余"）时，量子有加速潜力</strong>。Deutsch 只想要 1 比特全局信息，经典却被迫算了 2 个局部值。推广到 $n$ 位函数就是 <strong>Deutsch-Jozsa 算法</strong>。</blockquote>
+<p><strong>三大算法家族</strong>：</p>
+<table><thead><tr><th>家族</th><th>代表</th><th>加速</th></tr></thead><tbody><tr><td>量子 Fourier 变换类</td><td>Shor 因数分解 / 求阶</td><td>经典亚指数 → 量子多项式</td></tr><tr><td>量子搜索</td><td>Grover</td><td>$O(N) \to O(\sqrt{N})$</td></tr><tr><td>量子模拟</td><td>Feynman / Lloyd</td><td>模拟量子多体系统，指数 → 多项式</td></tr></tbody></table>
+<p><strong>复杂性视角</strong>：因数分解 $\in \mathrm{BQP}$。量子威力的核心开放问题是：是否存在某些问题量子能高效解、而经典概率图灵机不能？即是否 $\mathrm{BPP} \subsetneq \mathrm{BQP}$（普遍相信成立，但<strong>尚未证明</strong>）。</p>
+<blockquote class="callout key">🔑 <strong>记住：</strong> 量子并行单独不够用，优势来自<strong>干涉提取全局信息 + 削减信息冗余</strong>；三大家族 = QFT 类 / 搜索类 / 模拟类；BPP vs BQP 是悬而未决的世纪难题。</blockquote>
+<hr></section>
+<section id="s5"><h2>1.5 量子信息处理实验</h2>
+<p>理论再漂亮，也得在真实物理系统上把量子态制备出来、操控好、测得准，还要压住噪声。这一节给实验直觉、容错前景和主流硬件平台。</p>
+<p><strong>Stern-Gerlach 实验</strong>是自旋测量的原型。它揭示了一个核心现象：<strong>测量是不对易的</strong>。对级联的 Z-X-Z 测量，前一次测 X 会"洗掉"之前测 Z 得到的信息。</p>
+<blockquote class="callout analogy">🧠 <strong>类比：</strong> 测量不对易就像两个操作 <code>measureZ()</code> 和 <code>measureX()</code> <strong>不满足交换律</strong>：<code>measureZ(); measureX(); measureZ()</code> 最后那次 Z 的结果可能跟第一次不同——因为中间的 X 测量把 Z 信息重置了。顺序很重要，这和经典"读变量不改变量"截然不同。</blockquote>
+<p><strong>状态/过程层析 (tomography)</strong>：通过大量重复测量来反推一个未知量子态 $\rho$ 或未知量子过程长什么样。</p>
+<blockquote class="callout analogy">🧠 <strong>类比：</strong> 因为单次测量只给 1 比特、还会塌缩，想知道完整的 $\rho$ 就得拿很多份相同的态、在不同基下反复测，再用统计拟合重建——像用大量采样去<strong>估计一个隐藏概率分布</strong>。</blockquote>
+<p><strong>阈值定理 (threshold theorem)</strong>：只要把量子噪声压到某个阈值以下，工程上就能实现<strong>任意规模</strong>的容错量子计算。这是大规模量子计算可行性的理论支柱。</p>
+<blockquote class="callout key">🔑 <strong>记住：</strong> 阈值定理 = "只要单门错误率够低，就能用纠错把它无限放大到任意规模而不失控"。它是量子计算从玩具走向实用的理论保证。</blockquote>
+<p><strong>规模三阶段</strong>：小规模 = 量子通信（QKD）；中等规模 = <strong>NISQ</strong>（含噪、无完整纠错的中等比特机，我们现在所处的阶段）；大规模 = 容错通用量子计算（依赖阈值定理）。</p>
+<p><strong>物理实现平台</strong>（没有单一最优解，各有取舍）：光学系统、超导线路（含 transmon）、离子阱、冷原子、NV 色心、核磁共振 (NMR)、任意子（拓扑）。</p>
+<blockquote class="callout pitfall">⚠️ <strong>坑：</strong> 别问"哪个平台最好"——超导快但相干时间短、离子阱准但慢、光学好传输但难做双比特门……每个平台都是不同的工程取舍组合，目前没有公认赢家。</blockquote>
+<blockquote class="callout key">🔑 <strong>记住：</strong> 噪声是头号敌人；阈值定理给出"够低就能纠错放大"的希望；当下处于 NISQ 阶段（比特数在涨但缺完整容错）。</blockquote>
+<hr></section>
+<section id="s6"><h2>1.6 量子信息</h2>
+<p>量子信息论研究信息的"量子版"基本极限：量子态怎么编码、传输、压缩、保护，以及量子带来的新资源（纠缠）。它是经典信息论的直接推广。</p>
+<p><strong>经典信息论的两个基本问题</strong>（出发点）：</p>
+<ol><li><strong>信源压缩极限</strong>——一个信息源最多能压到多小？答案是 <strong>Shannon 熵</strong>。</li><li><strong>可靠传输极限</strong>——含噪信道上能以多高速率可靠传输？答案是<strong>信道容量</strong>。</li></ol>
+<blockquote class="callout analogy">🧠 <strong>类比：</strong> 第一个问题是 <code>gzip</code> 的理论下界（无损压缩能压到多少）；第二个是"这条丢包的网络链路，在保证可纠错的前提下最高有效带宽是多少"。Shannon 把这俩都给出了精确公式。</blockquote>
+<p><strong>量子信息论</strong>把这些问题搬到量子世界，基本目标有三：</p>
+<ul><li>识别量子信息处理中的基本<strong>资源</strong>（如纠缠、相干）。</li><li>给出量子态压缩、量子信道传输的<strong>极限</strong>（Schumacher 压缩、量子信道容量）。</li><li>在含噪环境下<strong>保护</strong>量子信息（量子纠错）。</li></ul>
+<blockquote class="callout tip">💡 <strong>人话：</strong> 把经典信息论里的每个概念做"量子升级"：比特 → qubit，Shannon 熵 → von Neumann 熵，无损压缩 → Schumacher 压缩。骨架一样，只是底层数据类型换成了量子的。</blockquote>
+<blockquote class="callout key">🔑 <strong>记住：</strong> 量子信息论 = 经典信息论的推广（比特换 qubit、Shannon 熵换 von Neumann 熵）；<strong>纠缠是经典没有的新资源</strong>（支撑隐形传态、超密编码）；测量的概率性和不可克隆定理共同塑造了量子信息独有的极限。</blockquote>
+<hr>
+<blockquote class="callout key">🔑 <strong>整章一句话：</strong> qubit 是归一化的二维复向量、量子门是可逆幺正变换、测量是带塌缩的概率采样、纠缠是不可分解的强关联；量子的真正威力来自叠加 + 纠缠 + <strong>干涉</strong>三者合力，而 BPP 是否真的小于 BQP，至今仍是这个领域最大的悬念。</blockquote></section>
+</main>
+</div>
+<script>
+const toggle=document.getElementById('themeToggle');
+const saved=localStorage.getItem('qcqi-theme');
+if(saved)document.documentElement.setAttribute('data-theme',saved);
+toggle&&toggle.addEventListener('click',()=>{
+ const cur=document.documentElement.getAttribute('data-theme')==='light'?'':'light';
+ document.documentElement.setAttribute('data-theme',cur);
+ localStorage.setItem('qcqi-theme',cur);
+});
+const links=[...document.querySelectorAll('.nav a')];
+const secs=[...document.querySelectorAll('section[id]')];
+const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){
+ links.forEach(l=>l.classList.toggle('active',l.getAttribute('href')==='#'+e.target.id));}})},
+ {rootMargin:'-10% 0px -80% 0px'});
+secs.forEach(s=>obs.observe(s));
+const box=document.getElementById('search');
+box&&box.addEventListener('input',()=>{const q=box.value.trim().toLowerCase();
+ links.forEach(l=>l.classList.toggle('hidden',q&&!l.textContent.toLowerCase().includes(q)));});
+</script>
+</body>
+</html>

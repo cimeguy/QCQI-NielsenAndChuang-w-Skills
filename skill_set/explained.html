@@ -1,0 +1,27 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>QCQI 人话版 · 门户</title><style>
+body{margin:0;min-height:100vh;background:radial-gradient(1200px 600px at 70% -10%,#f6ad55,#fbf7f0);
+color:#2a2620;font-family:-apple-system,"PingFang SC","Microsoft YaHei",system-ui,sans-serif}
+.wrap{max-width:980px;margin:0 auto;padding:70px 24px}
+h1{font-size:34px;margin:0 0 6px}.sub{color:#7a7163;margin-bottom:14px;font-size:15px;line-height:1.7}
+.legend{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:30px;font-size:13px;color:#7a7163}
+.legend span{background:#fff;border:1px solid #e6ddcd;border-radius:20px;padding:4px 13px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:18px}
+.card{display:block;background:#fff;border:1px solid #e6ddcd;border-radius:16px;padding:22px;
+color:#2a2620;text-decoration:none;transition:.18s}
+.card:hover{transform:translateY(-3px);border-color:#c2410c;box-shadow:0 10px 30px rgba(120,60,0,.18)}
+.ct{font-size:18px;font-weight:800;margin-bottom:8px}.cs{color:#7a7163;font-size:13px}
+.foot{margin-top:40px;color:#7a7163;font-size:13px;line-height:1.8}
+.foot a{color:#c2410c}
+</style></head>
+<body><div class="wrap">
+<h1>QCQI 知识库 · 人话版 🗣️</h1>
+<div class="sub">把晦涩的量子数学翻译成「程序员能懂的人话」：每条公式都配直觉解释、编程类比与避坑提示。<br>
+想看严谨的公式精简版？打开 <a href="index.html">公式版门户</a>。</div>
+<div class="legend"><span>💡 人话＝公式在说什么</span><span>🧠 类比＝用代码/数据结构理解</span>
+<span>⚠️ 坑＝容易误解的地方</span><span>🔑 记住＝一句话带走</span></div>
+<div class="grid"><a class="card" href="qcqi-ch01-intro/explained.html"><div class="ct">第一章 · 量子计算简介</div><div class="cs">7 节 · 人话讲解</div></a><a class="card" href="qcqi-ch02-linalg-qm/explained.html"><div class="ct">第二章 · 线性代数与量子力学</div><div class="cs">7 节 · 人话讲解</div></a><a class="card" href="qcqi-ch04-circuits/explained.html"><div class="ct">第四章 · 量子线路与模拟</div><div class="cs">7 节 · 人话讲解</div></a><a class="card" href="qcqi-ch05-qft/explained.html"><div class="ct">第五章 · QFT 与 Shor</div><div class="cs">7 节 · 人话讲解</div></a><a class="card" href="qcqi-ch06-search/explained.html"><div class="ct">第六章 · 量子搜索 (Grover)</div><div class="cs">7 节 · 人话讲解</div></a><a class="card" href="qcqi-ch08-quantum-channels/explained.html"><div class="ct">第八章补充 · 量子信道</div><div class="cs">8 节 · 人话讲解</div></a><a class="card" href="qcqi-key-points/explained.html"><div class="ct">各章关键知识点汇总</div><div class="cs">7 节 · 人话讲解</div></a></div>
+<div class="foot">面向计算机背景读者，无需物理基础。源自 <code>skill_set/&lt;skill&gt;/explained.md</code>，
+由 <code>build_explained.py</code> 静态生成（纯标准库 + 内置 MathJax，离线可用）。</div>
+</div></body></html>

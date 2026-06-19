@@ -379,7 +379,8 @@ def build_skill(slug, label):
            f'<div class="brand"><div class="t">QCQI 知识库</div><div class="s">{html.escape(label)}</div></div>',
            '<input class="search" id="search" placeholder="过滤小节…">',
            '<nav class="nav">',
-           '<a href="index.html" style="color:var(--muted)">← 返回门户</a>']
+           '<a href="index.html" style="color:var(--muted)">← 返回门户</a>',
+           '<a href="explained.html" style="color:var(--muted)">🗣️ 看人话版</a>']
     viz_file = VIZ_DIR / f"{slug}.html"
     if viz_file.exists():
         nav.append('<a href="#viz">可视化图示</a>')
@@ -423,7 +424,8 @@ def build_hub():
     """
     body = f"""<div class="wrap">
 <h1>QCQI 知识库 · 可视化门户</h1>
-<div class="sub">Nielsen &amp; Chuang《量子计算与量子信息》中文学习笔记生成的 Agent 技能集。点击任意章节进入可浏览、可视化的知识页面。</div>
+<div class="sub">Nielsen &amp; Chuang《量子计算与量子信息》中文学习笔记生成的 Agent 技能集。点击任意章节进入可浏览、可视化的知识页面。<br>
+看不懂晦涩的公式？换个版本：<a href="explained.html" style="color:#5ab0ff">🗣️ 人话版门户</a>（程序员友好，每条公式配直觉+类比+避坑）。</div>
 <div class="grid">{''.join(cards)}</div>
 <div class="foot">每页含小节导航、客户端搜索、深/浅色切换与领域可视化图示。<br>
 源自 <code>skill_set/</code> 下的 Agent Skills，由 <code>build_html.py</code> 静态生成（纯标准库，离线可用）。</div>
