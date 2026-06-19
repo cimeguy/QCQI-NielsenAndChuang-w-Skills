@@ -63,6 +63,14 @@ blockquote.callout.calc{border-left-color:var(--calc);background:var(--calcbg)}
 blockquote.callout.intuition{border-left-color:var(--intuition);background:var(--intuitionbg)}
 blockquote.callout.mistake{border-left-color:var(--mistake);background:var(--mistakebg)}
 blockquote.callout.summary{border-left-color:var(--summary);background:var(--summarybg);font-weight:600}
+details.expand{border:1px solid var(--border);border-radius:10px;margin:14px 0;background:var(--panel);overflow:hidden}
+details.expand>summary{cursor:pointer;list-style:none;padding:11px 16px;font-weight:600;color:var(--physics);
+background:var(--physicsbg);font-size:14.5px}
+details.expand>summary::-webkit-details-marker{display:none}
+details.expand>summary::before{content:"▸";display:inline-block;margin-right:8px;transition:transform .15s}
+details.expand[open]>summary::before{transform:rotate(90deg)}
+details.expand .expand-body{padding:2px 18px 8px}
+details.expand .expand-body>*:first-child{margin-top:8px}
 .legend{display:flex;gap:10px;flex-wrap:wrap;margin:6px 0 18px;font-size:12.5px;color:var(--muted)}
 .legend span{background:var(--panel);border:1px solid var(--border);border-radius:20px;padding:3px 11px}
 .badge{display:inline-block;background:var(--accent);color:#fff;border-radius:6px;padding:2px 9px;font-size:12px;font-weight:700}
@@ -150,6 +158,9 @@ window.MathJax={
 <blockquote class="callout mistake">⚠️ <strong>常见错误：</strong> 求均值时分母写错（$N=4$ 要除以 4，得 $\bar a=\tfrac14$，绝不是 $\tfrac18$）；以及忘了翻转公式是 $2\bar a-a_i$ 而不是 $\bar a-a_i$。这两处错了，整个算例就崩了。</blockquote>
 <blockquote class="callout summary">✅ <strong>小结：</strong> 一次 Grover 迭代＝两步：① $O$ 给命中项打负号；② 对均值翻转 $a_i\mapsto 2\bar a-a_i$。打了负号的命中项远低于均值，翻转后被抬高；非命中略低于均值，翻转后略降。每迭代只调用一次预言机，总查询 $O(\sqrt N)$，相比经典 $O(N)$ 是<strong>平方加速</strong>（不是指数加速，别夸大）。</blockquote>
 <blockquote class="callout physics">⚛️ <strong>物理上是啥：</strong> 这种"放大"本质是<strong>波的干涉</strong>，不是"同时算了 $N$ 条路"的经典并行。每个振幅都像一道波，"打负号＋对均值翻转"让命中态的波峰相互叠加（相长干涉）、非命中态的波相互抵消（相消干涉），命中态的振幅就一点点长高。Grover 的加速来自这种干涉对振幅的精细调度，而不是同时尝试所有答案。</blockquote>
+<details class="expand"><summary>🔬 想多了解一点：什么是&quot;波的干涉&quot;？Grover 凭什么靠它放大答案？</summary><div class="expand-body"><p><strong>1）干涉是"波"独有的脾气。</strong> 想象往平静水面同时丢两颗石子，激起的两圈水波相遇时：如果两个波峰刚好叠在一起，水面被推得更高（<strong>相长</strong>）；如果一个波峰碰上另一个的波谷，它们互相抵消、水面反而变平（<strong>相消</strong>）。声音、光都会这样。关键点是：<strong>两个东西加在一起，结果可能比单个更强，也可能更弱、甚至归零</strong>——这是普通"数个数"做不到的。</p>
+<p><strong>2）Grover 里的"波"就是振幅。</strong> 每个候选答案 $x$ 头上都挂着一个振幅 $a_x$（一个可正可负的数），它就像一道小波。"给命中项打负号＋对均值翻转"这套动作，相当于精心安排这些波怎么叠加：让<strong>命中项的波互相加强</strong>（振幅长高）、<strong>非命中项的波互相抵消</strong>（振幅压低）。而测量概率是振幅的模平方，所以命中项的概率就越来越大、最后能被读出来。</p>
+<p><strong>3）所以 Grover 不是"同时试了所有答案"。</strong> 最常见的误解是"量子一次把 $N$ 个都算了"。真相是：所有答案确实叠在一个态里，但你<strong>不能直接读出来</strong>（一测就塌缩成随机一个）。Grover 靠的是上面这种干涉调度，把"对的答案"的振幅一点点抬高、错的压低——它更像在<strong>精细调音</strong>，而不是"并行蛮算"。</p></div></details>
 <hr></section>
 <section id="s3"><h2>6.3 几何意义：其实是平面里转圈</h2>
 <p>大白话：别看 Grover 在 $2^n$ 维的巨大空间里跑，整个过程其实只发生在一个<strong>二维平面</strong>内。画出来后，每次迭代就是朝目标方向转一个固定角度。</p>
@@ -166,6 +177,9 @@ window.MathJax={
 <ul><li>预言机 $O$ 是关于 $\ket{\alpha}$ 轴的反射（把 $\ket{\beta}$ 分量取负——回忆 6.1 它给解打负号）。</li><li>$2\ketbra{\psi}{\psi}-I$ 是关于 $\ket{\psi}$ 的反射。</li><li>两次反射复合，结果恰好是一次<strong>旋转</strong>，旋转角 $\theta$ 满足 $\sin\dfrac{\theta}{2}=\sqrt{\dfrac{M}{N}}$。</li></ul>
 <blockquote class="callout calc">🧮 <strong>一步步算：$N=4,\ M=1$。</strong> $\sin\tfrac\theta2=\sqrt{M/N}=\sqrt{\tfrac14}=\tfrac12$，由 $\sin30°=\tfrac12$ 得 $\tfrac\theta2=30°$，故 $\theta=60°$。初态与 $\ket\alpha$ 夹角 $30°$；作用一次 $G$ 转 $60°$，到 $30°+60°=90°$——正好落在解轴 $\ket\beta$ 上，一次迭代 $100\%$ 命中（和 6.2 的振幅算例完全一致）。代次数公式 $R\approx\tfrac\pi4\sqrt{N/M}=\tfrac\pi4\cdot2\approx1.57$，取整后最优正是 $1$ 次。</blockquote>
 <blockquote class="callout physics">⚛️ <strong>物理上是啥：</strong> 整个量子态其实就是这个二维平面里的一根单位矢量（箭头）。每作用一次 Grover 迭代，物理上就是把这根态矢在平面内朝"解"方向稳稳转过一个固定角 $\theta$；转到贴着解轴 $\ket\beta$ 时测量，读到答案的概率最大。所谓"放大振幅"和"转动态矢"是同一件事的两种说法。</blockquote>
+<details class="expand"><summary>🔬 想多了解一点：为什么 Grover 只快到 $\sqrt N$（平方加速），不是&quot;指数级秒杀&quot;？</summary><div class="expand-body"><p><strong>1）每走一步，只转一个固定的小角度。</strong> 上面说了，整个搜索就是平面里一根箭头朝"解轴"转，每作用一次 Grover 迭代固定转角 $\theta$。而这个角往往<strong>不大</strong>：它满足 $\sin\tfrac\theta2=\sqrt{M/N}$，当解很稀少（解数 $M$ 远小于总数 $N$）时，$\theta$ 约等于 $2\sqrt{M/N}$，是个很小的角。</p>
+<p><strong>2）从起点转到解轴大约要 $90°$。</strong> 箭头一开始几乎贴着"非解轴"（因为非解多、解少），要转到"解轴"差不多得转 $90°$（也就是 $\tfrac{\pi}{2}$）。每步只挪 $\theta$ 这么一点点，所以需要的步数约为 $\dfrac{\pi/2}{\theta}\approx\dfrac{\pi}{4}\sqrt{N/M}$——<strong>步数随 $\sqrt N$ 增长</strong>。</p>
+<p><strong>3）这就叫"平方加速"，不是"指数加速"。</strong> 经典挨个试要约 $N$ 次，Grover 要约 $\sqrt N$ 次：$N=100$ 万时，经典约 $50$ 万次、Grover 约 $1000$ 次——省了很多，但远不是"几步搞定"。真正的指数加速（比如 Shor 分解大数）是<strong>另一类问题</strong>、靠<strong>另一套机制</strong>（量子 Fourier 变换）才有，像 Grover 这种"无结构纯搜索"被数学证明了<strong>最多只能到 $\sqrt N$</strong>。所以别被"量子秒杀一切"的说法带偏。</p></div></details>
 <blockquote class="callout summary">✅ <strong>小结：</strong> 搜索只发生在 $\ket{\alpha}$（非解）和 $\ket{\beta}$（解）张成的二维平面里；$O$ 与"对均值翻转"各是一次反射；两者复合＝固定角 $\theta$ 的旋转，$\sin(\theta/2)=\sqrt{M/N}$。整个算法＝把那个几乎贴 $X$ 轴的箭头，以固定步长 $\theta$ 转向 $Y$ 轴。</blockquote>
 <hr></section>
 <section id="s4"><h2>6.4 成功概率与最优迭代次数</h2>

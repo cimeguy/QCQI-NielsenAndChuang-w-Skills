@@ -63,6 +63,14 @@ blockquote.callout.calc{border-left-color:var(--calc);background:var(--calcbg)}
 blockquote.callout.intuition{border-left-color:var(--intuition);background:var(--intuitionbg)}
 blockquote.callout.mistake{border-left-color:var(--mistake);background:var(--mistakebg)}
 blockquote.callout.summary{border-left-color:var(--summary);background:var(--summarybg);font-weight:600}
+details.expand{border:1px solid var(--border);border-radius:10px;margin:14px 0;background:var(--panel);overflow:hidden}
+details.expand>summary{cursor:pointer;list-style:none;padding:11px 16px;font-weight:600;color:var(--physics);
+background:var(--physicsbg);font-size:14.5px}
+details.expand>summary::-webkit-details-marker{display:none}
+details.expand>summary::before{content:"▸";display:inline-block;margin-right:8px;transition:transform .15s}
+details.expand[open]>summary::before{transform:rotate(90deg)}
+details.expand .expand-body{padding:2px 18px 8px}
+details.expand .expand-body>*:first-child{margin-top:8px}
 .legend{display:flex;gap:10px;flex-wrap:wrap;margin:6px 0 18px;font-size:12.5px;color:var(--muted)}
 .legend span{background:var(--panel);border:1px solid var(--border);border-radius:20px;padding:3px 11px}
 .badge{display:inline-block;background:var(--accent);color:#fff;border-radius:6px;padding:2px 9px;font-size:12px;font-weight:700}
@@ -120,6 +128,10 @@ window.MathJax={
 <p>整本书有三条物理约束，贯穿始终。把它们当成量子计算这门"语言"的三条硬规则：</p>
 <ol><li><strong>不可克隆 → 禁扇出</strong>：你不能把一个未知量子态复制成两份。</li><li><strong>幺正可逆 → 禁扇入 / 禁环路</strong>：所有演化都必须可逆，线路里不能有回路、不能多根线汇成一根。</li><li><strong>测量即塌缩 → 信息藏在"幅"里，干涉后再测</strong>：一读取就坍缩，所以算法的全部魔法都发生在"测量之前"。</li></ol>
 <blockquote class="callout physics">⚛️ <strong>物理上是啥：</strong> 这三条不是人为约定，而是量子力学基本原理的直接后果。"幺正可逆"来自薛定谔方程——它描述的演化天生保模长、可以倒着回放；"不可克隆"来自量子态的线性性，线性操作没法完美复制一个任意未知态；"测量即塌缩"来自测量公设（现实中由系统和环境纠缠造成的退相干触发），一旦发生，叠加就被破坏，只剩下一个被测到的分支。</blockquote>
+<details class="expand"><summary>🔬 想多了解一点：为什么&quot;复制不了量子态&quot;？&quot;薛定谔方程&quot;&quot;退相干&quot;又是啥？</summary><div class="expand-body"><p>这一段把三条红线都挂在了几个物理名词上，逐个用大白话拆开。</p>
+<p><strong>1）薛定谔方程 = 量子世界的"运动方程"。</strong> 高中学过牛顿第二定律 $F=ma$：知道受力，就能算出物体下一刻在哪。量子世界对应的那条规则就是<strong>薛定谔方程</strong>——知道系统现在的态，它告诉你下一刻态会变成什么。关键是：这种演化是<strong>平滑、确定、可以倒放</strong>的（真正的随机只发生在"测量"那一刻）。"可倒放"就是说它<strong>可逆</strong>——你把态转过去，总能再转回来，信息一点不丢。这正是第一条/第二条红线（幺正、可逆）的物理来源。</p>
+<p><strong>2）为什么"未知量子态复制不了"？</strong> 经典比特随便复制（Ctrl-C / Ctrl-V）。但一个 qubit 是 $a\ket0+b\ket1$ 这样的叠加，而且 $a,b$ 你并不知道。量子的所有操作都必须是<strong>线性</strong>的——意思是：一台机器如果对 $\ket0$ 和 $\ket1$ 分别能复制（$\ket0\to\ket0\ket0$、$\ket1\to\ket1\ket1$），那它作用在叠加 $a\ket0+b\ket1$ 上时，按线性只能得到 $a\ket0\ket0+b\ket1\ket1$，而真正"两份拷贝"应该是 $(a\ket0+b\ket1)(a\ket0+b\ket1)$——两者根本不相等。于是"能复制任意未知态的万能复印机"在数学上就<strong>不存在</strong>。这就是不可克隆定理，第一条红线（禁扇出）的根。</p>
+<p><strong>3）退相干 = 环境把"叠加"搅没了。</strong> 叠加之所以神奇，是因为几支振幅之间有确定的<strong>相位关系</strong>（像几根时针方向对齐），干涉才做得出来。可这套关系非常娇气：系统只要跟外界<strong>任何</strong>东西（一个空气分子、一个杂散光子、仪器探针）发生哪怕一丁点接触，相位就被搅乱、泄漏到庞大环境里再也收不回来。环境越大越乱，这个过程越快——对宏观物体几乎是瞬间。结果：本来能干涉的叠加"散"成了普通经典概率，看上去就像"塌缩到某一个结果"。这就是第三条红线。补两个常见误解：退相干<strong>不超光速</strong>（靠的是实实在在的物理接触），也<strong>跟意识无关</strong>（让它散掉的是环境，不是有没有人在看）。</p></div></details>
 <blockquote class="callout review">📖 <strong>补基础：</strong> "扇出（fan-out）"是数字电路术语，指一根输出线分叉接到好几个地方——本质就是<strong>复制</strong>信号。"扇入（fan-in）"是反过来，多根线汇成一根。这两个词记不住没关系，记住对应的禁令就行：不能复制、不能合并。</blockquote>
 <blockquote class="callout review">📖 <strong>补基础：</strong> "幺正（unitary）"是这本书最高频的形容词。一个矩阵 $U$ 叫幺正，当且仅当 $U^\dagger U=I$，其中 $U^\dagger$ 是 $U$ 的<strong>共轭转置</strong>（转置之后每个元素再取复共轭），$I$ 是单位矩阵。幺正矩阵的几何意义是<strong>保持向量长度不变的旋转/反射</strong>——它一定可逆，逆就是 $U^\dagger$。量子里所有"演化"（即态怎么变）都是幺正变换，所以天然可逆，这就是第二条红线的来源。</blockquote>
 <blockquote class="callout intuition">💭 <strong>直觉：</strong> 量子线路像一种<strong>纯函数式、可逆、且变量不能复制</strong>的电路语言。它没有 <code>=</code> 赋值（赋值会丢掉旧值，不可逆），没有 <code>copy()</code>（不可克隆），没有 <code>while</code> 回路（禁环）。你能做的只有：用可逆的门把各个振幅"搅"在一起，最后 <code>read()</code> 一次——而这个 <code>read()</code> 会摧毁现场。</blockquote>
@@ -129,6 +141,9 @@ window.MathJax={
 <p>一条主线：<strong>四条公理（态 / 演化 / 测量 / 复合）+ 把它们说清楚的那套线性代数工具</strong>。下面逐条过。</p>
 <blockquote class="callout purpose">🎯 <strong>用来干嘛：</strong> 这一章给你一套<strong>描述量子世界的数学语言</strong>——怎么写一个态、怎么让它演化、怎么测量它、怎么把多个系统拼起来。学完你就能把任何量子现象翻译成矩阵运算，是读懂后面所有章节的地基。</blockquote>
 <blockquote class="callout physics">⚛️ <strong>物理上是啥：</strong> 这一章其实就是量子力学的数学框架本身：一个"态"是希尔伯特空间里的矢量（更一般地是密度算符 $\rho$），一个"可观测量"是厄米算符，"演化"是幺正变换，"多个系统合体"用张量积。把这套对应关系记牢，物理问题就被翻译成了线性代数运算。</blockquote>
+<details class="expand"><summary>🔬 想多了解一点：&quot;希尔伯特空间&quot;听着玄，其实就是&quot;装向量的空间&quot;</summary><div class="expand-body"><p>别被这个人名吓到。<strong>希尔伯特空间（Hilbert space）= 一个能量长度、能量夹角的向量空间</strong>——也就是你线代里学过的、可以做"内积"（点乘）的那种空间，只不过允许用复数、而且允许维度无穷大。</p>
+<p>对量子计算来说，它通常就是你已经很熟的东西：一个 qubit 的态住在<strong>二维复列向量</strong>空间里，$n$ 个 qubit 住在 $2^n$ 维里。所以以后每次看到"希尔伯特空间里的矢量"，你心里翻译成"那个装 $\ket{\psi}$ 列向量的空间"就行，<strong>九成场合不会出错</strong>。</p>
+<p>那为什么物理学家非要起这么个大名字？因为在完整的量子力学里，有些系统的状态空间是<strong>无穷维</strong>的——比如一个粒子的位置可以取连续无穷多个值，描述它就需要无穷维的向量空间。"希尔伯特空间"这个词正是为了把"有限维"和"无穷维"一起涵盖进来。在本书的量子计算语境里，你几乎只会碰到有限维（$2^n$ 维）那一档，放心当成普通复向量空间用。</p></div></details>
 <p><strong>态：用密度算符 $\rho$ 描述。</strong> 它是一个<strong>迹为 1 的正定矩阵</strong>，编码了关于这个系统你能问的所有统计信息。</p>
 <blockquote class="callout review">📖 <strong>补基础：</strong> "迹（trace）"$\Tr$ 就是矩阵主对角线上元素之和，比如 $\Tr\begin{pmatrix}a&amp;b\\c&amp;d\end{pmatrix}=a+d$。"正定（positive，更准确是半正定）"是指这个矩阵的所有本征值都 $\ge 0$——直觉上它代表"合法的概率分布"，因为概率不能是负数。"$\Tr\rho=1$"则对应"所有概率加起来等于 1"。</blockquote>
 <blockquote class="callout review">📖 <strong>补基础：</strong> 期望值和方差就是概率论里那两个量，只不过换成了矩阵写法：$\langle A\rangle=\Tr(\rho A)$ 是可观测量 $A$ 的平均值，$(\Delta A)^2=\langle A^2\rangle-\langle A\rangle^2$ 是它的方差（"平方的平均"减去"平均的平方"，跟你高中学的方差公式一模一样）。</blockquote>
@@ -158,6 +173,10 @@ window.MathJax={
 <p>一条主线：<strong>用幺正门搭线路（单比特门=旋转 → 受控门 → 通用门），再用 Trotter 把哈密顿量演化变成线路（量子模拟）</strong>。</p>
 <blockquote class="callout purpose">🎯 <strong>用来干嘛：</strong> 这一章告诉你<strong>用哪几个基本门就能拼出任何量子计算</strong>——就像知道了"与非门通吃"之后，你就能搭任何数字电路。学完你能看懂任何量子线路图，并知道一台量子计算机到底由哪几块组成。</blockquote>
 <blockquote class="callout physics">⚛️ <strong>物理上是啥：</strong> 量子门不是抽象符号，它对应着用可控的哈密顿量去驱动一个真实的两能级系统（比如超导电路、被囚禁的离子、光子的偏振）。给系统施加一段精心设计的相互作用、让它演化一小段时间，就实现了一个幺正门——所谓"搭线路"，物理上就是按顺序安排这些受控的演化脉冲。</blockquote>
+<details class="expand"><summary>🔬 想多了解一点：&quot;哈密顿量&quot;是什么？一个量子门在实验室里到底怎么做出来？</summary><div class="expand-body"><p>这段话里有三个可能没听过的词：哈密顿量、两能级系统、演化脉冲。拆开讲。</p>
+<p><strong>1）两能级系统 = 挑两个分得清的状态当 $\ket0,\ket1$。</strong> 任何一个物理对象，只要能稳定地给你<strong>两个能区分的状态</strong>，就能当 qubit：超导电路最低的两个能级、一个被囚禁的离子、一个光子的水平/竖直偏振，都行。把这两个状态记成 $\ket0$ 和 $\ket1$，硬件就有了"比特"。</p>
+<p><strong>2）哈密顿量 $H$ = 这个系统的"能量环境 / 控制旋钮"。</strong> 类比牛顿那条 $F=ma$："受力"决定物体怎么动；量子里"哈密顿量"决定量子态怎么演化。$H$ 装的是系统当下的能量情况——多强的磁场、多大的激光/微波照着它、内部怎么相互作用，全写在 $H$ 里。想让 qubit 怎么转，物理上就是去设计一个合适的 $H$（打一段特定的脉冲）。</p>
+<p><strong>3）一个门 = "在这个能量环境里待一小段时间"的总效果。</strong> 把"能量环境 $H$"和"持续时长 $t$"打包，演化算符是 $U=e^{-iHt/\hbar}$，它<strong>自动就是幺正的</strong>（所以门天然可逆、不丢信息）。于是"搭一条量子线路"在物理上就是：按顺序安排一串精心设计、定好时长的微波或激光脉冲，让系统一步步演化过去。门不是画在纸上的符号，是实验台上调得准的真实操作。</p></div></details>
 <p><strong>单比特门 = $U(2)$ 旋转。</strong> 任何单比特门都是 Bloch 球上的一次旋转。可以一步实现，也可以用 <strong>z-y-z 欧拉角</strong>分三步拼出来。</p>
 <blockquote class="callout review">📖 <strong>补基础：</strong> "Bloch 球"是把单比特态画成一个三维球面上的点的图示——纯态在球面上，混态在球内。所以"单比特门 = 旋转"是很实在的几何图像。"$U(2)$ / $SU(2)$"是 $2\times 2$ 幺正矩阵构成的群（$SU$ 多一个行列式为 1 的约束），它作用在 2 维的量子态空间上，恰好对应 $SO(3)$（三维空间的旋转）作用在 3 维 Bloch 球上。"欧拉角"你在图形学里见过：任意 3D 旋转都能拆成绕三个固定轴的三次旋转。</blockquote>
 <blockquote class="callout review">📖 <strong>补基础：</strong> 常用单比特门：$R_x,R_y,R_z$ 是绕三个轴转固定角度的旋转门；H（Hadamard 门）$=\tfrac{1}{\sqrt2}\begin{pmatrix}1&amp;1\\1&amp;-1\end{pmatrix}$ 把 $\ket0$ 变成等权叠加 $\tfrac{1}{\sqrt2}(\ket0+\ket1)$；S、T 是给相位加固定角度的门。其中 $R_y$ 配合相位就能生成所有单比特门。</blockquote>
@@ -180,6 +199,11 @@ window.MathJax={
 <p>一条主线：<strong>量子并行（Deutsch）→ QFT → 相位估计 → Shor（求阶）→ HSP（统一框架）</strong>。</p>
 <blockquote class="callout purpose">🎯 <strong>用来干嘛：</strong> 这是 QFT 家族——量子计算<strong>最赚钱的杀手级应用</strong>。它就是能分解大数、威胁 RSA 加密的那套算法。学完你会明白量子凭什么能指数级加速，以及这种加速到底靠的是什么（藏在问题里的"周期结构"）。</blockquote>
 <blockquote class="callout physics">⚛️ <strong>物理上是啥：</strong> 这一族算法的物理核心是"让周期结构经由干涉在频率上显形"。把信息编码进各分量的相位后，不同分量在测量前发生干涉：与隐藏周期匹配的频率被相长叠加、其余的相消抵消——于是一测量就大概率读到周期信息。这就是 Shor 能指数级加速的物理来源。</blockquote>
+<details class="expand"><summary>🔬 想多了解一点：&quot;干涉让周期显形&quot;到底在说什么？</summary><div class="expand-body"><p>这句话是整个 QFT 家族的灵魂，但它压了好几个概念，慢慢来。</p>
+<p><strong>1）先回忆"干涉"。</strong> 波叠加时有个独门脾气：两个波峰对齐就<strong>相长</strong>（叠得更高），波峰碰波谷就<strong>相消</strong>（互相抵消、甚至归零）——这是双缝实验里明暗条纹的来源。量子振幅本质是<strong>波</strong>（用复数记，自带"相位/方向"），所以也会干涉。普通的正概率只会越加越大，永远做不出"相消"，这正是量子和经典的分水岭。</p>
+<p><strong>2）把周期"藏"进相位。</strong> 算法先用量子门，把要找的信息编码成每个分量的<strong>相位</strong>（可以想成给每个分量配一根指向不同方向的小时针）。这时信息还没法直接读——它藏在相位里，单看概率看不出来。</p>
+<p><strong>3）干涉把对的频率"点亮"。</strong> 测量前让所有分量一起干涉：那些"转动频率"恰好跟隐藏周期<strong>对得上</strong>的分量，时针方向一致、彼此<strong>相长</strong>，振幅被叠得很大；其余频率方向乱七八糟、彼此<strong>相消</strong>，几乎归零。于是一测量，就大概率落到"对得上周期"的那个结果上——周期信息就这么被读了出来。</p>
+<p><strong>4）一个生活类比。</strong> 这很像<strong>荡秋千</strong>：你只有按秋千的固有节奏去推（频率匹配）才会越荡越高，乱推则白费力气；也像收音机调台，只有频率对上电台才收到清晰的声音。Shor 算法就是靠这种"只有匹配周期的频率被放大"的干涉，把藏在大数里的周期一把抓出来，从而指数级加速。</p></div></details>
 <p><strong>Deutsch-Jozsa 算法。</strong> 只调用一次 $U_f$ 就能判断函数 $f$ 是常数还是平衡，而经典最坏要 $2^{n-1}+1$ 次。它展现的是<strong>量子并行性</strong>。</p>
 <blockquote class="callout review">📖 <strong>补基础：</strong> $U_f$ 是把经典函数 $f$ 装进量子线路的标准做法（一个可逆的"黑盒"门）。"常数函数"指 $f$ 对所有输入都输出同一个值；"平衡函数"指 $f$ 在一半输入上输出 0、另一半输出 1。任务是只用尽量少的查询分辨这两类。</blockquote>
 <blockquote class="callout intuition">💭 <strong>直觉：</strong> "量子并行"不是字面意义的"同时算所有输入"那么简单——而是把所有输入的结果都塞进振幅里，再用<strong>干涉</strong>让"答案"凸显出来、让"无关项"互相抵消。启发：经典算法里如果存在"计算冗余"，量子往往能加速。</blockquote>

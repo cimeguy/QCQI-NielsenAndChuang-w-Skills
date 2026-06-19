@@ -63,6 +63,14 @@ blockquote.callout.calc{border-left-color:var(--calc);background:var(--calcbg)}
 blockquote.callout.intuition{border-left-color:var(--intuition);background:var(--intuitionbg)}
 blockquote.callout.mistake{border-left-color:var(--mistake);background:var(--mistakebg)}
 blockquote.callout.summary{border-left-color:var(--summary);background:var(--summarybg);font-weight:600}
+details.expand{border:1px solid var(--border);border-radius:10px;margin:14px 0;background:var(--panel);overflow:hidden}
+details.expand>summary{cursor:pointer;list-style:none;padding:11px 16px;font-weight:600;color:var(--physics);
+background:var(--physicsbg);font-size:14.5px}
+details.expand>summary::-webkit-details-marker{display:none}
+details.expand>summary::before{content:"▸";display:inline-block;margin-right:8px;transition:transform .15s}
+details.expand[open]>summary::before{transform:rotate(90deg)}
+details.expand .expand-body{padding:2px 18px 8px}
+details.expand .expand-body>*:first-child{margin-top:8px}
 .legend{display:flex;gap:10px;flex-wrap:wrap;margin:6px 0 18px;font-size:12.5px;color:var(--muted)}
 .legend span{background:var(--panel);border:1px solid var(--border);border-radius:20px;padding:3px 11px}
 .badge{display:inline-block;background:var(--accent);color:#fff;border-radius:6px;padding:2px 9px;font-size:12px;font-weight:700}
@@ -135,6 +143,10 @@ window.MathJax={
 <p>大白话：QFT 就是离散傅里叶变换（DFT）的量子版。经典 DFT 把一串数 $u_k$ 变成另一串数 $y_j$；QFT 干的是同一件数学，只不过把这串数当作量子态的概率幅来处理。它定义在基态上：</p>
 <blockquote class="callout purpose">🎯 <strong>用来干嘛：</strong> 用来把「藏在数据里的周期 / 频率」转换成「相位结构」，好让后续操作能高概率把它测出来。它是相位估计和 Shor 算法的引擎——Shor 破解 RSA 的关键一步就是用 QFT 找出周期。注意：QFT 本身只是个内部零件，傅里叶系数全在概率幅里、<strong>不能直接读出来</strong>当 FFT 用，必须配相位估计这类技巧才有意义。</blockquote>
 <blockquote class="callout physics">⚛️ <strong>物理上是啥：</strong> QFT 本质上是一次<strong>换基</strong>——把量子态从「位置 / 计算基」表象换到「频率 / 动量」表象，就像物理里在时域和频域之间切换。所以原本藏在数据里的周期性，过完 QFT 就变成了频率轴上一个明显的结构。</blockquote>
+<details class="expand"><summary>🔬 想多了解一点：傅里叶变换到底在干嘛？&quot;时域 / 频域&quot;&quot;换基&quot;又是什么？</summary><div class="expand-body"><p>这段话里 <strong>傅里叶变换</strong>、<strong>时域 / 频域</strong>、<strong>换基</strong> 都是大学才讲的词，但它的核心思想其实非常生活化。</p>
+<p><strong>1）傅里叶变换 = 把一段复杂的波"拆成一堆纯音"。</strong> 想象你同时按下钢琴的好几个键，耳朵听到的是一团混在一起的声音（这叫<strong>时域</strong>——按时间记录"此刻空气振动有多强"）。傅里叶变换干的事，就是把这团声音<strong>拆开</strong>，告诉你"里面其实是 Do、Mi、Sol 这几个音、各占多大比重"（这叫<strong>频域</strong>——按频率记录"每个音有多强"）。同一段声音，两种记法：一种盯着"每一时刻"，一种盯着"含哪些频率"。</p>
+<p><strong>2）另一个画面：棱镜分光。</strong> 一束白光看着没什么结构，可让它穿过三棱镜，就"散"成红橙黄绿蓝靛紫一条彩带——每种颜色就是一个频率。傅里叶变换就是数学上的棱镜：把混在一起的信号，摊开成"各个频率各有多少"。</p>
+<p><strong>3）"换基"和"找周期"。</strong> 把信号从时域写法换成频域写法，数学上叫<strong>换基</strong>（换一套坐标来描述同一个东西，就像同一个地点既能用"经纬度"也能用"街道门牌"来说）。换基的妙处是：<strong>原本看不出来的周期性，一到频域就变成一根扎眼的尖峰</strong>。比如一段每隔 3 秒重复一次的信号，时域上看是一团乱，频域里却会在"频率 = 1/3"那个位置冒出一个明显的高峰。Shor 算法要找的"周期"，正是靠这一招从一堆数据里逼出来的。</p></div></details>
 <p>$$\ket{j} \;\longrightarrow\; \frac{1}{\sqrt{N}}\sum_{k=0}^{N-1} e^{2\pi i\, jk/N}\,\ket{k},\qquad N=2^n.$$</p>
 <blockquote class="callout review">📖 <strong>补基础（单位根 $\omega$）：</strong> 记 $\omega=e^{2\pi i/N}$，叫「$N$ 次单位根」。它是单位圆上把整圈 $2\pi$ 均分成 $N$ 份的第一个点；它的幂 $\omega^0,\omega^1,\dots,\omega^{N-1}$ 是圆上均匀分布的 $N$ 个点，且 $\omega^N=1$（转满一圈回到 1）。例如 $N=4$ 时 $\omega=e^{2\pi i/4}=e^{i\pi/2}=i$，四个幂是 $1,i,-1,-i$。</blockquote>
 <blockquote class="callout review">📖 <strong>补基础（DFT 矩阵长什么样）：</strong> 把 QFT 写成 $N\times N$ 矩阵 $F$，第 $j$ 行第 $k$ 列就是 $F_{jk}=\frac{1}{\sqrt N}\omega^{jk}$（行列下标都从 0 数起）。它和经典 DFT 矩阵一模一样：每一列对应一个频率，是一串复指数的采样，$\frac{1}{\sqrt N}$ 负责归一化让它幺正。关键点：<strong>每个矩阵元都是单位圆上的一点</strong>，相位随乘积 $jk$ 线性增长。</blockquote>
@@ -154,6 +166,9 @@ window.MathJax={
 <p>$$U\ket{u}=e^{2\pi i\varphi}\ket{u}.$$</p>
 <blockquote class="callout review">📖 <strong>补基础（本征值的相位）：</strong> 幺正算符的本征值模长都是 1，所以一定能写成 $e^{2\pi i\varphi}$ 的形式，全部信息就在相位 $\varphi\in[0,1)$ 里。把 $U$ 想成一个「返回值永远落在单位圆上」的操作，$\ket u$ 是它的不动方向，唯一发生的事就是转了个角度 $2\pi\varphi$。相位估计就是个「测这个角度」的子程序，把 $\varphi$ 二进制采样到 $t$ 个比特上。</blockquote>
 <blockquote class="callout physics">⚛️ <strong>物理上是啥：</strong> 相位估计在物理上，就是把一个幺正算符（或哈密顿量）本征态的本征相位——这相位往往对应着能量或频率——读进寄存器里，很像干涉仪靠干涉条纹去测一个相位。注意它读的只是<strong>本征相位</strong>这一个量，并不能直接读出本征态里藏的任意信息。</blockquote>
+<details class="expand"><summary>🔬 想多了解一点：什么是&quot;干涉仪&quot;？为什么&quot;相位&quot;能代表&quot;能量或频率&quot;？</summary><div class="expand-body"><p><strong>1）相位先回顾一句。</strong> 把一支量子振幅想成一根<strong>不停旋转的小时针</strong>，它此刻<strong>指向哪个方向</strong>就是"相位"。单独看一根时针看不出方向有什么用，可一旦两支波合到一起，方向一致就<strong>相加变亮</strong>（相长）、方向相反就<strong>抵消变暗</strong>（相消）——这就是"干涉"。</p>
+<p><strong>2）干涉仪 = 用明暗来反推相位的尺子。</strong> 干涉仪是一种真实仪器：它把一支波<strong>分成两路</strong>，让其中一路多走一点、积累一点相位差，再把两路<strong>合回来</strong>，看合起来是变亮还是变暗。因为"亮多少 / 暗多少"完全由两路的<strong>相位差</strong>决定，于是反过来——只要量一下最后的明暗，就能精确算出那段相位差是多少。相位估计干的就是这件事的量子版：靠干涉把藏起来的相位 $\varphi$ 一位一位读出来。</p>
+<p><strong>3）为什么相位能代表能量 / 频率？</strong> 关键在一条规律：一个能量越高的量子态，它那根"相位时针"<strong>转得越快</strong>。所以"这根时针转得多快"（频率）和"它带多少能量"是绑定的。让态演化一段固定时间，<strong>能量高的多转、能量低的少转</strong>，最后停在的相位角度就把它的能量"记"了下来。于是测这个相位 $\varphi$，等于在间接测这个态的能量或频率——这正是量子化学里用相位估计去算分子能量的道理。</p></div></details>
 <p>算法三步走（计数寄存器 $t$ 比特决定精度，另有寄存器装 $\ket u$）：</p>
 <ol><li>计数比特全置 $\ket+$（即 $H^{\otimes t}\ket0$）。</li><li>施一串<strong>受控-$U^{2^k}$</strong>：第 $k$ 个计数比特控制 $U^{2^k}$（把 $U$ 重复作用 $2^k$ 次，相位被放大 $2^k$ 倍，正好对应二进制第 $k$ 位）。靠相位回踢，把 $\varphi$ 编码进计数比特，得到</li></ol>
 <p>$$\frac{1}{\sqrt{2^t}}\sum_{j=0}^{2^t-1} e^{2\pi i\varphi j}\,\ket{j}\,\ket{u}.$$ 注意这个态和 5.3 里 QFT 的输出<strong>长得一模一样</strong>——它就是 $\varphi$ 的「傅里叶编码」。</p>
@@ -176,6 +191,9 @@ window.MathJax={
 <p>$$\frac{1}{\sqrt{r}}\sum_{s=0}^{r-1}\ket{u_s} = \ket{1}.$$</p>
 <blockquote class="callout intuition">💭 <strong>直觉：</strong> 你不用费劲去造某个特定本征态。直接拿计算基里的 $\ket1$（数字 1 的编码，几乎零成本）当输入，它本身就是全体本征态的「大杂烩」。做一次相位估计，叠加会让你<strong>等概率</strong>地塌缩到某个 $s/r$ 上——相当于免费随机抽一个本征态来量。</blockquote>
 <blockquote class="callout physics">⚛️ <strong>物理上是啥：</strong> 求阶的物理图像是一个<strong>周期性的叠加态</strong>：模乘 $U$ 每作用一次就往前转一格，转 $r$ 次回到原点。这种周期信号经傅里叶变换后，会在对应「频率」$s/r$ 处发生相长干涉、其它地方相消，于是测量就大概率落到带着周期 $r$ 的那些点上。</blockquote>
+<details class="expand"><summary>🔬 想多了解一点：为什么&quot;周期性的叠加态&quot;一做傅里叶变换，就会在频率 $s/r$ 处&quot;亮&quot;起来？</summary><div class="expand-body"><p><strong>1）先想一个荡秋千的画面。</strong> 你推一个秋千，如果<strong>每次都在同一个节拍</strong>上推（跟秋千的固有周期合上拍），每一下都"加"在前一下上，秋千越荡越高——这叫<strong>相长</strong>。要是你乱推、节拍对不上，这一下推、那一下拽，互相抵消，秋千就荡不起来——这叫<strong>相消</strong>。傅里叶变换里发生的是一模一样的事，只不过"推"换成了"一支支量子振幅（小时针）相加"。</p>
+<p><strong>2）周期 $r$ 怎么变成频率轴上的尖峰。</strong> 模乘算符 $U$ 每作用一次就把态往前"转一格"，转满 $r$ 次正好回到原点——这就是一个<strong>周期为 $r$ 的信号</strong>。把所有这些振幅（小时针）按傅里叶的方式加起来时：在那些"节拍刚好对上周期"的频率位置（也就是 $s/r$ 这些点），所有小时针<strong>指向一致、相加变得很亮</strong>（相长）；在其它频率位置，小时针<strong>方向各异、彼此抵消、几乎归零</strong>（相消）。</p>
+<p><strong>3）所以测量"大概率"落在带着周期的点上。</strong> 经过这一轮相长 / 相消，态的"亮度"（也就是测量概率）几乎全堆在 $s/r$ 这几个位置。你一测量，就<strong>大概率读到这些点之一</strong>，于是分母里就带出了我们朝思暮想的周期 $r$。这就是 Shor 算法能把"藏在模乘里的周期"逼到你能读出来的基态上的根本原因——它不是把所有答案一次读光，而是让对的答案"亮"、错的答案"灭"。</p></div></details>
 <blockquote class="callout calc">🧮 <strong>一步步算（$N=15,\ y=7$ 求阶并分解）：</strong> 逐次算模幂（每步乘 7 再对 15 取余）： $$7^1=7,\quad 7^2=49\equiv4,\quad 7^3\equiv7\cdot4=28\equiv13,\quad 7^4\equiv7\cdot13=91\equiv1\pmod{15}.$$ 最小使 $y^r\equiv1$ 的是 $r=4$。$r$ 是偶数，且 $7^{r/2}=7^2=49\equiv4\not\equiv-1\pmod{15}$，满足导出因子的条件。于是 $$\gcd(7^2-1,\,15)=\gcd(48,15)=3,\qquad \gcd(7^2+1,\,15)=\gcd(50,15)=5,$$ 直接得到 $15=3\times5$。（$\gcd(50,15)$：$50=3\times15+5$，再 $\gcd(15,5)=5$。）量子部分的全部价值，就是对大 $N$ 也能高效地找出这个周期 $r$。</blockquote>
 <p>量子线路吐出一个测量值 $s/r$（分母带着我们要的 $r$，但 $s$ 是随机的、还可能约分了），接下来全是经典后处理：<strong>连分数展开</strong>把测得的近似分数逼成最简分数恢复 $r$，再用 $\gcd(y^{r/2}\pm1,N)$ 拿到因子。</p>
 <blockquote class="callout mistake">⚠️ <strong>常见错误：</strong> Shor 不是一锤定音。可能抽到的 $r$ 是奇数，或者 $y^{r/2}\equiv-1$，这两种情况无法导出因子——换个 $y$ 重试即可（每次成功概率都不低）。</blockquote>

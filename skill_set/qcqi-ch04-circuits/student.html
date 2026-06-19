@@ -63,6 +63,14 @@ blockquote.callout.calc{border-left-color:var(--calc);background:var(--calcbg)}
 blockquote.callout.intuition{border-left-color:var(--intuition);background:var(--intuitionbg)}
 blockquote.callout.mistake{border-left-color:var(--mistake);background:var(--mistakebg)}
 blockquote.callout.summary{border-left-color:var(--summary);background:var(--summarybg);font-weight:600}
+details.expand{border:1px solid var(--border);border-radius:10px;margin:14px 0;background:var(--panel);overflow:hidden}
+details.expand>summary{cursor:pointer;list-style:none;padding:11px 16px;font-weight:600;color:var(--physics);
+background:var(--physicsbg);font-size:14.5px}
+details.expand>summary::-webkit-details-marker{display:none}
+details.expand>summary::before{content:"▸";display:inline-block;margin-right:8px;transition:transform .15s}
+details.expand[open]>summary::before{transform:rotate(90deg)}
+details.expand .expand-body{padding:2px 18px 8px}
+details.expand .expand-body>*:first-child{margin-top:8px}
 .legend{display:flex;gap:10px;flex-wrap:wrap;margin:6px 0 18px;font-size:12.5px;color:var(--muted)}
 .legend span{background:var(--panel);border:1px solid var(--border);border-radius:20px;padding:3px 11px}
 .badge{display:inline-block;background:var(--accent);color:#fff;border-radius:6px;padding:2px 9px;font-size:12px;font-weight:700}
@@ -126,6 +134,11 @@ window.MathJax={
 <blockquote class="callout calc">🧮 <strong>一步步算（$H\ket0$ 和 $H^2=I$）：</strong> 把 $H$ 作用到 $\ket0=\binom10$，就是矩阵乘列向量： $$H\ket0=\frac{1}{\sqrt2}\begin{pmatrix}1&amp;1\\1&amp;-1\end{pmatrix}\begin{pmatrix}1\\0\end{pmatrix}=\frac{1}{\sqrt2}\begin{pmatrix}1\cdot1+1\cdot0\\1\cdot1+(-1)\cdot0\end{pmatrix}=\frac{1}{\sqrt2}\begin{pmatrix}1\\1\end{pmatrix}=\frac{\ket0+\ket1}{\sqrt2}.$$ 同理 $H\ket1=\frac{1}{\sqrt2}\binom{1}{-1}=\frac{\ket0-\ket1}{\sqrt2}$。再作用一次应回到原点，验证 $H^2=I$： $$H^2=\frac12\begin{pmatrix}1&amp;1\\1&amp;-1\end{pmatrix}\begin{pmatrix}1&amp;1\\1&amp;-1\end{pmatrix}=\frac12\begin{pmatrix}1+1&amp;1-1\\1-1&amp;1+1\end{pmatrix}=\frac12\begin{pmatrix}2&amp;0\\0&amp;2\end{pmatrix}=I.$$ 所以 $H$ 自己就是自己的逆（$H=H^{-1}$）。</blockquote>
 <blockquote class="callout intuition">💭 <strong>直觉：</strong> 单比特门 = 作用在 2 维向量上的可逆旋转。它不改长度、永远能撤销。几何上把 Bloch 球（一个用来画 qubit 的 3 维小球）转一个角度，态就从一个点转到另一个点。</blockquote>
 <blockquote class="callout physics">⚛️ <strong>物理上是啥：</strong> 单比特门在真实硬件里，就是对量子比特施加一段时长精确的受控外场脉冲（激光/微波脉冲、磁场），让 Bloch 矢量绕某根轴进动旋转。$R_y,R_z$ 这类旋转门正是来自一个「驱动哈密顿量」——调脉冲的强度、频率和持续时间，就等于选定旋转的轴和角度。</blockquote>
+<details class="expand"><summary>🔬 想多了解一点：为什么&quot;对 qubit 施加一个门&quot;物理上就是&quot;打一段精确的脉冲&quot;？</summary><div class="expand-body"><p>上面那句话里藏了三个高中没讲过的词——<strong>哈密顿量</strong>、<strong>进动</strong>、<strong>脉冲</strong>。一个个用大白话拆开。</p>
+<p><strong>1）哈密顿量 $H$ = 这个量子系统的"能量环境 / 旋钮总集"。</strong> 它装的是系统此刻处在什么能量情况里——被多强的磁场罩着、被多大功率的激光照着。换句话说，$H$ 就是工程师<strong>手里能拧的那几个旋钮</strong>。想让 qubit 怎么动，物理上就是去设计一个合适的 $H$（打一段特定的微波或激光脉冲）。</p>
+<p><strong>2）施加一个门 = 让系统在这个能量环境里"待"一小段时间。</strong> 量子态在能量环境 $H$ 里会随时间平滑地转动，转了多少由"环境 $H$ × 时间 $t$"决定，写出来就是演化算符 $U=e^{-iHt/\hbar}$（这里 $\hbar$ 是个极小的自然常数，作用是把能量和时间换算成"转了多少"）。所以<strong>门不是瞬间盖个章，而是"让系统在精心调好的场里演化恰好这么久"</strong>——脉冲的强度和持续时间，就对应你想要的那个门。</p>
+<p><strong>3）进动 = 小磁针在磁场里"绕圈转"，而不是直接倒过去。</strong> 把 qubit 想成一根会自转的小磁针（Bloch 球上那根箭头）。你把它放进磁场，它不会乖乖地一下子转到磁场方向，而是像<strong>高速转动的陀螺</strong>那样——陀螺受重力本该倒下，却因为在自转，改成绕着竖直方向慢慢画圈。小磁针也一样，会绕着磁场方向画锥形的圈，这种转动就叫<strong>进动</strong>。磁场越强，画圈越快。</p>
+<p><strong>一句话</strong>：所谓"给 qubit 施加一个门"，在实验台上就是"安排一段强度、频率、时长都设计好的脉冲，让那根小箭头精确地进动到你想要的方向"。Bloch 球上的旋转是看得见、调得准的真实操作。</p></div></details>
 <p><strong>任意单比特门 = 绕某根轴的旋转。</strong> 任何单比特门都可以写成绕单位轴 $n=(n_x,n_y,n_z)$ 旋转角度 $\theta$（再配一个全局相位 $e^{i\alpha}$）：</p>
 <p>$$R_n(\theta) = \cos\frac{\theta}{2}\, I - i\sin\frac{\theta}{2}\,(n_x X + n_y Y + n_z Z).$$</p>
 <blockquote class="callout review">📖 <strong>补基础（旋转矩阵与半角）：</strong> 你在线代里学过平面旋转矩阵 $\begin{pmatrix}\cos\phi&amp;-\sin\phi\\\sin\phi&amp;\cos\phi\end{pmatrix}$。量子里两个最常用的旋转门是 $$R_z(\theta)=\begin{pmatrix}e^{-i\theta/2}&amp;0\\0&amp;e^{i\theta/2}\end{pmatrix},\qquad R_y(\theta)=\begin{pmatrix}\cos\frac\theta2&amp;-\sin\frac\theta2\\[2pt]\sin\frac\theta2&amp;\cos\frac\theta2\end{pmatrix}.$$ $R_z$ 是<strong>对角阵</strong>：它不混 $\ket0,\ket1$，只给两者各加一个相反的相位（这就叫「绕 z 轴转」）。$R_y$ 就是你熟悉的平面旋转，会真的把 $\ket0,\ket1$ 的振幅搅在一起。<strong>注意都是半角 $\theta/2$</strong>：Bloch 球转 $\theta$，向量公式里只出现 $\theta/2$——记成「球转一圈，态只转半圈」。</blockquote>
@@ -138,6 +151,10 @@ window.MathJax={
 <p>大白话：多比特门靠「受控操作」搭出来——一个<strong>控制位</strong>决定要不要对<strong>目标位</strong>施加某个门。最像编程里的 <code>if (控制位==1) 对目标做U</code>，只不过它必须整体可逆。要看懂多比特门，先得会把单比特态拼成多比特态，这就要用张量积。</p>
 <blockquote class="callout purpose">🎯 <strong>用来干嘛：</strong> 受控门是制造<strong>纠缠</strong>的唯一手段——光靠单比特门各转各的，比特之间永远没关联。一个 $H$ + 一个 CNOT 就能造出 Bell 态，让两个比特的命运绑死。几乎所有量子协议（隐形传态、纠错码、Shor/Grover 的核心线路）都靠受控门把比特连起来。</blockquote>
 <blockquote class="callout physics">⚛️ <strong>物理上是啥：</strong> 受控门（如 CNOT）在硬件上必须靠<strong>两个比特真的发生相互作用</strong>才能实现（偶极-偶极、交换耦合、共振耦合等）。没有相互作用，两个比特各转各的，就永远造不出纠缠——这也是为什么再多的单比特门都凑不出一个 CNOT。</blockquote>
+<details class="expand"><summary>🔬 想多了解一点：两个 qubit &quot;真的发生相互作用&quot;是什么意思？为什么单比特门再多也造不出纠缠？</summary><div class="expand-body"><p><strong>1）"各转各的" vs "你动会牵动我"。</strong> 单比特门只是分别去转两根小箭头——你转你的、我转我的，谁也不知道对方转到哪了。这样无论转多少次，两个比特的结果都还是各自独立的，<strong>绑不到一起</strong>。要造出纠缠（两个比特命运相连），必须让它们之间真的存在一种"你动会牵动我"的物理联系，这种联系就叫<strong>相互作用（耦合）</strong>。</p>
+<p><strong>2）耦合在物理上是什么？</strong> 文中那几个名词其实都是"两个小东西彼此能感觉到对方"的不同方式：</p>
+<ul><li><strong>偶极-偶极</strong>：两根小磁针离得近时会互相感到对方的磁场，就像两块小磁铁放在一起会彼此吸引或排斥。</li><li><strong>交换耦合 / 共振耦合</strong>：把两个 qubit 的能量"频道"调到能彼此传能量，一个的状态变化会直接影响另一个——有点像两个频率调成一样的音叉，敲响一个、另一个也会跟着嗡嗡响。</li></ul>
+<p><strong>3）所以 CNOT 这种门必须"借力"相互作用。</strong> 只有当两个比特之间开着这条物理通道时，"控制位是 1 就翻转目标位"这种<strong>用一个比特的状态去决定另一个比特命运</strong>的操作才可能发生。没有相互作用，就没有纠缠——这就是为什么再多的单比特门也凑不出一个 CNOT。</p></div></details>
 <blockquote class="callout review">📖 <strong>补基础（张量积 ⊗）：</strong> 两个 qubit 的联合状态是把各自的列向量做<strong>张量积（Kronecker 积）</strong>。规则：把左边向量的每个分量乘上整个右边向量，再竖着摞起来： $$\binom{a}{b}\otimes\binom{c}{d}=\begin{pmatrix}a\binom{c}{d}\\[4pt]b\binom{c}{d}\end{pmatrix}=\begin{pmatrix}ac\\ad\\bc\\bd\end{pmatrix}.$$ 所以两个 qubit 的状态是 $2\times2=4$ 维向量，基底为 $\ket{00},\ket{01},\ket{10},\ket{11}$。例如 $\ket{10}=\ket1\otimes\ket0=\binom01\otimes\binom10=(0,0,1,0)^{T}$（第 3 个分量是 1）。同理两个门 $A,B$ 分别作用在两个比特上，整体矩阵是 $A\otimes B$（$4\times4$）。</blockquote>
 <blockquote class="callout review">📖 <strong>补基础（受控门的分块矩阵）：</strong> 一个 $4\times4$ 矩阵可以切成四个 $2\times2$ 小块。受控门长这样： $$\begin{pmatrix}I&amp;0\\0&amp;U\end{pmatrix}=\begin{pmatrix}1&amp;0&amp;\cdot&amp;\cdot\\0&amp;1&amp;\cdot&amp;\cdot\\\cdot&amp;\cdot&amp;&amp;\\\cdot&amp;\cdot&amp;&amp;\end{pmatrix},$$ 含义：当控制位是 0（对应前两个基态 $\ket{00},\ket{01}$）时，左上角的 $I$ 让目标不动；当控制位是 1（后两个基态 $\ket{10},\ket{11}$）时，右下角的 $U$ 作用到目标上。这正是「if 控制位 then U」的矩阵写法。</blockquote>
 <p>几个基本受控门：</p>
@@ -183,6 +200,9 @@ window.MathJax={
 <p>大白话：Feynman 的设想是用一个可控量子系统去模拟另一个量子系统的演化，绕开经典模拟的「指数墙」。难点在于哈密顿量 $H$ 里各项一般<strong>不对易</strong>，没法简单地把 $e^{-iHt}$ 拆开成几个因子相乘。Trotter 公式就是那把「近似拆分」的钥匙。</p>
 <blockquote class="callout purpose">🎯 <strong>用来干嘛：</strong> 这是量子计算机眼下最被看好的实用方向——模拟分子、材料、化学反应。经典计算机模拟量子系统会随粒子数指数级变慢（算个中等分子就卡死），Trotter 把演化 $e^{-iHt}$ 编译成一串能在量子机上跑的小门，让「设计新药、新电池材料」这类问题有了高效算法。</blockquote>
 <blockquote class="callout physics">⚛️ <strong>物理上是啥：</strong> 量子模拟的物理本质，是把目标系统哈密顿量的时间演化 $e^{-iHt}$ 拆成一串能在硬件上直接实现的小步操作——说白了就是「用一个可控的量子系统去模仿另一个量子系统」，这正是 Feynman 当初提议造量子计算机的初衷。</blockquote>
+<details class="expand"><summary>🔬 想多了解一点：什么叫&quot;用一个量子系统去模拟另一个&quot;？式子 $e^{-iHt}$ 在说什么？</summary><div class="expand-body"><p><strong>1）$e^{-iHt}$ = "让这个系统在能量环境 $H$ 里演化时间 $t$"的总效果。</strong> （和 4.1 节门那个 $e^{-iHt/\hbar}$ 是同一类东西。）这里 $H$ 是<strong>哈密顿量</strong>，可以理解成"这个系统的能量规则书"——它内部各部分怎么相互作用、有哪些能量，全写在 $H$ 里。给定了规则书 $H$ 和时间 $t$，这个系统下一刻变成什么样就完全定下来了，而 $e^{-iHt}$ 就是描述这段变化的算符。</p>
+<p><strong>2）为什么经典电脑算这个会"卡死"？</strong> 一个量子系统的状态要用极多的复数才能完整记下来——粒子每多一个，需要的数字就<strong>翻倍</strong>（指数爆炸）。算到几十个粒子，普通电脑的内存就装不下了，更别说算它怎么随时间演化。这就是 Feynman 当年点破的"指数墙"。</p>
+<p><strong>3）那就干脆"以子之矛攻子之盾"——拿真量子系统去模仿。</strong> 既然量子系统天生就按 $e^{-iHt}$ 演化，那就用一台<strong>可控的</strong>量子计算机，去复刻你想研究的那个分子或材料的"能量规则书 $H$"，让它照着演化，再测量结果，就绕开了经典电脑那堵指数墙。难点只在于：$H$ 里不同部分往往<strong>不能同时一步算</strong>（这正是下面"对易子"和 Trotter 公式要解决的问题），得拆成很多小步轮流来。这也是量子计算眼下最被看好的实用方向——模拟分子、设计新药和新材料。</p></div></details>
 <blockquote class="callout review">📖 <strong>补基础（对易子 $[A,B]$）：</strong> 矩阵乘法一般不满足交换律：$AB\neq BA$。衡量「差多少」的量叫<strong>对易子</strong> $$[A,B]:=AB-BA.$$ 若 $[A,B]=0$（即 $AB=BA$）就说 $A,B$ <strong>对易</strong>。对易了，指数才能拆：$e^{A+B}=e^Ae^B$ 只在 $[A,B]=0$ 时成立。普通数总是对易的（$xy=yx$），所以你以前没注意过这条；但矩阵不是。</blockquote>
 <blockquote class="callout calc">🧮 <strong>一步步算（$[X,Z]=-2iY$）：</strong> 逐个算矩阵乘法。 $$XZ=\begin{pmatrix}0&amp;1\\1&amp;0\end{pmatrix}\begin{pmatrix}1&amp;0\\0&amp;-1\end{pmatrix}=\begin{pmatrix}0&amp;-1\\1&amp;0\end{pmatrix},\qquad ZX=\begin{pmatrix}1&amp;0\\0&amp;-1\end{pmatrix}\begin{pmatrix}0&amp;1\\1&amp;0\end{pmatrix}=\begin{pmatrix}0&amp;1\\-1&amp;0\end{pmatrix}.$$ 相减： $$[X,Z]=XZ-ZX=\begin{pmatrix}0&amp;-2\\2&amp;0\end{pmatrix}.$$ 又因为 $Y=\begin{pmatrix}0&amp;-i\\i&amp;0\end{pmatrix}$，所以 $-2iY=-2i\begin{pmatrix}0&amp;-i\\i&amp;0\end{pmatrix}=\begin{pmatrix}0&amp;-2\\2&amp;0\end{pmatrix}$，两者相等。结论：$[X,Z]=-2iY\neq0$，$X$ 和 $Z$ <strong>不对易</strong>。</blockquote>
 <p><strong>Trotter 公式（两项情形）：</strong> 既然 $A,B$ 一般不对易，就用「切小步、交替走」来逼近：</p>
